@@ -1,7 +1,28 @@
 #!/bin/sh
 
-DIR="/c/Projects/Magnet"
-SYS="Adam's Laptop"
+DIR="/cygdrive/c/CodeBlocksProjects/OurGame"
+SYS="B3n's Desktop"
+
+
+if [ $# = 3 ]; then
+
+if [ x"$2" = x-m ]; then
+	MSG=$3
+fi
+
+elif [ $# = 4 ]; then
+
+if [ x"$3" = x-m ]; then
+        MSG=$4
+fi
+
+else
+        MSG=""
+fi
+
+
+
+
 
 if [ x"$1" = x-sync ]; then
 	cd $DIR
@@ -75,9 +96,11 @@ else
 	echo "   -test		Push from local system to GitHub test branch."
 	echo "-cd		Echos the directory for the local Magnet project."
 	echo "-init		Removes local directory & re-pulls file from the project."
-	
+	echo "-m "MESSAGE"	Sets the begining of the commit message for the project."	
+
 fi
 
 #
 # This command syncs the Magnet github project (localdir<->github/Magnet)
 #
+
