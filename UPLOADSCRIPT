@@ -5,32 +5,76 @@ SYS="Adam's Laptop"
 
 if [ x"$1" = x-sync ]; then
 	cd $DIR
-	git pull git@github.com:b3ngr33ni3r/Magnet.git master
-	git add ./*
-	git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
-	git push git@github.com:b3ngr33ni3r/Magnet.git master
+	
+	if [ x"$2" = x-test ]; then
+		git pull git@github.com:b3ngr33ni3r/Magnet.git test
+		git add ./*
+		git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
+		git push git@github.com:b3ngr33ni3r/Magnet.git test
+		
+	else
+		git pull git@github.com:b3ngr33ni3r/Magnet.git master
+		git add ./*
+		git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
+		git push git@github.com:b3ngr33ni3r/Magnet.git master
+		
+	fi
 
 elif [ x"$1" = x-pull ]; then
-
 	cd $DIR
-	git pull git@github.com:b3ngr33ni3r/Magnet.git master
+	
+	if [ x"$2" = x-release ]; then
+		git pull git@github.com:b3ngr33ni3r/Magnet.git release
+		
+	elif [ x"$2" = x-test ]; then
+		git pull git@github.com:b3ngr33ni3r/Magnet.git test
+		
+	else
+		git pull git@github.com:b3ngr33ni3r/Magnet.git master	
+	fi
 	
 elif [ x"$1" = x-push ]; then
-
 	cd $DIR
+	
 	git add ./*
 	git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
-	git push git@github.com:b3ngr33ni3r/Magnet.git master
+	
+	if [ x"$2" = x-release ]; then
+		git push git@github.com:b3ngr33ni3r/Magnet.git release
+	
+	elif [ x"$2" = x-test ]; then
+		git push git@github.com:b3ngr33ni3r/Magnet.git test
+		
+	else
+		git push git@github.com:b3ngr33ni3r/Magnet.git master
+	fi
 	
 elif [ x"$1" = x-cd ]; then
 	echo $DIR
 	
+elif [ x"$1" = x-init ]; then
+	cd $DIR
+	
+	chmod -R 777 .
+	
+	rm -R *
+	rm -R .git
+	
+	git init
+	Magnet -pull
+	
 else
 
-	echo "-sync	Pulls then pushes from GitHub, syncing the project."
-	echo "-pull	Pulls from GitHub, downloading the project."
-	echo "-push	Pushes from local system to GitHub, uploading the project."	
-	echo "-cd	Echos the directory for the local Magnet project."
+	echo "-sync		Pulls then pushes from GitHub, syncing the project."
+	echo "   -test		Pulls then pushes from GitHub test branch to local system ."	
+	echo "-pull		Pulls from GitHub, downloading the project."
+	echo "   -release	Pull from GitHub release branch to local system ."
+	echo "   -test		Pull from GitHub test branch to local system ."
+	echo "-push		Pushes from local system to GitHub, uploading the project."
+	echo "   -release	Push from local system to GitHub release branch."	
+	echo "   -test		Push from local system to GitHub test branch."
+	echo "-cd		Echos the directory for the local Magnet project."
+	echo "-init		Removes local directory & re-pulls file from the project."
 	
 fi
 
