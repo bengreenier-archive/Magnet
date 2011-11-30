@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1321150269 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\demo.cpp
+	<Box2D/Box2D.h>
+	<cstdio>
+
+1322608243 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.cpp
+	"GunLocker.h"
+
+1322608365 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.h
+
+1322608194 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
+	"GunMaker.h"
+
+1322608140 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.h
+
+1321741525 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.cpp
+	"overlay.h"
+
+1322613508 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.h
+	<SFML/Graphics.hpp>
+
