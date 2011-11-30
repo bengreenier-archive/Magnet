@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <sstream>
 
 GunMaker::GunMaker(float Scale)
 {
@@ -41,17 +42,23 @@ void GunMaker::ConsoleAGun()
 void GunMaker::DrawTo(sf::RenderWindow& Window,int x,int y)
 {
     FormatDrawable(x,y);
+    RenderGunInfo(x,y);
 
     Window.Draw(RearComponent->Sprite);
     Window.Draw(MiddleComponent->Sprite);
     Window.Draw(FrontComponent->Sprite);
+    Window.Draw(Name);
+    Window.Draw(Damage);
+
 }
 
 void GunMaker::FormatDrawable(int x,int y)
 {
+    /*
     int fLength =FrontComponent->Length;
     int mLength =MiddleComponent->Length;
     int rLength =RearComponent->Length;
+    */
 
     int fWidth  =FrontComponent->Width;
     int mWidth  =MiddleComponent->Width;
@@ -66,4 +73,30 @@ void GunMaker::FormatDrawable(int x,int y)
     RearComponent->Sprite.SetPosition(x,y);
     MiddleComponent->Sprite.SetPosition(x+(ScaleFactor*rWidth),y);
     FrontComponent->Sprite.SetPosition(x+(ScaleFactor*rWidth)+(ScaleFactor*mWidth),y);
+}
+
+void GunMaker::RenderGunInfo(int x,int y)
+{
+
+int mLength = MiddleComponent->Length;
+
+Name.SetText(fName+" "+mName+" "+rName);
+Name.SetSize(24);
+Name.SetColor(sf::Color(140,240,240));
+Name.SetPosition(x,y+(ScaleFactor*mLength));
+
+
+
+Damage.SetText("Damage: "+RenderGunInfo_Helper(fDamage+mDamage+rDamage));
+Damage.SetSize(18);
+Damage.SetColor(sf::Color(140,240,240));
+Damage.SetPosition(x,y+(ScaleFactor*mLength)+26);
+
+}
+
+std::string GunMaker::RenderGunInfo_Helper(int i)
+{
+    std::stringstream ss;
+    ss<<i;
+    return ss.str();
 }

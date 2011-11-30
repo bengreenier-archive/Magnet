@@ -33,9 +33,9 @@ int main()
         Window.Clear();
 
         Gun.DrawTo(Window,0,0);
-        Gun2.DrawTo(Window,0,100);
-        Gun3.DrawTo(Window,0,200);
-        Gun4.DrawTo(Window,0,300);
+        Gun2.DrawTo(Window,0,130);
+        Gun3.DrawTo(Window,0,250);
+        Gun4.DrawTo(Window,0,380);
          //Display window contents on screen
         Window.Display();
     }

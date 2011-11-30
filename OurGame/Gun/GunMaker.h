@@ -11,7 +11,9 @@ class GunMaker
         void DrawTo(sf::RenderWindow& Window,int x,int y);
     protected:
     private:
-        void FormatDrawable(int x,int y);
+        void        FormatDrawable(int x,int y);
+        void        RenderGunInfo(int x,int y );
+        std::string RenderGunInfo_Helper(int i);
 
         float ScaleFactor;
         int fRand;
@@ -27,6 +29,9 @@ class GunMaker
         GunComponent*   FrontComponent;       // Points to the Front GunComponents Sprite
         GunComponent*   MiddleComponent;      // Points to the Middle GunComponents Sprite
         GunComponent*   RearComponent;        // Points to the Rear GunComponents Sprite
+
+        sf::String      Name;
+        sf::String      Damage;
 
 };
 
