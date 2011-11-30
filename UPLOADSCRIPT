@@ -1,0 +1,39 @@
+#!/bin/sh
+
+DIR="/c/Projects/Magnet"
+SYS="Adam's Laptop"
+
+if [ x"$1" = x-sync ]; then
+	cd $DIR
+	git pull git@github.com:b3ngr33ni3r/Magnet.git master
+	git add ./*
+	git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
+	git push git@github.com:b3ngr33ni3r/Magnet.git master
+
+elif [ x"$1" = x-pull ]; then
+
+	cd $DIR
+	git pull git@github.com:b3ngr33ni3r/Magnet.git master
+	
+elif [ x"$1" = x-push ]; then
+
+	cd $DIR
+	git add ./*
+	git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
+	git push git@github.com:b3ngr33ni3r/Magnet.git master
+	
+elif [ x"$1" = x-cd ]; then
+	echo $DIR
+	
+else
+
+	echo "-sync	Pulls then pushes from GitHub, syncing the project."
+	echo "-pull	Pulls from GitHub, downloading the project."
+	echo "-push	Pushes from local system to GitHub, uploading the project."	
+	echo "-cd	Echos the directory for the local Magnet project."
+	
+fi
+
+#
+# This command syncs the Magnet github project (localdir<->github/Magnet)
+#
