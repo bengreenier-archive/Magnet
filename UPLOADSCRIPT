@@ -30,13 +30,13 @@ if [ x"$1" = x-sync ]; then
 	if [ x"$2" = x-test ]; then
 		git pull git@github.com:b3ngr33ni3r/Magnet.git test
 		git add ./*
-		git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
+		git commit -m  "$MSG pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
 		git push git@github.com:b3ngr33ni3r/Magnet.git test
 		
 	else
 		git pull git@github.com:b3ngr33ni3r/Magnet.git master
 		git add ./*
-		git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
+		git commit -m  "$MSG pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
 		git push git@github.com:b3ngr33ni3r/Magnet.git master
 		
 	fi
@@ -58,7 +58,7 @@ elif [ x"$1" = x-push ]; then
 	cd $DIR
 	
 	git add ./*
-	git commit -m  "pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
+	git commit -m  "$MSG pushed from $SYS @ $(date "+%H:%M:%S on %m/%d/%y")."
 	
 	if [ x"$2" = x-release ]; then
 		git push git@github.com:b3ngr33ni3r/Magnet.git release
