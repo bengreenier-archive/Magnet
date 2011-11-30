@@ -12,7 +12,7 @@ int main()
 
  while (Window.IsOpened())
     {
-    Gun.DrawTo(Window);
+
 
         sf::Event Event;
         while (Window.GetEvent(Event))
@@ -25,6 +25,7 @@ int main()
         // Clear the screen (fill it with black color)
         Window.Clear();
 
+        Gun.DrawTo(Window);
         // Display window contents on screen
         Window.Display();
     }

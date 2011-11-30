@@ -81,3 +81,40 @@
 	"GunComponent.h"
 	<iostream>
 
+1322636647 source:c:\codeblocksprojects\ourgame\ourgame\gun\gunlocker.cpp
+	"GunLocker.h"
+	"GunComponent.h"
+	<string>
+	<iostream>
+	<SFML/Graphics.hpp>
+
+1322636647 c:\codeblocksprojects\ourgame\ourgame\gun\gunlocker.h
+	<vector>
+	<string>
+	<SFML/Graphics.hpp>
+	"GunComponent.h"
+
+1322672418 c:\codeblocksprojects\ourgame\ourgame\gun\guncomponent.h
+	<SFML/Graphics.hpp>
+	<string>
+
+1322672061 source:c:\codeblocksprojects\ourgame\ourgame\gun\gunmaker.cpp
+	"GunMaker.h"
+	"GunLocker.h"
+	<stdlib.h>
+	<time.h>
+	<iostream>
+
+1322636647 c:\codeblocksprojects\ourgame\ourgame\gun\gunmaker.h
+	<SFML/Graphics.hpp>
+
+1322671285 source:c:\codeblocksprojects\ourgame\ourgame\main.cpp
+	<iostream>
+	"Gun/GunMaker.h"
+	<SFML/Graphics.hpp>
+
+1322672519 source:c:\codeblocksprojects\ourgame\ourgame\gun\guncomponent.cpp
+	"GunComponent.h"
+	<iostream>
+	<string>
+

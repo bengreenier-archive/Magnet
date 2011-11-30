@@ -37,7 +37,7 @@ void GunMaker::ConsoleAGun()
 void GunMaker::DrawTo(sf::RenderWindow& Window)
 {
     //can't draw like this for some reason.
-    Window.Draw(GunLocker::Get()->GetFrontComponent(fRand)->GetSprite());
-    Window.Draw(GunLocker::Get()->GetMiddleComponent(mRand)->GetSprite());
-    Window.Draw(GunLocker::Get()->GetRearComponent(rRand)->GetSprite());
+    Window.Draw(GunLocker::Get()->GetFrontComponent(fRand)->GetSprite("Front",0,0));
+    Window.Draw(GunLocker::Get()->GetMiddleComponent(mRand)->GetSprite("Middle",0,0));
+    Window.Draw(GunLocker::Get()->GetRearComponent(rRand)->GetSprite("Rear",0,0));
 }

@@ -1,5 +1,6 @@
 #include "GunComponent.h"
 #include <iostream>
+#include <string>
 
 /*********************************************************************
 
@@ -14,6 +15,13 @@ GunComponent::GunComponent(int Damage,std::string Name,std::string ImagePath)
     GunComponent::ImagePath = ImagePath;
     GunComponent::Damage    = Damage;
     GunComponent::Name      = Name;
+    if (!Image.LoadFromFile(ImagePath))
+    {
+        std::cout<<"Failure To Load Image From: "<<ImagePath<<"\n";
+    }
+    GunComponent::Length        = Image.GetHeight();
+    GunComponent::Width         = Image.GetWidth();
+    GunComponent::ScaleFactor   = .3f;
 
 }
 
@@ -59,31 +67,30 @@ std::string GunComponent::GetName()
     image as a sprite that can
     be drawn.
 
+    The way this is being done,
+    with arguments, is invalid.
+    i should be looking into
+    setting the .SetPosition
+    in GunMaker, as GunMaker
+    knows the dimensions to
+    all GunComponents in use.
+
 **********************************/
-sf::Sprite GunComponent::GetSprite()
+sf::Sprite GunComponent::GetSprite(std::string Position,int x,int y)
 {
-    std::cout<<GetImagePath()<<"\n";
-    sf::Sprite Sprite;
-    Sprite.SetImage(GetImage());
-    Sprite.SetPosition(10,10);
-    //GetImage()->GetWidth() the image width
+    //std::cout<<GetImagePath()<<"\n";
+    Sprite.SetImage(Image);
+
+    if (Position == "Rear")
+        Sprite.SetPosition(x,y);
+    else if (Position == "Middle")
+        Sprite.SetPosition(x+(Width*ScaleFactor),y);
+    else if (Position == "Front")
+        Sprite.SetPosition(x+(Width*ScaleFactor)+(Width*ScaleFactor),y);
+    else
+        std::cout<<"Invalid GetSprite(STRING) given.\n";
+
+    Sprite.SetScale(ScaleFactor,ScaleFactor);
+
     return Sprite;
-}
-
-/********************************
-
-    Craft an image, and return
-    it. use ImagePath to do so.
-
-********************************/
-sf::Image& GunComponent::GetImage()
-{
-       sf::Image Image;
-
-    if (!Image.LoadFromFile(ImagePath))
-    {
-        std::cout<<"Failure To Load Image From: "<<ImagePath<<"\n";
-    }
-
-    return Image;
 }
