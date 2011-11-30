@@ -16,9 +16,9 @@ GunLocker* GunLocker::GunLockerPtr = NULL;
 GunLocker::GunLocker()
 {
     //create initial (core/main loaded/non manual/etc) components from raw data here.
-    AddFrontComponent(new GunComponent(GunLocker::ImageFromPath("Sprites/assault1-front.png"),2,"Pain"));
-    AddMiddleComponent(new GunComponent(GunLocker::ImageFromPath("Sprites/assault1-middle.png"),4,"In The"));
-    AddRearComponent(new GunComponent(GunLocker::ImageFromPath("Sprites/assault1-rear.png"),1,"Ass"));
+    AddFrontComponent(new GunComponent(2,"Pain","Gun/Sprites/assault1-front.png"));
+    AddMiddleComponent(new GunComponent(4,"In The","Gun/Sprites/assault1-middle.png"));
+    AddRearComponent(new GunComponent(1,"Ass","Gun/Sprites/assault1-rear.png"));
 
     //ctor
 }

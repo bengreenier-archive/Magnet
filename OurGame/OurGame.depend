@@ -3,27 +3,28 @@
 	<Box2D/Box2D.h>
 	<cstdio>
 
-1322620005 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.cpp
+1322624101 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.cpp
 	"GunLocker.h"
 	"GunComponent.h"
 	<string>
 	<iostream>
 	<SFML/Graphics.hpp>
 
-1322620116 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.h
+1322623367 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.h
 	<vector>
 	<string>
 	<SFML/Graphics.hpp>
 	"GunComponent.h"
 
-1322620055 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
+1322624520 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
 	"GunMaker.h"
 	"GunLocker.h"
 	<stdlib.h>
 	<time.h>
 	<iostream>
 
-1322618900 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.h
+1322621305 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.h
+	<SFML/Graphics.hpp>
 
 1321741525 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.cpp
 	"overlay.h"
@@ -31,14 +32,16 @@
 1322613508 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.h
 	<SFML/Graphics.hpp>
 
-1322618342 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.cpp
+1322624954 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.cpp
 	"GunComponent.h"
+	<iostream>
 
-1322620036 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.h
+1322624695 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.h
 	<SFML/Graphics.hpp>
 	<string>
 
-1322619844 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\main.cpp
+1322623606 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\main.cpp
 	<iostream>
 	"Gun/GunMaker.h"
+	<SFML/Graphics.hpp>
 

@@ -1,4 +1,5 @@
 #include "GunComponent.h"
+#include <iostream>
 
 /*********************************************************************
 
@@ -7,24 +8,24 @@
     to create a full fledged gun.
 
 *********************************************************************/
-GunComponent::GunComponent(sf::Image Image,int Damage,std::string Name)
+GunComponent::GunComponent(int Damage,std::string Name,std::string ImagePath)
 {
-    GunComponent::Image     = Image;
+
+    GunComponent::ImagePath = ImagePath;
     GunComponent::Damage    = Damage;
     GunComponent::Name      = Name;
 
 }
 
-/*********************************
+/**************************************
 
-    A helper function to return
-    the components image at any
-    time.
+    A helper function to return the
+    components imagepath at any time.
 
-*********************************/
-sf::Image GunComponent::GetImage()
+**************************************/
+std::string GunComponent::GetImagePath()
 {
-    return GunComponent::Image;
+    return GunComponent::ImagePath;
 }
 
 /****************************
@@ -49,4 +50,40 @@ int GunComponent::GetDamage()
 std::string GunComponent::GetName()
 {
     return GunComponent::Name;
+}
+
+/**********************************
+
+    A helper function to create
+    and return the components
+    image as a sprite that can
+    be drawn.
+
+**********************************/
+sf::Sprite GunComponent::GetSprite()
+{
+    std::cout<<GetImagePath()<<"\n";
+    sf::Sprite Sprite;
+    Sprite.SetImage(GetImage());
+    Sprite.SetPosition(10,10);
+    //GetImage()->GetWidth() the image width
+    return Sprite;
+}
+
+/********************************
+
+    Craft an image, and return
+    it. use ImagePath to do so.
+
+********************************/
+sf::Image& GunComponent::GetImage()
+{
+       sf::Image Image;
+
+    if (!Image.LoadFromFile(ImagePath))
+    {
+        std::cout<<"Failure To Load Image From: "<<ImagePath<<"\n";
+    }
+
+    return Image;
 }

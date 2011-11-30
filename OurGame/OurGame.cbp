@@ -37,10 +37,7 @@
 		<Unit filename="Gun\GunLocker.h" />
 		<Unit filename="Gun\GunMaker.cpp" />
 		<Unit filename="Gun\GunMaker.h" />
-		<Unit filename="overlay\overlay.cpp" />
-		<Unit filename="overlay\overlay.h" />
-		<Unit filename="overlay\overlayController.cpp" />
-		<Unit filename="overlay\overlayController.h" />
+		<Unit filename="Main.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
