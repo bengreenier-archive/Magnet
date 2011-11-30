@@ -96,7 +96,7 @@ else
 	echo "   -test		Push from local system to GitHub test branch."
 	echo "-cd		Echos the directory for the local Magnet project."
 	echo "-init		Removes local directory & re-pulls file from the project."
-	echo "-m "MESSAGE"	Sets the begining of the commit message for the project."	
+	echo "-m \"MESSAGE\"	Sets the begining of the commit message for the project."	
 
 fi
 
