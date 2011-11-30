@@ -10,3 +10,7 @@ some features we would like to include:
 -enemies of varying difficulty..(obviously)
 
 @MusicAdam likes this
+
+
+-in GunLocker ideally i'd like the vector's to contain actual GunComponents, not pointers, as i feel like the pointer method
+could really get messy.

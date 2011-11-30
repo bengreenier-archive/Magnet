@@ -5,6 +5,7 @@ class GunMaker
 {
     public:
         GunMaker();
+        void ConsoleAGun();
     protected:
     private:
 
