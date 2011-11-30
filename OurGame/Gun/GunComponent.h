@@ -2,7 +2,7 @@
 #define GUNCOMPONENT_H
 #include <SFML/Graphics.hpp>
 #include <string>
-class GunComponent
+class GunComponent : sf::Sprite
 {
     public:
         GunComponent(int Damage,std::string Name,std::string ImagePath);          // Default Constructor, take the parts needed to make a component
@@ -16,6 +16,8 @@ class GunComponent
 
     protected:
     private:
+        sf::Sprite  Sprite;                             // Store a sprite
+        sf::Image   Image;                              // Stire an image
 
         int         Damage;                             // Store The damage value for the component here
         std::string Name;                               // Store The name value for the component here

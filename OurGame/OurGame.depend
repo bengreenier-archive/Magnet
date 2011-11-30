@@ -16,7 +16,7 @@
 	<SFML/Graphics.hpp>
 	"GunComponent.h"
 
-1322624520 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
+1322629478 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
 	"GunMaker.h"
 	"GunLocker.h"
 	<stdlib.h>
@@ -32,11 +32,11 @@
 1322613508 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.h
 	<SFML/Graphics.hpp>
 
-1322624954 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.cpp
+1322629499 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.cpp
 	"GunComponent.h"
 	<iostream>
 
-1322624695 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.h
+1322629478 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.h
 	<SFML/Graphics.hpp>
 	<string>
 

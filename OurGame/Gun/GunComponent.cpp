@@ -15,6 +15,11 @@ GunComponent::GunComponent(int Damage,std::string Name,std::string ImagePath)
     GunComponent::Damage    = Damage;
     GunComponent::Name      = Name;
 
+    if (!Image.LoadFromFile(ImagePath))
+    {
+        std::cout<<"Failure To Load Image From: "<<ImagePath<<"\n";
+    }
+
 }
 
 /**************************************
@@ -62,9 +67,9 @@ std::string GunComponent::GetName()
 **********************************/
 sf::Sprite GunComponent::GetSprite()
 {
-    std::cout<<GetImagePath()<<"\n";
-    sf::Sprite Sprite;
-    Sprite.SetImage(GetImage());
+    //std::cout<<GetImagePath()<<"\n";
+
+    Sprite.SetImage(Image);
     Sprite.SetPosition(10,10);
     //GetImage()->GetWidth() the image width
     return Sprite;
@@ -78,12 +83,6 @@ sf::Sprite GunComponent::GetSprite()
 ********************************/
 sf::Image& GunComponent::GetImage()
 {
-       sf::Image Image;
-
-    if (!Image.LoadFromFile(ImagePath))
-    {
-        std::cout<<"Failure To Load Image From: "<<ImagePath<<"\n";
-    }
 
     return Image;
 }
