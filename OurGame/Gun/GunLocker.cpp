@@ -20,6 +20,10 @@ GunLocker::GunLocker()
     AddMiddleComponent(new GunComponent(4,"In The","Gun/Sprites/assault1-middle.png"));
     AddRearComponent(new GunComponent(1,"Ass","Gun/Sprites/assault1-rear.png"));
 
+    AddFrontComponent(new GunComponent(8,"Burn","Gun/Sprites/assault2-front.png"));
+    AddMiddleComponent(new GunComponent(2,"Near Your","Gun/Sprites/assault2-middle.png"));
+    AddRearComponent(new GunComponent(3,"Eyes","Gun/Sprites/assault2-rear.png"));
+
     //ctor
 }
 

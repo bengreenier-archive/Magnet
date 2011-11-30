@@ -6,7 +6,7 @@ class GunMaker
     public:
         GunMaker();
         void ConsoleAGun();
-        void DrawTo(sf::RenderWindow& Window);
+        void DrawTo(sf::RenderWindow& Window,int x,int y);
     protected:
     private:
         int fRand;

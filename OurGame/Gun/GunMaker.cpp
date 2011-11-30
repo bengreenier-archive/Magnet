@@ -6,7 +6,7 @@
 
 GunMaker::GunMaker()
 {
-        srand ( time(NULL) );
+
         //Generate random number for each part of the gun.
      fRand = rand() % GunLocker::Get()->FrontSize();
      mRand = rand() % GunLocker::Get()->MiddleSize();
@@ -34,10 +34,10 @@ void GunMaker::ConsoleAGun()
 }
 
 
-void GunMaker::DrawTo(sf::RenderWindow& Window)
+void GunMaker::DrawTo(sf::RenderWindow& Window,int x,int y)
 {
     //can't draw like this for some reason.
-    Window.Draw(GunLocker::Get()->GetFrontComponent(fRand)->GetSprite("Front",0,0));
-    Window.Draw(GunLocker::Get()->GetMiddleComponent(mRand)->GetSprite("Middle",0,0));
-    Window.Draw(GunLocker::Get()->GetRearComponent(rRand)->GetSprite("Rear",0,0));
+    Window.Draw(GunLocker::Get()->GetFrontComponent(fRand)->GetSprite("Front",x,y));
+    Window.Draw(GunLocker::Get()->GetMiddleComponent(mRand)->GetSprite("Middle",x,y));
+    Window.Draw(GunLocker::Get()->GetRearComponent(rRand)->GetSprite("Rear",x,y));
 }
