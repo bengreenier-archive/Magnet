@@ -16,7 +16,7 @@
 	<SFML/Graphics.hpp>
 	"GunComponent.h"
 
-1322629478 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
+1322624520 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
 	"GunMaker.h"
 	"GunLocker.h"
 	<stdlib.h>
@@ -32,11 +32,11 @@
 1322613508 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.h
 	<SFML/Graphics.hpp>
 
-1322629499 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.cpp
+1322624954 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.cpp
 	"GunComponent.h"
 	<iostream>
 
-1322629478 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.h
+1322624695 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.h
 	<SFML/Graphics.hpp>
 	<string>
 
@@ -44,4 +44,40 @@
 	<iostream>
 	"Gun/GunMaker.h"
 	<SFML/Graphics.hpp>
+
+1322631039 source:c:\projects\magnet\ourgame\gun\gunlocker.cpp
+	"GunLocker.h"
+	"GunComponent.h"
+	<string>
+	<iostream>
+	<SFML/Graphics.hpp>
+
+1322631039 c:\projects\magnet\ourgame\gun\gunlocker.h
+	<vector>
+	<string>
+	<SFML/Graphics.hpp>
+	"GunComponent.h"
+
+1322631039 c:\projects\magnet\ourgame\gun\guncomponent.h
+	<SFML/Graphics.hpp>
+	<string>
+
+1322631039 source:c:\projects\magnet\ourgame\gun\gunmaker.cpp
+	"GunMaker.h"
+	"GunLocker.h"
+	<stdlib.h>
+	<time.h>
+	<iostream>
+
+1322631039 c:\projects\magnet\ourgame\gun\gunmaker.h
+	<SFML/Graphics.hpp>
+
+1322631039 source:c:\projects\magnet\ourgame\main.cpp
+	<iostream>
+	"Gun/GunMaker.h"
+	<SFML/Graphics.hpp>
+
+1322631039 source:c:\projects\magnet\ourgame\gun\guncomponent.cpp
+	"GunComponent.h"
+	<iostream>
 
