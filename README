@@ -1,44 +1,6 @@
 Read notes.
 
 
-#SH SCRIPT TO PULL/PUSH TO REPOS ON GITHUB
-
-  GNU nano 2.2.5                                                      File: /bin/Othello
-
-#!/bin/sh
-
-if [ x"$1" = x-sync ]; then
-cd /cygdrive/c/Users/B3n/My\ Documents/CodeBlocks\ Projects/OthelloBetter
-git pull origin master
-git add ./*
-git commit -m  "pushed from B3n's Desktop computer @ $(date "+%H:%M:%S on %m/%d/%y")."
-git push origin master
-
-elif [ x"$1" = x-cd ]; then
-
-echo -n "/cygdrive/c/Users/B3n/My"
-#echo -n "\\"
-echo -n " "
-echo -n "Documents/CodeBlocks"
-#echo -n "\\"
-echo -n " "
-echo -n "Projects/OthelloBetter"
-
-elif [ x"$1" = x-pull ]; then
-
-cd /cygdrive/c/Users/B3n/My\ Documents/CodeBlocks\ Projects/OthelloBetter
-git pull origin master
-
-elif [ x"$1" = x-push ]; then
-
-cd /cygdrive/c/Users/B3n/My\ Documents/CodeBlocks\ Projects/OthelloBetter
-git push origin master
-
-fi
-
-#
-# This command syncs the Othello github project (localdir<->github/Othello)
-#
 
 
 
