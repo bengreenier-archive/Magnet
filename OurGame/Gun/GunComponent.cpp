@@ -21,7 +21,8 @@ GunComponent::GunComponent(int Damage,std::string Name,std::string ImagePath)
     }
     GunComponent::Length        = Image.GetHeight();
     GunComponent::Width         = Image.GetWidth();
-    GunComponent::ScaleFactor   = .3f;
+    Sprite.SetImage(Image);
+
 
 }
 
@@ -60,37 +61,3 @@ std::string GunComponent::GetName()
     return GunComponent::Name;
 }
 
-/**********************************
-
-    A helper function to create
-    and return the components
-    image as a sprite that can
-    be drawn.
-
-    The way this is being done,
-    with arguments, is invalid.
-    i should be looking into
-    setting the .SetPosition
-    in GunMaker, as GunMaker
-    knows the dimensions to
-    all GunComponents in use.
-
-**********************************/
-sf::Sprite GunComponent::GetSprite(std::string Position,int x,int y)
-{
-    //std::cout<<GetImagePath()<<"\n";
-    Sprite.SetImage(Image);
-
-    if (Position == "Rear")
-        Sprite.SetPosition(x,y);
-    else if (Position == "Middle")
-        Sprite.SetPosition(x+(Width*ScaleFactor),y);
-    else if (Position == "Front")
-        Sprite.SetPosition(x+(Width*ScaleFactor)+(Width*ScaleFactor),y);
-    else
-        std::cout<<"Invalid GetSprite(STRING) given.\n";
-
-    Sprite.SetScale(ScaleFactor,ScaleFactor);
-
-    return Sprite;
-}

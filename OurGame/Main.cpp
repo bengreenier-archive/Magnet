@@ -6,13 +6,13 @@ int main()
 {
     std::cout<<"This is OurGame\n";
     srand ( time(NULL) );//random seeder for guns
-    GunMaker Gun;
+    GunMaker Gun(.3f);
         Gun.ConsoleAGun();
-    GunMaker Gun2;
+    GunMaker Gun2(.3f);
         Gun2.ConsoleAGun();
-    GunMaker Gun3;
+    GunMaker Gun3(.3f);
         Gun3.ConsoleAGun();
-    GunMaker Gun4;
+    GunMaker Gun4(.3f);
         Gun4.ConsoleAGun();
 
      sf::RenderWindow Window(sf::VideoMode(800, 600, 32), "OurGame");
@@ -36,7 +36,7 @@ int main()
         Gun2.DrawTo(Window,0,100);
         Gun3.DrawTo(Window,0,200);
         Gun4.DrawTo(Window,0,300);
-        // Display window contents on screen
+         //Display window contents on screen
         Window.Display();
     }
     return 0;
