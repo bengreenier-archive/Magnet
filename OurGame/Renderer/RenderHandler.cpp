@@ -1,6 +1,9 @@
 #include "RenderHandler.h"
 
 #include <iostream>
+#include <queue>
+
+#include "RenderData.h"
 
 RenderHandler*       RenderHandler::RenderHandlerPtr = NULL;
 
@@ -8,6 +11,7 @@ RenderHandler::RenderHandler()
 {
     WindowPtr = new sf::RenderWindow(sf::VideoMode::GetMode(3), "Chess - Adam Zielinski");
     m_isValid = false;
+    m_cindex    =   0;
 }
 
 //Clean up all the allocated memory space
@@ -42,25 +46,56 @@ sf::RenderWindow* RenderHandler::Window(){
     return this->WindowPtr;
 }
 
+void RenderHandler::RemapDepth(sf::Drawable* obj, int depth){
+    /*map<int, sf::Drawable*>::iterator it;
+
+    for(it = object_map.begin(); it != object_map.end(); it++){
+        if((*it).second == obj){
+            depth_map[(*it).first] = depth;
+        }
+    }*/
+}
+
+void RenderHandler::SwitchLayer(sf::Drawable* obj, Layer layer){
+    /*map<int, sf::Drawable*>::iterator it;
+
+    for(it = object_map.begin(); it != object_map.end(); it++){
+        if((*it).second == obj){
+            layer_map[(*it).first] = layer;
+        }
+    }*/
+}
 /*********************************************
             "Draw the screen"
 *********************************************/
 void RenderHandler::Render(){
-    RenderHandler* r = RenderHandler::GetObject();
+    if(isValid()) return;
 
-    if(r->isValid()) return;
+    std::cout << "Draw\n";
 
-    std::cout << "Draw " << r->isValid() << "\n";
+    Window()->Clear(sf::Color(0, 0, 0));
 
-    r->Window()->Clear(sf::Color(0, 0, 0));
+    //Iterate the struct_map and draw
+    multimap<int, multimap<int, int> >::iterator struct_it;
+    multimap<int, int>::iterator depth_it;
+    //A queue of each layer mapped to the depths within the layer with each object index mapped to that depth
+    //queue<map<int, multimap<int, int> > layerQ;
 
-    //Draw contents
-    //multimap<int, sf::Drawable>::iterator it;
+    std::cout << "There are " << struct_map.size() << " entries in struct map.\n";
 
+    for(struct_it = struct_map.begin(); struct_it != struct_map.end(); ++struct_it){
+        std::cout << "Layer " << (*struct_it).first  << " has " << (*struct_it).second.size() << " objects at depth(s) ";
 
-    r->Window()->Display();
+        for(depth_it = (*struct_it).second.begin(); depth_it != (*struct_it).second.end(); depth_it++){
+            std::cout << (*depth_it).first << " ";
+        }
 
-    r->validate();
+        std::cout << std::endl;
+    }
+
+    Window()->Display();
+
+    validate();
 }
 
 /*********************************************
@@ -68,21 +103,18 @@ void RenderHandler::Render(){
 
     This maps the objects depth to the object itself.
 *********************************************/
-void RenderHandler::Add(sf::Drawable* linkedObj, Layer layer, int depth){
-    multimap<int, sf::Drawable*> depthMap;
-    depthMap.insert(pair<int, sf::Drawable*>(depth, linkedObj));
+void RenderHandler::Map(sf::Drawable* linkerObj, Layer layer, int depth){
+    object_map[m_cindex] = linkerObj;
 
-    rmap.insert(pair< int, multimap<int, sf::Drawable* >(layer, depthMap));
+    multimap<int, int> tmpmap;
+    tmpmap.insert(pair<int, int>(depth, m_cindex));
+
+    struct_map.insert(pair<int, multimap<int, int> >(layer, tmpmap));
+
+    m_cindex++;
+
+    invalidate();
 }
-
-template<typename T>
-void RenderHandler::CreateObject(T newOb){
-    //RenderObject<T> newObject(newOb);
-    //newObject->_obType = T;
-
-    //return newObject;
-}
-
 
 /*********************************************
     "Check if the screen is valid"

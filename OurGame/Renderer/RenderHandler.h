@@ -1,15 +1,26 @@
 #ifndef RENDERHANDLER_H
 #define RENDERHANDLER_H
 
-#include <SFML/Graphics.hpp>
-#include "RenderObject.h"
+#include<map>
 
-using namespace std;
+#include <SFML/Graphics.hpp>
+
+using std::map;
+using std::multimap;
+using std::pair;
+
+class RenderData;
 
 //Handles the updating of GUI compoentns
 class RenderHandler
 {
     public:
+
+        enum Layer{
+            GUI_LAYER,
+            HUD_LAYER,
+            GAME_LAYER
+        };
 
         ~RenderHandler();
 
@@ -50,25 +61,37 @@ class RenderHandler
         /*********************************************
             "Draw the screen"
         *********************************************/
-        static void Render();
+        void Render();
 
         /*********************************************
             "Add a RenderObject to the handler"
+
+            When an object is mapped, it is assinged a unique index
         *********************************************/
-        void Map(sf::Drawable* linkedObj, Layer layer, int depth);
+        void Map(sf::Drawable* linkerObj, Layer layer, int depth);
+
+        /*********************************************
+            "Set the depth of a mapped object"
+        *********************************************/
+        void RemapDepth(sf::Drawable* linkedObj, int depth);
+
+        void SwitchLayer(sf::Drawable* linkedObj, Layer layer);
+
     protected:
         RenderHandler();
     private:
-        //Map the layer to the depth
-            //Map the depth to the sf::Drawable pointer
-        multimap<int, multimap<int, sf::Drawable*> >rmap;
+        //Map the drawable to its render data
+        map<int, sf::Drawable*> object_map;
+        //Map the sorted struct of the renederer
+        multimap<int, multimap<int, int> > struct_map;
 
         static RenderHandler*       RenderHandlerPtr;
 
         //Each render handler should have a new RenderWindow
         //Accessed through RenderHandler
         sf::RenderWindow*           WindowPtr;
-        bool        m_isValid; //Set false by public member invalidate(), this causes the frame to be redrawn
+        bool            m_isValid; //Set false by public member invalidate(), this causes the frame to be redrawn
+        unsigned int    m_cindex; //Current mapping index
 
 
 

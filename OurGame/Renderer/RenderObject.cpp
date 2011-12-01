@@ -1,14 +1,15 @@
 #include "RenderObject.h"
 #include "Layer.h"
 
-template <typename T>
-RenderObject<T>::RenderObject()
+RenderObject::RenderObject()
 {
     depth   =   0;
     layer   =   Layer::GAME;
+    object  =   NULL;
 }
 
-template <typename T>
-bool RenderObject<T>::isValid(){
-    return _valid;
+bool RenderObject::isValid(){
+    if(object ==  NULL) return false;
+
+    return true;
 }

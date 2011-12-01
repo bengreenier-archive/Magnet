@@ -1,15 +1,13 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <SFML/Graphics.hpp>
-
 #include "Renderer/RenderHandler.h"
-#include "Renderer/RenderObject.h"
+#include "Renderer/RenderData.h"
 #include "Renderer/Layer.cpp"
 
 /*************************************
     Renderer is a static class allows
-        objects to be drawn to screen
+        an easy API with RenderHandler
 **************************************/
 
 class Renderer
@@ -21,7 +19,10 @@ class Renderer
 
         //Link the Renderer to a drawable with no RenderObject
         //  A new RenderObject is created with default Layer (GAME) and depth(0)
-        static void Link(sf::Drawable* linkedObj, const int& layer, int depth);
+        //template <typename T>
+        static void Link(sf::Drawable* linkedObj);
+
+        static void RemapDepth(sf::Drawable* linkedObj, int depth);
 
         static sf::RenderWindow* Window();
         static void draw();

@@ -15,9 +15,13 @@ int main()
     //sf::RenderWindow Window(sf::VideoMode(800, 600, 32), "OurGame");
 
     /*  TO ADD SOMETHING TO THE RENDER HANDLER  */
-    sf::Shape* myRect = new sf::Shape::Rectangle(0, 0, 10, 10, sf::Color(255, 255, 255));
-    Renderer::Link(dynamic_cast<sf::Drawable*>(myRect), Layer::GAME, 0);
+    sf::Image img;
+    img.LoadFromFile("Gun/Sprites/assault1-front.png");
+    sf::Sprite* mySprite = new sf::Sprite();
+    mySprite->SetImage(img);
 
+    Renderer::Link(mySprite);
+    //Renderer::SetDepth(mySprite, 3);
     while (Renderer::Window()->IsOpened())
     {
 
