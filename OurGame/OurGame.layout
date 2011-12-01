@@ -8,18 +8,18 @@
 		<Cursor position="467" topLine="0" />
 	</File>
 	<File name="Gun\GunLocker.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="879" topLine="0" />
+		<Cursor position="1181" topLine="111" />
 	</File>
 	<File name="Gun\GunLocker.h" open="1" top="0" tabpos="3">
 		<Cursor position="1944" topLine="0" />
 	</File>
-	<File name="Gun\GunMaker.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="2032" topLine="37" />
+	<File name="Gun\GunMaker.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="2791" topLine="70" />
 	</File>
 	<File name="Gun\GunMaker.h" open="1" top="0" tabpos="1">
-		<Cursor position="153" topLine="0" />
+		<Cursor position="292" topLine="5" />
 	</File>
-	<File name="Main.cpp" open="1" top="0" tabpos="7">
-		<Cursor position="354" topLine="11" />
+	<File name="Main.cpp" open="1" top="1" tabpos="7">
+		<Cursor position="277" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

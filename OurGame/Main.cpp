@@ -7,13 +7,13 @@ int main()
     std::cout<<"This is OurGame\n";
     srand ( time(NULL) );//random seeder for guns
     GunMaker Gun(.3f);
-        Gun.ConsoleAGun();
+
     GunMaker Gun2(.3f);
-        Gun2.ConsoleAGun();
+
     GunMaker Gun3(.3f);
-        Gun3.ConsoleAGun();
+
     GunMaker Gun4(.3f);
-        Gun4.ConsoleAGun();
+
 
      sf::RenderWindow Window(sf::VideoMode(800, 600, 32), "OurGame");
 
