@@ -38,6 +38,11 @@
 		<Unit filename="Gun\GunMaker.cpp" />
 		<Unit filename="Gun\GunMaker.h" />
 		<Unit filename="Main.cpp" />
+		<Unit filename="Renderer.cpp" />
+		<Unit filename="Renderer.h" />
+		<Unit filename="Renderer\RenderData.h" />
+		<Unit filename="Renderer\RenderHandler.cpp" />
+		<Unit filename="Renderer\RenderHandler.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
+<<<<<<< HEAD
 	<File name="Gun\GunComponent.cpp" open="1" top="0" tabpos="4">
 		<Cursor position="2448" topLine="64" />
 	</File>
@@ -21,5 +22,42 @@
 	</File>
 	<File name="Main.cpp" open="1" top="1" tabpos="2">
 		<Cursor position="345" topLine="0" />
+=======
+	<File name="Gun\GunComponent.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="1633" topLine="27" />
+	</File>
+	<File name="Gun\GunComponent.h" open="0" top="0" tabpos="5">
+		<Cursor position="485" topLine="0" />
+	</File>
+	<File name="Gun\GunLocker.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="681" topLine="2" />
+	</File>
+	<File name="Gun\GunLocker.h" open="0" top="0" tabpos="7">
+		<Cursor position="1944" topLine="0" />
+	</File>
+	<File name="Gun\GunMaker.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="878" topLine="0" />
+	</File>
+	<File name="Gun\GunMaker.h" open="0" top="0" tabpos="3">
+		<Cursor position="68" topLine="0" />
+	</File>
+	<File name="Main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="560" topLine="4" />
+	</File>
+	<File name="Renderer.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="172" topLine="0" />
+	</File>
+	<File name="Renderer.h" open="1" top="0" tabpos="2">
+		<Cursor position="79" topLine="0" />
+	</File>
+	<File name="Renderer\RenderData.h" open="1" top="0" tabpos="6">
+		<Cursor position="152" topLine="0" />
+	</File>
+	<File name="Renderer\RenderHandler.cpp" open="1" top="1" tabpos="5">
+		<Cursor position="2014" topLine="68" />
+	</File>
+	<File name="Renderer\RenderHandler.h" open="1" top="0" tabpos="4">
+		<Cursor position="2519" topLine="56" />
+>>>>>>> 9b45e49f0f6c745250f0fd7e7dfdf0269f5d2a44
 	</File>
 </CodeBlocks_layout_file>

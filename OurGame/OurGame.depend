@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # depslib dependency file v1.0
 1321150269 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\demo.cpp
 	<Box2D/Box2D.h>
@@ -127,3 +128,125 @@
 	"Convert.h"
 	<sstream>
 
+=======
+# depslib dependency file v1.0
+1321150269 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\demo.cpp
+	<Box2D/Box2D.h>
+	<cstdio>
+
+1322624101 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.cpp
+	"GunLocker.h"
+	"GunComponent.h"
+	<string>
+	<iostream>
+	<SFML/Graphics.hpp>
+
+1322623367 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunlocker.h
+	<vector>
+	<string>
+	<SFML/Graphics.hpp>
+	"GunComponent.h"
+
+1322624520 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.cpp
+	"GunMaker.h"
+	"GunLocker.h"
+	<stdlib.h>
+	<time.h>
+	<iostream>
+
+1322621305 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\gunmaker.h
+	<SFML/Graphics.hpp>
+
+1321741525 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.cpp
+	"overlay.h"
+
+1322613508 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\overlay\overlay.h
+	<SFML/Graphics.hpp>
+
+1322624954 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.cpp
+	"GunComponent.h"
+	<iostream>
+
+1322624695 c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\gun\guncomponent.h
+	<SFML/Graphics.hpp>
+	<string>
+
+1322623606 source:c:\users\b3n\documents\codeblocks projects\ourgame\ourgame\main.cpp
+	<iostream>
+	"Gun/GunMaker.h"
+	<SFML/Graphics.hpp>
+
+1322633384 source:c:\projects\magnet\ourgame\gun\gunlocker.cpp
+	"GunLocker.h"
+	"GunComponent.h"
+	<string>
+	<iostream>
+	<SFML/Graphics.hpp>
+
+1322633384 c:\projects\magnet\ourgame\gun\gunlocker.h
+	<vector>
+	<string>
+	<SFML/Graphics.hpp>
+	"GunComponent.h"
+
+1322633384 c:\projects\magnet\ourgame\gun\guncomponent.h
+	<SFML/Graphics.hpp>
+	<string>
+
+1322633384 source:c:\projects\magnet\ourgame\gun\gunmaker.cpp
+	"GunMaker.h"
+	"GunLocker.h"
+	<stdlib.h>
+	<time.h>
+	<iostream>
+
+1322633384 c:\projects\magnet\ourgame\gun\gunmaker.h
+	<SFML/Graphics.hpp>
+
+1322702086 source:c:\projects\magnet\ourgame\main.cpp
+	<iostream>
+	<SFML/Graphics.hpp>
+	"Renderer.h"
+	"Gun/GunMaker.h"
+	"Renderer/Layer.h"
+
+1322633384 source:c:\projects\magnet\ourgame\gun\guncomponent.cpp
+	"GunComponent.h"
+	<iostream>
+
+1322701695 c:\projects\magnet\ourgame\renderer.h
+	"Renderer/RenderHandler.h"
+	"Renderer/RenderData.h"
+	"Renderer/Layer.cpp"
+
+1322703471 c:\projects\magnet\ourgame\renderer\renderhandler.h
+	<map>
+	<SFML/Graphics.hpp>
+
+1322688807 c:\projects\magnet\ourgame\renderer\renderobject.h
+
+1322681972 c:\projects\magnet\ourgame\renderer\layer.h
+
+1321903906 c:\projects\magnet\ourgame\renderer\layer.cpp
+
+1322701724 source:c:\projects\magnet\ourgame\renderer.cpp
+	"Renderer.h"
+
+1321903906 source:c:\projects\magnet\ourgame\renderer\layer.cpp
+
+1322703735 source:c:\projects\magnet\ourgame\renderer\renderhandler.cpp
+	"RenderHandler.h"
+	<iostream>
+	<queue>
+	<iterator>
+	"RenderData.h"
+
+1322682646 source:c:\projects\magnet\ourgame\renderer\renderobject.cpp
+	"RenderObject.h"
+	"Layer.h"
+
+1322689110 c:\projects\magnet\ourgame\renderer\renderdata.h
+	<SFML/Graphics.hpp>
+	"Renderer/RenderHandler.h"
+
+>>>>>>> 9b45e49f0f6c745250f0fd7e7dfdf0269f5d2a44
