@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <queue>
+#include <iterator>
 
 #include "RenderData.h"
 
@@ -77,17 +78,19 @@ void RenderHandler::Render(){
 
     //Iterate the struct_map and draw
     multimap<int, multimap<int, int> >::iterator struct_it;
-    multimap<int, int>::iterator depth_it;
+    multimap<int, int>::reverse_iterator depth_rit;
+
     //A queue of each layer mapped to the depths within the layer with each object index mapped to that depth
     //queue<map<int, multimap<int, int> > layerQ;
 
-    std::cout << "There are " << struct_map.size() << " entries in struct map.\n";
+    std::cout << "There are " << struct_map.size() << " layers in struct map.\n";
 
     for(struct_it = struct_map.begin(); struct_it != struct_map.end(); ++struct_it){
-        std::cout << "Layer " << (*struct_it).first  << " has " << (*struct_it).second.size() << " objects at depth(s) ";
+        std::cout << "Layer " << struct_it->first  << " has " << struct_it->second.size() << " objects at depth(s) ";
 
-        for(depth_it = (*struct_it).second.begin(); depth_it != (*struct_it).second.end(); depth_it++){
-            std::cout << (*depth_it).first << " ";
+        for(depth_rit = struct_it->second.rbegin(); depth_rit != struct_it->second.rend(); depth_rit++){
+            std::cout << depth_rit->first << " ";
+            Window()->Draw(*object_map[depth_rit->second]);
         }
 
         std::cout << std::endl;
@@ -106,10 +109,14 @@ void RenderHandler::Render(){
 void RenderHandler::Map(sf::Drawable* linkerObj, Layer layer, int depth){
     object_map[m_cindex] = linkerObj;
 
-    multimap<int, int> tmpmap;
-    tmpmap.insert(pair<int, int>(depth, m_cindex));
+    if(struct_map.find(layer) == struct_map.end()){
+        multimap<int, int> tmpmap;
+        tmpmap.insert(pair<int, int>(depth, m_cindex));
 
-    struct_map.insert(pair<int, multimap<int, int> >(layer, tmpmap));
+        struct_map.insert(pair<int, multimap<int, int> >(layer, tmpmap));
+    }else{
+        struct_map[layer].insert(pair<int, int>(depth, m_cindex));
+    }
 
     m_cindex++;
 

@@ -21,6 +21,8 @@ class Renderer
         //  A new RenderObject is created with default Layer (GAME) and depth(0)
         //template <typename T>
         static void Link(sf::Drawable* linkedObj);
+        static void Link(sf::Drawable* linkedObj, RenderHandler::Layer layer);
+        static void Link(sf::Drawable* linkedObj, RenderHandler::Layer layer, int depth);
 
         static void RemapDepth(sf::Drawable* linkedObj, int depth);
 

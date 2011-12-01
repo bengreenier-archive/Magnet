@@ -72,7 +72,7 @@
 1322633384 c:\projects\magnet\ourgame\gun\gunmaker.h
 	<SFML/Graphics.hpp>
 
-1322680637 source:c:\projects\magnet\ourgame\main.cpp
+1322702086 source:c:\projects\magnet\ourgame\main.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	"Renderer.h"
@@ -83,12 +83,12 @@
 	"GunComponent.h"
 	<iostream>
 
-1322688948 c:\projects\magnet\ourgame\renderer.h
+1322701695 c:\projects\magnet\ourgame\renderer.h
 	"Renderer/RenderHandler.h"
 	"Renderer/RenderData.h"
 	"Renderer/Layer.cpp"
 
-1322689457 c:\projects\magnet\ourgame\renderer\renderhandler.h
+1322703471 c:\projects\magnet\ourgame\renderer\renderhandler.h
 	<map>
 	<SFML/Graphics.hpp>
 
@@ -98,14 +98,17 @@
 
 1321903906 c:\projects\magnet\ourgame\renderer\layer.cpp
 
-1322689217 source:c:\projects\magnet\ourgame\renderer.cpp
+1322701724 source:c:\projects\magnet\ourgame\renderer.cpp
 	"Renderer.h"
 
 1321903906 source:c:\projects\magnet\ourgame\renderer\layer.cpp
 
-1322682636 source:c:\projects\magnet\ourgame\renderer\renderhandler.cpp
+1322703735 source:c:\projects\magnet\ourgame\renderer\renderhandler.cpp
 	"RenderHandler.h"
 	<iostream>
+	<queue>
+	<iterator>
+	"RenderData.h"
 
 1322682646 source:c:\projects\magnet\ourgame\renderer\renderobject.cpp
 	"RenderObject.h"

@@ -2,15 +2,15 @@
 
 //template <typename T>
 void Renderer::Link(sf::Drawable* linkedObj){
-    RenderHandler::GetObject()->Map(linkedObj, RenderHandler::GAME_LAYER, 0); //dynamic_cast<sf::Drawable*>(linkedObj)
+    RenderHandler::GetObject()->Map(linkedObj, RenderHandler::GAME_LAYER, 0);
 }
 
 void Renderer::Link(sf::Drawable* linkedObj, RenderHandler::Layer layer){
-    RenderHandler::GetObject()->Map(linkedObj, layer, 0); //dynamic_cast<sf::Drawable*>(linkedObj)
+    RenderHandler::GetObject()->Map(linkedObj, layer, 0);
 }
 
-void Renderer::Link(sf::Drawable* linkedObj){
-    RenderHandler::GetObject()->Map(linkedObj, RenderHandler::GAME_LAYER, 0); //dynamic_cast<sf::Drawable*>(linkedObj)
+void Renderer::Link(sf::Drawable* linkedObj, RenderHandler::Layer layer, int depth){
+    RenderHandler::GetObject()->Map(linkedObj, layer, depth);
 }
 
 void Renderer::RemapDepth(sf::Drawable* linkedObj, int depth){

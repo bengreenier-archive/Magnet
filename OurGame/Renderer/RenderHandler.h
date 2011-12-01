@@ -83,7 +83,7 @@ class RenderHandler
         //Map the drawable to its render data
         map<int, sf::Drawable*> object_map;
         //Map the sorted struct of the renederer
-        multimap<int, multimap<int, int> > struct_map;
+        map<int, multimap<int, int>, std::greater<int>  > struct_map;
 
         static RenderHandler*       RenderHandlerPtr;
 
