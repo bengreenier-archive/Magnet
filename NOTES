@@ -17,3 +17,8 @@ could really get messy.
 
 
 -Gun/ is working. :) it will generate guns and display the weapon, and some stats to the screen.
+
+
+-KeyBindings will work similar to the sfml threading
+
+-FileParser for GunLocker needs to be completed.
