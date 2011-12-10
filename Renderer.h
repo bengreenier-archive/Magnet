@@ -3,12 +3,8 @@
 
 #include<SFML/Graphics.hpp>
 #include <map>
-
-/*
-#include "Renderer/RenderHandler.h"
-#include "Renderer/RenderData.h"
-#include "Renderer/Layer.cpp"
-*/
+#include <string>
+#include <iostream>
 /*************************************
     Renderer is a static class allows
         an easy API with RenderHandler
@@ -48,8 +44,14 @@ class Renderer
             InvalidAll
         };
 
-        static void Link(LinkableSprite& sprite);
-        //static void Link(sf::Drawable* linkedObj, Layer layer);
+        struct exception{
+            enum ENAME{
+                NullType
+            };
+
+            ENAME       type;
+            std::string why;
+        };
 
         static sf::RenderWindow* Window();
 
@@ -90,11 +92,11 @@ class Renderer
         static void Render();
 
         /*********************************************
-            "Add a RenderObject to the handler"
+            "Add a drawable to the handler"
 
             When an object is mapped, it is assinged a unique index
         *********************************************/
-        void Map(LinkableSprite object);
+        static void CreateLink(sf::Drawable* sprite_ptr);
 
         /*********************************************
             "Set the depth of a mapped object"
@@ -108,17 +110,15 @@ class Renderer
     private:
         //Sort the layers into order.
         void sort();
-/*
-        map<int, sf::Drawable*> drawable_map;   //>   map a unique index to an sf::Drawable*
-        map<int, sf::Sprite*>   sprite_map;     //>   map a unique index to an sf::Sprite*
-        map<int, map_t> object_map;             //>   map a unique index to a map_t
-*/
-        //Map the sorted struct of the renederer
-        //map<int, multimap<int, int>, std::greater<int>  > struct_map;
 
-        //Map a layer to a depth to a Linkable at the depth
-        vector<LinkableSprite>             linkables;
-        vector<LinkableSprite>::iterator   linkables_it;
+        //Map a unique index to a drawable
+        map<int, sf::Drawable*>             drawable_map;
+        map<int, sf::Drawable*>::iterator   drawable_iterator;
+
+
+        //Make a multimap that maps a layer to the depth map on that layer
+        //  Nested multimap maps depths to a unique index
+        multimap<layer_t, multimap<int, int> > struct_map;
 
         static Renderer*       RendererPtr;
 

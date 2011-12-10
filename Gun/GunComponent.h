@@ -1,31 +1,38 @@
 #ifndef GUNCOMPONENT_H
 #define GUNCOMPONENT_H
 #include <SFML/Graphics.hpp>
-#include "../Handler/Renderer/LinkableSprite.h"
+#include "../Renderer.h"
+#include "../ImageHandler.h"
 #include <string>
-class GunComponent : public LinkableSprite
+#include "GunEnum.h"
+
+
+class GunComponent
 {
     public:
-        GunComponent(int Damage,std::string Name,std::string ImagePath);          // Default Constructor, take the parts needed to make a component
+        // Default Constructor, take the parts needed to make a component
+        GunComponent();
 
 
-        //sf::Sprite* GetSprite();
-        int         GetDamage();                        // Return the components damge value
-        std::string GetName();                          // Return the components name
+        ~GunComponent();          // Default Constructor, take the parts needed to make a component
+
+
+        sf::Sprite* GetSpritePtr();
         std::string GetImagePath();                     // Return the components image path
-        int         Length;                             // Store the components length here
-        int         Width;                              // Store the components width here
+        int GetWidth();
+        int GetHeight();
+        void SetImagePath(std::string path);
 
         std::string GetType();                          // Return the components gun type
+        GunEnum::Type type;
 
     protected:
     private:
+        std::string         m_imagepath;
+        sf::Sprite          m_sprite;
 
-        int         Damage;                             // Store The damage value for the component here
-        std::string Name;                               // Store The name value for the component here
-        std::string ImagePath;                          // Store ImagePath here
-        std::string Type;                               //Store the guntype here
-        //sf::Sprite  Sprite;                             // Store Sprite here
+        int         m_width;
+        int         m_height;
 
         std::string TypeFinder();
 

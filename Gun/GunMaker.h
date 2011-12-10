@@ -8,9 +8,9 @@ class GunMaker
     public:
         GunMaker(float Scale);
         void ConsoleAGun();
-        void DrawTo(int x,int y);
-        int tDamage; //Total Damage
-        sf::String Name;//GunName
+        void SetPosition(int x,int y);
+        std::string name;
+        int damage;
     protected:
     private:
         void        FormatDrawable(int x,int y);
@@ -18,23 +18,16 @@ class GunMaker
         std::string RenderGunInfo_Helper(int i);
 
         float ScaleFactor;
-        int fRand;
-        int mRand;
-        int rRand;
-        int fDamage;
-        int mDamage;
-        int rDamage;
 
-        std::string fName;
-        std::string mName;
-        std::string rName;
+        sf::String m_nameCmp;//GunName
+        sf::String m_damageCmp;
 
-        GunComponent*   FrontComponent;       // Points to the Front GunComponents Sprite
-        GunComponent*   MiddleComponent;      // Points to the Middle GunComponents Sprite
-        GunComponent*   RearComponent;        // Points to the Rear GunComponents Sprite
+        GunComponent   FrontComponent;       // Points to the Front GunComponents Sprite
+        GunComponent   MiddleComponent;      // Points to the Middle GunComponents Sprite
+        GunComponent   RearComponent;        // Points to the Rear GunComponents Sprite
 
 
-        sf::String      Damage;
+
 
 };
 

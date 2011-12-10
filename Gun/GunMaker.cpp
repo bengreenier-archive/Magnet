@@ -10,60 +10,42 @@
 
 GunMaker::GunMaker(float Scale)
 {
-
-
+     name   = GunLocker::Get()->GetRandomName();
+     damage = GunLocker::Get()->Random(9)+1;
      ScaleFactor=Scale;//For Now, until this constructor takes a scale
 
-     //this mess supossibly rerandomizes until types match.
-     do{
+     /*//this mess supossibly rerandomizes until types match.
 
-               //Generate random number for each part of the gun.
-     fRand = rand() % GunLocker::Get()->FrontSize();
-     mRand = rand() % GunLocker::Get()->MiddleSize();
-     rRand = rand() % GunLocker::Get()->RearSize();
-
-            }while (
-            (GunLocker::Get()->GetFrontComponent(fRand)->GetType().compare(GunLocker::Get()->GetMiddleComponent(mRand)->GetType()) !=0)
-            &&(GunLocker::Get()->GetRearComponent(rRand)->GetType().compare(GunLocker::Get()->GetMiddleComponent(mRand)->GetType()) !=0)
-            &&(GunLocker::Get()->GetFrontComponent(fRand)->GetType().compare(GunLocker::Get()->GetRearComponent(rRand)->GetType()) !=0)
-            );
-
-     //Get the components we will be using to craft the gun.
-     fName   =   GunLocker::Get()->GetFrontComponent(fRand)->GetName();
-     mName   =   GunLocker::Get()->GetMiddleComponent(mRand)->GetName();
-     rName   =   GunLocker::Get()->GetRearComponent(rRand)->GetName();
-     fDamage =   GunLocker::Get()->GetFrontComponent(fRand)->GetDamage();
-     mDamage =   GunLocker::Get()->GetMiddleComponent(mRand)->GetDamage();
-     rDamage =   GunLocker::Get()->GetRearComponent(rRand)->GetDamage();
-
-    tDamage=fDamage+mDamage+rDamage;
 
      //set the sprite pointers to GunComponents
-     FrontComponent = GunLocker::Get()->GetFrontComponent(fRand);
-     MiddleComponent = GunLocker::Get()->GetMiddleComponent(mRand);
-     RearComponent = GunLocker::Get()->GetRearComponent(rRand);
+     //FrontComponent = *GunLocker::Get()->GetFrontComponent(fRand);
+     //MiddleComponent = *GunLocker::Get()->GetMiddleComponent(mRand);
+     //RearComponent = *GunLocker::Get()->GetRearComponent(rRand);
+     */
+
+     FrontComponent = GunLocker::Get()->GetRandomComponent(GunEnum::Front, GunEnum::Light);
+     MiddleComponent = GunLocker::Get()->GetRandomComponent(GunEnum::Middle, GunEnum::Light);
+     RearComponent = GunLocker::Get()->GetRandomComponent(GunEnum::Rear, GunEnum::Light);
+
+     Renderer::CreateLink(FrontComponent.GetSpritePtr());
+     Renderer::CreateLink(MiddleComponent.GetSpritePtr());
+     Renderer::CreateLink(RearComponent.GetSpritePtr());
+     Renderer::CreateLink(&m_nameCmp);
+     Renderer::CreateLink(&m_damageCmp);
 
 }
 
 void GunMaker::ConsoleAGun()
 {
-    //Output the gun stats.
-    std::cout<<fName<<" does "<<fDamage<<" damage.\n";
-    std::cout<<mName<<" does "<<mDamage<<" damage.\n";
-    std::cout<<rName<<" does "<<rDamage<<" damage.\n";
-    std::cout<<"So the gun "<<fName<<" "<<mName<<" "<<rName<<" does "<<fDamage+mDamage+rDamage<<".\n";
+    std::cout<<"The gun "<< name <<" does "<< damage <<".\n";
 
 }
 
 
-//void GunMaker::SetPosition(int x,int y)
-void GunMaker::DrawTo(int x,int y)
+void GunMaker::SetPosition(int x,int y)
 {
     FormatDrawable(x,y);
     RenderGunInfo(x,y);
-    Renderer::Link(*RearComponent);
-    Renderer::Link(*MiddleComponent);
-    Renderer::Link(*FrontComponent);
 
 }
 
@@ -75,38 +57,42 @@ void GunMaker::FormatDrawable(int x,int y)
     int rLength =RearComponent->Length;
     */
 
-    int fWidth  =FrontComponent->Width;
-    int mWidth  =MiddleComponent->Width;
-    int rWidth  =RearComponent->Width;
+    std::cout << "Making changes!\n";
+
+    int fWidth  =FrontComponent.GetWidth();
+    int mWidth  =MiddleComponent.GetWidth();
+    int rWidth  =RearComponent.GetWidth();
 
     //Scale the Sprites
-    RearComponent->SetScale(ScaleFactor,ScaleFactor);
-    MiddleComponent->SetScale(ScaleFactor,ScaleFactor);
-    FrontComponent->SetScale(ScaleFactor,ScaleFactor);
+    RearComponent.GetSpritePtr()->SetScale(ScaleFactor,ScaleFactor);
+    MiddleComponent.GetSpritePtr()->SetScale(ScaleFactor,ScaleFactor);
+    FrontComponent.GetSpritePtr()->SetScale(ScaleFactor,ScaleFactor);
 
     //Set Sprite Draw Positions
-    RearComponent->SetPosition(x,y);
-    MiddleComponent->SetPosition(x+(ScaleFactor*rWidth),y);
-    FrontComponent->SetPosition(x+(ScaleFactor*rWidth)+(ScaleFactor*mWidth),y);
+    RearComponent.GetSpritePtr()->SetPosition(x,y);
+    MiddleComponent.GetSpritePtr()->SetPosition(x+(ScaleFactor*rWidth),y);
+    FrontComponent.GetSpritePtr()->SetPosition(x+(ScaleFactor*rWidth)+(ScaleFactor*mWidth),y);
+
+    Renderer::invalidate();
 }
 
 void GunMaker::RenderGunInfo(int x,int y)
 {
 
-int mLength = MiddleComponent->Length;
+int mLength = MiddleComponent.GetHeight();
 
-Name.SetText(fName+" "+mName+" "+rName);
-Name.SetSize(24);
-Name.SetColor(sf::Color(140,240,240));
-Name.SetPosition(x,y+(ScaleFactor*mLength));
-
-
+m_nameCmp.SetText(name);
+m_nameCmp.SetSize(24);
+m_nameCmp.SetColor(sf::Color(140,240,240));
+m_nameCmp.SetPosition(x,y+(ScaleFactor*mLength));
 
 
-Damage.SetText("Damage: "+RenderGunInfo_Helper(fDamage+mDamage+rDamage));
-Damage.SetSize(18);
-Damage.SetColor(sf::Color(140,240,240));
-Damage.SetPosition(x,y+(ScaleFactor*mLength)+26);
+
+
+m_damageCmp.SetText("Damage: "+RenderGunInfo_Helper(damage));
+m_damageCmp.SetSize(18);
+m_damageCmp.SetColor(sf::Color(140,240,240));
+m_damageCmp.SetPosition(x,y+(ScaleFactor*mLength)+26);
 
 }
 

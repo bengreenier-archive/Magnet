@@ -17,7 +17,7 @@ Convert* Convert::Get()
     return ConvertPtr;
 }
 
-std::string ToString(int i)
+std::string Convert::ToString(int i)
 {
     std::stringstream ss;
     ss<<i;

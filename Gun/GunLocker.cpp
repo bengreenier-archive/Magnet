@@ -1,9 +1,10 @@
 #include "GunLocker.h"
 #include "GunComponent.h"
+#include "../Conversions/Convert.h"
 #include <string>
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
+#include <typeinfo>
 GunLocker* GunLocker::GunLockerPtr = NULL;
 
 /*********************
@@ -16,20 +17,84 @@ GunLocker* GunLocker::GunLockerPtr = NULL;
 GunLocker::GunLocker()
 {
     //create initial (core/main loaded/non manual/etc) components from raw data here.
-    AddFrontComponent(new GunComponent(2,"Pain","Sprites/Guns/Assault/assault1-front.png"));
-    AddMiddleComponent(new GunComponent(4,"In The","Sprites/Guns/Assault/assault1-middle.png"));
-    AddRearComponent(new GunComponent(1,"Ass","Sprites/Guns/Assault/assault1-rear.png"));
+/*    AddFrontComponent(new GunComponent(2,"Pain","Gun/Sprites/Assault/assault1-front.png"));
+    AddMiddleComponent(new GunComponent(4,"In The","Gun/Sprites/Assault/assault1-middle.png"));
+    AddRearComponent(new GunComponent(1,"Ass","Gun/Sprites/Assault/assault1-rear.png"));
 
-    AddFrontComponent(new GunComponent(8,"Burn","Sprites/Guns/Assault/assault2-front.png"));
-    AddMiddleComponent(new GunComponent(2,"Near Your","Sprites/Guns/Assault/assault2-middle.png"));
-    AddRearComponent(new GunComponent(3,"Eyes","Sprites/Guns/Assault/assault2-rear.png"));
+    AddFrontComponent(new GunComponent(8,"Burn","Gun/Sprites/Assault/assault2-front.png"));
+    AddMiddleComponent(new GunComponent(2,"Near Your","Gun/Sprites/Assault/assault2-middle.png"));
+    AddRearComponent(new GunComponent(3,"Eyes","Gun/Sprites/Assault/assault2-rear.png"));
 
-    AddFrontComponent(new GunComponent(5,"Sting","Sprites/Guns/Assault/assault3-front.png"));
-    AddMiddleComponent(new GunComponent(11,"Up Your","Sprites/Guns/Assault/assault3-middle.png"));
-    AddRearComponent(new GunComponent(7,"Toes","Sprites/Guns/Assault/assault3-rear.png"));
+    AddFrontComponent(new GunComponent(5,"Sting","Gun/Sprites/Assault/assault3-front.png"));
+    AddMiddleComponent(new GunComponent(11,"Up Your","Gun/Sprites/Assault/assault3-middle.png"));
+    AddRearComponent(new GunComponent(7,"Toes","Gun/Sprites/Assault/assault3-rear.png"));*/
 
     //ctor
+
+    nouns.push_back("Bane");
+    nouns.push_back("Rock");
+    nouns.push_back("Rift");
+    nouns.push_back("Crater");
+
+    verbs.push_back("Crush");
+    verbs.push_back("Run");
+    verbs.push_back("Kill");
+    verbs.push_back("Steal");
+
+    adjectives.push_back("Dark");
+    adjectives.push_back("Red");
+    adjectives.push_back("Blue");
+    adjectives.push_back("Green");
+    adjectives.push_back("White");
+    adjectives.push_back("Deadly");
 }
+
+
+std::string GunLocker::GetRandomName(){
+    std::cout << "Generating random name...\n";
+    std::string name = "";
+    int r = rand() % 3;
+    int noun_index, verb_index, adj_index;
+
+    switch(r){
+        case 0:
+            std::cout << "Generating short name\n";
+            noun_index = rand() % nouns.size();
+            verb_index = -1;
+            adj_index = -1;
+            break;
+        case 1:
+            std::cout << "Generating medium name\n";
+            noun_index = rand() % nouns.size();
+            verb_index = rand() % verbs.size();
+            adj_index = -1;
+            break;
+        case 2:
+            std::cout << "Generating long name\n";
+            noun_index = rand() % nouns.size();
+            verb_index = rand() % verbs.size();
+            adj_index = rand() % adjectives.size();
+            break;
+    }
+
+    if(adj_index != -1){
+        name += adjectives[adj_index] + " ";
+    }
+
+     name += nouns[noun_index];
+
+    if(verb_index != -1){
+        name += " " + verbs[verb_index];
+    }
+
+
+    return name;
+}
+
+int GunLocker::Random(int range){
+    return rand()%range;
+}
+
 
 /**************************
 
@@ -42,7 +107,7 @@ GunLocker::GunLocker()
 GunLocker* GunLocker::Get()
 {
     if(GunLockerPtr==NULL)
-    GunLockerPtr=new GunLocker();
+        GunLockerPtr=new GunLocker();
 
     return GunLockerPtr;
 }
@@ -127,17 +192,68 @@ int GunLocker::RearSize()
     return Rear.size();
 }
 
-GunComponent* GunLocker::GetFrontComponent(int Index)
+GunComponent GunLocker::GetFrontComponent(int Index)
 {
-    return Front[Index];
+    return *Front[Index];
 }
 
-GunComponent* GunLocker::GetMiddleComponent(int Index)
+GunComponent GunLocker::GetMiddleComponent(int Index)
 {
-    return Middle[Index];
+    return *Middle[Index];
 }
 
-GunComponent* GunLocker::GetRearComponent(int Index)
+GunComponent GunLocker::GetRearComponent(int Index)
 {
-    return Rear[Index];
+    return *Rear[Index];
+}
+
+GunComponent GunLocker::GetRandomComponent( GunEnum::Component comp, GunEnum::Type type){
+    switch(comp){
+        case GunEnum::Front:
+            return GetRandomFrontComponent(type);
+        case GunEnum::Middle:
+            return GetRandomMiddleComponent(type);
+        case GunEnum::Rear:
+            return GetRandomRearComponent(type);
+    }
+}
+
+GunComponent GunLocker::GetRandomFrontComponent(GunEnum::Type type){
+    std::string imgid = Convert::ToString(rand()%3 +1);
+
+    GunComponent* newComponent = new GunComponent();
+    newComponent->type = type;
+    std::cout << "********** " << typeid(type).name() << std::endl;
+
+    std::string id;
+    newComponent->SetImagePath("Gun/Sprites/Assault/assault" + imgid + "-front.png");
+
+    AddFrontComponent(newComponent);
+
+    return *newComponent;
+}
+
+GunComponent GunLocker::GetRandomMiddleComponent(GunEnum::Type type){
+
+    std::string imgid = Convert::ToString(rand()%3 +1);
+
+    GunComponent* newComponent = new GunComponent();
+    newComponent->type = type;
+    newComponent->SetImagePath("Gun/Sprites/Assault/assault" + imgid + "-middle.png");
+
+    AddMiddleComponent(newComponent);
+
+    return *newComponent;
+}
+
+GunComponent GunLocker::GetRandomRearComponent(GunEnum::Type type){
+    std::string imgid = Convert::ToString(rand()%3 +1);
+
+    GunComponent* newComponent = new GunComponent();
+    newComponent->type = type;
+    newComponent->SetImagePath("Gun/Sprites/Assault/assault" + imgid + "-rear.png");
+
+    AddFrontComponent(newComponent);
+
+    return *newComponent;
 }

@@ -1,5 +1,4 @@
 #include "GunComponent.h"
-#include "../ImageHandler.h"
 #include <iostream>
 #include <string>
 
@@ -10,19 +9,20 @@
     to create a full fledged gun.
 
 *********************************************************************/
-GunComponent::GunComponent(int Damage,std::string Name,std::string ImagePath)
+GunComponent::GunComponent()
 {
+    std::cout << "Attempting to link\t\t" << &m_sprite << std::endl;
 
-    GunComponent::ImagePath = ImagePath;
-    GunComponent::Damage    = Damage;
-    GunComponent::Name      = Name;
-    GunComponent::Type      = TypeFinder();
-    std::cout<<Type<<"\n";
-    GunComponent::Length        = ImageHandler::GetImage(ImagePath).GetHeight();
-    GunComponent::Width         = ImageHandler::GetImage(ImagePath).GetWidth();
-    SetImage(ImageHandler::GetImage(ImagePath));
+    std::cout << "Renderer now recognizes\t\t" << &m_sprite << std::endl << std::endl;
 
+}
+GunComponent::~GunComponent()
+{
+    //delete [] m_sprite;
+}
 
+sf::Sprite* GunComponent::GetSpritePtr(){
+    return &m_sprite;
 }
 
 /**************************************
@@ -33,52 +33,42 @@ GunComponent::GunComponent(int Damage,std::string Name,std::string ImagePath)
 **************************************/
 std::string GunComponent::GetImagePath()
 {
-    return GunComponent::ImagePath;
+    return m_imagepath;
 }
 
-/****************************
-
-    A helper function to
-    return the components
-    damage at any time.
-
-****************************/
-int GunComponent::GetDamage()
+void GunComponent::SetImagePath(std::string path)
 {
-    return GunComponent::Damage;
+    m_imagepath = path;
+    m_sprite.SetImage(ImageHandler::GetImage(m_imagepath));
+
+    m_width = ImageHandler::GetImage(m_imagepath).GetWidth();
+    m_height = ImageHandler::GetImage(m_imagepath).GetHeight();
 }
 
-/**********************************
-
-    A helper function to return
-    the components name at any
-    time.
-
-**********************************/
-std::string GunComponent::GetName()
+int GunComponent::GetWidth()
 {
-    return GunComponent::Name;
+    return m_width;
 }
 
-std::string GunComponent::GetType()
+int GunComponent::GetHeight()
 {
-    return GunComponent::Type;
+    return m_height;
 }
 
 
 std::string GunComponent::TypeFinder()
 {
-     if (ImagePath.find("Assault")!=std::string::npos)
+     if (m_imagepath.find("Assault")!=std::string::npos)
         return "Assault";
-else if (ImagePath.find("Sniper")!=std::string::npos)
+else if (m_imagepath.find("Sniper")!=std::string::npos)
         return "Sniper";
-else if (ImagePath.find("Smg")!=std::string::npos)
+else if (m_imagepath.find("Smg")!=std::string::npos)
         return "Smg";
-else if (ImagePath.find("Pistol")!=std::string::npos)
+else if (m_imagepath.find("Pistol")!=std::string::npos)
         return "Pistol";
-else if (ImagePath.find("Launcher")!=std::string::npos)
+else if (m_imagepath.find("Launcher")!=std::string::npos)
         return "Launcher";
-else if (ImagePath.find("Light Machine")!=std::string::npos)
+else if (m_imagepath.find("Light Machine")!=std::string::npos)
         return "Light Machine";
 else
         return "Invalid";

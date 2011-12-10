@@ -7,7 +7,7 @@ class Convert
     public:
         Convert();
         static      Convert* Get();
-        std::string ToString(int i);
+        static std::string ToString(int i);
     protected:
     private:
         static Convert* ConvertPtr;
