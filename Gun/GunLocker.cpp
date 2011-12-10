@@ -16,17 +16,17 @@ GunLocker* GunLocker::GunLockerPtr = NULL;
 GunLocker::GunLocker()
 {
     //create initial (core/main loaded/non manual/etc) components from raw data here.
-    AddFrontComponent(new GunComponent(2,"Pain","Sprites/Assault/assault1-front.png"));
-    AddMiddleComponent(new GunComponent(4,"In The","Sprites/Assault/assault1-middle.png"));
-    AddRearComponent(new GunComponent(1,"Ass","Sprites/Assault/assault1-rear.png"));
+    AddFrontComponent(new GunComponent(2,"Pain","Sprites/Guns/Assault/assault1-front.png"));
+    AddMiddleComponent(new GunComponent(4,"In The","Sprites/Guns/Assault/assault1-middle.png"));
+    AddRearComponent(new GunComponent(1,"Ass","Sprites/Guns/Assault/assault1-rear.png"));
 
-    AddFrontComponent(new GunComponent(8,"Burn","Sprites/Assault/assault2-front.png"));
-    AddMiddleComponent(new GunComponent(2,"Near Your","Sprites/Assault/assault2-middle.png"));
-    AddRearComponent(new GunComponent(3,"Eyes","Sprites/Assault/assault2-rear.png"));
+    AddFrontComponent(new GunComponent(8,"Burn","Sprites/Guns/Assault/assault2-front.png"));
+    AddMiddleComponent(new GunComponent(2,"Near Your","Sprites/Guns/Assault/assault2-middle.png"));
+    AddRearComponent(new GunComponent(3,"Eyes","Sprites/Guns/Assault/assault2-rear.png"));
 
-    AddFrontComponent(new GunComponent(5,"Sting","Sprites/Assault/assault3-front.png"));
-    AddMiddleComponent(new GunComponent(11,"Up Your","Sprites/Assault/assault3-middle.png"));
-    AddRearComponent(new GunComponent(7,"Toes","Sprites/Assault/assault3-rear.png"));
+    AddFrontComponent(new GunComponent(5,"Sting","Sprites/Guns/Assault/assault3-front.png"));
+    AddMiddleComponent(new GunComponent(11,"Up Your","Sprites/Guns/Assault/assault3-middle.png"));
+    AddRearComponent(new GunComponent(7,"Toes","Sprites/Guns/Assault/assault3-rear.png"));
 
     //ctor
 }
