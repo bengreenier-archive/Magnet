@@ -223,10 +223,9 @@ GunComponent GunLocker::GetRandomFrontComponent(GunEnum::Type type){
 
     GunComponent* newComponent = new GunComponent();
     newComponent->type = type;
-    std::cout << "********** " << typeid(type).name() << std::endl;
 
     std::string id;
-    newComponent->SetImagePath("Gun/Sprites/Assault/assault" + imgid + "-front.png");
+    newComponent->SetImagePath("Sprites/Guns/Assault/assault" + imgid + "-front.png");
 
     AddFrontComponent(newComponent);
 
@@ -239,7 +238,7 @@ GunComponent GunLocker::GetRandomMiddleComponent(GunEnum::Type type){
 
     GunComponent* newComponent = new GunComponent();
     newComponent->type = type;
-    newComponent->SetImagePath("Gun/Sprites/Assault/assault" + imgid + "-middle.png");
+    newComponent->SetImagePath("Sprites/Guns/Assault/assault" + imgid + "-middle.png");
 
     AddMiddleComponent(newComponent);
 
@@ -251,7 +250,7 @@ GunComponent GunLocker::GetRandomRearComponent(GunEnum::Type type){
 
     GunComponent* newComponent = new GunComponent();
     newComponent->type = type;
-    newComponent->SetImagePath("Gun/Sprites/Assault/assault" + imgid + "-rear.png");
+    newComponent->SetImagePath("Sprites/Guns/Assault/assault" + imgid + "-rear.png");
 
     AddFrontComponent(newComponent);
 

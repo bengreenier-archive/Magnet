@@ -22,28 +22,10 @@ int main()
     GunMaker Gun4(.3f);
     std::cout<<"GunsMade";
 
-   Gun.DrawTo(0,0);
-    Gun2.DrawTo(0,130);
-    Gun3.DrawTo(0,250);
-    Gun4.DrawTo(0,380);
-/*
-    sf::Sprite sp1;
-    sp1.SetImage(ImageHandler::GetImage("Gun/Sprites/assault1.png"));
-    sp1.SetPosition(0, 0);
-    sf::Sprite sp2;
-    sp2.SetImage(ImageHandler::GetImage("Gun/Sprites/assault1.png"));
-    sp2.SetPosition(0, 200);
-    sf::Sprite sp3;
-    sp3.SetImage(ImageHandler::GetImage("Gun/Sprites/assault1.png"));
-    sp3.SetPosition(0, 400);
-    sf::Sprite sp4;
-    sp4.SetImage(ImageHandler::GetImage("Gun/Sprites/assault1.png"));
-    sp4.SetPosition(0, 600);
-
-    Renderer::Link(sp1);
-    Renderer::Link(sp2);
-    Renderer::Link(sp3);
-    Renderer::Link(sp4);*/
+    Gun.SetPosition(0,0);
+    Gun2.SetPosition(0,130);
+    Gun3.SetPosition(0,250);
+    Gun4.SetPosition(0,380);
 
 
     /*************************************************
