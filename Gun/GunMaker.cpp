@@ -27,6 +27,7 @@ GunMaker::GunMaker(float Scale)
      MiddleComponent = GunLocker::Get()->GetRandomComponent(GunEnum::Middle, GunEnum::Light);
      RearComponent = GunLocker::Get()->GetRandomComponent(GunEnum::Rear, GunEnum::Light);
 
+
      Renderer::CreateLink(FrontComponent.GetSpritePtr());
      Renderer::CreateLink(MiddleComponent.GetSpritePtr());
      Renderer::CreateLink(RearComponent.GetSpritePtr());

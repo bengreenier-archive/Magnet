@@ -11,9 +11,6 @@
 *********************************************************************/
 GunComponent::GunComponent()
 {
-    std::cout << "Attempting to link\t\t" << &m_sprite << std::endl;
-
-    std::cout << "Renderer now recognizes\t\t" << &m_sprite << std::endl << std::endl;
 
 }
 GunComponent::~GunComponent()

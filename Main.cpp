@@ -20,21 +20,15 @@ int main()
     GunMaker Gun3(.3f);
 
     GunMaker Gun4(.3f);
-    std::cout<<"GunsMade";
 
     Gun.SetPosition(0,0);
     Gun2.SetPosition(0,130);
     Gun3.SetPosition(0,250);
     Gun4.SetPosition(0,380);
 
-
     /*************************************************
     **********=>    End debug code
     **************************************************/
-
-     //sf::RenderWindow Window(sf::VideoMode(800, 600, 32), "OurGame");
-
-//    GameState currentState();
 
     while (Renderer::Window()->IsOpened())
     {
@@ -70,12 +64,7 @@ int main()
             }
         }
 
-        // Clear the screen (fill it with black color)
         Renderer::Render();
-
-        /*To draw these guns you need to:
-            Renderer::Link(sf::Drawable*);  //sf::Drawable being the sprite that is the gun
-        */
     }
     return 0;
 }

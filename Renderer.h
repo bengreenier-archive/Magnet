@@ -26,16 +26,20 @@ class Renderer
     public:
 
        /****
-            Enum: layer_t
+            typedef: Layer
 
             Allows map names to be stored
         *****/
+        typedef int Layer;
 
-        enum layer_t{
-            GameLayer,
-            HudLayer,
-            MenuLayer
-        } LayerEnum;
+        /*******Layer definitions******************
+            Each layer is assigned to its depth
+            You can safely add layers here
+        ******************************************/
+        static const Layer   GameLayer   =   0;
+        static const Layer   HudLayer    =   1;
+        static const Layer   MenuLayer   =   2;
+
 
         struct exception{
             enum ENAME{
@@ -89,10 +93,9 @@ class Renderer
 
             When an object is mapped, it is assinged a unique index
         *********************************************/
-        static void CreateLink(sf::Drawable* drawable_ptr, Renderer::layer_t layer, int depth);
-        static void CreateLink(sf::Drawable* drawable_ptr, Renderer::layer_t layer);
+        static void CreateLink(sf::Drawable* drawable_ptr, int layer, int depth);
+        static void CreateLink(sf::Drawable* drawable_ptr, int layer);
         static void CreateLink(sf::Drawable* drawable_ptr);
-
 
         /*********************************************
             "Set the depth of a mapped object"
@@ -104,7 +107,7 @@ class Renderer
     protected:
         Renderer();
     private:
-        void _createlink(sf::Drawable*);
+
         //Sort the layers into order.
         void sort();
 
@@ -115,13 +118,16 @@ class Renderer
 
         //Make a multimap that maps a layer to the depth map on that layer
         //  Nested multimap maps depths to a unique index
-        map<layer_t, multimap<int, int>, std::greater<int> > struct_map;
+        map<Layer, multimap<int, int> >           struct_map;
+        map<Layer, multimap<int, int> >::iterator struct_iterator;
+
 
         static Renderer*       RendererPtr;
 
         //Each render handler should have a new RenderWindow
         //Accessed through RenderHandler
         sf::RenderWindow*           WindowPtr;
+
         bool            m_isValid; //Set false by public member invalidate(), this causes the frame to be redrawn
         unsigned int    m_cindex; //Current mapping index
 
