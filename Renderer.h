@@ -37,13 +37,6 @@ class Renderer
             MenuLayer
         } LayerEnum;
 
-
-        enum invalidation_t{
-            InvalidSort,
-            InvalidWindow,
-            InvalidAll
-        };
-
         struct exception{
             enum ENAME{
                 NullType
@@ -96,7 +89,10 @@ class Renderer
 
             When an object is mapped, it is assinged a unique index
         *********************************************/
-        static void CreateLink(sf::Drawable* sprite_ptr);
+        static void CreateLink(sf::Drawable* drawable_ptr, Renderer::layer_t layer, int depth);
+        static void CreateLink(sf::Drawable* drawable_ptr, Renderer::layer_t layer);
+        static void CreateLink(sf::Drawable* drawable_ptr);
+
 
         /*********************************************
             "Set the depth of a mapped object"
@@ -108,6 +104,7 @@ class Renderer
     protected:
         Renderer();
     private:
+        void _createlink(sf::Drawable*);
         //Sort the layers into order.
         void sort();
 
@@ -118,7 +115,7 @@ class Renderer
 
         //Make a multimap that maps a layer to the depth map on that layer
         //  Nested multimap maps depths to a unique index
-        multimap<layer_t, multimap<int, int> > struct_map;
+        map<layer_t, multimap<int, int>, std::greater<int> > struct_map;
 
         static Renderer*       RendererPtr;
 

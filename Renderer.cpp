@@ -70,6 +70,8 @@ void Renderer::Render(){
 
     Window()->Clear(sf::Color(0, 0, 0));
 
+    std::cout << "There are " << GetObject()->struct_map.size() << " layers.\n";
+
     for(int i=0; i<GetObject()->m_cindex; i++){
         Window()->Draw(*GetObject()->drawable_map[i]) ;
     }
@@ -79,11 +81,30 @@ void Renderer::Render(){
     GetObject()->validate();
 }
 
-void Renderer::CreateLink(sf::Drawable* drawable_ptr){
-    GetObject()->drawable_map[GetObject()->m_cindex] = &*drawable_ptr;
+void Renderer::CreateLink(sf::Drawable* drawable_ptr, Renderer::layer_t layer, int depth){
+    Renderer* r = GetObject(); //For ease of access
 
-    drawable_ptr = &*GetObject()->drawable_map[GetObject()->m_cindex];
-    GetObject()->m_cindex++;
+    r->drawable_map[r->m_cindex] = &*drawable_ptr;
+    drawable_ptr = &*r->drawable_map[r->m_cindex];
+
+    multimap<int, int> tmpmap;
+    tmpmap.insert(pair<int, int>(depth, r->m_cindex));
+    if(r->struct_map.find(layer) == r->struct_map.end()){
+        r->struct_map.insert(pair<Renderer::layer_t, multimap<int, int> >(layer, tmpmap));
+    }else{
+        r->struct_map[layer] = tmpmap;
+    }
+
+
+    r->m_cindex++;
+}
+
+void Renderer::CreateLink(sf::Drawable* drawable_ptr, Renderer::layer_t layer){
+    Renderer::CreateLink(drawable_ptr, layer, 0);
+}
+
+void Renderer::CreateLink(sf::Drawable* drawable_ptr){
+    Renderer::CreateLink(drawable_ptr, Renderer::GameLayer, 0);
 }
 
 /*********************************************
