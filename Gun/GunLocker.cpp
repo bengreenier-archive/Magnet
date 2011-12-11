@@ -1,6 +1,7 @@
 #include "GunLocker.h"
 #include "GunComponent.h"
 #include "../Conversions/Convert.h"
+#include "../FileActions/FileAction.h"
 #include <string>
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -31,22 +32,10 @@ GunLocker::GunLocker()
 
     //ctor
 
-    nouns.push_back("Bane");
-    nouns.push_back("Rock");
-    nouns.push_back("Rift");
-    nouns.push_back("Crater");
 
-    verbs.push_back("Crush");
-    verbs.push_back("Run");
-    verbs.push_back("Kill");
-    verbs.push_back("Steal");
-
-    adjectives.push_back("Dark");
-    adjectives.push_back("Red");
-    adjectives.push_back("Blue");
-    adjectives.push_back("Green");
-    adjectives.push_back("White");
-    adjectives.push_back("Deadly");
+    ParseList("Resources/Words/Nouns.mgf",nouns);
+    ParseList("Resources/Words/Verbs.mgf",verbs);
+    ParseList("Resources/Words/Adjectives.mgf",adjectives);
 }
 
 
@@ -256,3 +245,33 @@ GunComponent GunLocker::GetRandomRearComponent(GunEnum::Type type){
 
     return *newComponent;
 }
+
+
+
+
+
+/***********************
+    Takes a ListPath, to read into the passed stringlist.
+    We use this to read in gun name things (noun,verb,etc)
+***********************/
+void GunLocker::ParseList(std::string ListPath,std::vector<std::string>& List)
+{
+    if(!FileAction::IfExists(ListPath))
+    {
+        std::cout<<"ParseList("<<ListPath<<") Failed.\n";
+        return;
+    }
+
+    //
+    std::string File=FileAction::ReadFrom(ListPath);
+    std::string Line="";
+    //get the file.
+    for (int i=0;i<File.length();i++)
+    {
+        //
+        if (File[i]==';'){std::cout<<"Pushing "<<Line<<"\n"; List.push_back(Line); Line="";}else{Line+=File[i];}
+    }
+
+
+}
+

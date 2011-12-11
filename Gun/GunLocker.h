@@ -50,6 +50,7 @@ class GunLocker
         std::vector<std::string>   nouns;
         std::vector<std::string>   adjectives;
         std::vector<std::string>   verbs;
+        void ParseList(std::string ListPath,std::vector<std::string>& List);         //To parse naming scheme.
 
         sf::Image   ImageFromPath(std::string Path);                            // Return a sf::Image from a resource path
 

@@ -10,7 +10,7 @@ FileAction::~FileAction()
     //dtor
 }
 
-void WriteTo(std::string Filename,std::string Msg)
+void FileAction::WriteTo(std::string Filename,std::string Msg)
 {
     std::ofstream outfile(Filename.c_str());
     outfile <<Msg.c_str();
@@ -18,7 +18,7 @@ void WriteTo(std::string Filename,std::string Msg)
 
 }
 
-std::string ReadFrom(std::string Filename)
+std::string FileAction::ReadFrom(std::string Filename)
 {
     std::string result="";
     std::string line;
@@ -28,14 +28,14 @@ std::string ReadFrom(std::string Filename)
     while ( infile.good() )
     {
       getline (infile,line);
-      result+=line+"\n";
+      result+=line;
     }
     infile.close();
   }
     return result;
 }
 
-bool IfExists(std::string Filename)
+bool FileAction::IfExists(std::string Filename)
 {
     std::ifstream infile(Filename.c_str());
     if (infile.is_open()){return true;}else{return false;}
