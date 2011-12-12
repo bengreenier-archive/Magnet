@@ -6,6 +6,7 @@
 #include "State/GameState.h"
 #include "Console/Console.h"
 
+
 int main()
 {
     /*************************************************
@@ -30,6 +31,10 @@ int main()
     /*************************************************
     **********=>    End debug code
     **************************************************/
+    Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands);
+    Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
+
+    sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
 
     while (Renderer::Window()->IsOpened())
     {
@@ -62,8 +67,12 @@ int main()
             if ((Event.Type == sf::Event::Closed)||((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::Escape))){
                     Renderer::Window()->Close();
             }
-            if ((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::C)){
-                    Console::GetObject()->Init();
+            if ((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::C)){//do console things.
+                    if (!Console::GetObject()->listenerOn){
+
+                            ConsoleListenThread.Launch();
+
+                    }else{std::cout<<"CONSOLE ALREADY ACTIVATED.\n";}
             }
         }
 

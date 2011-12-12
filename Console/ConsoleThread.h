@@ -9,7 +9,6 @@ class ConsoleThread
     public:
         ConsoleThread();
         ~ConsoleThread();
-        void TellAJoke();//This is our demo function.
         std::string listenerToExecutor;
     protected:
     private:
