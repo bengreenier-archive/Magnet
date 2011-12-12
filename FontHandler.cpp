@@ -1,10 +1,12 @@
 #include "FontHandler.h"
+#include "Console/Console.h"
 
 FontHandler* FontHandler::FontHandlerPtr = NULL;
 
 FontHandler::FontHandler()
 {
     //ctor
+    Console::AddCommand("FontHandler::PrintAvailableFonts()",&FontHandler::PrintAvailableFonts);
 }
 
 FontHandler::~FontHandler()
@@ -52,7 +54,7 @@ FontHandler* FontHandler::GetObject(){
 }
 
 
-void FontHandler::PrintAvailableFonts()
+void FontHandler::PrintAvailableFonts(void* UserData)
 {
     for ( GetObject()->Oit=GetObject()->object_map.begin() ; GetObject()->Oit != GetObject()->object_map.end(); GetObject()->Oit++ )
         std::cout<<GetObject()->Oit->first<<"\n";

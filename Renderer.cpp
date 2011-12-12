@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Console/Console.h"
 
 #include <queue>
 #include <iterator>
@@ -16,6 +17,10 @@ Renderer::Renderer()
     //_linkThread     = new sf::Thread(&_link);
 
     m_isValid = false;
+
+    Console::AddCommand("Renderer::invalidate()",&Renderer::invalidate);
+    Console::AddCommand("Renderer::Render()",&Renderer::Render);
+
 }
 
 //Clean up all the allocated memory space
@@ -65,7 +70,7 @@ sf::RenderWindow* Renderer::Window(){
 /*********************************************
             "Draw the screen "
 *********************************************/
-void Renderer::Render(){
+void Renderer::Render(void* UserData){
     if(GetObject()->isValid()) return;
 
     Window()->Clear(sf::Color(0, 0, 0));
@@ -148,7 +153,7 @@ bool Renderer::isValid(){ return m_isValid; }
 /*********************************************
     "Force the screen to redraw"
 *********************************************/
-void Renderer::invalidate(){ GetObject()->m_isValid = false; }
+void Renderer::invalidate(void* UserData){ GetObject()->m_isValid = false; }
 
 /*********************************************
     "sets m_isValid to true"

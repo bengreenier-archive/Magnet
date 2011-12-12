@@ -1,10 +1,12 @@
 #include "ImageHandler.h"
+#include "Console/Console.h"
 
 ImageHandler* ImageHandler::ImageHandlerPtr = NULL;
 
 ImageHandler::ImageHandler()
 {
     //ctor
+    Console::AddCommand("ImageHandler::PrintAvailableImages()",&ImageHandler::PrintAvailableImages);
 }
 
 ImageHandler::~ImageHandler()
@@ -52,7 +54,7 @@ ImageHandler* ImageHandler::GetObject(){
 }
 
 
-void ImageHandler::PrintAvailableImages()
+void ImageHandler::PrintAvailableImages(void* UserData)
 {
     for ( GetObject()->Oit=GetObject()->object_map.begin() ; GetObject()->Oit != GetObject()->object_map.end(); GetObject()->Oit++ )
         std::cout<<GetObject()->Oit->first<<"\n";

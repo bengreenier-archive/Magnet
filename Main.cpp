@@ -76,7 +76,7 @@ int main()
             }
         }
 
-        Renderer::Render();
+        Renderer::Render(NULL);
     }
     return 0;
 }

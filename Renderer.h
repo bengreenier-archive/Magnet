@@ -76,7 +76,7 @@ class Renderer
         /*********************************************
             "Force the screen to redraw"
         *********************************************/
-        static void invalidate();
+        static void invalidate(void* UserData);
 
         /*********************************************
             "sets m_isValid to true"
@@ -86,7 +86,7 @@ class Renderer
         /*********************************************
             "Draw the screen"
         *********************************************/
-        static void Render();
+        static void Render(void* UserData);
 
         /*********************************************
             "Add a drawable to the handler"

@@ -15,7 +15,7 @@ class FontHandler
         ~FontHandler();
         static sf::Font& GetFont(std::string in);
         static FontHandler* GetObject();
-        static void PrintAvailableFonts();
+        static void PrintAvailableFonts(void* UserData);
 
         static sf::String* MakeStringWithFont(std::string in,std::string font,int size);
 

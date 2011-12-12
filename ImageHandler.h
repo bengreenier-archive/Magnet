@@ -14,7 +14,7 @@ class ImageHandler
         ~ImageHandler();
         static sf::Image& GetImage(std::string in);
         static ImageHandler* GetObject();
-        static void PrintAvailableImages();
+        static void PrintAvailableImages(void* UserData);
 
     protected:
     private:

@@ -31,6 +31,11 @@ void Console::Listener(void* UserData)
 
     ConsoleThread Data;
     std::cout<<"CONSOLE ACTIVATED. INPUT BEING ACCEPTED.\n";
+
+    std::cout<<"\n";
+    Console::PrintCommands(NULL);
+    std::cout<<"\n";
+
     std::cin>>Data.listenerToExecutor;
     std::cout<<"CONSOLE DEACTIVATED. NO LONGER TAKING INPUT.\n";
     sf::Thread ExecuteThread(&Console::Executor,&Data);
