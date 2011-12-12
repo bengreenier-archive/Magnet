@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "ImageHandler.h"
 #include "State/GameState.h"
+#include "Console/Console.h"
 
 int main()
 {
@@ -59,8 +60,10 @@ int main()
         {
             // Close window : exit
             if ((Event.Type == sf::Event::Closed)||((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::Escape))){
-                ImageHandler::PrintAvailableImages();
-                Renderer::Window()->Close();
+                    Renderer::Window()->Close();
+            }
+            if ((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::C)){
+                    Console::GetObject()->Init();
             }
         }
 
