@@ -54,7 +54,7 @@ FontHandler* FontHandler::GetObject(){
 }
 
 
-void FontHandler::PrintAvailableFonts(void* UserData)
+void FontHandler::PrintAvailableFonts()
 {
     for ( GetObject()->Oit=GetObject()->object_map.begin() ; GetObject()->Oit != GetObject()->object_map.end(); GetObject()->Oit++ )
         std::cout<<GetObject()->Oit->first<<"\n";

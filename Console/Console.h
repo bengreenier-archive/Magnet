@@ -12,7 +12,10 @@
 class Console
 {
     public:
-        typedef void (*FuncType)(void*);//used for function referencing and calling and etc.
+        typedef void (*FuncType)();//used for function referencing and calling and etc.
+        typedef int (*FuncTypeInt)();
+        typedef std::string (*FuncTypeString)();
+        typedef bool (*FuncTypeBool)();
 
         Console();
         ~Console();
@@ -22,9 +25,13 @@ class Console
         bool listenerOn;
 
         static void AddCommand(std::string name,FuncType function);//add a command via name and function reference
-        static void PrintCommands(void* UserData);//print all command names
+        static void AddCommand(std::string name,FuncTypeBool function);
+        static void AddCommand(std::string name,FuncTypeInt function);
+        static void AddCommand(std::string name,FuncTypeString function);
 
-        static void TellAJoke(void* UserData);
+        static void PrintCommands();//print all command names
+
+        static void TellAJoke();
 
     protected:
 
@@ -32,9 +39,12 @@ class Console
     //the two f(x) below are static because they are called from a static scope, and cannot use GetObject.
 
         static void Executor(void* UserData);//launches command
-        FuncType GetCommand(std::string name);//returns command function
+        bool CanGetCommand(std::string name);//returns if you can Get said Command function
 
         std::vector< std::pair<std::string,FuncType> > commands;
+        std::vector< std::pair<std::string,FuncTypeInt> > commandsI;
+        std::vector< std::pair<std::string,FuncTypeString> > commandsS;
+        std::vector< std::pair<std::string,FuncTypeBool> > commandsB;
 
         static Console* consolePtr;
 

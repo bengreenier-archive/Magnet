@@ -20,6 +20,8 @@ Renderer::Renderer()
 
     Console::AddCommand("Renderer::invalidate()",&Renderer::invalidate);
     Console::AddCommand("Renderer::Render()",&Renderer::Render);
+    //Console::AddCommand("Renderer::isValid()",&Renderer::isValid);      //These aren't static, so don't allow useage, cause they might not work.
+    //Console::AddCommand("Renderer::validate()",&Renderer::validate);
 
 }
 
@@ -70,7 +72,7 @@ sf::RenderWindow* Renderer::Window(){
 /*********************************************
             "Draw the screen "
 *********************************************/
-void Renderer::Render(void* UserData){
+void Renderer::Render(){
     if(GetObject()->isValid()) return;
 
     Window()->Clear(sf::Color(0, 0, 0));
@@ -153,7 +155,7 @@ bool Renderer::isValid(){ return m_isValid; }
 /*********************************************
     "Force the screen to redraw"
 *********************************************/
-void Renderer::invalidate(void* UserData){ GetObject()->m_isValid = false; }
+void Renderer::invalidate(){ GetObject()->m_isValid = false; }
 
 /*********************************************
     "sets m_isValid to true"
