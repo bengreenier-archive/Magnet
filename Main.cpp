@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "ImageHandler.h"
 #include "State/GameState.h"
+#include "Handlers/EventHandler.h"
 
 int main()
 {
@@ -26,6 +27,7 @@ int main()
     Gun3.SetPosition(0,250);
     Gun4.SetPosition(0,380);
 
+    EventHandler::GetObject()->AddListener(sf::Event::Closed, &Renderer::Render);
     /*************************************************
     **********=>    End debug code
     **************************************************/
@@ -64,7 +66,8 @@ int main()
             }
         }
 
-        Renderer::Render();
+        //Renderer::Render();
+        EventHandler::GetObject()->CallEvent(sf::Event::Closed);
     }
     return 0;
 }
