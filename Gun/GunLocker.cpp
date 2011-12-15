@@ -275,3 +275,18 @@ void GunLocker::ParseList(std::string ListPath,std::vector<std::string>& List)
 
 }
 
+
+GunMaker GunLocker::StaticGunsGet(std::string name)
+{
+    //read from staticGuns iterate until staticGuns[i].name = name;
+}
+
+void  GunLocker::StaticGunsLoad()
+{
+    //load from Guns/static.mgs
+}
+
+void GunLocker::StaticGunsAdd(GunMaker in)
+{
+    //append to static.mgs, add to staticGuns
+}

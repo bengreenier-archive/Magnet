@@ -1,10 +1,12 @@
 #include "FontHandler.h"
+#include "Console/Console.h"
 
 FontHandler* FontHandler::FontHandlerPtr = NULL;
 
 FontHandler::FontHandler()
 {
     //ctor
+    Console::AddCommand("FontHandler::PrintAvailableFonts()",&FontHandler::PrintAvailableFonts);
 }
 
 FontHandler::~FontHandler()

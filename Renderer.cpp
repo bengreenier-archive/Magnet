@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Console/Console.h"
 
 #include <queue>
 #include <iterator>
@@ -16,6 +17,12 @@ Renderer::Renderer()
     //_linkThread     = new sf::Thread(&_link);
 
     m_isValid = false;
+
+    Console::AddCommand("Renderer::invalidate()",&Renderer::invalidate);
+    Console::AddCommand("Renderer::Render()",&Renderer::Render);
+    //Console::AddCommand("Renderer::isValid()",&Renderer::isValid);      //These aren't static, so don't allow useage, cause they might not work.
+    //Console::AddCommand("Renderer::validate()",&Renderer::validate);
+
 }
 
 //Clean up all the allocated memory space

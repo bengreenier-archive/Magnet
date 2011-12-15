@@ -5,6 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "GunMaker.h"
 #include "GunComponent.h"
 #include "GunEnum.h"
 
@@ -41,6 +42,12 @@ class GunLocker
         int          FrontSize();                                   // Get the front vector's size
         int          MiddleSize();                                  // Get the middle vector's size
         int          RearSize();                                    // Get the rear vector's size
+
+
+        static void  StaticGunsAdd(GunMaker in);
+        static void  StaticGunsLoad();
+        static GunMaker StaticGunsGet(std::string name);
+
     protected:
     private:
         std::vector <GunComponent*> Front;                        // Store front components that are useable
@@ -53,6 +60,8 @@ class GunLocker
         void ParseList(std::string ListPath,std::vector<std::string>& List);         //To parse naming scheme.
 
         sf::Image   ImageFromPath(std::string Path);                            // Return a sf::Image from a resource path
+
+        std::vector <GunMaker> staticGuns;                                      //holds non random guns. survies game exit/relaunch
 
         static GunLocker* GunLockerPtr;                                         // A helper pointer for the Get method of this class.
 

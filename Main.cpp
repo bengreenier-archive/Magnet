@@ -4,7 +4,8 @@
 #include "Renderer.h"
 #include "ImageHandler.h"
 #include "State/GameState.h"
-#include "Handlers/EventHandler.h"
+#include "Console/Console.h"
+
 
 int main()
 {
@@ -27,10 +28,13 @@ int main()
     Gun3.SetPosition(0,250);
     Gun4.SetPosition(0,380);
 
-    EventHandler::GetObject()->AddListener(sf::Event::Closed, &Renderer::Render);
     /*************************************************
     **********=>    End debug code
     **************************************************/
+    Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands);
+    Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
+
+    sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
 
     while (Renderer::Window()->IsOpened())
     {
@@ -61,13 +65,18 @@ int main()
         {
             // Close window : exit
             if ((Event.Type == sf::Event::Closed)||((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::Escape))){
-                ImageHandler::PrintAvailableImages();
-                Renderer::Window()->Close();
+                    Renderer::Window()->Close();
+            }
+            if ((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::C)){//do console things.
+                    if (!Console::GetObject()->listenerOn){
+
+                            ConsoleListenThread.Launch();
+
+                    }else{std::cout<<"CONSOLE ALREADY ACTIVATED.\n";}
             }
         }
 
-        //Renderer::Render();
-        EventHandler::GetObject()->CallEvent(sf::Event::Closed);
+        Renderer::Render();
     }
     return 0;
 }
