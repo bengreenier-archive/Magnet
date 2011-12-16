@@ -2,5 +2,4 @@
 Add the ability to changer the depth/layer of a linked Drawable
 
 *** EventHandler **
-Add KeyPressListener
-Add MouseListener
+Conform everything to handler
