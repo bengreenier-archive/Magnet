@@ -18,7 +18,7 @@ Renderer::Renderer()
 
 
     EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
-    EventHandler::AddEventListener(sf::Event::Closed, &Renderer::Close);
+    EventHandler::AddListener(sf::Event::Closed, &Renderer::Close);
 
     Console::AddCommand("invalidateRenderer",&Renderer::invalidate);
     Console::AddCommand("render",&Renderer::Render);
