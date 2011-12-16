@@ -98,11 +98,9 @@ class Renderer
         static void CreateLink(sf::Drawable* drawable_ptr);
 
         /*********************************************
-            "Set the depth of a mapped object"
+            "Close the RenderWindow"
         *********************************************/
-        //void RemapDepth(sf::Drawable* linkedObj, int depth);
-
-        //void SwitchLayer(sf::Drawable* linkedObj, Layer layer);
+        static void Close(sf::Event evt);
 
     protected:
         Renderer();

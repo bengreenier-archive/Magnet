@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Handlers/EventHandler.h"
 #include "Console/Console.h"
 
 #include <queue>
@@ -13,16 +14,14 @@ Renderer::Renderer()
     WindowPtr = new sf::RenderWindow(sf::VideoMode::GetMode(3), "Magnet");
     m_cindex    =   0;
 
-    //_renderThread(sf::Thread(&Renderer::_render));
-    //_linkThread     = new sf::Thread(&_link);
-
     m_isValid = false;
 
-    Console::AddCommand("Renderer::invalidate()",&Renderer::invalidate);
-    Console::AddCommand("Renderer::Render()",&Renderer::Render);
-    //Console::AddCommand("Renderer::isValid()",&Renderer::isValid);      //These aren't static, so don't allow useage, cause they might not work.
-    //Console::AddCommand("Renderer::validate()",&Renderer::validate);
 
+    EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
+    EventHandler::AddEventListener(sf::Event::Closed, &Renderer::Close);
+
+    Console::AddCommand("invalidateRenderer",&Renderer::invalidate);
+    Console::AddCommand("render",&Renderer::Render);
 }
 
 //Clean up all the allocated memory space
@@ -31,21 +30,10 @@ Renderer::~Renderer()
     delete [] WindowPtr;
     delete [] RendererPtr;
 }
-/*
-void Renderer::Link(sf::Drawable* linkedObj, Layer layer){
-    GetObject()->Map(linkedObj, layer, 0);
-}
 
-void Renderer::Link(sf::Drawable* linkedObj, Layer layer, int depth){
-    GetObject()->Map(linkedObj, layer, depth);
+void Renderer::Close(sf::Event evt){
+    Renderer::Window()->Close();
 }
-*/
-/*
-template<typename _T>
-static void Renderer::Link(RenderObject<_T> &linkedObj){
-    RenderHandler::GetObject()->Add(linkedObj);
-}
-*/
 /*********************************************
     "Get the RenderHandler object"
 
@@ -77,22 +65,15 @@ void Renderer::Render(){
 
     Window()->Clear(sf::Color(0, 0, 0));
 
-    std::cout << "There are " << GetObject()->struct_map.size() << " layers.\n";
-
     for(    GetObject()->struct_iterator = GetObject()->struct_map.begin();
             GetObject()->struct_iterator != GetObject()->struct_map.end();
             GetObject()->struct_iterator++   )
     {
-        std::cout << "Layer " << GetObject()->struct_iterator->first << ":   \n";
-
         multimap<int, int>::iterator depth_iterator;
         for(    depth_iterator = GetObject()->struct_iterator->second.begin();
                 depth_iterator != GetObject()->struct_iterator->second.end();
                 depth_iterator++   )
         {
-            std::cout << "\tDepth: " << depth_iterator->first << std::endl;
-            std::cout << "\t\t" <<  &depth_iterator->second << std::endl;
-
             Window()->Draw(*GetObject()->drawable_map[depth_iterator->second]);
         }
 
@@ -128,7 +109,6 @@ void Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){
     }
 
     GetObject()->m_cindex++;
-    std::cout << "Link created, there are " << GetObject()->struct_map.size() << std::endl;
 }
 
 

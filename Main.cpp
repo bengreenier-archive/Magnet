@@ -5,6 +5,9 @@
 #include "ImageHandler.h"
 #include "State/GameState.h"
 #include "Console/Console.h"
+#include "Handlers/EventHandler.h"
+
+void LaunchConsoleThread(sf::Event evt);
 
 
 int main()
@@ -35,6 +38,9 @@ int main()
     Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
 
     sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
+    Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
+
+    EventHandler::AddKeyListener(sf::Key::C, &LaunchConsoleThread);
 
     while (Renderer::Window()->IsOpened())
     {
@@ -58,25 +64,16 @@ int main()
                 //On
                 break;
         }*/
-
-
-        sf::Event Event;
-        while (Renderer::Window()->GetEvent(Event))
-        {
-            // Close window : exit
-            if ((Event.Type == sf::Event::Closed)||((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::Escape))){
-                    Renderer::Window()->Close();
-            }
-            if ((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::C)){//do console things.
-                    if (!Console::GetObject()->listenerOn){
-
-                            ConsoleListenThread.Launch();
-
-                    }else{std::cout<<"CONSOLE ALREADY ACTIVATED.\n";}
-            }
-        }
-
+        EventHandler::Listen();
         Renderer::Render();
     }
     return 0;
+}
+
+void LaunchConsoleThread(sf::Event evt){
+    if (!Console::GetObject()->listenerOn){
+        Console::GetObject()->consoleThread_ptr->Launch();
+    }else{
+        std::cout<<"CONSOLE ALREADY ACTIVATED.\n";
+    }
 }
