@@ -14,19 +14,14 @@ Renderer::Renderer()
     WindowPtr = new sf::RenderWindow(sf::VideoMode::GetMode(3), "Magnet");
     m_cindex    =   0;
 
-    //_renderThread(sf::Thread(&Renderer::_render));
-    //_linkThread     = new sf::Thread(&_link);
-
     m_isValid = false;
 
 
     EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
+    EventHandler::AddEventListener(sf::Event::Closed, &Renderer::Close);
 
     Console::AddCommand("invalidateRenderer",&Renderer::invalidate);
     Console::AddCommand("render",&Renderer::Render);
-    //Console::AddCommand("Renderer::isValid()",&Renderer::isValid);      //These aren't static, so don't allow useage, cause they might not work.
-    //Console::AddCommand("Renderer::validate()",&Renderer::validate);
-
 }
 
 //Clean up all the allocated memory space
@@ -37,7 +32,6 @@ Renderer::~Renderer()
 }
 
 void Renderer::Close(sf::Event evt){
-    std::cout << "**** CLOSE\n";
     Renderer::Window()->Close();
 }
 /*********************************************
