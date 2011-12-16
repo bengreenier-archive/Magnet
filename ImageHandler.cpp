@@ -1,6 +1,7 @@
 #include "ImageHandler.h"
 #include "Console/Console.h"
 
+
 ImageHandler* ImageHandler::ImageHandlerPtr = NULL;
 
 ImageHandler::ImageHandler()

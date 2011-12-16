@@ -8,6 +8,7 @@
 #include <SFML/System.hpp>
 
 #include "ConsoleThread.h"
+#include "FunctionPtrTemplate.h"
 
 class Console
 {
