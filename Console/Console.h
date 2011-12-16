@@ -33,6 +33,8 @@ class Console
 
         static void TellAJoke();
 
+        sf::Thread* consoleThread_ptr;  //A pointer to the console thread
+
     protected:
 
     private:
