@@ -7,6 +7,8 @@
 #include "Console/Console.h"
 #include "Handlers/EventHandler.h"
 
+void LaunchConsoleThread(sf::Event evt);
+
 
 int main()
 {
@@ -36,6 +38,9 @@ int main()
     Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
 
     sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
+    Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
+
+    EventHandler::AddKeyListener(sf::Key::C, &LaunchConsoleThread);
 
     while (Renderer::Window()->IsOpened())
     {
@@ -63,4 +68,12 @@ int main()
         Renderer::Render();
     }
     return 0;
+}
+
+void LaunchConsoleThread(sf::Event evt){
+    if (!Console::GetObject()->listenerOn){
+        Console::GetObject()->consoleThread_ptr->Launch();
+    }else{
+        std::cout<<"CONSOLE ALREADY ACTIVATED.\n";
+    }
 }
