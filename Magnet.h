@@ -48,6 +48,8 @@ class Magnet
             \param  shouldRunAlways: Sets managed_thread.runAlways  (Default: false)
             \param  lock:            Sets managed_thread.lockOnRun  (Default: false)
             \param  isGameThread:    Sets managed_thread.gameThread (Default: false)
+            
+            uhm, dude...remind me to show you optional arguments. you will redo this with them, i beleive
         *******************************/
         static void AddManagedThread(std::string accessName, sf::Thread& threadToManage);
         static void AddManagedThread(std::string accessName, sf::Thread& threadToManage, bool shouldRunAlways);
