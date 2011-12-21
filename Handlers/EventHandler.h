@@ -23,7 +23,7 @@ class EventHandler
             AddKeyListener - Should be used for key specific keypresses
             AddMouseListener - should be used for specific mouse events
         ******************/
-        static void AddListener(sf::Event::EventType type, FuncType funcPtr);
+        static void AddEventListener(sf::Event::EventType type, FuncType funcPtr);
         static void AddMouseListener(sf::Mouse::Button type, EventHandler::FuncType funcPtr);
         static void AddKeyListener(sf::Key::Code type, EventHandler::FuncType funcPtr);
 

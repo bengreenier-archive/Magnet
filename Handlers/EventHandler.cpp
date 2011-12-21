@@ -14,12 +14,8 @@ EventHandler::~EventHandler()
 }
 
 void EventHandler::Listen(){
-    while (Renderer::Window()->GetEvent(GetObject()->Event))
+    while (Renderer::GetRenderWindow()->GetEvent(GetObject()->Event))
     {
-        // Close window : exit
-        /*if ((Event.Type == sf::Event::Closed)||((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::Escape))){
-                Renderer::Window()->Close();
-        }*/
         GetObject()->CallEvent(GetObject()->Event.Type);
 
 
@@ -30,19 +26,10 @@ void EventHandler::Listen(){
         if(GetObject()->Event.Type == sf::Event::MouseButtonPressed || GetObject()->Event.Type == sf::Event::MouseButtonReleased){
             GetObject()->CallMouseEvent(GetObject()->Event.MouseButton.Button);
         }
-
-
-        /*if ((Event.Type == sf::Event::KeyReleased)&&(Event.Key.Code == sf::Key::C)){//do console things.
-                if (!Console::GetObject()->listenerOn){
-
-                        ConsoleListenThread.Launch();
-
-                }else{std::cout<<"CONSOLE ALREADY ACTIVATED.\n";}
-        }*/
     }
 }
 
-void EventHandler::AddListener(sf::Event::EventType type, EventHandler::FuncType funcPtr){
+void EventHandler::AddEventListener(sf::Event::EventType type, EventHandler::FuncType funcPtr){
     GetObject()->event_listeners.insert(pair<sf::Event::EventType, FuncType> (type, funcPtr));
 }
 

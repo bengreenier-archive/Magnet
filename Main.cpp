@@ -2,11 +2,14 @@
 #include "Gun/GunMaker.h"
 #include <SFML/Graphics.hpp>
 #include "Renderer.h"
+#include "Magnet.h"
 #include "ImageHandler.h"
 #include "State/GameState.h"
 #include "Console/Console.h"
 #include "Handlers/EventHandler.h"
 
+
+//This console stuff should go somewhere else
 void LaunchConsoleThread(sf::Event evt);
 
 
@@ -30,46 +33,44 @@ int main()
     Gun2.SetPosition(0,130);
     Gun3.SetPosition(0,250);
     Gun4.SetPosition(0,380);
-
     /*************************************************
     **********=>    End debug code
     **************************************************/
     Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands);
     Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
 
+    /*************************************************
+    **********=>     This console stuff should go
+    **********=>    somewhere else.
+    **************************************************/
     sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
     Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
 
     EventHandler::AddKeyListener(sf::Key::C, &LaunchConsoleThread);
 
-    while (Renderer::Window()->IsOpened())
-    {
-        /***Load Handlers **/
-        /*switch(currentState.GetState()){
-            case GameState::NULL:
-                //What to do here?
-                break;
-            case GameState::LOADING:
+    /*************************************************
+    **********=>     Main loop
+    **************************************************/
+    std::string renderName = "render_thread";
+    sf::Thread Render(&Renderer::Render, &renderName);
 
-                //Compress to ResourceHandler
-                ImageHandler::Init();
-                //FontHandler::Init();
+    Magnet::AddManagedThread(renderName, Render, true, false, true);
 
+    sf::RenderWindow Window(sf::VideoMode::GetMode(3), "Magnet");
+    Renderer::GetObject()->SetRenderWindow(Window);
+    Window.SetActive(false);
 
-                RenderHandler::Init();
-
-
-                break;
-            case GameState::READY:
-                //On
-                break;
-        }*/
+    do{
+        //We always listen for events
         EventHandler::Listen();
-        Renderer::Render();
-    }
+
+        Magnet::Think();
+    }while (Window.IsOpened());
+
     return 0;
 }
 
+//This console stuff should go somewhere else
 void LaunchConsoleThread(sf::Event evt){
     if (!Console::GetObject()->listenerOn){
         Console::GetObject()->consoleThread_ptr->Launch();

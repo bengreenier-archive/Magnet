@@ -1,5 +1,7 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef Renderer_H
+#define Renderer_H
+
+#include "Magnet.h"
 
 #include<SFML/Graphics.hpp>
 #include <map>
@@ -18,8 +20,6 @@ using std::map;
 using std::multimap;
 using std::pair;
 using std::vector;
-
-class LinkableSprite;
 
 class Renderer
 {
@@ -50,9 +50,6 @@ class Renderer
             std::string why;
         };
 
-        static sf::RenderWindow* Window();
-
-
 
         ~Renderer();
 
@@ -64,6 +61,7 @@ class Renderer
             *Uses lazy initialization
         *********************************************/
         static Renderer* GetObject();
+        static sf::RenderWindow* GetRenderWindow();
 
         /*********************************************
             "Check if the screen is valid"
@@ -86,15 +84,15 @@ class Renderer
         /*********************************************
             "Draw the screen"
         *********************************************/
-        static void Render();
+        static void Render(void* threadData);
 
         /*********************************************
             "Add a drawable to the handler"
 
             When an object is mapped, it is assinged a unique index
         *********************************************/
-        static void CreateLink(sf::Drawable* drawable_ptr, int layer, int depth);
-        static void CreateLink(sf::Drawable* drawable_ptr, int layer);
+        static void CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth);
+        static void CreateLink(sf::Drawable* drawable_ptr, Layer layer);
         static void CreateLink(sf::Drawable* drawable_ptr);
 
         /*********************************************
@@ -102,10 +100,27 @@ class Renderer
         *********************************************/
         static void Close(sf::Event evt);
 
+        /*********************************************
+            "Creates the render window and sets renderTreadPtr"
+        *********************************************/
+        void SetRenderWindow(sf::RenderWindow& Window);
+
+        void InitRenderThread(void* threadData);
+
+        /*********************************************
+            "Change the layer of a drawable"
+        *********************************************/
+        // static void SetLayer(sf::Drawable* drawable_ptr, Layer newLayer);
+        /*********************************************
+            "Change the depth of a drawable"
+        *********************************************/
+       // static void SetDepth(sf::Drawable* drawable_ptr, int newDepth);
+
     protected:
         Renderer();
     private:
-
+        Magnet::managed_thread* renderThreadPtr;
+        sf::RenderWindow*     RenderWindow_ptr;
         //Sort the layers into order.
         void sort();
 
@@ -119,16 +134,13 @@ class Renderer
         map<Layer, multimap<int, int> >           struct_map;
         map<Layer, multimap<int, int> >::iterator struct_iterator;
 
-
-        static Renderer*       RendererPtr;
-
         //Each render handler should have a new RenderWindow
         //Accessed through RenderHandler
-        sf::RenderWindow*           WindowPtr;
+        static Renderer*               RendererPtr;
 
         bool            m_isValid; //Set false by public member invalidate(), this causes the frame to be redrawn
         unsigned int    m_cindex; //Current mapping index
 
 };
 
-#endif // RENDERER_H
+#endif // Renderer_H
