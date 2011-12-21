@@ -8,6 +8,7 @@
 #include <SFML/System.hpp>
 
 #include "ConsoleThread.h"
+#include "FunctionPtrTemplate.h"
 
 class Console
 {
@@ -16,6 +17,7 @@ class Console
         typedef int (*FuncTypeInt)();
         typedef std::string (*FuncTypeString)();
         typedef bool (*FuncTypeBool)();
+        //need this to work!!! //typedef ALL (*FuncTypeAll)(ALL);
 
         Console();
         ~Console();

@@ -6,6 +6,9 @@ Console::Console()
 {
     //ctor
    listenerOn=false;
+
+
+
 }
 
 Console::~Console()
@@ -31,7 +34,6 @@ void Console::Listener(void* UserData)
 
     ConsoleThread Data;
     std::cout<<"------------CONSOLE ACTIVATED------------\n";
-
     std::cout<<"\n";
     Console::PrintCommands();
     std::cout<<"\n";
