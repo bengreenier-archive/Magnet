@@ -8,11 +8,6 @@
 #include "Console/Console.h"
 #include "Handlers/EventHandler.h"
 
-
-//This console stuff should go somewhere else
-void LaunchConsoleThread(sf::Event evt);
-
-
 int main()
 {
     /*************************************************
@@ -46,7 +41,7 @@ int main()
     sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
     Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
 
-    EventHandler::AddKeyListener(sf::Key::C, &LaunchConsoleThread);
+    EventHandler::AddKeyListener(sf::Key::C, &Console::LaunchConsoleThread);
 
     /*************************************************
     **********=>     Main loop
@@ -70,11 +65,3 @@ int main()
     return 0;
 }
 
-//This console stuff should go somewhere else
-void LaunchConsoleThread(sf::Event evt){
-    if (!Console::GetObject()->listenerOn){
-        Console::GetObject()->consoleThread_ptr->Launch();
-    }else{
-        std::cout<<"CONSOLE ALREADY ACTIVATED.\n";
-    }
-}

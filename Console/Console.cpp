@@ -219,3 +219,13 @@ bool Console::CanGetCommand(std::string in)
 
     return false;
 }
+
+
+void Console::LaunchConsoleThread(sf::Event evt)
+{
+        if (!Console::GetObject()->listenerOn){
+        Console::GetObject()->consoleThread_ptr->Launch();
+    }else{
+        std::cout<<"CONSOLE ALREADY ACTIVATED.\n";
+    }
+}

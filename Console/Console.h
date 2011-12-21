@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "ConsoleThread.h"
 #include "FunctionPtrTemplate.h"
@@ -23,6 +24,8 @@ class Console
         ~Console();
         static Console* GetObject();
         static void Listener(void* UserData);//does the listening/calls execution of command.
+
+        static void LaunchConsoleThread(sf::Event evt);
 
         bool listenerOn;
 
