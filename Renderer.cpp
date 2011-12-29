@@ -12,7 +12,7 @@ Renderer::Renderer()
 {
     m_cindex    =   0;
     m_isValid = false;
-    renderThreadPtr = NULL;
+//    renderThreadPtr = NULL;
 
 
     EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
@@ -27,12 +27,11 @@ Renderer::~Renderer()
 {
     delete [] RendererPtr;
     delete [] RenderWindow_ptr;
-    delete [] renderThreadPtr;
+    delete [] renderThread_ptr;
 }
 
 void Renderer::Close(sf::Event evt){
-    GetObject()->renderThreadPtr->isRunning = false;
-    GetObject()->renderThreadPtr->threadPtr->Terminate();
+    GetObject()->renderThread_ptr->Terminate();
     Renderer::GetRenderWindow()->Close();
 }
 
@@ -64,20 +63,16 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
     return GetObject()->RenderWindow_ptr;
 }
 
-void Renderer::InitRenderThread(void* threadData){
-    if(renderThreadPtr == NULL){
-        std::string* threadName = static_cast<std::string*>(threadData);
-        renderThreadPtr =   Magnet::GetManagedThread(*threadName);
-    }
+void Renderer::Init(sf::Thread& renderThread){
+    renderThread_ptr = &renderThread;
 }
 /*********************************************
             "Draw the screen "
 *********************************************/
 void Renderer::Render(void* threadData){
-    GetObject()->InitRenderThread(threadData);
-
     while(GetRenderWindow()->IsOpened()){
-        if(GetObject()->isValid()){ return; }
+        //Process the frame
+        //Magnet::Hooks()->Call(Hook::Frame);
 
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
@@ -97,8 +92,6 @@ void Renderer::Render(void* threadData){
         }
 
         GetRenderWindow()->Display();
-
-        GetObject()->validate();
     }
 }
 
@@ -224,22 +217,3 @@ void Renderer::SetLayer(sf::Drawable* drawable_ptr, Layer newLayer){
     //invalidate();
 }
 */
-void  Renderer::sort(){
-}
-/*********************************************
-    "Check if the screen is valid"
-
-    returns TRUE if the screen is valid
-            FALSE if the screen is invalid, aka doesn't represent the current data
-*********************************************/
-bool Renderer::isValid(){ return m_isValid; }
-
-/*********************************************
-    "Force the screen to redraw"
-*********************************************/
-void Renderer::invalidate(){ GetObject()->m_isValid = false; }
-
-/*********************************************
-    "sets m_isValid to true"
-*********************************************/
-void Renderer::validate(){ m_isValid = true; }

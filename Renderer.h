@@ -105,7 +105,7 @@ class Renderer
         *********************************************/
         void SetRenderWindow(sf::RenderWindow& Window);
 
-        void InitRenderThread(void* threadData);
+        void Init(sf::Thread& renderThread);
 
         /*********************************************
             "Change the layer of a drawable"
@@ -119,7 +119,7 @@ class Renderer
     protected:
         Renderer();
     private:
-        Magnet::managed_thread* renderThreadPtr;
+        sf::Thread*        renderThread_ptr;
         sf::RenderWindow*     RenderWindow_ptr;
         //Sort the layers into order.
         void sort();
@@ -134,8 +134,6 @@ class Renderer
         map<Layer, multimap<int, int> >           struct_map;
         map<Layer, multimap<int, int> >::iterator struct_iterator;
 
-        //Each render handler should have a new RenderWindow
-        //Accessed through RenderHandler
         static Renderer*               RendererPtr;
 
         bool            m_isValid; //Set false by public member invalidate(), this causes the frame to be redrawn

@@ -31,13 +31,10 @@ int main()
     /*************************************************
     **********=>    End debug code
     **************************************************/
+
     Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands);
     Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
 
-    /*************************************************
-    **********=>     This console stuff should go
-    **********=>    somewhere else.
-    **************************************************/
     sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
     Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
 
@@ -46,21 +43,18 @@ int main()
     /*************************************************
     **********=>     Main loop
     **************************************************/
-    std::string renderName = "render_thread";
-    sf::Thread Render(&Renderer::Render, &renderName);
-
-    Magnet::AddManagedThread(renderName, Render, true, false, true);
+    sf::Thread Render(&Renderer::Render);
 
     sf::RenderWindow Window(sf::VideoMode::GetMode(3), "Magnet");
     Renderer::GetObject()->SetRenderWindow(Window);
     Window.SetActive(false);
 
-    do{
+    Render.Launch();
+
+    while(Renderer::GetRenderWindow()->IsOpened()){
         //We always listen for events
         EventHandler::Listen();
-
-        Magnet::Think();
-    }while (Window.IsOpened());
+    }
 
     return 0;
 }

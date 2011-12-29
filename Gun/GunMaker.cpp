@@ -73,8 +73,6 @@ void GunMaker::FormatDrawable(int x,int y)
     RearComponent.GetSpritePtr()->SetPosition(x,y);
     MiddleComponent.GetSpritePtr()->SetPosition(x+(ScaleFactor*rWidth),y);
     FrontComponent.GetSpritePtr()->SetPosition(x+(ScaleFactor*rWidth)+(ScaleFactor*mWidth),y);
-
-    Renderer::invalidate();
 }
 
 void GunMaker::RenderGunInfo(int x,int y)
