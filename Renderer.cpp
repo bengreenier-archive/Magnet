@@ -12,7 +12,6 @@ Renderer::Renderer()
 {
     m_cindex    =   0;
     m_isValid = false;
-//    renderThreadPtr = NULL;
 
 
     EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
@@ -27,16 +26,19 @@ Renderer::~Renderer()
 {
     delete [] RendererPtr;
     delete [] RenderWindow_ptr;
-    delete [] renderThread_ptr;
 }
 
 void Renderer::Close(sf::Event evt){
-    GetObject()->renderThread_ptr->Terminate();
     Renderer::GetRenderWindow()->Close();
+    GetObject()->renderThread_ptr->Terminate();
 }
 
 void Renderer::SetRenderWindow(sf::RenderWindow& Window){
-    RenderWindow_ptr = &Window;
+    GetObject()->RenderWindow_ptr = &Window;
+}
+
+void Renderer::SetRenderThread(sf::Thread& renderThread){
+    GetObject()->renderThread_ptr = &renderThread;
 }
 
 /*********************************************
@@ -61,10 +63,6 @@ Renderer* Renderer::GetObject(){
 *********************************************/
 sf::RenderWindow* Renderer::GetRenderWindow(){
     return GetObject()->RenderWindow_ptr;
-}
-
-void Renderer::Init(sf::Thread& renderThread){
-    renderThread_ptr = &renderThread;
 }
 /*********************************************
             "Draw the screen "

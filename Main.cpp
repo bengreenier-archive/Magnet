@@ -43,19 +43,23 @@ int main()
     /*************************************************
     **********=>     Main loop
     **************************************************/
-    sf::Thread Render(&Renderer::Render);
+    sf::Thread RenderThread(&Renderer::Render);
+    Renderer::SetRenderThread(RenderThread);
 
     sf::RenderWindow Window(sf::VideoMode::GetMode(3), "Magnet");
-    Renderer::GetObject()->SetRenderWindow(Window);
     Window.SetActive(false);
+    Renderer::SetRenderWindow(Window);
 
-    Render.Launch();
+    RenderThread.Launch();
 
     while(Renderer::GetRenderWindow()->IsOpened()){
         //We always listen for events
         EventHandler::Listen();
     }
 
-    return 0;
+    //Crashes if we don't end this
+    //RenderThread.Terminate();
+
+    return EXIT_SUCCESS;
 }
 

@@ -103,9 +103,9 @@ class Renderer
         /*********************************************
             "Creates the render window and sets renderTreadPtr"
         *********************************************/
-        void SetRenderWindow(sf::RenderWindow& Window);
+        static void SetRenderWindow(sf::RenderWindow& Window);
 
-        void Init(sf::Thread& renderThread);
+        static void SetRenderThread(sf::Thread& renderThread);
 
         /*********************************************
             "Change the layer of a drawable"
@@ -119,8 +119,8 @@ class Renderer
     protected:
         Renderer();
     private:
-        sf::Thread*        renderThread_ptr;
         sf::RenderWindow*     RenderWindow_ptr;
+        sf::Thread*           renderThread_ptr;
         //Sort the layers into order.
         void sort();
 
