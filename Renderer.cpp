@@ -13,7 +13,6 @@ Renderer::Renderer()
     m_cindex    =   0;
     m_isValid = false;
 
-
     EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
     EventHandler::AddEventListener(sf::Event::Closed, &Renderer::Close);
 
@@ -29,6 +28,8 @@ Renderer::~Renderer()
 }
 
 void Renderer::Close(sf::Event evt){
+    Magnet::Hooks()->Call(Hook::Close);
+
     Renderer::GetRenderWindow()->Close();
     GetObject()->renderThread_ptr->Terminate();
 }
@@ -70,7 +71,7 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
 void Renderer::Render(void* threadData){
     while(GetRenderWindow()->IsOpened()){
         //Process the frame
-        //Magnet::Hooks()->Call(Hook::Frame);
+        Magnet::Hooks()->Call(Hook::Frame);
 
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 

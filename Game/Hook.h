@@ -4,10 +4,13 @@
 
 #include <map>
 #include <iostream>
+
 namespace Hook{
     enum Type {
-        Frame       //Called immediately before the frame is drawn
-                    //Should be used sparingly (is called every frame)
+        Frame,              //Called immediately before the frame is drawn
+                            //Should be used sparingly (is called every frame)
+        Close,              //Called when the game closes
+        GameStateChange     //Game state has been changed
     };
 
     class Registry{
@@ -21,7 +24,6 @@ namespace Hook{
             }
 
             void Call(Type hookType){
-                std::cout << "In call\n";
                 hooks_iterator_t it;
 
                 for(it  =   m_hooks.begin();

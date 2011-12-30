@@ -5,8 +5,10 @@
 class State {
     public:
         enum _type{
-            NullPointer,    //Pointers still need to be set
-            Ready           //Pointers are set, threads are running
+            Null,       //initial state
+            Loading,    //Loading initial game resources, I.E.
+            Menu,       //In a menu
+            InGame
         };
 
         State(_type init) : type(init), initialState(init) {}

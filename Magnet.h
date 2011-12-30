@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Handlers/EventHandler.h"
+
 #include "Game/State.h"
 #include "Game/Hook.h"
 #include "Game/ManagedThread.h"
@@ -19,6 +21,18 @@ class Magnet
         static void Frame();
 
         //////////////////////////////////////////
+        /// Called on space press
+        //////////////////////////////////////////
+        static void Event_SpacePressed(sf::Event evt);
+
+        //////////////////////////////////////////
+        /// Start the game
+        ///
+        ///     Changes state to InGame
+        //////////////////////////////////////////
+        static void StartGame();
+
+        //////////////////////////////////////////
         /// Retrieve the global mutex
         //////////////////////////////////////////
         static sf::Mutex* GlobalMutex();
@@ -27,16 +41,17 @@ class Magnet
         /// Retrieve the global hook registry
         //////////////////////////////////////////
         static Hook::Registry* Hooks();
+
+        //////////////////////////////////////////
+        /// Change the current state of the game
+        //////////////////////////////////////////
+        void ChangeState(State::_type newState);
     protected:
         //Magnet initialization stuff
         Magnet(State::_type defaultState);
     private:
-//        typedef std::vector<managed_thread>            threads_t;
-//        typedef std::vector<managed_thread>::iterator  threads_iterator_t;
-
         static Magnet* magnet_ptr;
         State gameState;
-//        threads_t threads;
 
         sf::Mutex m_globalMutex;
         Hook::Registry m_hooks;
