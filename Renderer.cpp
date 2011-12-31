@@ -1,7 +1,7 @@
 #include "Renderer.h"
 #include "Handlers/EventHandler.h"
 #include "Console/Console.h"
-
+#include "Magnet.h"
 #include <queue>
 #include <iterator>
 #include <typeinfo>
@@ -75,7 +75,7 @@ void Renderer::Render(void* threadData){
 
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
-        for(    GetObject()->struct_iterator = GetObject()->struct_map.begin();
+         for(    GetObject()->struct_iterator = GetObject()->struct_map.begin();
                 GetObject()->struct_iterator != GetObject()->struct_map.end();
                 GetObject()->struct_iterator++   )
         {
@@ -84,7 +84,11 @@ void Renderer::Render(void* threadData){
                     depth_iterator != GetObject()->struct_iterator->second.end();
                     depth_iterator++   )
             {
-                GetRenderWindow()->Draw(*GetObject()->drawable_map[depth_iterator->second]);
+                if(GetObject()->drawable_map[depth_iterator->second] == NULL){
+                    std::cout << "RENDER ERROR: Null link!\n";
+                }else{
+                    GetRenderWindow()->Draw(*GetObject()->drawable_map[depth_iterator->second]);
+                }
             }
 
 
@@ -130,89 +134,60 @@ void Renderer::CreateLink(sf::Drawable* drawable_ptr){
     Renderer::CreateLink(drawable_ptr, Renderer::GameLayer, 0);
 }
 
-/*
-void Renderer::SetLayer(sf::Drawable* drawable_ptr, Layer newLayer){
-    map<int, sf::Drawable*>::iterator it;
+void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
+    int linkIndex = GetObject()->GetLinkIndex(drawable_ptr);
 
-    int index = -1;
+    if(linkIndex == -1) return;
 
-    for(it = GetObject()->drawable_map.begin();
-        it != GetObject()->drawable_map.end();
-        it++   )
+    struct_map_it_t struct_it;
+    map<int, int>::iterator depth_it;
+
+    for(struct_it =     GetObject()->struct_map.begin();
+        struct_it !=    GetObject()->struct_map.end();
+        struct_it++)
     {
-        if(drawable_ptr == it->second){
-            index = it->first;
-        }
-    }
-
-    if(index == -1){
-        std::cout << "Could not change layer, drawable not linked!\n";
-    }else{
-        int linkedDepth;
-        bool depthSet = false;
-        bool layerSet = false;
-        map<Layer, multimap<int, int> >::iterator sit;
-        map<Layer, multimap<int, int> >::iterator sit_storage;
-        map<Layer, multimap<int, int> >::iterator sit_storage_old;
-        multimap<int, int>::iterator              dit;
-
-        std::cout << "Moving " << &*drawable_ptr << " to layer " << newLayer << std::endl;
-
-        for(sit =   GetObject()->struct_map.begin();
-            sit !=  GetObject()->struct_map.end();
-            sit++  )
+        for(depth_it =  struct_it->second.begin();
+            depth_it != struct_it->second.end();
+            depth_it++)
         {
-            std::cout << sit->first << " == " << newLayer << " && " << (!layerSet) << std::endl;
-            if(sit->first == newLayer && !layerSet){
-                std::cout << "Found the layer we want to move to, storing into sit storage...\n";
-                sit_storage = sit;
-                layerSet = true;
-                std::cout << "\tlayerSet = true\n";
-
-                if(depthSet){
-                    std::cout << "Depth already set, exiting loop\n";
-                    break;
-                }
+            if(depth_it->second == linkIndex){
+                struct_it->second.erase(depth_it);
+                break;
             }
-
-            if(!depthSet){
-                std::cout << "Searching for index in layer " << sit->first << std::endl;
-                for(dit = sit->second.begin();
-                    dit != sit->second.end();
-                    dit++ )
-                {
-                    std::cout << dit->second << " == " << index << std::endl;
-                    if(dit->second == index){
-                        std::cout << "Index found in layer " << sit->first << " at depth " << dit->first << ", storing the depth\n";
-                        linkedDepth = dit->first;
-                        sit_storage_old = sit;
-                        depthSet = true;
-                        std::cout << "\depthSet = true\n";
-
-                        if(layerSet){
-                            std::cout << "Layer already set, exiting loop\n";
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if(GetObject()->struct_map.find(newLayer) == GetObject()->struct_map.end()){
-            multimap<int, int> copyMap;
-            copyMap.insert(pair<int, int>(linkedDepth, index));
-            GetObject()->struct_map.insert(pair<int, multimap<int, int> >(newLayer, copyMap));
-
-        std::cout << "Here\n";
-            sit_storage_old->second.erase(dit);
-
-        std::cout << "Here2\n";
-        }else{
-            sit_storage->second.insert(pair<int, int>(linkedDepth, index));
-            sit_storage_old->second.erase(dit);
         }
     }
 
-    //invalidate();
+
+
 }
-*/
+
+
+
+bool Renderer::LinkExists(sf::Drawable* drawable_ptr){
+    if(GetLinkIndex(drawable_ptr) != -1){
+        return true;
+    }
+
+    return false;
+}
+
+int Renderer::GetLinkIndex(sf::Drawable* drawable_ptr){
+    drawable_map_it_t it;
+
+    for(it  =   drawable_map.begin();
+        it  !=  drawable_map.end();
+        it++)
+    {
+        if(it->second == drawable_ptr){
+            return it->first;
+        }
+    }
+
+    return -1;
+}
+
+
+void Renderer::SetLinkLayer(sf::Drawable* drawable_ptr, Layer newLayer){
+    Renderer::RemoveLink(drawable_ptr);
+    Renderer::CreateLink(drawable_ptr, newLayer);
+}

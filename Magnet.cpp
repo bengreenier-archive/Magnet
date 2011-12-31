@@ -1,5 +1,4 @@
 #include "Magnet.h"
-#include "Renderer.h"
 
 #include <typeinfo>
 
@@ -11,11 +10,19 @@ Magnet::Magnet(State::_type defaultState) : gameState(defaultState)
     m_hooks.Register(Hook::Frame, &Magnet::Frame);
 
     EventHandler::AddKeyListener(sf::Key::Space, &Magnet::Event_SpacePressed);
+    EventHandler::AddEventListener(sf::Event::MouseMoved, &Magnet::Event_MouseMove);
 }
 
 Magnet::~Magnet()
 {
     //dtor
+}
+
+void Magnet::Event_MouseMove(sf::Event evt){
+    if(Object()->m_mouseTrail.on){
+        const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
+        Object()->m_mouseTrail.MouseMove(sf::Vector2i(Input.GetMouseX(), Input.GetMouseY()));
+    }
 }
 
 void Magnet::Event_SpacePressed(sf::Event evt){
@@ -93,5 +100,9 @@ void Magnet::Frame(){
         case State::InGame:
             //Wait for user to resturn to menu/exit game
             break;
+    }
+
+    if(Object()->m_mouseTrail.on){
+        Object()->m_mouseTrail.Frame();
     }
 }

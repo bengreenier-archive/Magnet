@@ -1,8 +1,6 @@
 #ifndef Renderer_H
 #define Renderer_H
 
-#include "Magnet.h"
-
 #include<SFML/Graphics.hpp>
 #include <map>
 #include <string>
@@ -35,10 +33,13 @@ class Renderer
         /*******Layer definitions******************
             Each layer is assigned to its depth
             You can safely add layers here
+
+            For layers, the depth 0 is the top
+            For drawables the depth 0 is the bottom
         ******************************************/
-        static const Layer   GameLayer   =   0;
+        static const Layer   GameLayer   =   2;
         static const Layer   HudLayer    =   1;
-        static const Layer   MenuLayer   =   2;
+        static const Layer   MenuLayer   =   0;
 
 
         struct exception{
@@ -95,6 +96,8 @@ class Renderer
         static void CreateLink(sf::Drawable* drawable_ptr, Layer layer);
         static void CreateLink(sf::Drawable* drawable_ptr);
 
+        static void RemoveLink(sf::Drawable* drawable_ptr);
+        static void SetLinkLayer(sf::Drawable* drawable_ptr, Layer newLayer);
         /*********************************************
             "Close the RenderWindow"
         *********************************************/
@@ -116,23 +119,34 @@ class Renderer
         *********************************************/
        // static void SetDepth(sf::Drawable* drawable_ptr, int newDepth);
 
+       ////////////////////////////////////////////////
+       ///  Gets the unique index assigned to a link
+       ///  returns -1 if the index is not found
+       ////////////////////////////////////////////////
+       int GetLinkIndex(sf::Drawable* drawable_ptr);
+
+       ////////////////////////////////////////////////
+       ///  Checks to see if a drawable is linked
+       ////////////////////////////////////////////////
+       bool LinkExists(sf::Drawable* drawable_ptr);
+
     protected:
         Renderer();
     private:
+        typedef map<int, sf::Drawable*>                       drawable_map_t;
+        typedef map<int, sf::Drawable*>::iterator             drawable_map_it_t;
+        typedef map<Layer, multimap<int, int>, std::greater<int> >               struct_map_t;
+        typedef map<Layer, multimap<int, int>, std::greater<int> >::iterator     struct_map_it_t;
+
         sf::RenderWindow*     RenderWindow_ptr;
         sf::Thread*           renderThread_ptr;
-        //Sort the layers into order.
-        void sort();
 
         //Map a unique index to a drawable
-        map<int, sf::Drawable*>             drawable_map;
-        map<int, sf::Drawable*>::iterator   drawable_iterator;
-
-
+        drawable_map_t             drawable_map;
         //Make a multimap that maps a layer to the depth map on that layer
         //  Nested multimap maps depths to a unique index
-        map<Layer, multimap<int, int> >           struct_map;
-        map<Layer, multimap<int, int> >::iterator struct_iterator;
+        struct_map_t    struct_map;
+        struct_map_it_t struct_iterator;
 
         static Renderer*               RendererPtr;
 

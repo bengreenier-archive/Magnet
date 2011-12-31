@@ -3,11 +3,15 @@
 
 #include <SFML/Graphics.hpp>
 
+
+#include "Renderer.h"
+
 #include "Handlers/EventHandler.h"
 
 #include "Game/State.h"
 #include "Game/Hook.h"
 #include "Game/ManagedThread.h"
+#include "Game/MouseTrail.h"
 
 class Magnet
 {
@@ -24,6 +28,7 @@ class Magnet
         /// Called on space press
         //////////////////////////////////////////
         static void Event_SpacePressed(sf::Event evt);
+        static void Event_MouseMove(sf::Event evt);
 
         //////////////////////////////////////////
         /// Start the game
@@ -46,6 +51,7 @@ class Magnet
         /// Change the current state of the game
         //////////////////////////////////////////
         void ChangeState(State::_type newState);
+
     protected:
         //Magnet initialization stuff
         Magnet(State::_type defaultState);
@@ -55,6 +61,8 @@ class Magnet
 
         sf::Mutex m_globalMutex;
         Hook::Registry m_hooks;
+
+        MouseTrail m_mouseTrail;
 
 };
 
