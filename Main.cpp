@@ -47,6 +47,7 @@ int main()
     Renderer::SetRenderThread(RenderThread);
 
     sf::RenderWindow Window(sf::VideoMode::GetMode(3), "Magnet");
+    Window.SetFramerateLimit(30);
     Window.SetActive(false);
     Renderer::SetRenderWindow(Window);
 

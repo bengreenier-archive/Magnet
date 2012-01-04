@@ -2,9 +2,6 @@
 #include "Handlers/EventHandler.h"
 #include "Console/Console.h"
 #include "Magnet.h"
-#include <queue>
-#include <iterator>
-#include <typeinfo>
 
 Renderer*               Renderer::RendererPtr         = NULL;
 
@@ -16,9 +13,6 @@ Renderer::Renderer()
 
     EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
     EventHandler::AddEventListener(sf::Event::Closed, &Renderer::Close);
-
-   // Console::AddCommand("invalidateWindow",&Window::invalidate);
-    //Console::AddCommand("render",&Window::Render);
 }
 
 //Clean up all the allocated memory space

@@ -15,10 +15,7 @@
         needed.
 **************************************/
 
-using std::map;
 using std::queue;
-using std::multimap;
-using std::pair;
 using std::vector;
 
 class Renderer
@@ -140,15 +137,8 @@ class Renderer
             int             depth;
         };
 
-        typedef map<int, sf::Drawable*>                       drawable_map_t;
-        typedef map<int, sf::Drawable*>::iterator             drawable_map_it_t;
-        typedef map<Layer, multimap<int, int>, std::greater<int> >               struct_map_t;
-        typedef map<Layer, multimap<int, int>, std::greater<int> >::iterator     struct_map_it_t;
-
         typedef vector<link>            links_t;
         typedef vector<link>::iterator  links_iterator_t;
-
-        typedef queue<int>              remove_queue_t;
         typedef queue<link>              newlink_queue_t;
 
 
@@ -161,14 +151,6 @@ class Renderer
 
         links_t             links;
         newlink_queue_t     newlink_queue;
-
-        //Map a unique index to a drawable
-        drawable_map_t             drawable_map;
-        //Make a multimap that maps a layer to the depth map on that layer
-        //  Nested multimap maps depths to a unique index
-        struct_map_t    struct_map;
-        struct_map_it_t struct_iterator;
-        remove_queue_t  remove_queue;
 
         void _RemoveLink(int linkIndex);
         void _CreateLink(link newLink);
