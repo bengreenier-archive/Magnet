@@ -8,7 +8,6 @@ TrailCircle::TrailCircle(float x, float y, float radius, const sf::Color color)
     m_initialY  =   y;
     m_scale     =   1;
     m_remove    =   false;
-    _m_removed  =   false;
 }
 
 TrailCircle::~TrailCircle()
@@ -21,19 +20,27 @@ void TrailCircle::Link(){
 }
 
 void TrailCircle::RemoveLink(){
-    if(_m_removed) return;
 
     Renderer::RemoveLink(&m_circle);
-    _m_removed  =   true;
 }
 
 void TrailCircle::Update(){
-    m_scale -= .01;
+    m_scale -= .045;
+
+    int neg = rand() % 3 + 1;
+
+    if(neg == 1){
+        neg = -1;
+    }else if(neg == 2){
+        neg = 1;
+    }else{
+        neg = 0;
+    }
 
     m_circle.SetScale(m_scale, m_scale);
+    m_circle.SetPosition((m_initalX-(m_initalX*m_scale))+(m_shake*neg), (m_initialY-(m_initialY*m_scale))+(m_shake*neg));
 
     if(m_scale < .1){
         m_remove=true;
-        //Renderer::RemoveLink(&m_circle);
     }
 }

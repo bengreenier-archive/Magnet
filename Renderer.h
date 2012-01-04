@@ -35,13 +35,10 @@ class Renderer
         /*******Layer definitions******************
             Each layer is assigned to its depth
             You can safely add layers here
-
-            For layers, the depth 0 is the top
-            For drawables the depth 0 is the bottom
         ******************************************/
-        static const Layer   GameLayer   =   2;
+        static const Layer   GameLayer   =   0;
         static const Layer   HudLayer    =   1;
-        static const Layer   MenuLayer   =   0;
+        static const Layer   MenuLayer   =   2;
 
 
         struct exception{
@@ -137,16 +134,33 @@ class Renderer
     protected:
         Renderer();
     private:
+        struct link{
+            sf::Drawable*   object;
+            Layer           layer;
+            int             depth;
+        };
+
         typedef map<int, sf::Drawable*>                       drawable_map_t;
         typedef map<int, sf::Drawable*>::iterator             drawable_map_it_t;
         typedef map<Layer, multimap<int, int>, std::greater<int> >               struct_map_t;
         typedef map<Layer, multimap<int, int>, std::greater<int> >::iterator     struct_map_it_t;
+
+        typedef vector<link>            links_t;
+        typedef vector<link>::iterator  links_iterator_t;
+
         typedef queue<int>              remove_queue_t;
+        typedef queue<link>              newlink_queue_t;
+
+
+
 
         sf::RenderWindow*     RenderWindow_ptr;
         sf::Thread*           renderThread_ptr;
 
         bool m_wait;
+
+        links_t             links;
+        newlink_queue_t     newlink_queue;
 
         //Map a unique index to a drawable
         drawable_map_t             drawable_map;
@@ -157,6 +171,7 @@ class Renderer
         remove_queue_t  remove_queue;
 
         void _RemoveLink(int linkIndex);
+        void _CreateLink(link newLink);
 
         static Renderer*               RendererPtr;
 

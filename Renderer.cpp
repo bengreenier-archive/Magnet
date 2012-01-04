@@ -74,68 +74,69 @@ void Renderer::Render(void* threadData){
     while(GetRenderWindow()->IsOpened() && GetObject()->m_shouldDraw){
         Magnet::Hooks()->Call(Hook::Frame);
 
-        Magnet::GlobalMutex()->Lock();
-        //std::cout << "Calling frame hook...\n";
-
-        //std::cout << "Processing remove queue...\n";
-        //Process the remove queue
-        while(!GetObject()->remove_queue.empty()){
-            GetObject()->_RemoveLink(GetObject()->remove_queue.front());
-            GetObject()->remove_queue.pop();
+        //Process the new link queue
+        while(!GetObject()->newlink_queue.empty()){
+            GetObject()->_CreateLink(GetObject()->newlink_queue.front());
+            GetObject()->newlink_queue.pop();
         }
 
-        //std::cout << "Clearning window...\n";
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
-        struct_map_it_t struct_it;
-        //std::cout << "Drawing...\n";
-        for(    struct_it = GetObject()->struct_map.begin();
-                struct_it != GetObject()->struct_map.end();
-                struct_it++   )
-        {
-            multimap<int, int>::iterator depth_iterator;
-            for(    depth_iterator = struct_it->second.begin();
-                     depth_iterator != struct_it->second.end();
-                    depth_iterator++   )
-            {
-                    GetRenderWindow()->Draw(*GetObject()->drawable_map[depth_iterator->second]);
-                    //std::cout << "\tDraw\n";
-            }
-
-
+        for(int i=0; i < GetObject()->links.size(); i++){
+            GetRenderWindow()->Draw(*GetObject()->links[i].object);
         }
 
         GetRenderWindow()->Display();
-        Magnet::GlobalMutex()->Unlock();
-        //std::cout << "****END FRAME****\n\n";
     }
 }
 
 void Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){
+    link newLink;
+    newLink.object = drawable_ptr;
+    newLink.layer  = layer;
+    newLink.depth  = depth;
 
-    GetObject()->drawable_map[GetObject()->m_cindex] = &*drawable_ptr;
-    drawable_ptr = &*GetObject()->drawable_map[GetObject()->m_cindex];
+    GetObject()->newlink_queue.push(newLink);
+}
 
-
-    if(GetObject()->struct_map.find(layer) == GetObject()->struct_map.end()){
-        multimap<int, int> copyMap;
-        copyMap.insert(pair<int, int>(depth, GetObject()->m_cindex));
-        GetObject()->struct_map.insert(pair<int, multimap<int, int> >(layer, copyMap));
+void Renderer::_CreateLink(Renderer::link newLink){
+    if(GetObject()->links.empty()){
+        GetObject()->links.push_back(newLink);
     }else{
-        map< Layer, multimap<int, int> >::iterator tmp_struct_iterator;
+        links_iterator_t it;
+        bool insertBefore = false;
+        bool insertAfter = false;
 
-        for(
-            tmp_struct_iterator = GetObject()->struct_map.begin();
-            tmp_struct_iterator != GetObject()->struct_map.end();
-            tmp_struct_iterator++)
-        {
-            if(tmp_struct_iterator->first == layer){
-                tmp_struct_iterator->second.insert(pair<int, int>(depth, GetObject()->m_cindex));
+        for(it = links.begin(); it != links.end(); it++){
+
+            if(it->layer > newLink.layer){
+                insertBefore = true;
+            }else if(it->layer == newLink.layer){
+                if(it->depth > newLink.depth){
+                    insertBefore = true;
+                }else if(it->depth == newLink.depth){
+                    if((it+1) == links.end() || (it+1)->layer != newLink.layer || (it+1)->depth != newLink.depth){
+                        insertAfter = true;
+                    }
+                }
+            }
+            if(!insertBefore && !insertAfter){
+                if((it+1) == links.end()){
+                    insertAfter = true;
+                }
+            }
+
+            if(insertBefore){
+                links.insert(it, newLink);
+                break;
+            }
+
+            if(insertAfter){
+                links.insert(it+1, newLink);
+                break;
             }
         }
     }
-
-    GetObject()->m_cindex++;
 }
 
 
@@ -153,28 +154,13 @@ void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
 
     if(linkIndex == -1) return;
 
-    GetObject()->remove_queue.push(linkIndex);
+    GetObject()->links.erase(GetObject()->links.begin()+linkIndex);
 }
 
 void Renderer::_RemoveLink(int linkIndex){
-    struct_map_it_t struct_it;
-    map<int, int>::iterator depth_it;
-
-    for(struct_it =     struct_map.begin();
-        struct_it !=    struct_map.end();
-        struct_it++)
-    {
-        for(depth_it =  struct_it->second.begin();
-            depth_it != struct_it->second.end();
-            depth_it++)
-        {
-            if(depth_it->second == linkIndex){
-                struct_it->second.erase(depth_it);
-                drawable_map.erase(linkIndex);
-                break;
-            }
-        }
-    }
+    std::cout << "Links size before: " << links.size() << std::endl;
+    links.erase(links.begin()+linkIndex);
+    std::cout << "Links size after: " << links.size() << std::endl;
 }
 
 
@@ -188,14 +174,11 @@ bool Renderer::LinkExists(sf::Drawable* drawable_ptr){
 }
 
 int Renderer::GetLinkIndex(sf::Drawable* drawable_ptr){
-    drawable_map_it_t it;
+    links_iterator_t it;
 
-    for(it  =   drawable_map.begin();
-        it  !=  drawable_map.end();
-        it++)
-    {
-        if(it->second == drawable_ptr){
-            return it->first;
+    for(int i = 0; i < links.size(); i++){
+        if(links[i].object == drawable_ptr){
+            return i;
         }
     }
 

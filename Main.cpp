@@ -48,7 +48,6 @@ int main()
 
     sf::RenderWindow Window(sf::VideoMode::GetMode(3), "Magnet");
     Window.SetActive(false);
-    //Window.SetFramerateLimit(30);
     Renderer::SetRenderWindow(Window);
 
     RenderThread.Launch();
@@ -59,8 +58,7 @@ int main()
 
     }
 
-    //Crashes if we don't end this
-    //RenderThread.Terminate();
+    RenderThread.Terminate();
 
     return EXIT_SUCCESS;
 }

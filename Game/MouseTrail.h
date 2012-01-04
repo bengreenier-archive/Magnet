@@ -23,6 +23,8 @@ class MouseTrail
         typedef std::vector<TrailCircle*>::iterator  trail_it_t;
         trail_t     trail;
         trail_it_t  trail_it;
+
+        int m_maxSize;  //This is the maximum trail length
 };
 
 #endif // MOUSETRAIL_H

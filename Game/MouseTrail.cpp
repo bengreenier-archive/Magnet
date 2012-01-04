@@ -6,6 +6,7 @@
 MouseTrail::MouseTrail()
 {
     on = true;
+    m_maxSize   =   150;
 }
 
 MouseTrail::~MouseTrail()
@@ -14,24 +15,29 @@ MouseTrail::~MouseTrail()
 }
 
 void MouseTrail::MouseMove(sf::Vector2i mouse){
-    int numCircles = rand() % 4 + 1;
-    int offsetX      = rand() % 5;
-    int offsetY      = rand() % 5;
+    int circles      = rand() % 3 +1 ;
+    int offsetX;
+    int offsetY;
     int size;
 
-    int negX =   rand() % 2 + 1;
-    int negY =   rand() % 2 + 1;
+    int negX;
+    int negY;
 
-    if(negX == 1){
-        offsetX = offsetX * -1;
-    }
-
-    if(negY == 1){
-        offsetY = offsetY * -1;
-    }
-
-    for(int i = 0; i < numCircles; i++){
+    for(int i=0; i < circles; i++){
+        offsetX      = rand() % 4;
+        offsetY      = rand() % 4;
         size = rand()%5+2;
+
+        negX =   rand() % 2 + 1;
+        negY =   rand() % 2 + 1;
+
+        if(negX == 1){
+            offsetX = offsetX * -1;
+        }
+
+        if(negY == 1){
+            offsetY = offsetY * -1;
+        }
 
         trail.push_back(new TrailCircle(mouse.x+offsetX, mouse.y+offsetY, size, sf::Color(255, 255, 255)));
         trail.back()->Link();
@@ -40,8 +46,12 @@ void MouseTrail::MouseMove(sf::Vector2i mouse){
 
 void MouseTrail::Frame(){
    if(!trail.empty()){
-        trail_it = trail.begin();
+        while(trail.size() > m_maxSize){
+            trail.front()->RemoveLink();
+            trail.erase(trail.begin());
+        }
 
+        trail_it = trail.begin();
         while(trail_it != trail.end()){
             (*trail_it)->Update();
 
