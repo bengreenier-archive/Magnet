@@ -12,6 +12,7 @@ Renderer::Renderer()
 {
     m_cindex    =   0;
     m_isValid = false;
+    m_shouldDraw = true;
 
     EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
     EventHandler::AddEventListener(sf::Event::Closed, &Renderer::Close);
@@ -69,36 +70,49 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
             "Draw the screen "
 *********************************************/
 void Renderer::Render(void* threadData){
-    while(GetRenderWindow()->IsOpened()){
-        //Process the frame
+    GetObject()->m_shouldDraw = true;
+    while(GetRenderWindow()->IsOpened() && GetObject()->m_shouldDraw){
         Magnet::Hooks()->Call(Hook::Frame);
 
+        Magnet::GlobalMutex()->Lock();
+        //std::cout << "Calling frame hook...\n";
+
+        //std::cout << "Processing remove queue...\n";
+        //Process the remove queue
+        while(!GetObject()->remove_queue.empty()){
+            GetObject()->_RemoveLink(GetObject()->remove_queue.front());
+            GetObject()->remove_queue.pop();
+        }
+
+        //std::cout << "Clearning window...\n";
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
-         for(    GetObject()->struct_iterator = GetObject()->struct_map.begin();
-                GetObject()->struct_iterator != GetObject()->struct_map.end();
-                GetObject()->struct_iterator++   )
+        struct_map_it_t struct_it;
+        //std::cout << "Drawing...\n";
+        for(    struct_it = GetObject()->struct_map.begin();
+                struct_it != GetObject()->struct_map.end();
+                struct_it++   )
         {
             multimap<int, int>::iterator depth_iterator;
-            for(    depth_iterator = GetObject()->struct_iterator->second.begin();
-                    depth_iterator != GetObject()->struct_iterator->second.end();
+            for(    depth_iterator = struct_it->second.begin();
+                     depth_iterator != struct_it->second.end();
                     depth_iterator++   )
             {
-                if(GetObject()->drawable_map[depth_iterator->second] == NULL){
-                    std::cout << "RENDER ERROR: Null link!\n";
-                }else{
                     GetRenderWindow()->Draw(*GetObject()->drawable_map[depth_iterator->second]);
-                }
+                    //std::cout << "\tDraw\n";
             }
 
 
         }
 
         GetRenderWindow()->Display();
+        Magnet::GlobalMutex()->Unlock();
+        //std::cout << "****END FRAME****\n\n";
     }
 }
 
 void Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){
+
     GetObject()->drawable_map[GetObject()->m_cindex] = &*drawable_ptr;
     drawable_ptr = &*GetObject()->drawable_map[GetObject()->m_cindex];
 
@@ -139,11 +153,15 @@ void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
 
     if(linkIndex == -1) return;
 
+    GetObject()->remove_queue.push(linkIndex);
+}
+
+void Renderer::_RemoveLink(int linkIndex){
     struct_map_it_t struct_it;
     map<int, int>::iterator depth_it;
 
-    for(struct_it =     GetObject()->struct_map.begin();
-        struct_it !=    GetObject()->struct_map.end();
+    for(struct_it =     struct_map.begin();
+        struct_it !=    struct_map.end();
         struct_it++)
     {
         for(depth_it =  struct_it->second.begin();
@@ -152,13 +170,11 @@ void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
         {
             if(depth_it->second == linkIndex){
                 struct_it->second.erase(depth_it);
+                drawable_map.erase(linkIndex);
                 break;
             }
         }
     }
-
-
-
 }
 
 

@@ -1,9 +1,11 @@
 #include "MouseTrail.h"
 #include "../Magnet.h"
 
+#include "TrailCircle.h"
+
 MouseTrail::MouseTrail()
 {
-    on = false;
+    on = true;
 }
 
 MouseTrail::~MouseTrail()
@@ -13,16 +15,42 @@ MouseTrail::~MouseTrail()
 
 void MouseTrail::MouseMove(sf::Vector2i mouse){
     int numCircles = rand() % 4 + 1;
-    int noise      = rand();
+    int offsetX      = rand() % 5;
+    int offsetY      = rand() % 5;
     int size;
+
+    int negX =   rand() % 2 + 1;
+    int negY =   rand() % 2 + 1;
+
+    if(negX == 1){
+        offsetX = offsetX * -1;
+    }
+
+    if(negY == 1){
+        offsetY = offsetY * -1;
+    }
+
     for(int i = 0; i < numCircles; i++){
-        size = rand()%10+5;
-        //trail.push_back(std::auto_ptr<sf::Shape>(new sf::Shape::Circle(mouse.x*noise, mouse.y*noise, size, sf::Color(255, 255, 255))));
+        size = rand()%5+2;
+
+        trail.push_back(new TrailCircle(mouse.x+offsetX, mouse.y+offsetY, size, sf::Color(255, 255, 255)));
+        trail.back()->Link();
     }
 }
 
 void MouseTrail::Frame(){
-    for(int i =0; i < trail.size(); i++){
-        //Renderer::CreateLink(&trail[i]);
+   if(!trail.empty()){
+        trail_it = trail.begin();
+
+        while(trail_it != trail.end()){
+            (*trail_it)->Update();
+
+            if((*trail_it)->ShouldRemove()){
+                (*trail_it)->RemoveLink();
+                trail_it = trail.erase(trail_it);
+            }else{
+                trail_it++;
+            }
+        }
     }
 }

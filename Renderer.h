@@ -3,6 +3,7 @@
 
 #include<SFML/Graphics.hpp>
 #include <map>
+#include <queue>
 #include <string>
 #include <iostream>
 /*************************************
@@ -15,6 +16,7 @@
 **************************************/
 
 using std::map;
+using std::queue;
 using std::multimap;
 using std::pair;
 using std::vector;
@@ -130,6 +132,8 @@ class Renderer
        ////////////////////////////////////////////////
        bool LinkExists(sf::Drawable* drawable_ptr);
 
+       static sf::Mutex* Mutex();
+
     protected:
         Renderer();
     private:
@@ -137,9 +141,12 @@ class Renderer
         typedef map<int, sf::Drawable*>::iterator             drawable_map_it_t;
         typedef map<Layer, multimap<int, int>, std::greater<int> >               struct_map_t;
         typedef map<Layer, multimap<int, int>, std::greater<int> >::iterator     struct_map_it_t;
+        typedef queue<int>              remove_queue_t;
 
         sf::RenderWindow*     RenderWindow_ptr;
         sf::Thread*           renderThread_ptr;
+
+        bool m_wait;
 
         //Map a unique index to a drawable
         drawable_map_t             drawable_map;
@@ -147,10 +154,14 @@ class Renderer
         //  Nested multimap maps depths to a unique index
         struct_map_t    struct_map;
         struct_map_it_t struct_iterator;
+        remove_queue_t  remove_queue;
+
+        void _RemoveLink(int linkIndex);
 
         static Renderer*               RendererPtr;
 
-        bool            m_isValid; //Set false by public member invalidate(), this causes the frame to be redrawn
+        bool            m_isValid;
+        bool            m_shouldDraw;
         unsigned int    m_cindex; //Current mapping index
 
 };

@@ -16,7 +16,7 @@ int main()
     **************************************************/
     std::cout<<"This is OurGame\n";
     srand ( time(NULL) );//random seeder for guns
-    GunMaker Gun(.3f);
+    /*GunMaker Gun(.3f);
 
     GunMaker Gun2(.3f);
 
@@ -27,12 +27,12 @@ int main()
     Gun.SetPosition(0,0);
     Gun2.SetPosition(0,130);
     Gun3.SetPosition(0,250);
-    Gun4.SetPosition(0,380);
+    Gun4.SetPosition(0,380);*/
     /*************************************************
     **********=>    End debug code
     **************************************************/
 
-    Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands);
+    Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands) ;
     Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
 
     sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
@@ -48,6 +48,7 @@ int main()
 
     sf::RenderWindow Window(sf::VideoMode::GetMode(3), "Magnet");
     Window.SetActive(false);
+    //Window.SetFramerateLimit(30);
     Renderer::SetRenderWindow(Window);
 
     RenderThread.Launch();
@@ -55,6 +56,7 @@ int main()
     while(Renderer::GetRenderWindow()->IsOpened()){
         //We always listen for events
         EventHandler::Listen();
+
     }
 
     //Crashes if we don't end this

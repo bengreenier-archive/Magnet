@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Console/Console.h"
 
 #include "Renderer.h"
 
@@ -52,6 +53,9 @@ class Magnet
         //////////////////////////////////////////
         void ChangeState(State::_type newState);
 
+
+        MouseTrail m_mouseTrail;
+
     protected:
         //Magnet initialization stuff
         Magnet(State::_type defaultState);
@@ -61,8 +65,6 @@ class Magnet
 
         sf::Mutex m_globalMutex;
         Hook::Registry m_hooks;
-
-        MouseTrail m_mouseTrail;
 
 };
 

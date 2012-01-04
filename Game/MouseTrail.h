@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 
+class TrailCircle;
 class MouseTrail
 {
     public:
@@ -18,8 +19,10 @@ class MouseTrail
         bool on;
     protected:
     private:
-        typedef std::vector<std::auto_ptr<sf::Shape> >            trail_t;
-        trail_t trail;
+        typedef std::vector<TrailCircle*>            trail_t;
+        typedef std::vector<TrailCircle*>::iterator  trail_it_t;
+        trail_t     trail;
+        trail_it_t  trail_it;
 };
 
 #endif // MOUSETRAIL_H
