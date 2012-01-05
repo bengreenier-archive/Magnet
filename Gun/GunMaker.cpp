@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "../ImageHandler.h"
+#include "../Magnet.h"
 
 GunMaker::GunMaker(float Scale)
 {

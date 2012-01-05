@@ -1,6 +1,4 @@
 #include "Renderer.h"
-#include "Handlers/EventHandler.h"
-#include "Console/Console.h"
 #include "Magnet.h"
 
 Renderer*               Renderer::RendererPtr         = NULL;

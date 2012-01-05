@@ -1,5 +1,5 @@
 #include "ImageHandler.h"
-#include "Console/Console.h"
+#include "../../Magnet.h"
 
 
 ImageHandler* ImageHandler::ImageHandlerPtr = NULL;

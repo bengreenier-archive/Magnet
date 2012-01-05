@@ -1,5 +1,5 @@
 #include "FontHandler.h"
-#include "Console/Console.h"
+#include "../../Magnet.h"
 
 FontHandler* FontHandler::FontHandlerPtr = NULL;
 

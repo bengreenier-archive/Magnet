@@ -7,11 +7,14 @@
 
 #include "Renderer.h"
 
-#include "Handlers/EventHandler.h"
+#include "Game/Resource.h"
+
+#include "Game/Handlers/EventHandler.h"
+#include "Game/Handlers/ImageHandler.h"
+#include "Game/Handlers/FontHandler.h"
 
 #include "Game/State.h"
 #include "Game/Hook.h"
-#include "Game/ManagedThread.h"
 #include "Game/MouseTrail.h"
 
 class Magnet
@@ -65,6 +68,7 @@ class Magnet
 
         sf::Mutex m_globalMutex;
         Hook::Registry m_hooks;
+
 
 };
 

@@ -1,8 +1,7 @@
 #ifndef GUNCOMPONENT_H
 #define GUNCOMPONENT_H
 #include <SFML/Graphics.hpp>
-#include "../Renderer.h"
-#include "../ImageHandler.h"
+#include "../Magnet.h"
 #include <string>
 #include "GunEnum.h"
 

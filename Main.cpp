@@ -1,12 +1,8 @@
 #include <iostream>
 #include "Gun/GunMaker.h"
 #include <SFML/Graphics.hpp>
-#include "Renderer.h"
+
 #include "Magnet.h"
-#include "ImageHandler.h"
-#include "State/GameState.h"
-#include "Console/Console.h"
-#include "Handlers/EventHandler.h"
 
 int main()
 {
