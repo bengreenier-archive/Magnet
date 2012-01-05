@@ -1,5 +1,5 @@
 #include "Resource.h"
-#include "Magnet.h"
+#include "../Magnet.h"
 
 Resource::Resource()
 {

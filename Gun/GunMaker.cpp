@@ -1,6 +1,6 @@
 #include "GunMaker.h"
 #include "GunLocker.h"
-#include "../Renderer.h"
+#include "../Magnet.h"
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>

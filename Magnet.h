@@ -5,7 +5,7 @@
 
 #include "Console/Console.h"
 
-#include "Renderer.h"
+#include "Game/Renderer.h"
 
 #include "Game/Resource.h"
 

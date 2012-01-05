@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "Magnet.h"
+#include "../Magnet.h"
 
 Renderer*               Renderer::RendererPtr         = NULL;
 
