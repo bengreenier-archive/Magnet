@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "../Handlers/ImageHandler.h"
+#include "../Handlers/FontHandler.h"
 
 class ResourcePointer
 {
@@ -15,7 +16,7 @@ class ResourcePointer
             Invalid,
             Image,
             Sound,
-            Text
+            Font
         };
 
         ResourcePointer(std::string file);

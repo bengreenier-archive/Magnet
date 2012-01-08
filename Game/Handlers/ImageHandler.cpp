@@ -28,7 +28,7 @@ sf::Image& ImageHandler::GetImage(std::string in)
 
 }
 
-void ImageHandler::AddImage(std::string in)
+bool ImageHandler::AddImage(std::string in)  throw(Exception::ob)
 {
     sf::Image Image;
 
@@ -36,8 +36,10 @@ void ImageHandler::AddImage(std::string in)
 
     if (!GetObject()->object_map[in].LoadFromFile(in))
     {
-        //throw Resource::Exception(Resource::Exception::LoadFail, "Image could not be loaded from " + in);
+        return false;
     }
+
+    return true;
 }
 
 ImageHandler* ImageHandler::GetObject(){

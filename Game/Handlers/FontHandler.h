@@ -13,6 +13,8 @@ class FontHandler
     public:
         FontHandler();
         ~FontHandler();
+
+        static bool AddFont(std::string in);
         static sf::Font& GetFont(std::string in);
         static FontHandler* GetObject();
         static void PrintAvailableFonts();
@@ -23,7 +25,6 @@ class FontHandler
     private:
         std::map <std::string, sf::Font> object_map;
         std::map <std::string, sf::Font>::iterator Oit;
-        void AddFont(std::string in);
         static FontHandler* FontHandlerPtr;
 };
 

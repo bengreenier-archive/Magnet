@@ -7,27 +7,9 @@
 
 #include "Handlers/ImageHandler.h"
 
-#include "BaseException.h"
+#include "Exception.h"
 #include "Resource/ResourcePointer.h"
 
-class ResourceException : public BaseException
-{
-    public:
-    ResourceException(Type what, std::string why) : BaseException(what, why){}
-    virtual void what(){
-        std::cout << "Exception \"";
-        switch(m_what){
-            case LoadFail:
-                std::cout << "LoadFail\": Resource could not be loaded.";
-            default:
-                std::cout << "UNKOWN EXCEPTION";
-        }
-    }
-
-    virtual void why(){
-        std::cout << "Reason: " << m_why;
-    }
-};
 ////////////////////////////////
 /// Static class to handle
 /// Resources

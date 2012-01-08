@@ -6,6 +6,8 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+#include "../Exception.h"
+
 class ImageHandler
 {
     public:
@@ -18,7 +20,7 @@ class ImageHandler
         /// Throws a LoadFail exception if the file
         /// could not be loaded.
         //////////////////////////////////////////////
-        static void AddImage(std::string in);
+        static bool AddImage(std::string in) throw(Exception::ob);
         static sf::Image& GetImage(std::string in);
         static ImageHandler* GetObject();
         static void PrintAvailableImages();

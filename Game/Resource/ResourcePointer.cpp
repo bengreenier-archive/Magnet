@@ -1,5 +1,5 @@
 #include "ResourcePointer.h"
-
+#include "../Resource.h"
 ResourcePointer::ResourcePointer(std::string file)
 {
     set(file);
@@ -15,22 +15,21 @@ void ResourcePointer::set(std::string file){
 
     parse(file, ".", &fileType);
 
-    std::cout << "Setting type... ";
     if(fileType.size() == 2){
-        std::cout << fileType[1] << std::endl;
-        std::cout << "File path is properly formatted\n";
         if(fileType[1] == "png"){
-            std::cout << "File is an image\n";
-            //try{
-                ImageHandler::AddImage(file);
+            std::string realPath = Resource::Object()->ImageDir + file;
+            if(ImageHandler::AddImage(realPath)){
                 m_type = Image;
-            //}
-
-            /*catch(Resource::Exception e){
-                std::cout << "Resource exception occured!\n";
-                //e.error();
+            }else{
                 m_type = Invalid;
-            }*/
+            }
+        }else if(fileType[1] == "ttf"){
+            std::string realPath = Resource::Object()->FontDir + file;
+            if(FontHandler::AddFont(realPath)){
+                m_type = Font;
+            }else{
+                m_type = Invalid;
+            }
         }else{
             m_type = Invalid;
         }

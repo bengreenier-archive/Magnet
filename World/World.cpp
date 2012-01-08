@@ -111,7 +111,7 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos)  //a sort of tria
 
 	bodyDef.position.Set(pos.x*WorldStandards::unratio, pos.y*WorldStandards::unratio);
 
-	bodyDef.angle = 90*WorldStandards::degtorad;
+	bodyDef.angle = 0;
 
 	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
 

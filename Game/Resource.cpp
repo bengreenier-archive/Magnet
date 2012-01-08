@@ -112,8 +112,9 @@ void Resource::Load(void* data){
         Object()->m_loadLeft = Object()->m_load_queue.size();
     }
 
-    Object()->m_loading =   false;
 
     if(Object()->m_debug)
         std::cout << "[Resource][Load] Done loading\n";
+
+    Object()->m_loading =   false;
 }

@@ -19,29 +19,30 @@ sf::Font& FontHandler::GetFont(std::string in)
     if (GetObject()->object_map.count(in) <= 0)
     {
         //make new
-        GetObject()->AddFont(in);
-    }
+        //error
+    }else{
 
         //return reference to Font
         return GetObject()->object_map[in];
+    }
 
 
 
 }
 
-void FontHandler::AddFont(std::string in)
+bool FontHandler::AddFont(std::string in)
 {
     sf::Font Font;
 
-    object_map[in] = Font;
+    GetObject()->object_map[in] = Font;
 
-    if (!object_map[in].LoadFromFile(in))
+    if (!GetObject()->object_map[in].LoadFromFile(in))
     {
         std::cout<<"Font could not be loaded from "<<in<<"\n";
-        return;
+        return false;
     }
 
-    return;
+    return true;
 
 }
 

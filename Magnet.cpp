@@ -21,15 +21,7 @@ Magnet::~Magnet()
 }
 
 void Magnet::Test(){
-    Resource::Add("test.png");
-    Resource::Add("test.txt");
-    Resource::Add("test.txt");
-    Resource::Add("test.txt");
-    Resource::Add("test.txt");
-    Resource::Add("test.txt");
-    Resource::Add("test.txt");
-    Resource::Add("test.txt");
-    Resource::Add("test.txt");
+    Resource::Add("guns/assault1.png");
 
     World::Access()->AddBox(100,10,300,100,sf::Vector2f(100,100));
     World::Access()->AddStaticBox(100,10,300,100,sf::Vector2f(200,600));
