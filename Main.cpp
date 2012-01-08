@@ -23,6 +23,7 @@ int main()
     Gun.SetPosition(0,0);
     Gun2.SetPosition(0,130);
     Gun3.SetPosition(0,250);
+
     Gun4.SetPosition(0,380);*/
 
     /*************************************************
@@ -41,21 +42,17 @@ int main()
     **********=>     Main loop
     **************************************************/
 
-    std::cout << "Render thread\n";
     sf::Thread RenderThread(&Renderer::Render);
     Renderer::SetRenderThread(RenderThread);
 
-    std::cout << "resource thread\n";
-    sf::Thread ResourceLoader(&Resource::Handle::Load);
+    sf::Thread ResourceLoader(&Resource::Load);
 
 
-    std::cout << "window settings\n";
     sf::RenderWindow Window(sf::VideoMode::GetMode(3), "Magnet");
     Window.SetFramerateLimit(30);
     Window.SetActive(false);
     Renderer::SetRenderWindow(Window);
 
-    std::cout << "Main loop\n";
     while(Renderer::GetRenderWindow()->IsOpened()){
         Magnet::Init(RenderThread, ResourceLoader);
 

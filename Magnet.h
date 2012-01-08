@@ -10,12 +10,12 @@
 #include "Game/Resource.h"
 
 #include "Game/Handlers/EventHandler.h"
-#include "Game/Handlers/ImageHandler.h"
-#include "Game/Handlers/FontHandler.h"
 
 #include "Game/State.h"
 #include "Game/Hook.h"
 #include "Game/MouseTrail.h"
+
+#include "World/World.h"
 
 #include "World/World.h"
 

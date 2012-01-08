@@ -41,6 +41,7 @@ void World::Init(){
     m_ptr = new World();
 }
 
+
 b2World* World::CurrentWorld()
 {
     return m_selected;
@@ -187,6 +188,7 @@ void World::ActivateHook()
     }
 
 */
+
 /*
     if (!Access()->m_hooked)
     {
@@ -215,5 +217,4 @@ void World::HookHelper()
 */
 
 Access()->Step();
-
 }

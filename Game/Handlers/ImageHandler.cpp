@@ -1,13 +1,12 @@
 #include "ImageHandler.h"
-#include "../../Magnet.h"
-
+//#include "../../Console/Console.h"
 
 ImageHandler* ImageHandler::ImageHandlerPtr = NULL;
 
 ImageHandler::ImageHandler()
 {
     //ctor
-    Console::AddCommand("ImageHandler::PrintAvailableImages()",&ImageHandler::PrintAvailableImages);
+    //Console::AddCommand("ImageHandler::PrintAvailableImages()",&ImageHandler::PrintAvailableImages);
 }
 
 ImageHandler::~ImageHandler()

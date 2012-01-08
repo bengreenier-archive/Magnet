@@ -21,15 +21,15 @@ Magnet::~Magnet()
 }
 
 void Magnet::Test(){
-    Resource::Handle::Add("test.png");
-    Resource::Handle::Add("test.txt");
-    Resource::Handle::Add("test.txt");
-    Resource::Handle::Add("test.txt");
-    Resource::Handle::Add("test.txt");
-    Resource::Handle::Add("test.txt");
-    Resource::Handle::Add("test.txt");
-    Resource::Handle::Add("test.txt");
-    Resource::Handle::Add("test.txt");
+    Resource::Add("test.png");
+    Resource::Add("test.txt");
+    Resource::Add("test.txt");
+    Resource::Add("test.txt");
+    Resource::Add("test.txt");
+    Resource::Add("test.txt");
+    Resource::Add("test.txt");
+    Resource::Add("test.txt");
+    Resource::Add("test.txt");
 
     World::Access()->AddBox(100,10,300,100,sf::Vector2f(100,100));
     World::Access()->AddStaticBox(100,10,300,100,sf::Vector2f(200,600));
@@ -111,7 +111,7 @@ void Magnet::ChangeState(State::_type newState){
             gameState.set(newState);
             std::cout << "**********\tINITALIZE\t**********\n";
             std::cout << "[Magnet][Initialize] Initialize resource...\n";
-            Resource::Handle::Init(Object("ChangeState")->m_loadThread_ptr, "resource/");
+            Resource::Init(Object("ChangeState")->m_loadThread_ptr, "resource/");
             std::cout << "[Magnet][Initialize] Initialize world...\n";
             World::Init();
             std::cout << "[Magnet][Initialize] Calling setup hook\n";
@@ -150,23 +150,13 @@ void Magnet::Frame(){
 
     //Should be called every frame
     switch(Object("Frame")->gameState.get()){
-        case State::Null:
-            break;
-        case State::Initialize:
-            break;
         case State::Loading:
-            if(Resource::Handle::IsLoading()){
-                //std::cout << "Loading progress:\t" << Resource::Handle::LoadProgress() << std::endl;
+            if(Resource::IsLoading()){
+                std::cout << "Loading progress:\t" << Resource::LoadProgress() << std::endl;
             }else{
-                //std::cout << "Loading progress:\t" << Resource::Handle::LoadProgress() << std::endl;
+                std::cout << "Loading progress:\t" << Resource::LoadProgress() << std::endl;
                 Object("Frame")->ChangeState(State::Menu);
             }
-            break;
-        case State::Menu:
-            //Wait for user to start game
-            break;
-        case State::InGame:
-            //Wait for user to resturn to menu/exit game
             break;
     }
 

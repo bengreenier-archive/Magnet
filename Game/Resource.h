@@ -8,32 +8,31 @@
 #include "Handlers/ImageHandler.h"
 
 #include "BaseException.h"
-#include "Resource/Pointer.h"
+#include "Resource/ResourcePointer.h"
 
-namespace Resource{
-    class Exception : public BaseException
-    {
-        public:
-        Exception(Type what, std::string why) : BaseException(what, why){}
-        virtual void what(){
-            std::cout << "Exception \"";
-            switch(m_what){
-                case LoadFail:
-                    std::cout << "LoadFail\": Resource could not be loaded.";
-                default:
-                    std::cout << "UNKOWN EXCEPTION";
-            }
+class ResourceException : public BaseException
+{
+    public:
+    ResourceException(Type what, std::string why) : BaseException(what, why){}
+    virtual void what(){
+        std::cout << "Exception \"";
+        switch(m_what){
+            case LoadFail:
+                std::cout << "LoadFail\": Resource could not be loaded.";
+            default:
+                std::cout << "UNKOWN EXCEPTION";
         }
+    }
 
-        virtual void why(){
-            std::cout << "Reason: " << m_why;
-        }
-    };
+    virtual void why(){
+        std::cout << "Reason: " << m_why;
+    }
+};
 ////////////////////////////////
 /// Static class to handle
 /// Resources
 ////////////////////////////////
-class Handle
+class Resource
 {
     public:
         const std::string ResourceDir;//           =   "resource/";
@@ -41,12 +40,12 @@ class Handle
         const std::string ImageDir;//     =   Dir + "image/"
         const std::string FontDir;//       =   Dir + "font/";
 
-        virtual ~Handle();
+        virtual ~Resource();
 
         ////////////////////////////////
         /// Get the Resource object
         ////////////////////////////////
-        static Handle* Object();
+        static Resource* Object();
 
         ////////////////////////////////
         /// Initialize the resource object
@@ -83,23 +82,23 @@ class Handle
 
         static void Load(void* data);
     protected:
-        Handle(sf::Thread* loadThread, std::string resourceDir);
+        Resource(sf::Thread* loadThread, std::string resourceDir);
     private:
-        static Handle* _resource_ptr;
+        static Resource* _resource_ptr;
         sf::Thread*     m_loadThread_ptr;
 
-        typedef std::queue<std::string>     load_queue_t;
-        typedef std::map<std::string, Pointer>    resource_vect_t;
+        typedef std::queue<std::string>           load_queue_t;
+        typedef std::map<std::string, ResourcePointer>    resource_vect_t;
 
         resource_vect_t m_resource_vect;
         load_queue_t    m_load_queue;
         int             m_loadSize;         //load total
         int             m_loadLeft;         //current queue size
         bool            m_loading;          //True when loading is in process
+        bool            m_debug;
 
 
 
 };
-}
 
 #endif // RESOURCE_H
