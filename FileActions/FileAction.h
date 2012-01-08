@@ -12,7 +12,9 @@ class FileAction
         ~FileAction();
         static void WriteTo(std::string Filename,std::string Msg);
         static std::string ReadFrom(std::string Filename);
-        static bool IfExists(std::string Filename);
+        static bool FindFile(std::string Filename);
+        static bool FindDir(std::string dir);
+        static void MakeDir(std::string dir);
     protected:
     private:
 };

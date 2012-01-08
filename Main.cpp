@@ -24,6 +24,7 @@ int main()
     Gun2.SetPosition(0,130);
     Gun3.SetPosition(0,250);
     Gun4.SetPosition(0,380);*/
+
     /*************************************************
     **********=>    End debug code
     **************************************************/
@@ -54,6 +55,7 @@ int main()
     Window.SetActive(false);
     Renderer::SetRenderWindow(Window);
 
+    std::cout << "Main loop\n";
     while(Renderer::GetRenderWindow()->IsOpened()){
         Magnet::Init(RenderThread, ResourceLoader);
 

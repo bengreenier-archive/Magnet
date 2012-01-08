@@ -10,7 +10,10 @@ namespace Hook{
         Frame,              //Called immediately before the frame is drawn
                             //Should be used sparingly (is called every frame)
         Close,              //Called when the game closes
-        GameStateChange     //Game state has been changed
+        GameStateChange,    //Called after the game state has been changed
+        Load,               //Called when resources should begin loading
+        Setup               //Called after all static classes have been initialized
+                            //  Use this to safely add resources
     };
 
     class Registry{

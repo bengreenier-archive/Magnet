@@ -8,10 +8,11 @@ class State {
             Null,       //initial state
             Loading,    //Loading initial game resources, I.E.
             Menu,       //In a menu
-            InGame
+            InGame,
+            Initialize
         };
 
-        State(_type init) : type(init), initialState(init) {}
+        State(_type init) : type(Null), initialState(init) {}
 
         _type get() { return type; }
         void set(_type newType){ type = newType; }

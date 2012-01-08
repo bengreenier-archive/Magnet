@@ -21,7 +21,7 @@ Renderer::~Renderer()
 }
 
 void Renderer::Close(sf::Event evt){
-    Magnet::Hooks()->Call(Hook::Close);
+    Magnet::Hooks("Renderer::Close")->Call(Hook::Close);
 
     Renderer::GetRenderWindow()->Close();
     GetObject()->renderThread_ptr->Terminate();
@@ -62,9 +62,8 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
             "Draw the screen "
 *********************************************/
 void Renderer::Render(void* threadData){
-    GetObject()->m_shouldDraw = true;
-    while(GetRenderWindow()->IsOpened() && GetObject()->m_shouldDraw){
-        Magnet::Hooks()->Call(Hook::Frame);
+    while(GetRenderWindow()->IsOpened() && Magnet::Initialized()){
+        Magnet::Hooks("Renderer::Render")->Call(Hook::Frame);
 
         //Process the new link queue
         while(!GetObject()->newlink_queue.empty()){

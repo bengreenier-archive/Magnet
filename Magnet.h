@@ -17,6 +17,8 @@
 #include "Game/Hook.h"
 #include "Game/MouseTrail.h"
 
+#include "World/World.h"
+
 #include "FileActions/FileAction.h"
 
 class Magnet
@@ -26,9 +28,11 @@ class Magnet
         //Garbage collection
         virtual ~Magnet();
 
-        static Magnet* Object(std::string from);
+        static Magnet* Object(std::string from);    ///< DEBUG
+        static Magnet* Object();
         static void Init(sf::Thread& renderThread, sf::Thread& loadThread);
         static bool Initialized(); //Check to see if we have initialized yet
+        static void Hook_Initialize();
 
         static void Frame();
         static void Test();
@@ -54,7 +58,9 @@ class Magnet
         //////////////////////////////////////////
         /// Retrieve the global hook registry
         //////////////////////////////////////////
-        static Hook::Registry* Hooks(std::string from);
+        static Hook::Registry* Hooks(std::string from); ///< DEBUG
+        static Hook::Registry* Hooks();
+
 
 
         static State GetState(){ return Object("GetState")->gameState; }

@@ -1,4 +1,5 @@
 #include "FileAction.h"
+#include <dirent.h>
 
 FileAction::FileAction()
 {
@@ -35,8 +36,27 @@ std::string FileAction::ReadFrom(std::string Filename)
     return result;
 }
 
-bool FileAction::IfExists(std::string Filename)
+bool FileAction::FindFile(std::string Filename)
 {
     std::ifstream infile(Filename.c_str());
     if (infile.is_open()){return true;}else{return false;}
+}
+bool FileAction::FindDir(std::string dir)
+{
+    DIR *pDir;
+    bool bExists = false;
+
+    pDir = opendir (dir.c_str());
+
+    if (pDir != NULL)
+    {
+        bExists = true;
+        (void) closedir (pDir);
+    }
+
+    return bExists;
+}
+
+void FileAction::MakeDir(std::string dir){
+    mkdir(dir.c_str()); //I'm so schetched about this... platform safe?
 }

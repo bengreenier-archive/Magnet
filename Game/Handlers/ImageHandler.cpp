@@ -19,12 +19,11 @@ sf::Image& ImageHandler::GetImage(std::string in)
 {
     if (GetObject()->object_map.count(in) <= 0)
     {
-        //make new
-        GetObject()->AddImage(in);
-    }
-
+        //throw
+    }else{
         //return reference to image
         return GetObject()->object_map[in];
+    }
 
 
 
@@ -34,16 +33,12 @@ void ImageHandler::AddImage(std::string in)
 {
     sf::Image Image;
 
-    object_map[in] = Image;
+    GetObject()->object_map[in] = Image;
 
-    if (!object_map[in].LoadFromFile(in))
+    if (!GetObject()->object_map[in].LoadFromFile(in))
     {
-        std::cout<<"Image could not be loaded from "<<in<<"\n";
-        return;
+        //throw Resource::Exception(Resource::Exception::LoadFail, "Image could not be loaded from " + in);
     }
-
-    return;
-
 }
 
 ImageHandler* ImageHandler::GetObject(){

@@ -256,7 +256,7 @@ GunComponent GunLocker::GetRandomRearComponent(GunEnum::Type type){
 ***********************/
 void GunLocker::ParseList(std::string ListPath,std::vector<std::string>& List)
 {
-    if(!FileAction::IfExists(ListPath))
+    if(!FileAction::FindFile(ListPath))
     {
         std::cout<<"ParseList("<<ListPath<<") Failed.\n";
         return;
