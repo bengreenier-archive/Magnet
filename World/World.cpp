@@ -68,7 +68,7 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos)
 	bodyDef.angle = 0*WorldStandards::degtorad;
 	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
 	b2PolygonShape staticBox;
-	staticBox.SetAsBox((x/2)*WorldStandards::unratio, (y/2)*WorldStandards::unratio);
+	staticBox.SetAsBox(((x2-x)/2)*WorldStandards::unratio, ((y2-y)/2)*WorldStandards::unratio);
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &staticBox;
     fixtureDef.density = 0;
@@ -117,7 +117,7 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos)  //a sort of tria
 
 	b2PolygonShape dynamicBox;
 
-	dynamicBox.SetAsBox((x/2)*WorldStandards::unratio, (y/2)*WorldStandards::unratio);
+	dynamicBox.SetAsBox(((x2-x)/2)*WorldStandards::unratio, ((y2-y)/2)*WorldStandards::unratio);
 
 	//fixture stuff
 	b2FixtureDef fixtureDef;
