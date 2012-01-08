@@ -15,6 +15,8 @@ static const float degtorad = (180.0 / b2_pi);
 
 
 static const bool debug = true; //set to false to supress couts
+static const bool debug_step = false; //set to false to supress couts in stepping
+
 
 };
 
