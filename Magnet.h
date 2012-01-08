@@ -17,6 +17,8 @@
 #include "Game/Hook.h"
 #include "Game/MouseTrail.h"
 
+#include "World/World.h"
+
 class Magnet
 {
     public:

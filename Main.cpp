@@ -24,6 +24,11 @@ int main()
     Gun2.SetPosition(0,130);
     Gun3.SetPosition(0,250);
     Gun4.SetPosition(0,380);*/
+    World newWorld;
+    //lets add a box and a static box, both same size, at dif positions
+    newWorld.AddBox(100,10,300,100,sf::Vector2f(100,100));
+    newWorld.AddStaticBox(100,10,300,100,sf::Vector2f(200,600));
+
     /*************************************************
     **********=>    End debug code
     **************************************************/
