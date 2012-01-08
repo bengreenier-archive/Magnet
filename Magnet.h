@@ -17,6 +17,8 @@
 #include "Game/Hook.h"
 #include "Game/MouseTrail.h"
 
+#include "FileActions/FileAction.h"
+
 class Magnet
 {
     public:
@@ -24,9 +26,12 @@ class Magnet
         //Garbage collection
         virtual ~Magnet();
 
-        static Magnet* Object();
+        static Magnet* Object(std::string from);
+        static void Init(sf::Thread& renderThread, sf::Thread& loadThread);
+        static bool Initialized(); //Check to see if we have initialized yet
 
         static void Frame();
+        static void Test();
 
         //////////////////////////////////////////
         /// Called on space press
@@ -49,7 +54,10 @@ class Magnet
         //////////////////////////////////////////
         /// Retrieve the global hook registry
         //////////////////////////////////////////
-        static Hook::Registry* Hooks();
+        static Hook::Registry* Hooks(std::string from);
+
+
+        static State GetState(){ return Object("GetState")->gameState; }
 
         //////////////////////////////////////////
         /// Change the current state of the game
@@ -61,10 +69,12 @@ class Magnet
 
     protected:
         //Magnet initialization stuff
-        Magnet(State::_type defaultState);
+        Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
     private:
         static Magnet* magnet_ptr;
         State gameState;
+        sf::Thread* m_renderThread_ptr;
+        sf::Thread* m_loadThread_ptr;
 
         sf::Mutex m_globalMutex;
         Hook::Registry m_hooks;
