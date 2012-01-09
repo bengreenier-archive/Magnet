@@ -110,7 +110,6 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degangle)  /
 	bodyDef.awake = true;
 
     //see if this hlps..
-    bodyDef.bullet = true;
 
 	bodyDef.position.Set(pos.x*WorldStandards::unratio, pos.y*WorldStandards::unratio);
 
@@ -130,7 +129,7 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degangle)  /
     /////add material class in the futurec.
     fixtureDef.density = 1.00f;
     fixtureDef.friction = 0.30f;
-    fixtureDef.restitution = 0.2f;
+    fixtureDef.restitution = 0.002f;
 	//////
 
 	bodyBox->CreateFixture(&fixtureDef);
