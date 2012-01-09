@@ -18,8 +18,8 @@ class World
 
         sf::Color B2SFColor(const b2Color &color, int alpha = 255); //convert a b2color to sfml
 
-        void AddBox(int x,int y,int x2,int y2,sf::Vector2f pos=sf::Vector2f(0,0));
-        void AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos=sf::Vector2f(0,0));
+        void AddBox(int x,int y,int x2,int y2,sf::Vector2f pos=sf::Vector2f(0,0),float degangle=0);
+        void AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos=sf::Vector2f(0,0),float degangle=0);
 
         b2World* CurrentWorld();//returns current world.
 

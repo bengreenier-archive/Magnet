@@ -10,12 +10,12 @@ static const float ratio = 30.0f;
 static const float ppm = ratio;
 static const float mpp = (1.0F/ratio);
 static const float unratio = mpp;
-static const float radtodeg = (b2_pi / 180.0);
-static const float degtorad = (180.0 / b2_pi);
+static const float degtorad = (b2_pi / 180.0);
+static const float radtodeg = (180.0 / b2_pi);
 
 
 static const bool debug = true; //set to false to supress couts
-static const bool debug_step = false; //set to false to supress couts in stepping
+static const bool debug_step = true; //set to false to supress couts in stepping
 
 
 };

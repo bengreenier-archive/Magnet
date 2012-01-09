@@ -57,7 +57,7 @@ sf::Color World::B2SFColor(const b2Color &color, int alpha)
 }
 
 
-void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos)
+void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degangle)
 {
     //do box2d first..
     b2BodyDef bodyDef;
@@ -65,13 +65,15 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos)
 	bodyDef.allowSleep = true;
 	bodyDef.awake = true;
 	bodyDef.position.Set(pos.x*WorldStandards::unratio, pos.y*WorldStandards::unratio);
-	bodyDef.angle = 0*WorldStandards::degtorad;
+     bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
+
 	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
 	b2PolygonShape staticBox;
 	staticBox.SetAsBox(((x2-x)/2)*WorldStandards::unratio, ((y2-y)/2)*WorldStandards::unratio);
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &staticBox;
     fixtureDef.density = 0;
+
 
 
 	bodyBox->CreateFixture(&fixtureDef);
@@ -85,6 +87,7 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos)
     //do sfml
     sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(x,y,x2,y2,sf::Color(21,0,255))); //create a new rect with color red (for now)
     visibox->SetPosition(pos);
+    visibox->Rotate(degangle);
 
     Renderer::CreateLink(visibox);
 
@@ -98,7 +101,7 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos)
 }
 
 
-void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos)  //a sort of trial function , to make sure were getting basic physics.
+void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degangle)  //a sort of trial function , to make sure were getting basic physics.
 {
     //do box2d first..
     b2BodyDef bodyDef;
@@ -111,7 +114,7 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos)  //a sort of tria
 
 	bodyDef.position.Set(pos.x*WorldStandards::unratio, pos.y*WorldStandards::unratio);
 
-	bodyDef.angle = 0;
+    bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
 
 	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
 
@@ -129,6 +132,7 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos)  //a sort of tria
     fixtureDef.friction = 0.30f;
     fixtureDef.restitution = 0.2f;
 	//////
+
 	bodyBox->CreateFixture(&fixtureDef);
 
     //add the body to the list
@@ -140,6 +144,7 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos)  //a sort of tria
     //do sfml
     sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(x,y,x2,y2,sf::Color(255,0,0))); //create a new rect with color red (for now)
     visibox->SetPosition(pos);
+    visibox->Rotate(degangle);
 
     Renderer::CreateLink(visibox);
 
@@ -174,10 +179,18 @@ void World::Step()
         float b2rot  = Access()->b2PhysicsObjects[i]->GetAngle();
 
         if ((WorldStandards::debug)&&(WorldStandards::debug_step))
+        {
             std::cout<<"[System] [Step] [ObjectInfo] MassData.mass = "<< Access()->b2PhysicsObjects[i]->GetMass() <<".\n";
+            std::cout<<"[System] [Step] [b2ObjectInfo] GetAngle = "<< b2rot <<".\n";
+            std::cout<<"[System] [Step] [sfObjectInfo] GetAngle = "<< b2rot * WorldStandards::radtodeg <<".\n";
+        }
 
+
+        float sfmlcur = Access()->sfPhysicsObjects[i]->GetRotation();
+        float newrot = (-1 * b2rot) * WorldStandards::radtodeg;
+        float rot = newrot - sfmlcur ;
         Access()->sfPhysicsObjects[i]->SetPosition(b2posx*WorldStandards::ratio,b2posy*WorldStandards::ratio);
-        Access()->sfPhysicsObjects[i]->Rotate(b2rot * WorldStandards::radtodeg);
+        Access()->sfPhysicsObjects[i]->Rotate(rot);
 
     }
 
