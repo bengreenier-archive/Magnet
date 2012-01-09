@@ -184,10 +184,17 @@ void World::Step()
             std::cout<<"[System] [Step] [sfObjectInfo] GetAngle = "<< b2rot * WorldStandards::radtodeg <<".\n";
         }
 
+        float deg = b2rot * WorldStandards::radtodeg;
+        float alreadyrot = Access()->sfPhysicsObjects[i]->GetRotation();
+        float newrot = (-1*b2rot) * WorldStandards::radtodeg;
+        float rot= newrot - alreadyrot ;;
+/*
+        if (deg < 0 )
+            rot = newrot - alreadyrot ;
+        else
+            rot = (360 - deg) - alreadyrot ;
+*/
 
-        float sfmlcur = Access()->sfPhysicsObjects[i]->GetRotation();
-        float newrot = (-1 * b2rot) * WorldStandards::radtodeg;
-        float rot = newrot - sfmlcur ;
         Access()->sfPhysicsObjects[i]->SetPosition(b2posx*WorldStandards::ratio,b2posy*WorldStandards::ratio);
         Access()->sfPhysicsObjects[i]->Rotate(rot);
 
