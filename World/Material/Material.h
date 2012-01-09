@@ -1,5 +1,5 @@
-#ifndef BASE_H
-#define BASE_H
+#ifndef MATERIAL_H
+#define MATERIAL_H
 
 
 //the base material class, most materials should be able to be this.
@@ -7,8 +7,8 @@
 
 //SHOULD HANDLE COLORS/TEXTURES/IMAGES EVENTUALLY TOO.
 
-/*
-namespace Material{
+
+namespace MatType{
 
     enum Type{
         Default,
@@ -16,12 +16,16 @@ namespace Material{
         Light
     };
 
+}
 
-class Base
+class Material
 {
     public:
-        Base(Type in=Material::Type::Default);
-        ~Base();
+        Material(MatType::Type in=MatType::Default);
+        ~Material();
+        float GetDensity();
+        float GetRestitution();
+        float GetFriction();
     protected:
     private:
         float m_density;
@@ -29,12 +33,12 @@ class Base
         float m_friction;
 
         //these set things up for each type. each type has a function here.
-        void Default();
-        void Heavy();
-        void Light();
+        void m_Default();
+        void m_Heavy();
+        void m_Light();
 
 };
 
-}//namespace material
-*/
+
+
 #endif // BASE_H

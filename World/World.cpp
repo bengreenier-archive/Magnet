@@ -57,7 +57,7 @@ sf::Color World::B2SFColor(const b2Color &color, int alpha)
 }
 
 
-void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degangle)
+void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos,Material* mat,float degangle)
 {
     //do box2d first..
     b2BodyDef bodyDef;
@@ -72,8 +72,10 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degang
 	staticBox.SetAsBox(((x2-x)/2)*WorldStandards::unratio, ((y2-y)/2)*WorldStandards::unratio);
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &staticBox;
-    fixtureDef.density = 0;
-
+    /////add material class in the futurec.
+    fixtureDef.density = mat->GetDensity();
+    fixtureDef.friction = mat->GetFriction();
+    fixtureDef.restitution = mat->GetRestitution();
 
 
 	bodyBox->CreateFixture(&fixtureDef);
@@ -101,7 +103,7 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degang
 }
 
 
-void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degangle)  //a sort of trial function , to make sure were getting basic physics.
+void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,Material* mat,float degangle)  //a sort of trial function , to make sure were getting basic physics.
 {
     //do box2d first..
     b2BodyDef bodyDef;
@@ -127,9 +129,9 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,float degangle)  /
 	fixtureDef.shape = &dynamicBox;
 
     /////add material class in the futurec.
-    fixtureDef.density = 1.00f;
-    fixtureDef.friction = 0.30f;
-    fixtureDef.restitution = 0.002f;
+    fixtureDef.density = mat->GetDensity();
+    fixtureDef.friction = mat->GetFriction();
+    fixtureDef.restitution = mat->GetRestitution();
 	//////
 
 	bodyBox->CreateFixture(&fixtureDef);
