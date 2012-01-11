@@ -24,6 +24,9 @@ World::World()
     worldConstraint[1].x = 500 + Renderer::GetRenderWindow()->GetWidth();
     worldConstraint[1].y = 500 + Renderer::GetRenderWindow()->GetHeight();
 
+    //max bodies allowed
+    maxPhysicsBodies = 200;
+
 
     //--demo msg
 	sf::String* msg = new sf::String("Sposed To Collide...");
@@ -226,19 +229,29 @@ void World::Step()
         }
 
 
+        if (Access()->b2PhysicsObjects.size() > Access()->maxPhysicsBodies)
+        {
+            sfchain.push_back(Access()->b2PhysicsObjects.size());
+            b2chain.push_back(Access()->b2PhysicsObjects.size());
+
+            if (WorldStandards::debug)
+                        std::cout<<"[System] [Step] [Erase] Shape Erase Chained. \n";
+
+        }
+
     }
 
 
     //scroll our erase chains, and execute their stuff.
     for (int i=0;i<sfchain.size();i++)
     {
-                Access()->sfPhysicsObjects.erase(Access()->sfPhysicsObjects.begin()+(sfchain[i]-1));
+                Access()->sfPhysicsObjects.erase(Access()->sfPhysicsObjects.begin()+sfchain[i]);
                 Renderer::RemoveLink(Access()->sfPhysicsObjects[sfchain[i]]);
     }
 
     for (int i=0;i<b2chain.size();i++)
     {
-                Access()->b2PhysicsObjects.erase(Access()->b2PhysicsObjects.begin()+(b2chain[i]-1));
+                Access()->b2PhysicsObjects.erase(Access()->b2PhysicsObjects.begin()+b2chain[i]);
                 Access()->CurrentWorld()->DestroyBody(Access()->b2PhysicsObjects[b2chain[i]]);
     }
     //clear them.

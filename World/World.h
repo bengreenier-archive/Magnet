@@ -43,6 +43,7 @@ class World
         static World* m_ptr;
 
 
+        int maxPhysicsBodies;
         //our array of world constrainst. set in constructor.
         sf::Vector2i worldConstraint[2];
 
