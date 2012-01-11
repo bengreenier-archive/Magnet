@@ -35,7 +35,7 @@ class Magnet
         static void Hook_Initialize();
 
         static void Frame();
-        static void Test();
+        static void Hook_Setup();
 
         //////////////////////////////////////////
         /// Called on space press

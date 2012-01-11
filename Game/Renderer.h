@@ -139,7 +139,7 @@ class Renderer
 
         typedef vector<link>            links_t;
         typedef vector<link>::iterator  links_iterator_t;
-        typedef queue<link>              newlink_queue_t;
+        typedef queue<link>             link_queue_t;
 
 
 
@@ -149,10 +149,11 @@ class Renderer
 
         bool m_wait;
 
-        links_t             links;
-        newlink_queue_t     newlink_queue;
+        links_t          links;
+        link_queue_t     newlink_queue;
+        link_queue_t      delete_queue;
 
-        void _RemoveLink(int linkIndex);
+        void _RemoveLink(link oldLink);
         void _CreateLink(link newLink);
 
         static Renderer*               RendererPtr;

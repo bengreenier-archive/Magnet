@@ -71,6 +71,12 @@ void Renderer::Render(void* threadData){
             GetObject()->newlink_queue.pop();
         }
 
+        //Process the new link queue
+        while(!GetObject()->delete_queue.empty()){
+            GetObject()->_RemoveLink(GetObject()->delete_queue.front());
+            GetObject()->delete_queue.pop();
+        }
+
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
         for(int i=0; i < GetObject()->links.size(); i++){
@@ -145,13 +151,16 @@ void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
 
     if(linkIndex == -1) return;
 
-    GetObject()->links.erase(GetObject()->links.begin()+linkIndex);
+    //GetObject()->links.erase(GetObject()->links.begin()+linkIndex);
+    GetObject()->delete_queue.push(GetObject()->links[linkIndex]);
 }
 
-void Renderer::_RemoveLink(int linkIndex){
-    std::cout << "Links size before: " << links.size() << std::endl;
+void Renderer::_RemoveLink(link oldLink){
+    int linkIndex = GetLinkIndex(oldLink.object);
+
+    if(linkIndex == -1) return;
+
     links.erase(links.begin()+linkIndex);
-    std::cout << "Links size after: " << links.size() << std::endl;
 }
 
 
