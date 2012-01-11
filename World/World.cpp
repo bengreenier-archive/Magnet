@@ -15,8 +15,8 @@ World::World()
     m_hooked = false;
 
 	m_timeStep = 1.0f / 40.0f;
-	m_velocityIterations = 6;
-	m_positionIterations = 2;
+	m_velocityIterations = 8;
+	m_positionIterations = 3;
 
     //world max/min
     worldConstraint[0].x = -500; //left
@@ -198,7 +198,9 @@ void World::Step()
         float rot= newrot - alreadyrot ;
 
         float sfposx = b2posx*WorldStandards::mpp;
+            sfposx-=30;
         float sfposy = b2posy*WorldStandards::mpp;
+            sfposy-=30;
 
         if ((worldConstraint[0].x<sfposx)&&(sfposx<worldConstraint[1].x)&&(worldConstraint[0].y<sfposy)&&(sfposy<worldConstraint[1].y))
         {
@@ -254,57 +256,14 @@ void World::Step()
 
 
 void World::ActivateHook()
-{/*
- std::vector<World*>::iterator it;
-    bool found = false;
-
-    for (it=Access()->worldList.begin();it<Access()->worldList.end();it++)
-    {
-        if ((*it)==Access()){
-            found=true;
-        }
-    }
-
-    if (!found)
-    {
-        Ptr()->Access()->worldList.push_back(Access()); //add our world to this list... ?
-            if (WorldStandards::debug)
-                std::cout<<"[System] [ActivateHook] Added to worldList. \n";
-
-            Magnet::Hooks()->Register(Hook::Frame,&World::HookHelper);
-
-    }
-
-*/
-
-/*
-    if (!Access()->m_hooked)
-    {
-        if (WorldStandards::debug)
-                std::cout<<"[System] [ActivateHook] Hooked. \n";
-
-        Magnet::Hooks()->Register(Hook::Frame,&World::HookHelper);
-        Access()->m_hooked=true;
-    }else{
-        if (WorldStandards::debug)
-                std::cout<<"[System] [ActivateHook] Already hooked. \n";
-
-    }*/
+{
+    //useless....
 }
 
 
 void World::HookHelper()
 {
-/*
-    std::vector<World*>::iterator it;
-
-    for (it = Ptr()->Access()->worldList.begin();it<Ptr()->Access()->worldList.end();it++)
-    {
-        (*it)->Step(); //step each world in worldList
-    }
-*/
-
-Access()->Step();
+    Access()->Step();
 }
 
 
@@ -321,4 +280,15 @@ void World::Hook_Setup()
     World::Access()->AddStaticBox(0,0,400,100,sf::Vector2f(0,500), new Material(MatType::Floor),340);
     World::Access()->AddStaticBox(0,0,400,100,sf::Vector2f(400,500), new Material(MatType::Floor));
     //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(430,500,830,600,sf::Color(255,0,0))),Renderer::HudLayer);
+}
+
+
+void World::SetTimestep(float in)
+{
+    m_timeStep = in;
+}
+
+float World::GetTimestep()
+{
+    return m_timeStep;
 }

@@ -25,6 +25,8 @@ class World
         b2World* CurrentWorld();//returns current world.
 
         void Step();//sets over world once.
+        void SetTimestep(float in);//set the world speed.
+        float GetTimestep();
 
         static void HookHelper();
         static void Hook_Setup();
