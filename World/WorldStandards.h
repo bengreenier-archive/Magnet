@@ -7,8 +7,8 @@ namespace WorldStandards{
 
 
 static const float ratio = 30.0f;
-static const float ppm = ratio;
-static const float mpp = (1.0F/ratio);
+static const float ppm =0.02f;//multiply pixels by this to get b2d units
+static const float mpp = 50.0f;//multiply b2d by this to get pixels
 static const float unratio = mpp;
 static const float degtorad = (b2_pi / 180.0);
 static const float radtodeg = (180.0 / b2_pi);

@@ -27,6 +27,7 @@ class World
         void Step();//sets over world once.
 
         static void HookHelper();
+        static void Hook_Setup();
 
     protected:
     private:

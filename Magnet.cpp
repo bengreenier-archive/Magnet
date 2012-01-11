@@ -23,10 +23,7 @@ Magnet::~Magnet()
 void Magnet::Test(){
     Resource::Add("guns/assault1.png");
 
-    World::Access()->AddBox(0,0,100,100,sf::Vector2f(100,100));
-    //World::Access()->AddBox(0,0,100,100,sf::Vector2f(230,100), new Material(MatType::Light)) ;
-    World::Access()->AddBox(0,0,100,100,sf::Vector2f(100,-10));
-    World::Access()->AddStaticBox(0,0,100,100,sf::Vector2f(170,500), new Material(MatType::Floor));
+
 }
 
 void Magnet::Event_MouseMove(sf::Event evt){
