@@ -80,9 +80,9 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos,Material* ma
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &staticBox;
     /////add material class in the futurec.
-    fixtureDef.density = mat->GetDensity();
+    /*fixtureDef.density = mat->GetDensity();
     fixtureDef.friction = mat->GetFriction();
-    fixtureDef.restitution = mat->GetRestitution();
+    fixtureDef.restitution = mat->GetRestitution();*/
 
 
 	bodyBox->CreateFixture(&fixtureDef);
