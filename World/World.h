@@ -42,6 +42,11 @@ class World
 
         static World* m_ptr;
 
+
+        //our array of world constrainst. set in constructor.
+        sf::Vector2i worldConstraint[2];
+
+
         b2World* m_selected;// a pointer to the selected world.
         b2World* m_world1; //our first/potentially-only physics world.
         std::vector <b2Body*> b2PhysicsObjects; //a list of all b2 pointers. push_front this.

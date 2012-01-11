@@ -14,9 +14,16 @@ World::World()
     m_selected = m_world1;
     m_hooked = false;
 
-	m_timeStep = 1.0f / 60.0f;
+	m_timeStep = 1.0f / 40.0f;
 	m_velocityIterations = 6;
 	m_positionIterations = 2;
+
+    //world max/min
+    worldConstraint[0].x = -500; //left
+    worldConstraint[0].y = -500; //top
+    worldConstraint[1].x = 500 + Renderer::GetRenderWindow()->GetWidth();
+    worldConstraint[1].y = 500 + Renderer::GetRenderWindow()->GetHeight();
+
 
     //--demo msg
 	sf::String* msg = new sf::String("Sposed To Collide...");
@@ -87,7 +94,7 @@ void World::AddStaticBox(int x,int y,int x2,int y2,sf::Vector2f pos,Material* ma
         std::cout << "[Box2D] Added static Box.\n";
 
     //do sfml
-    sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(x,y,x2,y2,sf::Color(21,0,255))); //create a new rect with color red (for now)
+    sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(x,y,x2,y2,mat->GetColor())); //create a new rect with color red (for now)
     visibox->SetPosition(pos);
     visibox->Rotate(degangle);
 
@@ -143,7 +150,7 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,Material* mat,floa
         std::cout << "[Box2D] Added dynamic Box.\n";
 
     //do sfml
-    sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(x,y,x2,y2,sf::Color(255,0,0))); //create a new rect with color red (for now)
+    sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(x,y,x2,y2,mat->GetColor())); //create a new rect with color red (for now)
     visibox->SetPosition(pos);
     visibox->Rotate(degangle);
 
@@ -163,6 +170,13 @@ void World::AddBox(int x,int y,int x2,int y2,sf::Vector2f pos,Material* mat,floa
 
 void World::Step()
 {
+
+//erasechains
+    std::vector<int> b2chain;
+    std::vector<int> sfchain;
+//--
+
+
 
     if ((WorldStandards::debug)&&(WorldStandards::debug_step))
         std::cout<<"[System] [Step] Stepping now...\n";
@@ -189,20 +203,47 @@ void World::Step()
         float deg = b2rot * WorldStandards::radtodeg;
         float alreadyrot = Access()->sfPhysicsObjects[i]->GetRotation();
         float newrot = (-1*b2rot) * WorldStandards::radtodeg;
-        float rot= newrot - alreadyrot ;;
-/*
-        if (deg < 0 )
-            rot = newrot - alreadyrot ;
-        else
-            rot = (360 - deg) - alreadyrot ;
-*/
+        float rot= newrot - alreadyrot ;
 
-        Access()->sfPhysicsObjects[i]->SetPosition(b2posx*WorldStandards::ratio,b2posy*WorldStandards::ratio);
-        Access()->sfPhysicsObjects[i]->Rotate(rot);
+        float sfposx = b2posx*WorldStandards::ratio;
+        float sfposy = b2posy*WorldStandards::ratio;
+
+        if ((worldConstraint[0].x<sfposx)&&(sfposx<worldConstraint[1].x)&&(worldConstraint[0].y<sfposy)&&(sfposy<worldConstraint[1].y))
+        {
+
+                    Access()->sfPhysicsObjects[i]->SetPosition(sfposx,sfposy);
+                    Access()->sfPhysicsObjects[i]->Rotate(rot);
+
+        }else{
+                //erase based on "outside constraints"
+                //add positions to erasechains
+                sfchain.push_back(i);
+                b2chain.push_back(i);
+                if (WorldStandards::debug)
+                        std::cout<<"[System] [Step] [Erase] Shape Erase Chained. \n";
+
+
+        }
+
 
     }
 
 
+    //scroll our erase chains, and execute their stuff.
+    for (int i=0;i<sfchain.size();i++)
+    {
+                Access()->sfPhysicsObjects.erase(Access()->sfPhysicsObjects.begin()+(sfchain[i]-1));
+                Renderer::RemoveLink(Access()->sfPhysicsObjects[sfchain[i]]);
+    }
+
+    for (int i=0;i<b2chain.size();i++)
+    {
+                Access()->b2PhysicsObjects.erase(Access()->b2PhysicsObjects.begin()+(b2chain[i]-1));
+                Access()->CurrentWorld()->DestroyBody(Access()->b2PhysicsObjects[b2chain[i]]);
+    }
+    //clear them.
+    sfchain.clear();
+    b2chain.clear();
 
 
 }

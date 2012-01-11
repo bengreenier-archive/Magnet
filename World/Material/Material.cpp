@@ -9,6 +9,7 @@ Material::Material(MatType::Type in)
     {
         case MatType::Heavy:{m_Heavy();}break;
         case MatType::Light:{m_Light();}break;
+        case MatType::Floor:{m_Floor();}break;
         default:{m_Default();}break;
     }
 }
@@ -24,6 +25,7 @@ void Material::m_Default()
 m_density = 1.0f;
 m_restitution = 0.002f;
 m_friction = 0.3f;
+m_color = sf::Color(255,0,0);
 
 }
 
@@ -33,6 +35,7 @@ void Material::m_Heavy()
 m_density = 2.0f;
 m_restitution = 0.00002f;
 m_friction = 0.6f;
+m_color = sf::Color(121,10,250);
 
 }
 
@@ -42,9 +45,17 @@ void Material::m_Light()
 m_density = 0.5f;
 m_restitution = 0.2f;
 m_friction = 0.003f;
+m_color = sf::Color(21,40,250);
 
 }
 
+void Material::m_Floor()
+{
+    m_density = 2.0f;
+    m_restitution = 0.00002f;
+    m_friction = 0.6f;
+    m_color = sf::Color(21,0,255);
+}
 
 float Material::GetDensity()
 {
@@ -59,4 +70,10 @@ float Material::GetRestitution()
 float Material::GetFriction()
 {
     return m_friction;
+}
+
+
+sf::Color Material::GetColor()
+{
+    return m_color;
 }
