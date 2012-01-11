@@ -12,7 +12,7 @@ TrailCircle::TrailCircle(float x, float y, float radius, const sf::Color color)
 
 TrailCircle::~TrailCircle()
 {
-    Renderer::RemoveLink(&m_circle);
+    RemoveLink();
 }
 
 void TrailCircle::Link(){

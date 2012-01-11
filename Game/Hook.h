@@ -12,8 +12,10 @@ namespace Hook{
         Close,              //Called when the game closes
         GameStateChange,    //Called after the game state has been changed
         Load,               //Called when resources should begin loading
-        Setup               //Called after all static classes have been initialized
-                            //  Use this to safely add resources
+        Initialize,         //Called after static classes have been initialized
+                            //      *Add resources in this hook
+        Setup               //Called after resources have been loaded
+                            //      *Create sf::Drawables here
     };
 
     class Registry{

@@ -60,7 +60,7 @@ int main()
         EventHandler::Listen();
     }
 
-    RenderThread.Terminate();
+    //RenderThread.Terminate();
 
     return EXIT_SUCCESS;
 }

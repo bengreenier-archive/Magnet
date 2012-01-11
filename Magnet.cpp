@@ -122,7 +122,7 @@ void Magnet::ChangeState(State::_type newState){
             break;
         case State::InGame:
             gameState.set(newState);
-            std::cout << "**********\tINGAME\t**********\n";
+            std::cout << "**********\tGAME\t**********\n";
             break;
         default:
             std::cout << "*** ERROR: State \"" << typeid(newState).name() << "\" is not a valid game state! Setting to default state.\n";

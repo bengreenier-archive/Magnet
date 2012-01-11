@@ -1,12 +1,12 @@
 #include "ImageHandler.h"
-//#include "../../Console/Console.h"
+#include "../../Console/Console.h"
 
 ImageHandler* ImageHandler::ImageHandlerPtr = NULL;
 
 ImageHandler::ImageHandler()
 {
     //ctor
-    //Console::AddCommand("ImageHandler::PrintAvailableImages()",&ImageHandler::PrintAvailableImages);
+    Console::AddCommand("print_images",&ImageHandler::PrintAvailableImages);
 }
 
 ImageHandler::~ImageHandler()

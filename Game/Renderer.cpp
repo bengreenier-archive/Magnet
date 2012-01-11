@@ -24,7 +24,7 @@ void Renderer::Close(sf::Event evt){
     Magnet::Hooks("Renderer::Close")->Call(Hook::Close);
 
     Renderer::GetRenderWindow()->Close();
-    GetObject()->renderThread_ptr->Terminate();
+    GetObject()->renderThread_ptr->Wait();
 }
 
 void Renderer::SetRenderWindow(sf::RenderWindow& Window){

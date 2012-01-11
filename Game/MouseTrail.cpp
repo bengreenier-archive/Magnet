@@ -56,7 +56,7 @@ void MouseTrail::Frame(){
             (*trail_it)->Update();
 
             if((*trail_it)->ShouldRemove()){
-                (*trail_it)->RemoveLink();
+                //(*trail_it)->RemoveLink();
                 trail_it = trail.erase(trail_it);
             }else{
                 trail_it++;
