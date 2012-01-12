@@ -323,7 +323,6 @@ void World::HookHelper()
 
 void World::Hook_Setup()
 {
-
     World::Access()->AddBox(10,10,sf::Vector2f(100,100));
     //World::Access()->AddBox(0,0,100,100,sf::Vector2f(230,100), new Material(MatType::Light)) ;
     World::Access()->AddBox(10,10,sf::Vector2f(100,-10));

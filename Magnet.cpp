@@ -104,7 +104,7 @@ void Magnet::ChangeState(State::_type newState){
             std::cout << "[Magnet][Initialize] Initialize world...\n";
             World::Init();
             std::cout << "[Magnet][Initialize] Calling setup hook\n";
-            Object("ChangeState")->m_hooks.Call(Hook::Setup);
+            Object("ChangeState")->m_hooks.Call(Hook::Initialize);
 
             m_renderThread_ptr->Launch();
 
