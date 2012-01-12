@@ -28,10 +28,8 @@ void Magnet::Hook_Initialize(){
 }
 
 void Magnet::Hook_Setup(){
-    Object()->m_sprite.SetImage(ImageHandler::GetImage("resource/image/guns/assault1.png"));
-    Object()->m_sprite.SetPosition(100, 100);
-
-    Renderer::CreateLink(&Object()->m_sprite);
+    //Renderer::CreateLink(new sf::Sprite(ImageHandler::GetImage("resource/image/guns/assault1.png"), sf::Vector2f(100, 100), sf::Vector2f(1, 1), 0.0f, sf::Color(255, 255, 255)));
+    //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(100, 100, 110, 110, sf::Color(0, 255, 0))));
 }
 
 void Magnet::Event_MouseMove(sf::Event evt){
