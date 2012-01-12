@@ -6,6 +6,7 @@ World::World()
 {
     //ctor
 
+
     m_world1 = new b2World(b2Vec2(0.0f,10.0f));
 
     if (WorldStandards::debug)
@@ -38,6 +39,9 @@ World::World()
 
     m_hooked=true;
 
+    Stat = new WorldStats(m_world1);
+    Stat->ShowWorldCount();
+
 }
 
 World* World::Access()
@@ -64,6 +68,28 @@ sf::Color World::B2SFColor(const b2Color &color, int alpha)
 	sf::Color result((sf::Uint8)(color.r*255), (sf::Uint8)(color.g*255), (sf::Uint8)(color.b*255), (sf::Uint8) alpha);
 	return result;
 }
+
+
+void World::MakeCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
+{
+    WorldStorage* temp = new WorldStorage();
+    temp->SetParams(radius,pos,mat,degangle);
+    cmdqueue.push_back(temp);
+}
+void World::MakeBox(int width,int height,sf::Vector2f pos,Material* mat, float degangle)
+{
+    WorldStorage* temp = new WorldStorage();
+    temp->SetParams(width,height,pos,mat,degangle);
+    cmdqueue.push_back(temp);
+}
+void World::MakeStaticBox(int width,int height,sf::Vector2f pos,Material* mat, float degangle)
+{
+    WorldStorage* temp = new WorldStorage();
+    temp->SetParams(width,height,pos,mat,degangle);
+    temp->MakeStatic();
+    cmdqueue.push_back(temp);
+}
+
 
 void World::AddCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
 {
@@ -122,6 +148,7 @@ void World::AddCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
 
 void World::AddStaticBox(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
 {
+
     //do box2d first..
     b2BodyDef bodyDef;
 	//bodyDef.type = b2_dynamicBody;
@@ -312,6 +339,21 @@ if (!Access()->CurrentWorld()->IsLocked())
     }
 
 
+    for (int i=0;i<cmdqueue.size();i++)
+    {
+
+    if (cmdqueue[i]->IsType(WorldShape::Circle))
+        AddCircle(cmdqueue[i]->GetRadius(),cmdqueue[i]->GetPos(),cmdqueue[i]->GetMat(),cmdqueue[i]->GetAngle());
+
+    if (cmdqueue[i]->IsType(WorldShape::Box))
+        AddBox(cmdqueue[i]->GetWidth(),cmdqueue[i]->GetHeight(),cmdqueue[i]->GetPos(),cmdqueue[i]->GetMat(),cmdqueue[i]->GetAngle());
+
+    if (cmdqueue[i]->IsType(WorldShape::StaticBox))
+        AddStaticBox(cmdqueue[i]->GetWidth(),cmdqueue[i]->GetHeight(),cmdqueue[i]->GetPos(),cmdqueue[i]->GetMat(),cmdqueue[i]->GetAngle());
+
+    }
+        cmdqueue.clear();
+
     //scroll our erase chains, and execute their stuff.
     for (int i=0;i<sfchain.size();i++)
     {
@@ -328,6 +370,10 @@ if (!Access()->CurrentWorld()->IsLocked())
     //clear them.
     sfchain.clear();
     b2chain.clear();
+
+
+//to see world bodies count at pos 10,10
+Stat->UpdateWorldCount();
 
 
 }
@@ -348,16 +394,16 @@ void World::HookHelper()
 
 void World::Hook_Setup()
 {
-    World::Access()->AddBox(10,10,sf::Vector2f(100,100));
+    World::Access()->MakeBox(10,10,sf::Vector2f(100,100));
     //World::Access()->AddBox(0,0,100,100,sf::Vector2f(230,100), new Material(MatType::Light)) ;
-    World::Access()->AddBox(10,10,sf::Vector2f(100,-10));
+    World::Access()->MakeBox(10,10,sf::Vector2f(100,-10));
 
-    World::Access()->AddBox(10,10,sf::Vector2f(100,130));
+    World::Access()->MakeBox(10,10,sf::Vector2f(100,130));
 
-    World::Access()->AddCircle(10,sf::Vector2f(100,20));
+    World::Access()->MakeCircle(10,sf::Vector2f(100,20));
 
-    World::Access()->AddStaticBox(400,100,sf::Vector2f(0,500), new Material(MatType::Floor),340);
-    World::Access()->AddStaticBox(400,100,sf::Vector2f(400,500), new Material(MatType::Floor));
+    World::Access()->MakeStaticBox(400,100,sf::Vector2f(0,500), new Material(MatType::Floor),340);
+    World::Access()->MakeStaticBox(400,100,sf::Vector2f(400,500), new Material(MatType::Floor));
     //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(400,500,800,600,sf::Color(255,0,0))),Renderer::HudLayer);
 }
 
@@ -377,12 +423,20 @@ void World::ClickBox(sf::Event evt)
 {
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Right)
-            Access()->AddBox(10,10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()));
+        //if (!Access()->CurrentWorld()->IsLocked())
+            Access()->MakeBox(10,10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()));
+       // else
+        //    std::cout<<"[System] [World] is locked. cannot add box.\n";
 }
 
 void World::ClickCircle(sf::Event evt)
 {
+    int radius = 10;
+
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Left)
-            Access()->AddCircle(10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()));
+            //if (!Access()->CurrentWorld()->IsLocked())
+                Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius,Input.GetMouseY()-radius));
+            //else
+            //    std::cout<<"[System] [World] is locked. cannot add box.\n";
 }

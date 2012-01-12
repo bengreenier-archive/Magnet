@@ -8,6 +8,8 @@
 #include "../Magnet.h"
 #include "WorldStandards.h"
 #include "Material/Material.h"
+#include "Storage/WorldStorage.h"
+#include "Stats/WorldStats.h"
 
 class World
 {
@@ -19,9 +21,9 @@ class World
 
         sf::Color B2SFColor(const b2Color &color, int alpha = 255); //convert a b2color to sfml
 
-        void AddBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
-        void AddStaticBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
-        void AddCircle(int radius,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(), float degangle=0);
+        void MakeCircle(int radius,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
+        void MakeBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
+        void MakeStaticBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
 
 
         b2World* CurrentWorld();//returns current world.
@@ -50,6 +52,15 @@ class World
 
         static World* m_ptr;
 
+        WorldStats* Stat;
+
+        void AddBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
+        void AddStaticBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
+        void AddCircle(int radius,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(), float degangle=0);
+
+
+
+
 
         int maxPhysicsBodies;
         //our array of world constrainst. set in constructor.
@@ -62,6 +73,8 @@ class World
         std::vector <sf::Drawable*> sfPhysicsObjects; //a list of all sf pointers. push_front this.
 
         std::vector <World*> worldList; //so that we can hook world steps...?
+
+        std::vector <WorldStorage*> cmdqueue;
 };
 
 #endif // WORLD_H
