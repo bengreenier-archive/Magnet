@@ -6,10 +6,11 @@ class State {
     public:
         enum _type{
             Null,       //initial state
-            Loading,    //Loading initial game resources, I.E.
+            Loading,
             Menu,       //In a menu
-            InGame,
-            Initialize
+            Game,       //In game
+            Initialize, //Initialize resources
+            Setup       //Setup resources
         };
 
         State(_type init) : type(Null), initialState(init) {}

@@ -55,6 +55,8 @@ class Resource
         /// Return m_loadPercent
         ////////////////////////////////
         static int LoadProgress(){
+            if(Object()->m_loadSize == 0) return 100;
+
             float m_loadLeft = Object()->m_loadLeft;
             float m_loadSize = Object()->m_loadSize;
 

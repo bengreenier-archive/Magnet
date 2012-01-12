@@ -6,13 +6,15 @@ Magnet*         Magnet::magnet_ptr           =   NULL;
 Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
 {
     m_hooks.Register(Hook::Frame, &Magnet::Frame);
-    m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
+    //m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
     EventHandler::AddKeyListener(sf::Key::Space, &Magnet::Event_SpacePressed);
     EventHandler::AddEventListener(sf::Event::MouseMoved, &Magnet::Event_MouseMove);
 
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
+
+    m_mouseTrail.on = false;
 }
 
 Magnet::~Magnet()
@@ -38,9 +40,7 @@ void Magnet::Event_SpacePressed(sf::Event evt){
 }
 
 void Magnet::StartGame(){
-    if(Object("StartGame")->gameState.get() == State::Menu){
-        Object("StartGame")->ChangeState(State::InGame);
-    }
+    Object("StartGame")->ChangeState(State::Game);
 }
 
 
@@ -113,14 +113,20 @@ void Magnet::ChangeState(State::_type newState){
         case State::Loading:
             gameState.set(newState);
             std::cout << "**********\tLOADING\t**********\n";
-            std::cout << "Calling load hook hook\n";
+            std::cout << "[Magnet][State][Loading] Start...\n";
             m_hooks.Call(Hook::Load);
+            break;
+        case State::Setup:
+            gameState.set(newState);
+            std::cout << "**********\tSETUP\t**********\n";
+            std::cout << "[Magnet][State][Setup] Start...\n";
+            m_hooks.Call(Hook::Setup);
             break;
         case State::Menu:
             gameState.set(newState);
             std::cout << "**********\tMENU\t**********\n";
             break;
-        case State::InGame:
+        case State::Game:
             gameState.set(newState);
             std::cout << "**********\tGAME\t**********\n";
             break;
@@ -144,8 +150,11 @@ void Magnet::Frame(){
                 std::cout << "Loading progress:\t" << Resource::LoadProgress() << std::endl;
             }else{
                 std::cout << "Loading progress:\t" << Resource::LoadProgress() << std::endl;
-                Object("Frame")->ChangeState(State::Menu);
+                Object("Frame")->ChangeState(State::Setup);
             }
+            break;
+        case State::Setup:
+            StartGame();
             break;
     }
 
