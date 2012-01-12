@@ -40,7 +40,7 @@ World::World()
     m_hooked=true;
 
     Stat = new WorldStats(m_world1);
-    Stat->ShowWorldCount();
+
 
 }
 
@@ -373,8 +373,8 @@ if (!Access()->CurrentWorld()->IsLocked())
 
 
 //to see world bodies count at pos 10,10
-Stat->UpdateWorldCount();
-
+Stat->UpdateWorldCount(10,24);
+Stat->UpdateFps(10,0);
 
 }
 
