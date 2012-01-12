@@ -16,12 +16,13 @@ ImageHandler::~ImageHandler()
 
 sf::Image& ImageHandler::GetImage(std::string in)
 {
-    if (GetObject()->object_map.count(in) <= 0)
-    {
-        //throw
-    }else{
-        //return reference to image
+    if (GetObject()->object_map.count(in))
+    {       //return reference to image
+
+        std::cout << "--[ImageHandler][GetImage] Returning \"" << in << "\"\n";
         return GetObject()->object_map[in];
+    }else{
+        std::cout << "*[ImageHandler][GetImage] Could not retrieve \"" << in << "\"\n";
     }
 
 

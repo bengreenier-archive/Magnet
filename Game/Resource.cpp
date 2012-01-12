@@ -101,10 +101,13 @@ void Resource::Load(void* data){
     while(!Object()->m_load_queue.empty()){
         std::string file = Object()->m_load_queue.front();
 
-        ResourcePointer resource(file);
+        ResourcePointer* resource = new ResourcePointer(file);
 
-        if(resource.isValid()){
-            //Object()->m_resource_vect[resource.file()] = resource;
+        if(resource->isValid()){
+            Object()->m_resource_vect[resource->file()] = resource;
+            std::cout << "Loaded: " << resource->file() << std::endl;
+        }else{
+            std::cout << "OH NO NOT VALID\n";
         }
 
         Object()->m_load_queue.pop();
@@ -117,4 +120,10 @@ void Resource::Load(void* data){
         std::cout << "[Resource][Load] Done loading\n";
 
     Object()->m_loading =   false;
+}
+
+sf::Image& Resource::GetImage(std::string file){
+    if(Object()->m_resource_vect.count(file)){
+        return Object()->m_resource_vect[file]->getImage();
+    }
 }

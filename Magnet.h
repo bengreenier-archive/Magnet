@@ -72,6 +72,7 @@ class Magnet
 
 
         MouseTrail m_mouseTrail;
+        sf::Sprite m_sprite;
 
     protected:
         //Magnet initialization stuff
