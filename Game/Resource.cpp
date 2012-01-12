@@ -99,17 +99,21 @@ void Resource::Hook_Load(){
 void Resource::Load(void* data){
     //Process load queue
     while(!Object()->m_load_queue.empty()){
+        bool test = false;
         std::string file = Object()->m_load_queue.front();
 
         ResourcePointer* resource = new ResourcePointer(file);
 
         if(resource->isValid()){
             Object()->m_resource_vect[resource->file()] = resource;
-            std::cout << "Loaded: " << resource->file() << std::endl;
-        }else{
-            std::cout << "OH NO NOT VALID\n";
+            test = true;
         }
 
+        delete [] resource;
+
+        if(test){
+            std::cout << "Loaded:\t"<< Object()->m_resource_vect[file] << std::endl;
+        }
         Object()->m_load_queue.pop();
 
         Object()->m_loadLeft = Object()->m_load_queue.size();
