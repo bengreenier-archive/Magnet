@@ -6,7 +6,8 @@ Magnet*         Magnet::magnet_ptr           =   NULL;
 Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
 {
     m_hooks.Register(Hook::Frame, &Magnet::Frame);
-    //m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
+    m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
+    m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
     EventHandler::AddKeyListener(sf::Key::Space, &Magnet::Event_SpacePressed);
     EventHandler::AddEventListener(sf::Event::MouseMoved, &Magnet::Event_MouseMove);
@@ -14,7 +15,7 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
 
-    m_mouseTrail.on = false;
+    m_mouseTrail.on = true;
 }
 
 Magnet::~Magnet()
@@ -22,8 +23,15 @@ Magnet::~Magnet()
     //dtor
 }
 
-void Magnet::Hook_Setup(){
+void Magnet::Hook_Initialize(){
     Resource::Add("guns/assault1.png");
+}
+
+void Magnet::Hook_Setup(){
+    Object()->m_sprite.SetImage(ImageHandler::GetImage("resource/image/guns/assault1.png"));
+    Object()->m_sprite.SetPosition(100, 100);
+
+    Renderer::CreateLink(&Object()->m_sprite);
 }
 
 void Magnet::Event_MouseMove(sf::Event evt){

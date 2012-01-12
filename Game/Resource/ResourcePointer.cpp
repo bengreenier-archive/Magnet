@@ -10,22 +10,28 @@ ResourcePointer::~ResourcePointer()
     //dtor
 }
 
+sf::Image&  ResourcePointer::getImage(){
+    return ImageHandler::GetImage(m_fullPath);
+}
+
 void ResourcePointer::set(std::string file){
+    m_file = file;
+
     std::vector<std::string> fileType;
 
     parse(file, ".", &fileType);
 
     if(fileType.size() == 2){
         if(fileType[1] == "png"){
-            std::string realPath = Resource::Object()->ImageDir + file;
-            if(ImageHandler::AddImage(realPath)){
+            m_fullPath = Resource::Object()->ImageDir + file;
+            if(ImageHandler::AddImage(m_fullPath)){
                 m_type = Image;
             }else{
                 m_type = Invalid;
             }
         }else if(fileType[1] == "ttf"){
-            std::string realPath = Resource::Object()->FontDir + file;
-            if(FontHandler::AddFont(realPath)){
+            m_fullPath = Resource::Object()->FontDir + file;
+            if(FontHandler::AddFont(m_fullPath)){
                 m_type = Font;
             }else{
                 m_type = Invalid;

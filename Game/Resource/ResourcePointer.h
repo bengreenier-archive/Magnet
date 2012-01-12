@@ -24,9 +24,10 @@ class ResourcePointer
 
         void set(std::string file);
         Type getType(){ return m_type; };
-        std::string file(){ return m_dir; }
+        std::string file(){ return m_file; }
+        std::string path(){ return m_fullPath; }
 
-        bool isValid(){ if(getType() == Invalid) return true; return false; }
+        bool isValid(){ if(getType() == Invalid) return false; return true; }
 
         ////////////////////////////////////////////////////////////
         ///     Get a pointer to a resource of any type
@@ -42,7 +43,7 @@ class ResourcePointer
         ///     throws NullPointer exception if the resource is
         ///     not of type image;
         ////////////////////////////////////////////////////////////
-        sf::Image*  getImage();
+        sf::Image&  getImage();
 
         ////////////////////////////////////////////////////////////
         ///     Get a pointer to a resource of type font
@@ -71,7 +72,8 @@ class ResourcePointer
 
     protected:
     private:
-        std::string m_dir;
+        std::string m_file;
+        std::string m_fullPath;
         Type m_type;
 
         void _settype();
