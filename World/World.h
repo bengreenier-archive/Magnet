@@ -21,6 +21,8 @@ class World
 
         void AddBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
         void AddStaticBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
+        void AddCircle(int radius,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(), float degangle=0);
+
 
         b2World* CurrentWorld();//returns current world.
 

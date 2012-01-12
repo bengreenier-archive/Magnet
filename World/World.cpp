@@ -60,6 +60,60 @@ sf::Color World::B2SFColor(const b2Color &color, int alpha)
 	return result;
 }
 
+void World::AddCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
+{
+    //
+    b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+    bodyDef.allowSleep = true;
+	bodyDef.awake = true;
+
+	bodyDef.position.Set(((pos.x+radius)/2)*WorldStandards::ppm, ((pos.y+radius)/2)*WorldStandards::ppm);
+
+    bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
+
+	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
+
+	b2CircleShape circle;
+
+	//circle.m_p.Set(2.0f, 3.0f);
+
+	circle.m_radius = radius*WorldStandards::ppm;
+
+	b2FixtureDef fixtureDef;
+
+	fixtureDef.shape = &circle;
+
+    /////add material class in the futurec.
+    fixtureDef.density = mat->GetDensity();
+    fixtureDef.friction = mat->GetFriction();
+    fixtureDef.restitution = mat->GetRestitution();
+	//////
+
+	bodyBox->CreateFixture(&fixtureDef);
+
+    //add the body to the list
+    Access()->b2PhysicsObjects.push_back(bodyBox);
+
+    if (WorldStandards::debug)
+        std::cout << "[Box2D] Added Circle.\n";
+
+    //do sfml
+    sf::Shape* cb = new sf::Shape(sf::Shape::Circle(0,0,radius,mat->GetColor()));
+    cb->SetPosition(pos);
+    //cb->SetCenter(sf::Vector2f(radius/2, radius/2));
+    cb->Rotate(degangle);
+
+    Renderer::CreateLink(cb);
+
+    //add body to the list
+    Access()->sfPhysicsObjects.push_back(cb);
+
+    if (WorldStandards::debug)
+        std::cout << "[SFML] Added Circle.\n";
+
+    ActivateHook();//useless really...
+}
 
 void World::AddStaticBox(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
 {
@@ -290,9 +344,11 @@ void World::Hook_Setup()
 
     World::Access()->AddBox(10,10,sf::Vector2f(100,130));
 
+    World::Access()->AddCircle(10,sf::Vector2f(100,20));
+
     World::Access()->AddStaticBox(400,100,sf::Vector2f(0,500), new Material(MatType::Floor),340);
     World::Access()->AddStaticBox(400,100,sf::Vector2f(400,500), new Material(MatType::Floor));
-    //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(430,500,830,600,sf::Color(255,0,0))),Renderer::HudLayer);
+    Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(400,500,800,600,sf::Color(255,0,0))),Renderer::HudLayer);
 }
 
 
