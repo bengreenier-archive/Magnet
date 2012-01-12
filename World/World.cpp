@@ -40,7 +40,7 @@ World::World()
     m_hooked=true;
 
     Stat = new WorldStats(m_world1);
-    Stat->ShowWorldCount();
+
 
 }
 
@@ -373,8 +373,8 @@ if (!Access()->CurrentWorld()->IsLocked())
 
 
 //to see world bodies count at pos 10,10
-Stat->UpdateWorldCount();
-
+Stat->UpdateWorldCount(10,24);
+Stat->UpdateFps(10,0);
 
 }
 
@@ -402,8 +402,8 @@ void World::Hook_Setup()
 
     World::Access()->MakeCircle(10,sf::Vector2f(100,20));
 
-    World::Access()->MakeStaticBox(400,100,sf::Vector2f(0,500), new Material(MatType::Floor),340);
-    World::Access()->MakeStaticBox(400,100,sf::Vector2f(400,500), new Material(MatType::Floor));
+    World::Access()->MakeStaticBox(400,100,sf::Vector2f(0,1000), new Material(MatType::Floor),340);
+    World::Access()->MakeStaticBox(400,100,sf::Vector2f(400,1000), new Material(MatType::Floor));
     //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(400,500,800,600,sf::Color(255,0,0))),Renderer::HudLayer);
 }
 

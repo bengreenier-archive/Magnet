@@ -14,7 +14,7 @@ static const float degtorad = (b2_pi / 180.0);
 static const float radtodeg = (180.0 / b2_pi);
 
 
-static const bool debug = true; //set to false to supress couts
+static const bool debug = false; //set to false to supress couts
 static const bool debug_step = false; //set to false to supress couts in stepping
 
 

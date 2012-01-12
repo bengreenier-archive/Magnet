@@ -13,20 +13,22 @@ class WorldStats
         WorldStats(b2World* in);
         ~WorldStats();
 
-        void ShowAll();
+        void ShowAll(int x,int y);
         void HideAll();
 
-        void ShowFps();
+        void ShowFps(int x,int y);
         void HideFps();
+        void UpdateFps(int x,int y);
 
-        void ShowWorldCount();
+        void ShowWorldCount(int x,int y);
         void HideWorldCount();
-        void UpdateWorldCount();
+        void UpdateWorldCount(int x, int y);
 
     protected:
     private:
         b2World* m_managedWorldPtr;
         sf::String* m_wc;
+        sf::String* m_fps;
 };
 
 #endif // WORLDSTATS_H
