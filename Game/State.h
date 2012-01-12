@@ -10,7 +10,8 @@ class State {
             Menu,       //In a menu
             Game,       //In game
             Initialize, //Initialize resources
-            Setup       //Setup resources
+            Setup,       //Setup resources
+            Ready
         };
 
         State(_type init) : type(Null), initialState(init) {}

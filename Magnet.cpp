@@ -15,7 +15,7 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
 
-    m_mouseTrail.on = true;
+    m_mouseTrail.on = false;
 }
 
 Magnet::~Magnet()
@@ -24,24 +24,9 @@ Magnet::~Magnet()
 }
 
 void Magnet::Hook_Initialize(){
-    /*Resource::Add("guns/assault1.png");
-    Resource::Add("guns/assault1.png");
-    Resource::Add("guns/assault1.png");
-    Resource::Add("guns/assault1.png");
-    Resource::Add("guns/assault1.png");
-    Resource::Add("guns/assault1.png");
-    Resource::Add("guns/assault1.png");
-    Resource::Add("guns/assault1.png");*/
 }
 
 void Magnet::Hook_Setup(){
-    /*sf::Sprite* spr;
-    std::cout << "Here\n";
-    spr->SetImage(ImageHandler::GetImage("resource/image/guns/assault1.png"));
-    std::cout << "Here2\n";
-    spr->SetPosition(200, 200);
-    Renderer::CreateLink(spr);*/
-    //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(100, 100, 110, 110, sf::Color(0, 255, 0))));
 }
 
 void Magnet::Event_MouseMove(sf::Event evt){
@@ -108,14 +93,13 @@ bool Magnet::Initialized(){
 
 void Magnet::ChangeState(State::_type newState){
     if(newState == gameState.get()) return;
-
     switch(newState){
         case State::Null:
-            gameState.set(newState);
             std::cout << "**********\tNULL\t**********\n";
+
+            gameState.set(newState);
             break;
         case State::Initialize:
-            gameState.set(newState);
             std::cout << "**********\tINITALIZE\t**********\n";
             std::cout << "[Magnet][Initialize] Initialize resource...\n";
             Resource::Init(Object("ChangeState")->m_loadThread_ptr, "resource/");
@@ -126,33 +110,37 @@ void Magnet::ChangeState(State::_type newState){
 
             m_renderThread_ptr->Launch();
 
-            Object("ChangeState")->ChangeState(State::Loading);
+            gameState.set(newState);
             break;
         case State::Loading:
-            gameState.set(newState);
             std::cout << "**********\tLOADING\t**********\n";
             std::cout << "[Magnet][State][Loading] Start...\n";
             m_hooks.Call(Hook::Load);
+
+            gameState.set(newState);
             break;
         case State::Setup:
-            gameState.set(newState);
             std::cout << "**********\tSETUP\t**********\n";
             std::cout << "[Magnet][State][Setup] Start...\n";
             m_hooks.Call(Hook::Setup);
+
+            gameState.set(newState);
             break;
         case State::Menu:
-            gameState.set(newState);
             std::cout << "**********\tMENU\t**********\n";
+
+
+            gameState.set(newState);
             break;
         case State::Game:
-            gameState.set(newState);
             std::cout << "**********\tGAME\t**********\n";
+
+            gameState.set(newState);
             break;
         default:
             std::cout << "*** ERROR: State \"" << typeid(newState).name() << "\" is not a valid game state! Setting to default state.\n";
             gameState.reset();
     }
-
     m_hooks.Call(Hook::GameStateChange);
 
 
@@ -161,14 +149,17 @@ void Magnet::ChangeState(State::_type newState){
 void Magnet::Frame(){
     if(magnet_ptr == NULL) return;
 
-    //Should be called every frame
     switch(Object("Frame")->gameState.get()){
+        case State::Initialize:
+            Object("ChangeState")->ChangeState(State::Loading);
+            break;
         case State::Loading:
-            if(Resource::IsLoading()){
-                std::cout << "Loading progress:\t" << Resource::LoadProgress() << std::endl;
+            if(Resource::Loading()){
+                std::cout << "[Magnet][Frame] Loading progress:\t" << Resource::LoadProgress() << std::endl;
             }else{
-                std::cout << "Loading progress:\t" << Resource::LoadProgress() << std::endl;
-                Object("Frame")->ChangeState(State::Setup);
+                if(Resource::Ready()){
+                    Object("Frame")->ChangeState(State::Setup);
+                }
             }
             break;
         case State::Setup:

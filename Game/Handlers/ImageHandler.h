@@ -20,7 +20,8 @@ class ImageHandler
         /// Throws a LoadFail exception if the file
         /// could not be loaded.
         //////////////////////////////////////////////
-        static bool AddImage(std::string in) throw(Exception::ob);
+        static bool AddImage(std::string in);
+        static sf::Image& GetImage(std::string in, bool& success);
         static sf::Image& GetImage(std::string in);
         static ImageHandler* GetObject();
         static void PrintAvailableImages();

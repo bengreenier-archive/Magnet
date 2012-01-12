@@ -47,9 +47,37 @@ class Resource
         static void Hook_Load();
 
         ////////////////////////////////
-        /// Return m_loading
+        /// Return true when the
+        /// resources are loading
         ////////////////////////////////
-        static bool IsLoading(){return Object()->m_loading; };
+        static bool Loading(){
+          if(Object()->m_load_state.get() == State::Loading){
+            return true;
+          }
+
+          return false;
+        };
+
+        ////////////////////////////////
+        /// Return true when the
+        /// resources have been
+        /// loaded and the queue is
+        /// empty
+        ////////////////////////////////
+        static bool Ready(){
+          if(Object()->m_load_state.get() == State::Ready){
+            return true;
+          }
+
+          return false;
+        };
+
+        ////////////////////////////////
+        /// Returns true when resources
+        /// are queued but have not yet
+        /// been loaded.
+        ////////////////////////////////
+        static bool NeedLoad();
 
         ////////////////////////////////
         /// Return m_loadPercent
@@ -79,6 +107,7 @@ class Resource
 
         resource_vect_t m_resource_vect;
         load_queue_t    m_load_queue;
+        State           m_load_state;
         int             m_loadSize;         //load total
         int             m_loadLeft;         //current queue size
         bool            m_loading;          //True when loading is in process

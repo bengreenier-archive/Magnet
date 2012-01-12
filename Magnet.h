@@ -5,14 +5,14 @@
 
 #include "Console/Console.h"
 
-#include "Game/Renderer.h"
-
-#include "Game/Resource.h"
-
 #include "Game/Handlers/EventHandler.h"
 
 #include "Game/State.h"
 #include "Game/Hook.h"
+
+
+#include "Game/Renderer.h"
+#include "Game/Resource.h"
 #include "Game/MouseTrail.h"
 
 #include "World/World.h"
@@ -25,6 +25,7 @@ class Magnet
 {
     public:
 
+    sf::Sprite spr;
         //Garbage collection
         virtual ~Magnet();
 
@@ -36,6 +37,7 @@ class Magnet
 
         static void Frame();
         static void Hook_Setup();
+        static void CreateSprite();
 
         //////////////////////////////////////////
         /// Called on space press
@@ -85,6 +87,8 @@ class Magnet
 
         sf::Mutex m_globalMutex;
         Hook::Registry m_hooks;
+
+        bool m_loadingStarted; //Checks to see if the loading has started yet
 
 
 };

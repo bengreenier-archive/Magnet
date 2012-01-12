@@ -17,8 +17,7 @@ ImageHandler::~ImageHandler()
 sf::Image& ImageHandler::GetImage(std::string in)
 {
     if (GetObject()->object_map.count(in))
-    {       //return reference to image
-
+    {
         std::cout << "[ImageHandler][GetImage] Returning \"" << in << "\"\n";
         return GetObject()->object_map[in];
     }else{
@@ -29,16 +28,22 @@ sf::Image& ImageHandler::GetImage(std::string in)
 
 }
 
-bool ImageHandler::AddImage(std::string in)  throw(Exception::ob)
+bool ImageHandler::AddImage(std::string in)
 {
-    if(GetObject()->object_map.count(in)) return true;
+    std::cout << "[ImageHandler][AddImage] Attempting to add \"" << in << "\"\n";
+    if(GetObject()->object_map.count(in)){
+        std::cout << "\tImage already added\n";
+        return false;
+    }
 
     sf::Image Image;
 
     if(Image.LoadFromFile(in)){
         GetObject()->object_map[in] = Image;
+        std::cout << "\tImage added\n";
+    }else{
+        std::cout << "\tImage not loaded\n";
     }
-
 
     return GetObject()->object_map.count(in);
 

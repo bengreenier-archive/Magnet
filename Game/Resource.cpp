@@ -3,7 +3,8 @@
 Resource*   Resource::_resource_ptr =   NULL;
 
 Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
-    :   ResourceDir(resourceDir),
+    :   m_load_state(State::Null),
+        ResourceDir(resourceDir),
         ConfigDir(ResourceDir+"config/"),
         ImageDir(ResourceDir+"image/"),
         FontDir(ResourceDir+"font/")
@@ -76,7 +77,11 @@ void Resource::Init(sf::Thread* loadThread, std::string resourceDir){
 }
 
 void Resource::Add(std::string file){
-    if(Object()->m_loading) return;
+    if(Resource::Loading()) return;
+
+    if(Object()->m_load_state.get() == State::Ready){
+        Object()->m_load_state.set(State::Null);
+    }
 
     Object()->m_load_queue.push(file);
     Object()->m_loadSize = Object()->m_load_queue.size();
@@ -86,36 +91,41 @@ void Resource::Add(std::string file){
         std::cout << "[Resource] Added \"" << file << "\" to the load queue\n";
 }
 
+bool Resource::NeedLoad(){
+    if(Object()->m_load_state.get() == State::Null && Object()->m_loadSize > 0){
+        return true;
+    }
+
+    return false;
+
+}
+
 void Resource::Hook_Load(){
-    if(Object()->m_load_queue.empty()) return;
+    if(Resource::NeedLoad()){
+        Object()->m_load_state.set(State::Loading);
 
-    if(Object()->m_debug)
-        std::cout << "[Resource][Load] Loading...\n";
-
-    Object()->m_loading =   true;
-    Object()->m_loadThread_ptr->Launch();
+        if(Object()->m_debug)
+            std::cout << "[Resource][Load] Loading...\n";
+        Object()->m_loadThread_ptr->Launch();
+    }else{
+        Object()->m_load_state.set(State::Ready);
+    }
 }
 
 void Resource::Load(void* data){
     //Process load queue
     while(!Object()->m_load_queue.empty()){
-        bool test = false;
         std::string file = Object()->m_load_queue.front();
 
-        ResourcePointer* resource = new ResourcePointer(file);
+        if(!Object()->m_resource_vect.count(file)){
+            ResourcePointer* resource = new ResourcePointer(file);
 
-        if(resource->isValid()){
-            Object()->m_resource_vect[resource->file()] = resource;
-            test = true;
+            if(resource->isValid()){
+                Object()->m_resource_vect[resource->file()] = resource;
+            }
         }
 
-        delete [] resource;
-
-        if(test){
-            std::cout << "Loaded:\t"<< Object()->m_resource_vect[file] << std::endl;
-        }
         Object()->m_load_queue.pop();
-
         Object()->m_loadLeft = Object()->m_load_queue.size();
     }
 
@@ -123,7 +133,7 @@ void Resource::Load(void* data){
     if(Object()->m_debug)
         std::cout << "[Resource][Load] Done loading\n";
 
-    Object()->m_loading =   false;
+    Object()->m_load_state.set(State::Ready);
 }
 
 sf::Image& Resource::GetImage(std::string file){
