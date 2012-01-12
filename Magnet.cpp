@@ -24,11 +24,23 @@ Magnet::~Magnet()
 }
 
 void Magnet::Hook_Initialize(){
+    /*Resource::Add("guns/assault1.png");
     Resource::Add("guns/assault1.png");
+    Resource::Add("guns/assault1.png");
+    Resource::Add("guns/assault1.png");
+    Resource::Add("guns/assault1.png");
+    Resource::Add("guns/assault1.png");
+    Resource::Add("guns/assault1.png");
+    Resource::Add("guns/assault1.png");*/
 }
 
 void Magnet::Hook_Setup(){
-    //Renderer::CreateLink(new sf::Sprite(ImageHandler::GetImage("resource/image/guns/assault1.png"), sf::Vector2f(100, 100), sf::Vector2f(1, 1), 0.0f, sf::Color(255, 255, 255)));
+    /*sf::Sprite* spr;
+    std::cout << "Here\n";
+    spr->SetImage(ImageHandler::GetImage("resource/image/guns/assault1.png"));
+    std::cout << "Here2\n";
+    spr->SetPosition(200, 200);
+    Renderer::CreateLink(spr);*/
     //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(100, 100, 110, 110, sf::Color(0, 255, 0))));
 }
 
