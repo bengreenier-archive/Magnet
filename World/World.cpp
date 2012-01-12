@@ -63,47 +63,6 @@ sf::Color World::B2SFColor(const b2Color &color, int alpha)
 
 void World::AddStaticBox(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
 {
-    /*
-    //do box2d first..
-
-    b2BodyDef bodyDef;
-	bodyDef.type = b2_staticBody;
-	bodyDef.allowSleep = true;
-	bodyDef.position.Set(pos.x*WorldStandards::ppm, pos.y*WorldStandards::ppm);
-    bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
-
-	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
-	b2PolygonShape staticBox;
-	staticBox.SetAsBox(((width)/2.0f)*WorldStandards::ppm, ((height)/2.0f)*WorldStandards::ppm);//this is scaling up, bigger gap from x-x2/y-y2 makes worse
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &staticBox;
-
-
-	bodyBox->CreateFixture(&fixtureDef);
-
-    //add the body to the list
-    Access()->b2PhysicsObjects.push_back(bodyBox);
-
-    if (WorldStandards::debug)
-        std::cout << "[Box2D] Added static Box.\n";
-
-    //do sfml
-    sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(pos.x,pos.y,pos.x+width,pos.y+height,mat->GetColor()));
-    visibox->SetPosition(pos);
-    visibox->Rotate(degangle);
-
-    Renderer::CreateLink(visibox);
-
-    //add body to the list
-    Access()->sfPhysicsObjects.push_back(visibox);
-
-    if (WorldStandards::debug)
-        std::cout << "[SFML] Added static Box.\n";
-
-    ActivateHook();//tell the program to Hook World::Step for us.
-    */
-
-
     //do box2d first..
     b2BodyDef bodyDef;
 	//bodyDef.type = b2_dynamicBody;
@@ -112,7 +71,7 @@ void World::AddStaticBox(int width,int height,sf::Vector2f pos,Material* mat,flo
 
     //see if this hlps..
 
-	bodyDef.position.Set(pos.x*WorldStandards::ppm, pos.y*WorldStandards::ppm);
+	bodyDef.position.Set(((pos.x+width)/2)*WorldStandards::ppm, ((pos.y+height)/2)*WorldStandards::ppm);
 
     bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
 
@@ -144,6 +103,7 @@ void World::AddStaticBox(int width,int height,sf::Vector2f pos,Material* mat,flo
     //do sfml
     sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(0,0,width,height,mat->GetColor()));
     visibox->SetPosition(pos);
+    visibox->SetCenter(sf::Vector2f(width/2, height/2));
     visibox->Rotate(degangle);
 
     Renderer::CreateLink(visibox);
@@ -200,6 +160,7 @@ void World::AddBox(int width,int height,sf::Vector2f pos,Material* mat,float deg
     //do sfml
     sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(0,0,width,height,mat->GetColor()));
     visibox->SetPosition(pos);
+    visibox->SetCenter(sf::Vector2f(width/2, height/2));
     visibox->Rotate(degangle);
 
     Renderer::CreateLink(visibox);
@@ -251,7 +212,7 @@ void World::Step()
         float newrot = (-1*b2rot) * WorldStandards::radtodeg;
         float rot= newrot - alreadyrot ;
 
-        float sfposx = b2posx*WorldStandards::mpp;
+        float sfposx = b2posx*WorldStandards::mpp;//(b2posx-(Access()->sfPhysicsObjects[i]->GetWidth()/2))
         float sfposy = b2posy*WorldStandards::mpp;
 
 
