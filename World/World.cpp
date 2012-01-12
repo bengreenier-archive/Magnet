@@ -120,7 +120,7 @@ void World::AddStaticBox(int width,int height,sf::Vector2f pos,Material* mat,flo
 
 	b2PolygonShape dynamicBox;
 
-	dynamicBox.SetAsBox(((width/2))*WorldStandards::ppm, ((height/2))*WorldStandards::ppm);
+	dynamicBox.SetAsBox(((width)/2)*WorldStandards::ppm, ((height)/2)*WorldStandards::ppm);
 
 	//fixture stuff
 	b2FixtureDef fixtureDef;
