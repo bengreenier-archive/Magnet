@@ -33,6 +33,9 @@ class World
         static void HookHelper();
         static void Hook_Setup();
 
+        static void ClickCircle(sf::Event evt);
+        static void ClickBox(sf::Event evt);
+
     protected:
     private:
         // Prepare for simulation. Typically we use a time step of 1/60 of a

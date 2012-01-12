@@ -32,6 +32,10 @@ World::World()
 
     Magnet::Hooks()->Register(Hook::Frame,&World::HookHelper);
     Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
+
+    EventHandler::AddEventListener(sf::Event::MouseButtonReleased, &World::ClickCircle);
+    EventHandler::AddEventListener(sf::Event::MouseButtonReleased, &World::ClickBox);
+
     m_hooked=true;
 
 }
@@ -43,6 +47,7 @@ World* World::Access()
     return m_ptr;
 
 }
+
 void World::Init(){
     m_ptr = new World();
 }
@@ -68,7 +73,7 @@ void World::AddCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
     bodyDef.allowSleep = true;
 	bodyDef.awake = true;
 
-	bodyDef.position.Set(((pos.x+radius)/2)*WorldStandards::ppm, ((pos.y+radius)/2)*WorldStandards::ppm);
+	bodyDef.position.Set((pos.x+radius)*WorldStandards::ppm, (pos.y+radius)*WorldStandards::ppm);
 
     bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
 
@@ -101,7 +106,7 @@ void World::AddCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
     //do sfml
     sf::Shape* cb = new sf::Shape(sf::Shape::Circle(0,0,radius,mat->GetColor()));
     cb->SetPosition(pos);
-    //cb->SetCenter(sf::Vector2f(radius/2, radius/2));
+    //cb->SetCenter(sf::Vector2f(radius, radius));
     cb->Rotate(degangle);
 
     Renderer::CreateLink(cb);
@@ -234,6 +239,11 @@ void World::AddBox(int width,int height,sf::Vector2f pos,Material* mat,float deg
 void World::Step()
 {
 
+/*
+if (!Access()->CurrentWorld()->IsLocked())
+    return;
+*/
+
 //erasechains (really only need one...)
     std::vector<int> b2chain;
     std::vector<int> sfchain;
@@ -348,7 +358,7 @@ void World::Hook_Setup()
 
     World::Access()->AddStaticBox(400,100,sf::Vector2f(0,500), new Material(MatType::Floor),340);
     World::Access()->AddStaticBox(400,100,sf::Vector2f(400,500), new Material(MatType::Floor));
-    Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(400,500,800,600,sf::Color(255,0,0))),Renderer::HudLayer);
+    //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(400,500,800,600,sf::Color(255,0,0))),Renderer::HudLayer);
 }
 
 
@@ -360,4 +370,19 @@ void World::SetTimestep(float in)
 float World::GetTimestep()
 {
     return m_timeStep;
+}
+
+
+void World::ClickBox(sf::Event evt)
+{
+     const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
+     if (evt.MouseButton.Button == sf::Mouse::Right)
+            Access()->AddBox(10,10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()));
+}
+
+void World::ClickCircle(sf::Event evt)
+{
+     const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
+     if (evt.MouseButton.Button == sf::Mouse::Left)
+            Access()->AddCircle(10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()));
 }
