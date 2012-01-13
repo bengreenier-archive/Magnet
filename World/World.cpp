@@ -490,10 +490,12 @@ float World::GetTimestep()
 void World::ClickBox(sf::Event evt)
 {
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
+
+     int w = 2;
      if (evt.MouseButton.Button == sf::Mouse::Right)
         //if (!Access()->CurrentWorld()->IsLocked())
         for(int i=0; i<100; i++)
-            Access()->MakeBox(2,2,sf::Vector2f(Input.GetMouseX()+i,Input.GetMouseY()),Access()->CurrentMaterial());
+            Access()->MakeBox(w,w,sf::Vector2f(Input.GetMouseX()+i*w,Input.GetMouseY()),Access()->CurrentMaterial());
        // else
         //    std::cout<<"[System] [World] is locked. cannot add box.\n";
 }
@@ -505,7 +507,7 @@ void World::ClickCircle(sf::Event evt)
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Left){
             for(int i=0; i<100; i++){
-            Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius+i,Input.GetMouseY()-radius),Access()->CurrentMaterial());
+            Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius+i*radius,Input.GetMouseY()-radius),Access()->CurrentMaterial());
             }
      }
 }
