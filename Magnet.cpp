@@ -24,9 +24,15 @@ Magnet::~Magnet()
 }
 
 void Magnet::Hook_Initialize(){
+    Resource::Add("guns/assault1.png");
+    Resource::Add(Resource::Object()->ErrorImage);
 }
 
 void Magnet::Hook_Setup(){
+    Object()->m_sprite.SetImage(Resource::GetImage("guns/assault1.png"));
+    Object()->m_sprite.SetPosition(100, 100);
+
+    Renderer::CreateLink(&Object()->m_sprite);
 }
 
 void Magnet::Event_MouseMove(sf::Event evt){
@@ -105,7 +111,7 @@ void Magnet::ChangeState(State::_type newState){
             Resource::Init(Object("ChangeState")->m_loadThread_ptr, "resource/");
             std::cout << "[Magnet][Initialize] Initialize world...\n";
             World::Init();
-            std::cout << "[Magnet][Initialize] Calling setup hook\n";
+
             Object("ChangeState")->m_hooks.Call(Hook::Initialize);
 
             m_renderThread_ptr->Launch();
@@ -114,14 +120,12 @@ void Magnet::ChangeState(State::_type newState){
             break;
         case State::Loading:
             std::cout << "**********\tLOADING\t**********\n";
-            std::cout << "[Magnet][State][Loading] Start...\n";
             m_hooks.Call(Hook::Load);
 
             gameState.set(newState);
             break;
         case State::Setup:
             std::cout << "**********\tSETUP\t**********\n";
-            std::cout << "[Magnet][State][Setup] Start...\n";
             m_hooks.Call(Hook::Setup);
 
             gameState.set(newState);

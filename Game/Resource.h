@@ -21,6 +21,7 @@ class Resource
         const std::string ConfigDir;//     =   Dir + "config/";
         const std::string ImageDir;//     =   Dir + "image/"
         const std::string FontDir;//       =   Dir + "font/";
+        const std::string ErrorImage;//       =   Dir + "font/";
 
         virtual ~Resource();
 

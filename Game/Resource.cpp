@@ -7,7 +7,8 @@ Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
         ResourceDir(resourceDir),
         ConfigDir(ResourceDir+"config/"),
         ImageDir(ResourceDir+"image/"),
-        FontDir(ResourceDir+"font/")
+        FontDir(ResourceDir+"font/"),
+        ErrorImage("error.png")
 {
     m_debug = true;
 
@@ -122,6 +123,8 @@ void Resource::Load(void* data){
 
             if(resource->isValid()){
                 Object()->m_resource_vect[resource->file()] = resource;
+            }else{
+                std::cout << "*[Resource] [Load] Warning: Couldn't load resource \"" << file << "\"\n";
             }
         }
 
@@ -139,5 +142,7 @@ void Resource::Load(void* data){
 sf::Image& Resource::GetImage(std::string file){
     if(Object()->m_resource_vect.count(file)){
         return Object()->m_resource_vect[file]->getImage();
+    }else{
+        return Object()->m_resource_vect[Object()->ErrorImage]->getImage();
     }
 }
