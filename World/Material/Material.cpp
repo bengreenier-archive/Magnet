@@ -62,7 +62,7 @@ void Material::m_Floor()
 void Material::m_Rubber()
 {
     m_density = 2.0f;
-    m_restitution = 0.2f;
+    m_restitution = .5f;
     m_friction = 0.3f;
     m_color = sf::Color(0,255,85);
 }

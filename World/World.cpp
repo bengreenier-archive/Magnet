@@ -26,7 +26,7 @@ World::World()
     worldConstraint[1].y = 500 + Renderer::GetRenderWindow()->GetHeight();
 
     //max bodies allowed
-    maxPhysicsBodies = 200;
+    maxPhysicsBodies = 500;
 
     if (WorldStandards::debug)
         std::cout<<"[World] [Init] Hooked. \n";
@@ -377,17 +377,28 @@ if (!Access()->CurrentWorld()->IsLocked())
         cmdqueue.clear();
 
     //scroll our erase chains, and execute their stuff.
+    int count=0;
     for (int i=0;i<sfchain.size();i++)
     {
                 Renderer::RemoveLink(Access()->sfPhysicsObjects[GetIndexOf(sfchain[i])]);
                 Access()->sfPhysicsObjects.erase(Access()->sfPhysicsObjects.begin()+GetIndexOf(sfchain[i]));
 
-    }
+                /*count++;
+                if(count>100){
+                    break;
+                }*/
 
+    }
+count=0;
     for (int i=0;i<b2chain.size();i++)
     {
                 Access()->CurrentWorld()->DestroyBody(Access()->b2PhysicsObjects[GetIndexOf(b2chain[i])]);
                 Access()->b2PhysicsObjects.erase(Access()->b2PhysicsObjects.begin()+GetIndexOf(b2chain[i]));
+
+                /*count++;
+                if(count>100){
+                    break;
+                }*/
     }
     //clear them.
     sfchain.clear();
@@ -447,13 +458,13 @@ b2Body* World::FirstNonStatic(std::vector <b2Body*> in)
 
 void World::Hook_Setup()
 {
-    World::Access()->MakeBox(10,10,sf::Vector2f(100,100));
+    /*World::Access()->MakeBox(10,10,sf::Vector2f(100,100));
     //World::Access()->AddBox(0,0,100,100,sf::Vector2f(230,100), new Material(MatType::Light)) ;
     World::Access()->MakeBox(10,10,sf::Vector2f(100,-10));
 
     World::Access()->MakeBox(10,10,sf::Vector2f(100,130));
 
-    World::Access()->MakeCircle(10,sf::Vector2f(100,20));
+    World::Access()->MakeCircle(10,sf::Vector2f(100,20));*/
 
     World::Access()->MakeStaticBox(400,100,sf::Vector2f(0,1000), new Material(MatType::Floor),340);
     World::Access()->MakeStaticBox(400,100,sf::Vector2f(400,1000), new Material(MatType::Floor));
@@ -481,18 +492,21 @@ void World::ClickBox(sf::Event evt)
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Right)
         //if (!Access()->CurrentWorld()->IsLocked())
-            Access()->MakeBox(10,10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()),Access()->CurrentMaterial());
+        for(int i=0; i<100; i++)
+            Access()->MakeBox(2,2,sf::Vector2f(Input.GetMouseX()+i,Input.GetMouseY()),Access()->CurrentMaterial());
        // else
         //    std::cout<<"[System] [World] is locked. cannot add box.\n";
 }
 
 void World::ClickCircle(sf::Event evt)
 {
-    int radius = 10;
+    int radius = 2;
 
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Left){
-            Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius,Input.GetMouseY()-radius),Access()->CurrentMaterial());
+            for(int i=0; i<100; i++){
+            Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius+i,Input.GetMouseY()-radius),Access()->CurrentMaterial());
+            }
      }
 }
 
