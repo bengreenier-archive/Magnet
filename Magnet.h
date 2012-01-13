@@ -17,15 +17,13 @@
 
 #include "World/World.h"
 
-#include "World/World.h"
+#include "mgui/mgui.h"
 
 #include "FileActions/FileAction.h"
 
 class Magnet
 {
     public:
-
-    sf::Sprite spr;
         //Garbage collection
         virtual ~Magnet();
 
@@ -74,7 +72,6 @@ class Magnet
 
 
         MouseTrail m_mouseTrail;
-        sf::Sprite m_sprite;
 
     protected:
         //Magnet initialization stuff

@@ -29,6 +29,14 @@ void Magnet::Hook_Initialize(){
 }
 
 void Magnet::Hook_Setup(){
+    mgui::Component* testcmp = new mgui::Component();
+    testcmp->SetPosition(200, 200);
+    testcmp->SetSize(200, 200);
+    testcmp->SetColor(sf::Color(255, 255, 255, 244));
+    testcmp->EnableOutline(true);
+    testcmp->SetOutlineWidth(10);
+    testcmp->SetVisible(false);
+    testcmp->Create();
 }
 
 void Magnet::Event_MouseMove(sf::Event evt){
