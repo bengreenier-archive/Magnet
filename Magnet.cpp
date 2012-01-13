@@ -29,10 +29,6 @@ void Magnet::Hook_Initialize(){
 }
 
 void Magnet::Hook_Setup(){
-    Object()->m_sprite.SetImage(Resource::GetImage("guns/assault1.png"));
-    Object()->m_sprite.SetPosition(100, 100);
-
-    Renderer::CreateLink(&Object()->m_sprite);
 }
 
 void Magnet::Event_MouseMove(sf::Event evt){
