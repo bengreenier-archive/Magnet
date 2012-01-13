@@ -38,6 +38,14 @@ class World
         static void ClickCircle(sf::Event evt);
         static void ClickBox(sf::Event evt);
 
+        //static binders for material current changing
+        static void Default(sf::Event evt);
+        static void Heavy(sf::Event evt);
+        static void Light(sf::Event evt);
+
+        static void Rubber(sf::Event evt);
+        static void Wood(sf::Event evt);
+
     protected:
     private:
         // Prepare for simulation. Typically we use a time step of 1/60 of a
@@ -59,13 +67,17 @@ class World
         void AddCircle(int radius,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(), float degangle=0);
 
 
+        int GetIndexOf(b2Body* in);
+        int GetIndexOf(sf::Drawable* in);
 
-
+        b2Body* FirstNonStatic(std::vector<b2Body*> in);
+        Material* CurrentMaterial();
 
         int maxPhysicsBodies;
         //our array of world constrainst. set in constructor.
         sf::Vector2i worldConstraint[2];
 
+        Material* m_curMat;
 
         b2World* m_selected;// a pointer to the selected world.
         b2World* m_world1; //our first/potentially-only physics world.

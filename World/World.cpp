@@ -37,6 +37,21 @@ World::World()
     EventHandler::AddEventListener(sf::Event::MouseButtonReleased, &World::ClickCircle);
     EventHandler::AddEventListener(sf::Event::MouseButtonReleased, &World::ClickBox);
 
+
+    EventHandler::AddKeyListener(sf::Key::Num1,&World::Default);
+    EventHandler::AddKeyListener(sf::Key::Num2,&World::Heavy);
+    EventHandler::AddKeyListener(sf::Key::Num3,&World::Light);
+
+    EventHandler::AddKeyListener(sf::Key::Num4,&World::Rubber);
+    EventHandler::AddKeyListener(sf::Key::Num5,&World::Wood);
+
+    m_curMat = new Material();
+    //temp material msg
+    sf::String* msg = new sf::String("Materials = 1,2(HVY),3(LGT),4(RBR),5(WOOD)");
+    msg->SetPosition(540,10);
+    Renderer::CreateLink(msg);
+    //--
+
     m_hooked=true;
 
     Stat = new WorldStats(m_world1);
@@ -272,10 +287,10 @@ if (!Access()->CurrentWorld()->IsLocked())
 */
 
 //erasechains (really only need one...)
-    std::vector<int> b2chain;
-    std::vector<int> sfchain;
+    std::vector<b2Body*> b2chain;
+    std::vector<sf::Drawable*> sfchain;
 //--
-
+    bool mpb_notchecked=true;
 
 
     if ((WorldStandards::debug)&&(WorldStandards::debug_step))
@@ -316,8 +331,12 @@ if (!Access()->CurrentWorld()->IsLocked())
         }else{
                 //erase based on "outside constraints"
                 //add positions to erasechains
-                sfchain.push_back(i);
-                b2chain.push_back(i);
+                //sfchain.push_back(i);
+               //b2chain.push_back(i);
+
+                sfchain.push_back(Access()->sfPhysicsObjects[i]);
+                b2chain.push_back(Access()->b2PhysicsObjects[i]);
+
                 if (WorldStandards::debug)
                         std::cout<<"[System] [Step] [Erase] Shape Erase Chained. \n";
 
@@ -325,11 +344,14 @@ if (!Access()->CurrentWorld()->IsLocked())
         }
 
 
-        if (Access()->b2PhysicsObjects.size() > Access()->maxPhysicsBodies)
-        {
-            //add the last position of each (ie pop the last)
-            sfchain.push_back(Access()->sfPhysicsObjects.size());
-            b2chain.push_back(Access()->b2PhysicsObjects.size());
+        if ((Access()->b2PhysicsObjects.size() > Access()->maxPhysicsBodies)&&(mpb_notchecked))
+        {   mpb_notchecked=false;
+            //add the last position of each (ie pop the front)
+
+            b2Body* temp = FirstNonStatic(Access()->b2PhysicsObjects);
+            int tIndex = GetIndexOf(temp);
+            sfchain.push_back(Access()->sfPhysicsObjects[tIndex]);
+            b2chain.push_back(Access()->b2PhysicsObjects[tIndex]);
 
             if (WorldStandards::debug)
                         std::cout<<"[System] [Step] [Erase] Shape Erase Chained. \n";
@@ -357,15 +379,15 @@ if (!Access()->CurrentWorld()->IsLocked())
     //scroll our erase chains, and execute their stuff.
     for (int i=0;i<sfchain.size();i++)
     {
-                Renderer::RemoveLink(Access()->sfPhysicsObjects[sfchain[i]]);
-                Access()->sfPhysicsObjects.erase(Access()->sfPhysicsObjects.begin()+sfchain[i]);
+                Renderer::RemoveLink(Access()->sfPhysicsObjects[GetIndexOf(sfchain[i])]);
+                Access()->sfPhysicsObjects.erase(Access()->sfPhysicsObjects.begin()+GetIndexOf(sfchain[i]));
 
     }
 
     for (int i=0;i<b2chain.size();i++)
     {
-                Access()->CurrentWorld()->DestroyBody(Access()->b2PhysicsObjects[b2chain[i]]);
-                Access()->b2PhysicsObjects.erase(Access()->b2PhysicsObjects.begin()+b2chain[i]);
+                Access()->CurrentWorld()->DestroyBody(Access()->b2PhysicsObjects[GetIndexOf(b2chain[i])]);
+                Access()->b2PhysicsObjects.erase(Access()->b2PhysicsObjects.begin()+GetIndexOf(b2chain[i]));
     }
     //clear them.
     sfchain.clear();
@@ -390,6 +412,37 @@ void World::HookHelper()
     Access()->Step();
 }
 
+int World::GetIndexOf(b2Body* in)
+{
+    //scroll b2PhysicsObjects until  = in, then return counter/i
+    for (int i=0;i<Access()->b2PhysicsObjects.size();i++)
+    {
+        if (Access()->b2PhysicsObjects[i] == in)
+            return i;
+    }
+    return -1;
+}
+
+int World::GetIndexOf(sf::Drawable* in)
+{
+    //scroll sfPhysicsObjects until  = in, then return counter/i
+    for (int i=0;i<Access()->sfPhysicsObjects.size();i++)
+    {
+        if (Access()->sfPhysicsObjects[i] == in)
+            return i;
+    }
+    return -1;
+}
+
+b2Body* World::FirstNonStatic(std::vector <b2Body*> in)
+{
+    for (int i=0;i<in.size();i++)
+    {
+        if (in[i]->GetType() == b2_dynamicBody)
+            return in[i];
+    }
+}
+
 
 
 void World::Hook_Setup()
@@ -404,6 +457,10 @@ void World::Hook_Setup()
 
     World::Access()->MakeStaticBox(400,100,sf::Vector2f(0,1000), new Material(MatType::Floor),340);
     World::Access()->MakeStaticBox(400,100,sf::Vector2f(400,1000), new Material(MatType::Floor));
+    World::Access()->MakeStaticBox(400,100,sf::Vector2f(980,1400), new Material(MatType::Floor),300);
+    World::Access()->MakeStaticBox(400,100,sf::Vector2f(1500,1700), new Material(MatType::Floor),0);
+    World::Access()->MakeStaticBox(400,100,sf::Vector2f(1900,1700), new Material(MatType::Floor),30);
+
     //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(400,500,800,600,sf::Color(255,0,0))),Renderer::HudLayer);
 }
 
@@ -424,7 +481,7 @@ void World::ClickBox(sf::Event evt)
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Right)
         //if (!Access()->CurrentWorld()->IsLocked())
-            Access()->MakeBox(10,10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()));
+            Access()->MakeBox(10,10,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()),Access()->CurrentMaterial());
        // else
         //    std::cout<<"[System] [World] is locked. cannot add box.\n";
 }
@@ -434,9 +491,35 @@ void World::ClickCircle(sf::Event evt)
     int radius = 10;
 
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
-     if (evt.MouseButton.Button == sf::Mouse::Left)
-            //if (!Access()->CurrentWorld()->IsLocked())
-                Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius,Input.GetMouseY()-radius));
-            //else
-            //    std::cout<<"[System] [World] is locked. cannot add box.\n";
+     if (evt.MouseButton.Button == sf::Mouse::Left){
+            Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius,Input.GetMouseY()-radius),Access()->CurrentMaterial());
+     }
+}
+
+
+
+Material* World::CurrentMaterial()
+{
+    return Access()->m_curMat;
+}
+
+void World::Default(sf::Event evt)
+{
+    Access()->m_curMat=new Material(MatType::Default);
+}
+void World::Heavy(sf::Event evt)
+{
+    Access()->m_curMat=new Material(MatType::Heavy);
+}
+void World::Light(sf::Event evt)
+{
+    Access()->m_curMat=new Material(MatType::Light);
+}
+void World::Rubber(sf::Event evt)
+{
+    Access()->m_curMat=new Material(MatType::Rubber);
+}
+void World::Wood(sf::Event evt)
+{
+    Access()->m_curMat=new Material(MatType::Wood);
 }

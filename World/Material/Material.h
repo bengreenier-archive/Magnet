@@ -14,7 +14,9 @@ namespace MatType{
         Default,
         Heavy,
         Light,
-        Floor
+        Floor,
+        Rubber,
+        Wood
     };
 
 }
@@ -40,6 +42,8 @@ class Material
         void m_Heavy();
         void m_Light();
         void m_Floor();
+        void m_Rubber();
+        void m_Wood();
 
 };
 

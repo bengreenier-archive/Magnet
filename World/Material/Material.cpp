@@ -10,6 +10,8 @@ Material::Material(MatType::Type in)
         case MatType::Heavy:{m_Heavy();}break;
         case MatType::Light:{m_Light();}break;
         case MatType::Floor:{m_Floor();}break;
+        case MatType::Rubber:{m_Rubber();}break;
+        case MatType::Wood:{m_Wood();}break;
         default:{m_Default();}break;
     }
 }
@@ -55,6 +57,22 @@ void Material::m_Floor()
     m_restitution = 0.00002f;
     m_friction = 0.6f;
     m_color = sf::Color(21,0,255);
+}
+
+void Material::m_Rubber()
+{
+    m_density = 2.0f;
+    m_restitution = 0.2f;
+    m_friction = 0.3f;
+    m_color = sf::Color(0,255,85);
+}
+
+void Material::m_Wood()
+{
+    m_density = 1.2f;
+    m_restitution = 0.05f;
+    m_friction = 0.8f;
+    m_color = sf::Color(255,192,0);
 }
 
 float Material::GetDensity()
