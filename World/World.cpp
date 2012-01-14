@@ -35,17 +35,11 @@ World::World()
     Magnet::Hooks()->Register(Hook::Frame,&World::HookHelper);
     Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
 
-    EventHandler::AddEventListener(sf::Event::MouseButtonReleased, &World::ClickCircle);
-    EventHandler::AddEventListener(sf::Event::MouseButtonReleased, &World::ClickBox);
+    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::ClickCircle));
+    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::ClickBox));
 
 
-    EventHandler::AddKeyListener(sf::Key::Num1,&World::Default);
-    EventHandler::AddKeyListener(sf::Key::Num2,&World::Heavy);
-    EventHandler::AddKeyListener(sf::Key::Num3,&World::Light);
-
-    EventHandler::AddKeyListener(sf::Key::Num4,&World::Rubber);
-    EventHandler::AddKeyListener(sf::Key::Num5,&World::Wood);
-
+    EventHandler::AddListener(new EventListener(sf::Event::KeyPressed,&World::Event_KeyPresed));
     m_curMat = new Material();
     //temp material msg
     sf::String* msg = new sf::String("Materials = 1,2(HVY),3(LGT),4(RBR),5(WOOD)");
@@ -280,8 +274,26 @@ float World::GetTimestep()
     return m_timeStep;
 }
 
+bool World::Event_KeyPresed(sf::Event evt){
+    if(evt.Key.Code == sf::Key::Num1)
+        World::Default(evt);
 
-void World::ClickBox(sf::Event evt)
+    if(evt.Key.Code == sf::Key::Num2)
+        World::Heavy(evt);
+
+    if(evt.Key.Code == sf::Key::Num3)
+        World::Light(evt);
+
+    if(evt.Key.Code == sf::Key::Num4)
+        World::Rubber(evt);
+
+    if(evt.Key.Code == sf::Key::Num5)
+        World::Wood(evt);
+
+    return true;
+}
+
+bool World::ClickBox(sf::Event evt)
 {
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
 
@@ -290,9 +302,11 @@ void World::ClickBox(sf::Event evt)
         for(int i=0; i<100; i++)
             Access()->Queue.push_back(new Rect(w,w,sf::Vector2f(Input.GetMouseX()+i*w,Input.GetMouseY()),Access()->CurrentMaterial()));
 
+    return true;
+
 }
 
-void World::ClickCircle(sf::Event evt)
+bool World::ClickCircle(sf::Event evt)
 {
     int radius = 2;
 
@@ -301,7 +315,10 @@ void World::ClickCircle(sf::Event evt)
             for(int i=0; i<100; i++)
                 Access()->Queue.push_back(new Circle(radius,sf::Vector2f(Input.GetMouseX()-radius+i*radius,Input.GetMouseY()-radius),Access()->CurrentMaterial()));
 
+    return true;
+
 }
+
 
 
 
