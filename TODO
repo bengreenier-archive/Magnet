@@ -11,3 +11,11 @@ EventHandler:
       *Add ability to remove events
 mgui
       *Comment methods
+
+[DIRECTORY CHANGES] 
+      Move directory "Game/Handlers/" to "Game/Handler"
+            -Classes in folder should be named after their
+            folder. 
+      Move directory "Game/EventListener.(h/cpp)" to "Game/EventListener/(file)"
+            --Allows organization of different Listener types
+      
