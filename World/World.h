@@ -6,10 +6,16 @@
 #include <vector>
 
 #include "../Magnet.h"
+
+//Other World-ly includes
 #include "WorldStandards.h"
 #include "Material/Material.h"
-#include "Storage/WorldStorage.h"
 #include "Stats/WorldStats.h"
+
+//PhysShape Includes
+#include "Shapes/PhysShape.h"
+#include "Shapes/Circle.h"
+#include "Shapes/Rect.h"
 
 class World
 {
@@ -21,14 +27,10 @@ class World
 
         sf::Color B2SFColor(const b2Color &color, int alpha = 255); //convert a b2color to sfml
 
-        void MakeCircle(int radius,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
-        void MakeBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
-        void MakeStaticBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
-
-
         b2World* CurrentWorld();//returns current world.
 
-        void Step();//sets over world once.
+        void Step();//steps over world once.
+
         void SetTimestep(float in);//set the world speed.
         float GetTimestep();
 
@@ -38,39 +40,24 @@ class World
         static void ClickCircle(sf::Event evt);
         static void ClickBox(sf::Event evt);
 
-        //static binders for material current changing
+        //static binders for material-current changing
         static void Default(sf::Event evt);
         static void Heavy(sf::Event evt);
         static void Light(sf::Event evt);
-
         static void Rubber(sf::Event evt);
         static void Wood(sf::Event evt);
 
     protected:
     private:
-        // Prepare for simulation. Typically we use a time step of 1/60 of a
-        // second (60Hz) and 10 iterations. This provides a high quality simulation
-        // in most game scenarios.
         float32 m_timeStep;
         int32 m_velocityIterations;
         int32 m_positionIterations;
         bool m_hooked;
 
-        void ActivateHook();//hooks the step for this world.
-
         static World* m_ptr;
 
         WorldStats* Stat;
 
-        void AddBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
-        void AddStaticBox(int width,int height,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(),float degangle=0);
-        void AddCircle(int radius,sf::Vector2f pos=sf::Vector2f(0,0),Material* mat = new Material(), float degangle=0);
-
-
-        int GetIndexOf(b2Body* in);
-        int GetIndexOf(sf::Drawable* in);
-
-        b2Body* FirstNonStatic(std::vector<b2Body*> in);
         Material* CurrentMaterial();
 
         int maxPhysicsBodies;
@@ -81,12 +68,15 @@ class World
 
         b2World* m_selected;// a pointer to the selected world.
         b2World* m_world1; //our first/potentially-only physics world.
-        std::vector <b2Body*> b2PhysicsObjects; //a list of all b2 pointers. push_front this.
-        std::vector <sf::Drawable*> sfPhysicsObjects; //a list of all sf pointers. push_front this.
 
-        std::vector <World*> worldList; //so that we can hook world steps...?
+        std::vector<PhysShape*> Objects;
 
-        std::vector <WorldStorage*> cmdqueue;
+        std::vector <PhysShape*> Queue;
+
+        //processes the above.
+        void ProcessQueue(std::vector<PhysShape*>* Q,std::string fx);
+        int GetObjectIndex(PhysShape* in);
+        int GetIndex(vector<PhysShape*>* in,PhysShape* sh);
 };
 
 #endif // WORLD_H

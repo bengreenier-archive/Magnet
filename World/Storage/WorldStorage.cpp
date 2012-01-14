@@ -63,10 +63,13 @@ bool WorldStorage::IsType(WorldShape::Type in)
     if ((in == WorldShape::Box)&&(m_width!=-1)&&(!m_isstatic))
         return true;
 
-    if ((in == WorldShape::Circle)&&(m_radius!=-1))
+    if ((in == WorldShape::Circle)&&(m_radius!=-1)&&(!m_isstatic))
         return true;
 
-    if ((in == WorldShape::StaticBox)&&(m_isstatic))
+    if ((in == WorldShape::StaticBox)&&(m_width!=-1)&&(m_isstatic))
+        return true;
+
+    if ((in == WorldShape::StaticCircle)&&(m_radius!=-1)&&(m_isstatic))
         return true;
 
     return false;

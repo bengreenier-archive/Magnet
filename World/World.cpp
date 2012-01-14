@@ -13,6 +13,7 @@ World::World()
         std::cout<<"[Box2D] World Created Successfully.\n";
 
     m_selected = m_world1;
+
     m_hooked = false;
 
 	m_timeStep = 1.0f / 40.0f;
@@ -84,259 +85,61 @@ sf::Color World::B2SFColor(const b2Color &color, int alpha)
 	return result;
 }
 
-
-void World::MakeCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
-{
-    WorldStorage* temp = new WorldStorage();
-    temp->SetParams(radius,pos,mat,degangle);
-    cmdqueue.push_back(temp);
-}
-void World::MakeBox(int width,int height,sf::Vector2f pos,Material* mat, float degangle)
-{
-    WorldStorage* temp = new WorldStorage();
-    temp->SetParams(width,height,pos,mat,degangle);
-    cmdqueue.push_back(temp);
-}
-void World::MakeStaticBox(int width,int height,sf::Vector2f pos,Material* mat, float degangle)
-{
-    WorldStorage* temp = new WorldStorage();
-    temp->SetParams(width,height,pos,mat,degangle);
-    temp->MakeStatic();
-    cmdqueue.push_back(temp);
-}
-
-
-void World::AddCircle(int radius,sf::Vector2f pos,Material* mat, float degangle)
-{
-    //
-    b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-    bodyDef.allowSleep = true;
-	bodyDef.awake = true;
-
-	bodyDef.position.Set((pos.x+radius)*WorldStandards::ppm, (pos.y+radius)*WorldStandards::ppm);
-
-    bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
-
-	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
-
-	b2CircleShape circle;
-
-	//circle.m_p.Set(2.0f, 3.0f);
-
-	circle.m_radius = radius*WorldStandards::ppm;
-
-	b2FixtureDef fixtureDef;
-
-	fixtureDef.shape = &circle;
-
-    /////add material class in the futurec.
-    fixtureDef.density = mat->GetDensity();
-    fixtureDef.friction = mat->GetFriction();
-    fixtureDef.restitution = mat->GetRestitution();
-	//////
-
-	bodyBox->CreateFixture(&fixtureDef);
-
-    //add the body to the list
-    Access()->b2PhysicsObjects.push_back(bodyBox);
-
-    if (WorldStandards::debug)
-        std::cout << "[Box2D] Added Circle.\n";
-
-    //do sfml
-    sf::Shape* cb = new sf::Shape(sf::Shape::Circle(0,0,radius,mat->GetColor()));
-    cb->SetPosition(pos);
-    //cb->SetCenter(sf::Vector2f(radius, radius));
-    cb->Rotate(degangle);
-
-    Renderer::CreateLink(cb);
-
-    //add body to the list
-    Access()->sfPhysicsObjects.push_back(cb);
-
-    if (WorldStandards::debug)
-        std::cout << "[SFML] Added Circle.\n";
-
-    ActivateHook();//useless really...
-}
-
-void World::AddStaticBox(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
-{
-
-    //do box2d first..
-    b2BodyDef bodyDef;
-	//bodyDef.type = b2_dynamicBody;
-    bodyDef.allowSleep = true;
-	bodyDef.awake = true;
-
-    //see if this hlps..
-
-	bodyDef.position.Set(((pos.x+width)/2)*WorldStandards::ppm, ((pos.y+height)/2)*WorldStandards::ppm);
-
-    bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
-
-	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
-
-	b2PolygonShape dynamicBox;
-
-	dynamicBox.SetAsBox(((width)/2)*WorldStandards::ppm, ((height)/2)*WorldStandards::ppm);
-
-	//fixture stuff
-	b2FixtureDef fixtureDef;
-
-	fixtureDef.shape = &dynamicBox;
-
-    /////add material class in the futurec.
-    //fixtureDef.density = mat->GetDensity();
-    //fixtureDef.friction = mat->GetFriction();
-    //fixtureDef.restitution = mat->GetRestitution();
-	//////
-
-	bodyBox->CreateFixture(&fixtureDef);
-
-    //add the body to the list
-    Access()->b2PhysicsObjects.push_back(bodyBox);
-
-    if (WorldStandards::debug)
-        std::cout << "[Box2D] Added Static Box.\n";
-
-    //do sfml
-    sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(0,0,width,height,mat->GetColor()));
-    visibox->SetPosition(pos);
-    visibox->SetCenter(sf::Vector2f(width/2, height/2));
-    visibox->Rotate(degangle);
-
-    Renderer::CreateLink(visibox);
-
-    //add body to the list
-    Access()->sfPhysicsObjects.push_back(visibox);
-
-    if (WorldStandards::debug)
-        std::cout << "[SFML] Added Static Box.\n";
-
-    ActivateHook();//tell the program to Hook World::Step for us.
-}
-
-
-void World::AddBox(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
-{
-    //do box2d first..
-    b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-    bodyDef.allowSleep = true;
-	bodyDef.awake = true;
-
-    //see if this hlps..
-
-	bodyDef.position.Set(pos.x*WorldStandards::ppm, pos.y*WorldStandards::ppm);
-
-    bodyDef.angle = (((-1)*degangle)*WorldStandards::degtorad);
-
-	b2Body* bodyBox = Access()->CurrentWorld()->CreateBody(&bodyDef);
-
-	b2PolygonShape dynamicBox;
-
-	dynamicBox.SetAsBox(((width)/2)*WorldStandards::ppm, ((height)/2)*WorldStandards::ppm);
-
-	//fixture stuff
-	b2FixtureDef fixtureDef;
-
-	fixtureDef.shape = &dynamicBox;
-
-    /////add material class in the futurec.
-    fixtureDef.density = mat->GetDensity();
-    fixtureDef.friction = mat->GetFriction();
-    fixtureDef.restitution = mat->GetRestitution();
-	//////
-
-	bodyBox->CreateFixture(&fixtureDef);
-
-    //add the body to the list
-    Access()->b2PhysicsObjects.push_back(bodyBox);
-
-    if (WorldStandards::debug)
-        std::cout << "[Box2D] Added dynamic Box.\n";
-
-    //do sfml
-    sf::Shape* visibox = new sf::Shape(sf::Shape::Rectangle(0,0,width,height,mat->GetColor()));
-    visibox->SetPosition(pos);
-    visibox->SetCenter(sf::Vector2f(width/2, height/2));
-    visibox->Rotate(degangle);
-
-    Renderer::CreateLink(visibox);
-
-    //add body to the list
-    Access()->sfPhysicsObjects.push_back(visibox);
-
-    if (WorldStandards::debug)
-        std::cout << "[SFML] Added dynamic Box.\n";
-
-    ActivateHook();//tell the program to Hook World::Step for us.
-
-}
-
-
-
 void World::Step()
 {
 
-/*
-if (!Access()->CurrentWorld()->IsLocked())
-    return;
-*/
+    //stores erases for this step, clears before step ends
+    std::vector<PhysShape*> EraseQueue;
 
-//erasechains (really only need one...)
-    std::vector<b2Body*> b2chain;
-    std::vector<sf::Drawable*> sfchain;
-//--
-    bool mpb_notchecked=true;
+    bool mpb_notchecked=true; //used to stop constant deletion when > maxPhysicsBodies (reset each Step)
 
 
     if ((WorldStandards::debug)&&(WorldStandards::debug_step))
         std::cout<<"[System] [Step] Stepping now...\n";
 
 
+    //step world
     Access()->CurrentWorld()->Step(Access()->m_timeStep, Access()->m_velocityIterations, Access()->m_positionIterations);
-    //remap values now... :(
 
+    //add objects.
+    ProcessQueue(&Access()->Queue,"create");
 
-    for (int i=0;i<Access()->b2PhysicsObjects.size();i++)
+    //do remapping for sfml, and process creation of deletion commands.
+    for (int i=0;i<Access()->Objects.size();i++)
     {
 
-        float b2posx = Access()->b2PhysicsObjects[i]->GetPosition().x;
-        float b2posy = Access()->b2PhysicsObjects[i]->GetPosition().y;
-        float b2rot  = Access()->b2PhysicsObjects[i]->GetAngle();
+        //get b2Body info
+        float b2posx = Access()->Objects[i]->Get_Body()->GetPosition().x;
+        float b2posy = Access()->Objects[i]->Get_Body()->GetPosition().y;
+        float b2rot  = Access()->Objects[i]->Get_Body()->GetAngle();
 
         if ((WorldStandards::debug)&&(WorldStandards::debug_step))
         {
-            std::cout<<"[System] [Step] [ObjectInfo] MassData.mass = "<< Access()->b2PhysicsObjects[i]->GetMass() <<".\n";
+            std::cout<<"[System] [Step] [ObjectInfo] MassData.mass = "<< Access()->Objects[i]->Get_Body()->GetMass() <<".\n";
         }
 
+        //create new angle for sf::Shape
         float deg = b2rot * WorldStandards::radtodeg;
-        float alreadyrot = Access()->sfPhysicsObjects[i]->GetRotation();
+        float alreadyrot = Access()->Objects[i]->Get_Shape()->GetRotation();
         float newrot = (-1*b2rot) * WorldStandards::radtodeg;
         float rot= newrot - alreadyrot ;
 
-        float sfposx = b2posx*WorldStandards::mpp;//(b2posx-(Access()->sfPhysicsObjects[i]->GetWidth()/2))
+        //update sfml positions via ratio, so they are pixels, not b2 mkz units
+        float sfposx = b2posx*WorldStandards::mpp;
         float sfposy = b2posy*WorldStandards::mpp;
 
 
+        //if a shape.Position is inside the worldConstraints, update info, else deelte it
         if ((worldConstraint[0].x<sfposx)&&(sfposx<worldConstraint[1].x)&&(worldConstraint[0].y<sfposy)&&(sfposy<worldConstraint[1].y))
         {
 
-                    Access()->sfPhysicsObjects[i]->SetPosition(sfposx,sfposy);
-                    Access()->sfPhysicsObjects[i]->Rotate(rot);
+                    Access()->Objects[i]->Get_Shape()->SetPosition(sfposx,sfposy);
+                    Access()->Objects[i]->Get_Shape()->Rotate(rot);
+
 
         }else{
-                //erase based on "outside constraints"
-                //add positions to erasechains
-                //sfchain.push_back(i);
-               //b2chain.push_back(i);
 
-                sfchain.push_back(Access()->sfPhysicsObjects[i]);
-                b2chain.push_back(Access()->b2PhysicsObjects[i]);
-
+               EraseQueue.push_back(Access()->Objects[i]);
                 if (WorldStandards::debug)
                         std::cout<<"[System] [Step] [Erase] Shape Erase Chained. \n";
 
@@ -344,65 +147,21 @@ if (!Access()->CurrentWorld()->IsLocked())
         }
 
 
-        if ((Access()->b2PhysicsObjects.size() > Access()->maxPhysicsBodies)&&(mpb_notchecked))
+        if ((Access()->Objects.size() > Access()->maxPhysicsBodies)&&(mpb_notchecked))
         {   mpb_notchecked=false;
-            //add the last position of each (ie pop the front)
 
-            b2Body* temp = FirstNonStatic(Access()->b2PhysicsObjects);
-            int tIndex = GetIndexOf(temp);
-            sfchain.push_back(Access()->sfPhysicsObjects[tIndex]);
-            b2chain.push_back(Access()->b2PhysicsObjects[tIndex]);
+            EraseQueue.push_back(Objects.front());
 
             if (WorldStandards::debug)
-                        std::cout<<"[System] [Step] [Erase] Shape Erase Chained. \n";
+                        std::cout<<"[System] [Step] [Erase] Shape(s) Erase Chained. \n";
 
         }
 
     }
 
 
-    for (int i=0;i<cmdqueue.size();i++)
-    {
-
-    if (cmdqueue[i]->IsType(WorldShape::Circle))
-        AddCircle(cmdqueue[i]->GetRadius(),cmdqueue[i]->GetPos(),cmdqueue[i]->GetMat(),cmdqueue[i]->GetAngle());
-
-    if (cmdqueue[i]->IsType(WorldShape::Box))
-        AddBox(cmdqueue[i]->GetWidth(),cmdqueue[i]->GetHeight(),cmdqueue[i]->GetPos(),cmdqueue[i]->GetMat(),cmdqueue[i]->GetAngle());
-
-    if (cmdqueue[i]->IsType(WorldShape::StaticBox))
-        AddStaticBox(cmdqueue[i]->GetWidth(),cmdqueue[i]->GetHeight(),cmdqueue[i]->GetPos(),cmdqueue[i]->GetMat(),cmdqueue[i]->GetAngle());
-
-    }
-        cmdqueue.clear();
-
-    //scroll our erase chains, and execute their stuff.
-    int count=0;
-    for (int i=0;i<sfchain.size();i++)
-    {
-                Renderer::RemoveLink(Access()->sfPhysicsObjects[GetIndexOf(sfchain[i])]);
-                Access()->sfPhysicsObjects.erase(Access()->sfPhysicsObjects.begin()+GetIndexOf(sfchain[i]));
-
-                /*count++;
-                if(count>100){
-                    break;
-                }*/
-
-    }
-count=0;
-    for (int i=0;i<b2chain.size();i++)
-    {
-                Access()->CurrentWorld()->DestroyBody(Access()->b2PhysicsObjects[GetIndexOf(b2chain[i])]);
-                Access()->b2PhysicsObjects.erase(Access()->b2PhysicsObjects.begin()+GetIndexOf(b2chain[i]));
-
-                /*count++;
-                if(count>100){
-                    break;
-                }*/
-    }
-    //clear them.
-    sfchain.clear();
-    b2chain.clear();
+    //process erases for this iteration of step
+    ProcessQueue(&EraseQueue,"destroy");
 
 
 //to see world bodies count at pos 10,10
@@ -411,68 +170,103 @@ Stat->UpdateFps(10,0);
 
 }
 
-
-void World::ActivateHook()
+int World::GetObjectIndex(PhysShape* in)
 {
-    //useless....
+    for (int a=0;a<Access()->Objects.size();a++)
+            {
+                if (Objects[a] == in)
+                    return a;
+
+            }
+
+    return -1;
 }
 
+void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
+{
+
+
+    if (fx == "destroy")
+    {
+
+            //erase all statics, dont touch em!
+        std::vector<PhysShape*> t_rm;
+        for (int i =0; i<Q->size(); i++)
+        {
+            if (Q->at(i)->Get_Static()){
+                t_rm.push_back(Q->at(i));
+            }
+        }
+        for (int i=0;i<t_rm.size();i++)
+        {
+
+            Q->erase(Q->begin() + GetIndex(Q,t_rm.at(i))); //erase from int GetIndex(vector<PhysShape*>* in,PhysShape* sh)
+        }
+        t_rm.clear();
+        //--
+
+
+        for (int i =0; i<Q->size(); i++)
+        {
+            //iterate Q, match Q's PhysShape to an Objects, and destroy it. then erase the Objects.
+            for (int a=0;a<Access()->Objects.size();a++)
+            {
+                if (Q->at(i) == Objects[a])
+                    Objects[a]->Destroy();
+            }
+            Objects.erase(Objects.begin() + GetObjectIndex(Q->at(i)));
+
+        }
+        Q->clear();
+
+    }else if (fx == "create")
+    {
+        for (int i =0; i< Q->size(); i++)
+        {
+            //iterate Q, calling each PhysShapes create.
+            Q->at(i)->Create();
+            Access()->Objects.push_back(Q->at(i));
+        }
+
+        Q->clear();
+    }else{
+
+        if (WorldStandards::debug)
+            std::cout<<"[World] [Process] Invalid fx.\n";
+
+    }
+
+
+}
+
+int World::GetIndex(vector<PhysShape*>* in,PhysShape* sh)
+{
+        for (int a=0;a<in->size();a++)
+            {
+                if (in->at(a) == sh)
+                    return a;
+
+            }
+
+    return -1;
+}
 
 void World::HookHelper()
 {
     Access()->Step();
 }
 
-int World::GetIndexOf(b2Body* in)
-{
-    //scroll b2PhysicsObjects until  = in, then return counter/i
-    for (int i=0;i<Access()->b2PhysicsObjects.size();i++)
-    {
-        if (Access()->b2PhysicsObjects[i] == in)
-            return i;
-    }
-    return -1;
-}
-
-int World::GetIndexOf(sf::Drawable* in)
-{
-    //scroll sfPhysicsObjects until  = in, then return counter/i
-    for (int i=0;i<Access()->sfPhysicsObjects.size();i++)
-    {
-        if (Access()->sfPhysicsObjects[i] == in)
-            return i;
-    }
-    return -1;
-}
-
-b2Body* World::FirstNonStatic(std::vector <b2Body*> in)
-{
-    for (int i=0;i<in.size();i++)
-    {
-        if (in[i]->GetType() == b2_dynamicBody)
-            return in[i];
-    }
-}
-
-
-
 void World::Hook_Setup()
 {
-    /*World::Access()->MakeBox(10,10,sf::Vector2f(100,100));
-    //World::Access()->AddBox(0,0,100,100,sf::Vector2f(230,100), new Material(MatType::Light)) ;
-    World::Access()->MakeBox(10,10,sf::Vector2f(100,-10));
 
-    World::Access()->MakeBox(10,10,sf::Vector2f(100,130));
+     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(0,1000), new Material(MatType::Floor),340));
+     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(400,1000), new Material(MatType::Floor)));
 
-    World::Access()->MakeCircle(10,sf::Vector2f(100,20));*/
+     //World::Access()->Queue.push_back(new Cricle(50,true,sf::Vector2f(1000,1000), new Material(MatType::Floor)));
 
-    World::Access()->MakeStaticBox(400,100,sf::Vector2f(0,1000), new Material(MatType::Floor),340);
-    World::Access()->MakeStaticBox(400,100,sf::Vector2f(400,1000), new Material(MatType::Floor));
-    World::Access()->MakeStaticBox(400,100,sf::Vector2f(980,1400), new Material(MatType::Floor),300);
-    World::Access()->MakeStaticBox(400,100,sf::Vector2f(1500,1700), new Material(MatType::Floor),0);
-    World::Access()->MakeStaticBox(400,100,sf::Vector2f(1900,1700), new Material(MatType::Floor),30);
-
-    //Renderer::CreateLink(new sf::Shape(sf::Shape::Rectangle(400,500,800,600,sf::Color(255,0,0))),Renderer::HudLayer);
+     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(980,1400), new Material(MatType::Floor),300));
+     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
+     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
 }
 
 
@@ -493,11 +287,9 @@ void World::ClickBox(sf::Event evt)
 
      int w = 2;
      if (evt.MouseButton.Button == sf::Mouse::Right)
-        //if (!Access()->CurrentWorld()->IsLocked())
         for(int i=0; i<100; i++)
-            Access()->MakeBox(w,w,sf::Vector2f(Input.GetMouseX()+i*w,Input.GetMouseY()),Access()->CurrentMaterial());
-       // else
-        //    std::cout<<"[System] [World] is locked. cannot add box.\n";
+            Access()->Queue.push_back(new Rect(w,w,sf::Vector2f(Input.GetMouseX()+i*w,Input.GetMouseY()),Access()->CurrentMaterial()));
+
 }
 
 void World::ClickCircle(sf::Event evt)
@@ -505,15 +297,15 @@ void World::ClickCircle(sf::Event evt)
     int radius = 2;
 
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
-     if (evt.MouseButton.Button == sf::Mouse::Left){
-            for(int i=0; i<100; i++){
-            Access()->MakeCircle(radius,sf::Vector2f(Input.GetMouseX()-radius+i*radius,Input.GetMouseY()-radius),Access()->CurrentMaterial());
-            }
-     }
+     if (evt.MouseButton.Button == sf::Mouse::Left)
+            for(int i=0; i<100; i++)
+                Access()->Queue.push_back(new Circle(radius,sf::Vector2f(Input.GetMouseX()-radius+i*radius,Input.GetMouseY()-radius),Access()->CurrentMaterial()));
+
 }
 
 
 
+/* MATERIAL SELECTOR STUFF */
 Material* World::CurrentMaterial()
 {
     return Access()->m_curMat;

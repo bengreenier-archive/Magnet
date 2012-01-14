@@ -9,7 +9,8 @@ namespace WorldShape
     enum Type{
         Box,
         Circle,
-        StaticBox
+        StaticBox,
+        StaticCircle
     };
 }
 
