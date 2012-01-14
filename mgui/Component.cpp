@@ -1,13 +1,15 @@
 #include "Component.h"
-
+#include "../Game/Renderer.h"
 using namespace mgui;
 
-Component::Component()
+Component::Component(const char* name)
 {
+    m_name = name;
     init(0, 0, 100, 100);
 }
 
-Component::Component(sf::Vector2f pos, sf::Vector2f size){
+Component::Component(const char* name, sf::Vector2f pos, sf::Vector2f size){
+    m_name = name;
     init(pos.x, pos.y, size.x, size.y);
 }
 

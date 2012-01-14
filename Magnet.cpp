@@ -29,13 +29,29 @@ void Magnet::Hook_Initialize(){
 }
 
 void Magnet::Hook_Setup(){
-    mgui::Component* testcmp = new mgui::Component();
-    testcmp->SetPosition(200, 200);
+    mgui::Group* testmenu = new mgui::Group("test_menu");
+
+    mgui::Component* testcmp = new mgui::Component("test_cmp1");
+    //testcmp->SetPosition(200, 200);
     testcmp->SetSize(200, 200);
     testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->EnableOutline(true);
     testcmp->SetVisible(true);
     testcmp->Create();
+    testmenu->AddComponent(testcmp);
+
+
+    mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
+    testcmp2->SetPosition(200, 0);
+    testcmp2->SetSize(200, 200);
+    testcmp2->SetColor(sf::Color(0, 0, 255, 255));
+    testcmp2->EnableOutline(true);
+    testcmp2->SetVisible(true);
+    testcmp2->Create();
+    testmenu->AddComponent(testcmp2);
+
+    testmenu->SetPosition(sf::Vector2f(100, 100));
+    Object()->m_menus.Register(testmenu);
 }
 
 bool Magnet::Event_MouseMove(sf::Event evt){
@@ -72,6 +88,10 @@ Hook::Registry* Magnet::Hooks(std::string from){
 
 Hook::Registry* Magnet::Hooks(){
     return &Object()->m_hooks;
+}
+
+mgui::Registry* Magnet::Menus(){
+    return &Object()->m_menus;
 }
 
 Magnet* Magnet::Object(std::string from){

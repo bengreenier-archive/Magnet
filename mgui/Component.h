@@ -2,7 +2,6 @@
 #define COMPONENT_H
 
 #include <SFML/Graphics.hpp>
-#include "../Magnet.h"
 
 namespace mgui{
 
@@ -10,8 +9,8 @@ namespace mgui{
     {
         public:
             //Default constructor
-            Component();
-            Component(sf::Vector2f pos, sf::Vector2f size);
+            Component(const char* name);
+            Component(const char* name, sf::Vector2f pos, sf::Vector2f size);
             virtual ~Component();
 
             virtual void Create();
@@ -26,7 +25,10 @@ namespace mgui{
             void SetSize(float width, float height);
             void SetSize(sf::Vector2f size);
 
-            bool onClick();
+            void SetName(const char* newName){ m_name = newName; }
+            const char* GetName(){ return m_name; }
+
+            virtual bool onClick(){};
             void Update();
         protected:
         private:
@@ -35,11 +37,10 @@ namespace mgui{
             sf::Color       m_color;
 
             bool m_outline;
-            bool m_handleEvents;        //When true, this component will handle its own events
 
             void format();
             void init(float x, float y, float width, float height);
-
+            const char* m_name;
     };
 }
 

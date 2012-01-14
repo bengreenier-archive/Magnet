@@ -1,9 +1,18 @@
 #include "EventListener.h"
 
-EventListener::EventListener(sf::Event::EventType evtType, callback_type cb)
+EventListener::EventListener(sf::Event::EventType evtType, callback_func_type cb)
 {
     callback = cb;
     eventType = evtType;
+    //object = NULL;
+}
+
+EventListener::EventListener(sf::Event::EventType evtType, callback_func_type cb, void* callob)
+{
+    callback    =   cb;
+    eventType   =   evtType;
+    //object      =   callob;
+
 }
 
 EventListener::~EventListener()
@@ -12,7 +21,9 @@ EventListener::~EventListener()
 }
 
 bool EventListener::onEvent(sf::Event evt){
-    return callback(evt);
-
-    return true;
+    //if(object == NULL){
+        return callback(evt);
+    /*}else{
+        return ob->callback(evt);
+    }*/
 }

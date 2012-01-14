@@ -9,7 +9,9 @@
 class EventListener : public AbstractListener
 {
     public:
-        EventListener(sf::Event::EventType event, callback_type callback);
+
+        EventListener(sf::Event::EventType event, callback_func_type callback);
+        EventListener(sf::Event::EventType event, callback_func_type callback, void* callob);
         virtual ~EventListener();
         virtual bool onEvent(sf::Event evt);
 };

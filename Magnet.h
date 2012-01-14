@@ -62,6 +62,10 @@ class Magnet
         //////////////////////////////////////////
         static Hook::Registry* Hooks(std::string from); ///< DEBUG
         static Hook::Registry* Hooks();
+        //////////////////////////////////////////
+        /// Retrieve the global menu registry
+        //////////////////////////////////////////
+        static mgui::Registry* Menus();
 
 
 
@@ -89,7 +93,10 @@ class Magnet
         sf::Thread* m_loadThread_ptr;
 
         sf::Mutex m_globalMutex;
+
+        //Registries
         Hook::Registry m_hooks;
+        mgui::Registry m_menus;
 
         bool m_loadingStarted; //Checks to see if the loading has started yet
 
