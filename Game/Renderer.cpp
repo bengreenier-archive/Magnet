@@ -10,7 +10,6 @@ Renderer::Renderer()
     m_shouldDraw = true;
 
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
-    EventHandler::AddListener(new EventListener(sf::Event::Closed, &Renderer::Event_Close));
 }
 
 //Clean up all the allocated memory space
@@ -22,15 +21,15 @@ Renderer::~Renderer()
 
 bool Renderer::Event_KeyPressed(sf::Event evt){
     if(evt.Key.Code == sf::Key::Escape){
-        Renderer::GetRenderWindow()->Close();
+        Renderer::Close(evt);
     }
 
     return true;
 }
 
-bool Renderer::Event_Close(sf::Event evt){
-    Magnet::Hooks("Renderer::Close")->Call(Hook::Close);
+bool Renderer::Close(sf::Event evt){
 
+    Renderer::GetRenderWindow()->Close();
     GetObject()->renderThread_ptr->Wait();
 
     return true;

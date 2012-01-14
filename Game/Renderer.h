@@ -97,7 +97,7 @@ class Renderer
         /*********************************************
             "Close the RenderWindow"
         *********************************************/
-        static bool Event_Close(sf::Event evt);
+        static bool Close(sf::Event evt);
         static bool Event_KeyPressed(sf::Event evt);
 
         /*********************************************

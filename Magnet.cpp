@@ -15,7 +15,7 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
 
-    m_mouseTrail.on = true;
+    m_mouseTrail.on = false;
 }
 
 Magnet::~Magnet()

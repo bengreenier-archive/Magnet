@@ -12,7 +12,6 @@ EventListener::~EventListener()
 }
 
 bool EventListener::onEvent(sf::Event evt){
-    std::cout << "Event called\n";
     return callback(evt);
 
     return true;
