@@ -1,11 +1,10 @@
-ADAM:
+IMPROVE EFFICIENCY EVERYWHERE
+      I.E.  *Look at algorithms and attempt to see if there is another possible solition
+            *Assess if the new solition is more efficent than the original
+              -Check for number of times memory needs to be accessed.
+              -If pointers are created, ensure they are destroyed!
+              (Add more)
 
-*** Renderer ***
-Add the ability to changer the depth/layer of a linked Drawable
-
-*** States ***
-.. make them
-
-
-BEN:
-Learn Box2D
+Resource: 
+    *Add Fonts, Config, and Sounds
+  
