@@ -6,6 +6,8 @@ IMPROVE EFFICIENCY EVERYWHERE
               (Add more)
 
 Resource: 
-    *Add Fonts, Config, and Sounds
+      *Add Fonts, Config, and Sounds
 EventHandler:
       *Add ability to remove events
+mgui
+      *Comment methods
