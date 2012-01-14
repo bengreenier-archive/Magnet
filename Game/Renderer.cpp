@@ -9,8 +9,8 @@ Renderer::Renderer()
     m_isValid = false;
     m_shouldDraw = true;
 
-    EventHandler::AddKeyListener(sf::Key::Escape, &Renderer::Close);
-    EventHandler::AddEventListener(sf::Event::Closed, &Renderer::Close);
+    EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
+    EventHandler::AddListener(new EventListener(sf::Event::Closed, &Renderer::Event_Close));
 }
 
 //Clean up all the allocated memory space
@@ -20,11 +20,20 @@ Renderer::~Renderer()
     delete [] RenderWindow_ptr;
 }
 
-void Renderer::Close(sf::Event evt){
+bool Renderer::Event_KeyPressed(sf::Event evt){
+    if(evt.Key.Code == sf::Key::Escape){
+        Renderer::GetRenderWindow()->Close();
+    }
+
+    return true;
+}
+
+bool Renderer::Event_Close(sf::Event evt){
     Magnet::Hooks("Renderer::Close")->Call(Hook::Close);
 
-    Renderer::GetRenderWindow()->Close();
     GetObject()->renderThread_ptr->Wait();
+
+    return true;
 }
 
 void Renderer::SetRenderWindow(sf::RenderWindow& Window){

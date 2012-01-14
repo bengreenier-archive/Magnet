@@ -14,21 +14,28 @@ EventHandler::~EventHandler()
 }
 
 void EventHandler::Listen(){
-    while (Renderer::GetRenderWindow()->GetEvent(GetObject()->Event))
+    event_queue_t& queue = Object()->m_event_queue;
+    listener_map_pair_t ptr_range;
+    sf::Event nextEvent;
+
+    while (Renderer::GetRenderWindow()->GetEvent(nextEvent))
     {
-        GetObject()->CallEvent(GetObject()->Event.Type);
+        queue.push(nextEvent);
+    }
 
-
-        if(GetObject()->Event.Type == sf::Event::KeyPressed){
-            GetObject()->CallKeyEvent(GetObject()->Event.Key.Code);
-        }
-
-        if(GetObject()->Event.Type == sf::Event::MouseButtonPressed || GetObject()->Event.Type == sf::Event::MouseButtonReleased){
-            GetObject()->CallMouseEvent(GetObject()->Event.MouseButton.Button);
-        }
+    while(!queue.empty()){
+        Object()->doCallEvent(queue.front(), Object()->m_listener_map.equal_range(queue.front().Type));
+        queue.pop();
     }
 }
 
+void EventHandler::AddListener(AbstractListener* listener_ptr){
+    EventHandler* EventHandler = Object();
+
+    EventHandler->m_listener_map.insert(std::pair<sf::Event::EventType, AbstractListener*>(listener_ptr->eventType, listener_ptr));
+}
+
+/*
 void EventHandler::AddEventListener(sf::Event::EventType type, EventHandler::FuncType funcPtr){
     GetObject()->event_listeners.insert(pair<sf::Event::EventType, FuncType> (type, funcPtr));
 }
@@ -40,44 +47,20 @@ void EventHandler::AddKeyListener(sf::Key::Code type, EventHandler::FuncType fun
 void EventHandler::AddMouseListener(sf::Mouse::Button type, EventHandler::FuncType funcPtr){
     GetObject()->mouse_listeners.insert(pair<sf::Mouse::Button, FuncType> (type, funcPtr));
 }
+*/
 
-void EventHandler::CallEvent(sf::Event::EventType type){
-    pair<multimap<sf::Event::EventType, FuncType>::iterator, multimap<sf::Event::EventType, FuncType>::iterator > ptr_range;
-    ptr_range = event_listeners.equal_range(type);
+void EventHandler::doCallEvent(sf::Event& evt, listener_map_pair_t lrange){
+    listener_map_it itr;
 
-    for(event_listeners_iterator = ptr_range.first;
-        event_listeners_iterator != ptr_range.second;
-        event_listeners_iterator++ )
-    {
-        event_listeners_iterator->second(Event);
-    }
+    for(itr = lrange.first; itr != lrange.second; itr++ )
+        if(itr->second->onEvent(evt)){
+            std::cout << "Event was successful!\n";
+        }else{
+            std::cout << "Event was unsuccessful!\n";
+        }
+
 }
-
-void EventHandler::CallKeyEvent(sf::Key::Code type){
-    pair<multimap<sf::Key::Code, FuncType>::iterator, multimap<sf::Key::Code, FuncType>::iterator > ptr_range;
-    ptr_range = key_listeners.equal_range(type);
-
-    for(key_listeners_iterator = ptr_range.first;
-        key_listeners_iterator != ptr_range.second;
-        key_listeners_iterator++ )
-    {
-        key_listeners_iterator->second(Event);
-    }
-}
-
-void EventHandler::CallMouseEvent(sf::Mouse::Button type){
-    pair<multimap<sf::Mouse::Button, FuncType>::iterator, multimap<sf::Mouse::Button, FuncType>::iterator > ptr_range;
-    ptr_range = mouse_listeners.equal_range(type);
-
-    for(mouse_listeners_iterator = ptr_range.first;
-        mouse_listeners_iterator != ptr_range.second;
-        mouse_listeners_iterator++ )
-    {
-        mouse_listeners_iterator->second(Event);
-    }
-}
-
-EventHandler* EventHandler::GetObject(){
+EventHandler* EventHandler::Object(){
     if(EventObject == NULL)
         EventObject = new EventHandler();
 

@@ -5,6 +5,7 @@
 
 #include "Console/Console.h"
 
+#include "Game/EventListener.h"
 #include "Game/Handlers/EventHandler.h"
 
 #include "Game/State.h"
@@ -40,8 +41,9 @@ class Magnet
         //////////////////////////////////////////
         /// Called on space press
         //////////////////////////////////////////
-        static void Event_SpacePressed(sf::Event evt);
-        static void Event_MouseMove(sf::Event evt);
+        static bool Event_SpacePressed(sf::Event evt);
+        static bool Event_MouseClick(sf::Event evt);
+        static bool Event_MouseMove(sf::Event evt);
 
         //////////////////////////////////////////
         /// Start the game
@@ -77,6 +79,10 @@ class Magnet
         //Magnet initialization stuff
         Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
     private:
+        typedef std::vector<EventListener*>     eventlistener_vector_t;
+
+        eventlistener_vector_t m_eventlistener_vect;
+
         static Magnet* magnet_ptr;
         State gameState;
         sf::Thread* m_renderThread_ptr;

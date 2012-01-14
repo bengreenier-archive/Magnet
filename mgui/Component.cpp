@@ -48,6 +48,11 @@ void Component::format(){
         SetPointOutlineColor(1, GetOutlineColor());
         SetPointOutlineColor(2, GetOutlineColor());
         SetPointOutlineColor(3, GetOutlineColor());
+
+        SetPointColor(0, GetColor());
+        SetPointColor(1, GetColor());
+        SetPointColor(2, GetColor());
+        SetPointColor(3, GetColor());
     }
 }
 
@@ -59,6 +64,13 @@ void Component::SetOutlineColor(sf::Color outlineCol){
 sf::Color Component::GetOutlineColor(){
     return m_outlineColor;
 }
+
+
+void Component::SetColor(sf::Color color){
+    m_color = color;
+    format();
+}
+sf::Color Component::GetColor(){ return m_color; }
 
 void Component::SetVisible(bool toggle){
     if(m_outline){

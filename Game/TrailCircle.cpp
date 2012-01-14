@@ -16,7 +16,7 @@ TrailCircle::~TrailCircle()
 }
 
 void TrailCircle::Link(){
-    Renderer::CreateLink(&m_circle);
+    Renderer::CreateLink(&m_circle, Renderer::MenuLayer);
 }
 
 void TrailCircle::RemoveLink(){

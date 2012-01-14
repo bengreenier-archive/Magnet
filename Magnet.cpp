@@ -9,13 +9,13 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
     m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
-    EventHandler::AddKeyListener(sf::Key::Space, &Magnet::Event_SpacePressed);
-    EventHandler::AddEventListener(sf::Event::MouseMoved, &Magnet::Event_MouseMove);
+    EventHandler::AddListener(new EventListener(sf::Event::MouseLeft, Event_MouseClick));
+    EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, Event_MouseMove));
 
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
 
-    m_mouseTrail.on = false;
+    m_mouseTrail.on = true;
 }
 
 Magnet::~Magnet()
@@ -32,21 +32,25 @@ void Magnet::Hook_Setup(){
     mgui::Component* testcmp = new mgui::Component();
     testcmp->SetPosition(200, 200);
     testcmp->SetSize(200, 200);
-    testcmp->SetColor(sf::Color(255, 255, 255, 244));
+    testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->EnableOutline(true);
-    testcmp->SetOutlineWidth(10);
-    testcmp->SetVisible(false);
+    testcmp->SetVisible(true);
     testcmp->Create();
 }
 
-void Magnet::Event_MouseMove(sf::Event evt){
+bool Magnet::Event_MouseMove(sf::Event evt){
     if(Object("Event_MouseMove")->m_mouseTrail.on){
-        const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
-        Object("Event_MouseMove")->m_mouseTrail.MouseMove(sf::Vector2i(Input.GetMouseX(), Input.GetMouseY()));
+        Object("Event_MouseMove")->m_mouseTrail.MouseMove(sf::Vector2i(evt.MouseMove.X, evt.MouseMove.Y));
     }
+
+    return true;
 }
 
-void Magnet::Event_SpacePressed(sf::Event evt){
+bool Magnet::Event_MouseClick(sf::Event evt){
+    return true;
+}
+
+bool Magnet::Event_SpacePressed(sf::Event evt){
     if(Object("Event_SpacePressed")->gameState.get() == State::Menu){
         Magnet::StartGame();
     }

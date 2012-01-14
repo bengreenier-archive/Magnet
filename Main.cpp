@@ -36,7 +36,7 @@ int main()
     sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
     Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
 
-    EventHandler::AddKeyListener(sf::Key::C, &Console::LaunchConsoleThread);
+    //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
 
     /*************************************************
     **********=>     Main loop
