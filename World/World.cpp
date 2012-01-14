@@ -95,8 +95,6 @@ void World::Step()
     //step world
     Access()->CurrentWorld()->Step(Access()->m_timeStep, Access()->m_velocityIterations, Access()->m_positionIterations);
 
-    //add objects.
-    ProcessQueue(&Access()->Queue,"create");
 
     //do remapping for sfml, and process creation of deletion commands.
     for (int i=0;i<Access()->Objects.size();i++)
@@ -144,7 +142,9 @@ void World::Step()
         if ((Access()->Objects.size() > Access()->maxPhysicsBodies)&&(mpb_notchecked))
         {   mpb_notchecked=false;
 
-            EraseQueue.push_back(Objects.front());
+            for (int a=0;a<15;a++)//11 at a time from the front
+            EraseQueue.push_back(Objects[a]);
+
 
             if (WorldStandards::debug)
                         std::cout<<"[System] [Step] [Erase] Shape(s) Erase Chained. \n";
@@ -152,6 +152,9 @@ void World::Step()
         }
 
     }
+
+        //add objects.
+    ProcessQueue(&Access()->Queue,"create");
 
 
     //process erases for this iteration of step
@@ -164,17 +167,6 @@ Stat->UpdateFps(10,0);
 
 }
 
-int World::GetObjectIndex(PhysShape* in)
-{
-    for (int a=0;a<Access()->Objects.size();a++)
-            {
-                if (Objects[a] == in)
-                    return a;
-
-            }
-
-    return -1;
-}
 
 void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
 {
@@ -183,32 +175,16 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
     if (fx == "destroy")
     {
 
-            //erase all statics, dont touch em!
-        std::vector<PhysShape*> t_rm;
         for (int i =0; i<Q->size(); i++)
         {
-            if (Q->at(i)->Get_Static()){
-                t_rm.push_back(Q->at(i));
-            }
-        }
-        for (int i=0;i<t_rm.size();i++)
-        {
-
-            Q->erase(Q->begin() + GetIndex(Q,t_rm.at(i))); //erase from int GetIndex(vector<PhysShape*>* in,PhysShape* sh)
-        }
-        t_rm.clear();
-        //--
-
-
-        for (int i =0; i<Q->size(); i++)
-        {
-            //iterate Q, match Q's PhysShape to an Objects, and destroy it. then erase the Objects.
+            //iterate Q, match Q's PhysShape to an Objects, and destroy it, and erase the Objects.
             for (int a=0;a<Access()->Objects.size();a++)
             {
-                if (Q->at(i) == Objects[a])
+                if (Q->at(i) == Objects[a]){
                     Objects[a]->Destroy();
+                    Objects.erase(Objects.begin() + a);
+                    }
             }
-            Objects.erase(Objects.begin() + GetObjectIndex(Q->at(i)));
 
         }
         Q->clear();
@@ -219,7 +195,9 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
         {
             //iterate Q, calling each PhysShapes create.
             Q->at(i)->Create();
-            Access()->Objects.push_back(Q->at(i));
+            //only add nonstatics
+            if (!Q->at(i)->Get_Static())
+                Access()->Objects.push_back(Q->at(i));
         }
 
         Q->clear();
@@ -233,17 +211,7 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
 
 }
 
-int World::GetIndex(vector<PhysShape*>* in,PhysShape* sh)
-{
-        for (int a=0;a<in->size();a++)
-            {
-                if (in->at(a) == sh)
-                    return a;
 
-            }
-
-    return -1;
-}
 
 void World::HookHelper()
 {

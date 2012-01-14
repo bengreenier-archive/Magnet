@@ -76,8 +76,7 @@ class World
 
         //processes the above.
         void ProcessQueue(std::vector<PhysShape*>* Q,std::string fx);
-        int GetObjectIndex(PhysShape* in);
-        int GetIndex(vector<PhysShape*>* in,PhysShape* sh);
+
 };
 
 #endif // WORLD_H

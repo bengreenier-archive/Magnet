@@ -89,4 +89,7 @@ void Circle::Destroy()
 {
     Renderer::RemoveLink(Get_Shape());
     World::Access()->CurrentWorld()->DestroyBody(Get_Body());
+        if (WorldStandards::debug)
+        std::cout << "[SFML/Box2D] Removed Circle.\n";
+
 }

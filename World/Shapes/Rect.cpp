@@ -82,6 +82,7 @@ void Rect::Create()
 
     Renderer::CreateLink(Get_Shape());
 
+
     //add body to the list
     //Access()->sfPhysicsObjects.push_back(visibox);
 
@@ -96,4 +97,7 @@ void Rect::Destroy()
     //
     Renderer::RemoveLink(Get_Shape());
     World::Access()->CurrentWorld()->DestroyBody(Get_Body());
+    if (WorldStandards::debug)
+        std::cout << "[SFML/Box2D] Removed Box.\n";
+
 }
