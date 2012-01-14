@@ -7,4 +7,5 @@ IMPROVE EFFICIENCY EVERYWHERE
 
 Resource: 
     *Add Fonts, Config, and Sounds
-  
+EventHandler:
+      *Add ability to remove events
