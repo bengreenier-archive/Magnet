@@ -11,6 +11,7 @@ EventHandler:
       *Add ability to remove events
 mgui
       *Comment methods
+Exceptions*
 
 [DIRECTORY CHANGES] 
       Move directory "Game/Handlers/" to "Game/Handler"
