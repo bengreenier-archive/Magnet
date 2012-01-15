@@ -125,9 +125,9 @@ void World::Step()
         if ((worldConstraint[0].x<sfposx)&&(sfposx<worldConstraint[1].x)&&(worldConstraint[0].y<sfposy)&&(sfposy<worldConstraint[1].y))
         {
 
-                    Access()->Objects[i]->Get_Shape()->SetPosition(sfposx,sfposy);
-                    Access()->Objects[i]->Get_Shape()->Rotate(rot);
-
+                    Access()->Objects[i]->Set_Position(sf::Vector2f(sfposx,sfposy));
+                    Access()->Objects[i]->Set_Angle(rot);
+                    Access()->Objects[i]->Update();
 
         }else{
 
@@ -263,12 +263,12 @@ bool World::Event_KeyPresed(sf::Event evt){
 
 bool World::ClickBox(sf::Event evt)
 {
-     const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
 
-     int w = 2;
+     const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
+     int w = 10;
      if (evt.MouseButton.Button == sf::Mouse::Right)
         for(int i=0; i<100; i++)
-            Access()->Queue.push_back(new Rect(w,w,sf::Vector2f(Input.GetMouseX()+i*w,Input.GetMouseY()),Access()->CurrentMaterial()));
+            Access()->Queue.push_back(new Rect(w,w,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()),Access()->CurrentMaterial()));
 
     return true;
 
@@ -276,7 +276,7 @@ bool World::ClickBox(sf::Event evt)
 
 bool World::ClickCircle(sf::Event evt)
 {
-    int radius = 2;
+    int radius = 5;
 
      const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Left)

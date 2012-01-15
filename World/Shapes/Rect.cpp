@@ -41,8 +41,6 @@ void Rect::Create()
     bodyDef.allowSleep = true;
 	bodyDef.awake = true;
 
-    //see if this hlps..
-
 	bodyDef.position.Set(((Get_Position().x+Get_Width())/2)*WorldStandards::ppm, ((Get_Position().y+Get_Height())/2)*WorldStandards::ppm);
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
@@ -68,9 +66,6 @@ void Rect::Create()
 
 	Get_Body()->CreateFixture(&fixtureDef);
 
-    //add the body to the list
-    //Access()->b2PhysicsObjects.push_back(bodyBox);
-
     if (WorldStandards::debug)
         std::cout << "[Box2D] Added Box.\n";
 
@@ -81,10 +76,6 @@ void Rect::Create()
     Get_Shape()->Rotate(Get_Angle());
 
     Renderer::CreateLink(Get_Shape());
-
-
-    //add body to the list
-    //Access()->sfPhysicsObjects.push_back(visibox);
 
     if (WorldStandards::debug)
         std::cout << "[SFML] Added Box.\n";
@@ -100,4 +91,12 @@ void Rect::Destroy()
     if (WorldStandards::debug)
         std::cout << "[SFML/Box2D] Removed Box.\n";
 
+}
+
+
+void Rect::Update()
+{
+    Get_Shape()->SetPosition(Get_Position());
+    Get_Shape()->SetCenter(sf::Vector2f(Get_Width()/2, Get_Height()/2));
+    Get_Shape()->Rotate(Get_Angle());
 }

@@ -14,6 +14,7 @@ class Circle : public PhysShape
         /** generic public functions */
         virtual void Create();
         virtual void Destroy();
+        virtual void Update();
 
         /** Default destructor */
         ~Circle();

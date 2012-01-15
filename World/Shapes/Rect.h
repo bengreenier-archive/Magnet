@@ -14,6 +14,7 @@ class Rect : public PhysShape
         /** generic public functions */
         virtual void Create();
         virtual void Destroy();
+        virtual void Update();
 
         /** Default destructor */
         ~Rect();

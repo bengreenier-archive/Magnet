@@ -45,8 +45,6 @@ void Circle::Create()
 
 	b2CircleShape circle;
 
-	//circle.m_p.Set(2.0f, 3.0f);
-
 	circle.m_radius = Get_Radius()*WorldStandards::ppm;
 
 	b2FixtureDef fixtureDef;
@@ -63,24 +61,17 @@ void Circle::Create()
 
 	Get_Body()->CreateFixture(&fixtureDef);
 
-    //add the body to the list
-    //Access()->b2PhysicsObjects.push_back(bodyBox);
-
-    if (WorldStandards::debug)
+   if (WorldStandards::debug)
         std::cout << "[Box2D] Added Circle.\n";
 
     //do sfml
     Set_Shape(new sf::Shape(sf::Shape::Circle(0,0,Get_Radius(),Get_Mat()->GetColor())));
     Get_Shape()->SetPosition(Get_Position());
-    //cb->SetCenter(sf::Vector2f(radius, radius));
     Get_Shape()->Rotate(Get_Angle());
 
     Renderer::CreateLink(Get_Shape());
 
-    //add body to the list
-    //Access()->sfPhysicsObjects.push_back(cb);
-
-    if (WorldStandards::debug)
+     if (WorldStandards::debug)
         std::cout << "[SFML] Added Circle.\n";
 
 }
@@ -92,4 +83,10 @@ void Circle::Destroy()
         if (WorldStandards::debug)
         std::cout << "[SFML/Box2D] Removed Circle.\n";
 
+}
+
+void Circle::Update()
+{
+        Get_Shape()->SetPosition(Get_Position());
+        Get_Shape()->Rotate(Get_Angle());
 }
