@@ -157,7 +157,7 @@ void World::Step()
     ProcessQueue(&Access()->Queue,"create");
 
 
-    //process erases for this iteration of step
+    //destroy objects.
     ProcessQueue(&EraseQueue,"destroy");
 
 
