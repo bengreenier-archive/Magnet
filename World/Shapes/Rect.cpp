@@ -49,7 +49,7 @@ void Rect::Create()
 
 	b2PolygonShape dynamicBox;
 
-	dynamicBox.SetAsBox(((Get_Width())/2)*WorldStandards::ppm, ((Get_Height())/2)*WorldStandards::ppm);
+	dynamicBox.SetAsBox((Get_Width()/2)*WorldStandards::ppm, (Get_Height()/2)*WorldStandards::ppm);
 
 	//fixture stuff
 	b2FixtureDef fixtureDef;
