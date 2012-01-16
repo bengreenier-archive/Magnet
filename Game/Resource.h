@@ -4,6 +4,10 @@
 #include "../Magnet.h"
 #include <string>
 #include <queue>
+#include <dirent.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "Handlers/ImageHandler.h"
 
@@ -17,11 +21,11 @@
 class Resource
 {
     public:
-        const std::string ResourceDir;//           =   "resource/";
-        const std::string ConfigDir;//     =   Dir + "config/";
-        const std::string ImageDir;//     =   Dir + "image/"
-        const std::string FontDir;//       =   Dir + "font/";
-        const std::string ErrorImage;//       =   Dir + "font/";
+        const std::string ResourceDir;
+        const std::string ConfigDir;
+        const std::string ImageDir;
+        const std::string FontDir;
+        const std::string ErrorImage;
 
         virtual ~Resource();
 
@@ -40,7 +44,30 @@ class Resource
         /// The resource will be loaded
         /// on the next Load hook
         ////////////////////////////////
-        static void Add(std::string file);
+        static void AddFile(std::string file) throw(Exception);
+
+        ////////////////////////////////
+        /// Add a directory
+        ////////////////////////////////
+        static void AddDir(std::string dir) throw(Exception);
+
+        ////////////////////////////////
+        /// Add a directory recursively
+        ////////////////////////////////
+        static void AddDirRecursive(std::string dir) throw(Exception);
+
+        ////////////////////////////////
+        /// Check if a directory exists
+        /// in search paths
+        ////////////////////////////////
+        static bool FindDir(std::string dir);
+
+        ////////////////////////////////
+        /// Gets the full path of a dir
+        /// based on Resource search
+        /// directories
+        ////////////////////////////////
+        static std::string GetRealPath(std::string dir);
 
         ////////////////////////////////
         /// Load queue resources

@@ -24,8 +24,14 @@ Magnet::~Magnet()
 }
 
 void Magnet::Hook_Initialize(){
-    Resource::Add("guns/assault1.png");
-    Resource::Add(Resource::Object()->ErrorImage);
+    try{
+        Resource::AddFile(Resource::Object()->ErrorImage);
+        Resource::AddDir("guns/");
+    }
+
+    catch(Exception e){
+        e.output();
+    }
 }
 
 void Magnet::Hook_Setup(){
@@ -37,12 +43,8 @@ void Magnet::Hook_Setup(){
     testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->EnableOutline(true);
     testcmp->SetVisible(true);
-    testcmp->Create();
+    //testcmp->Create();
     testmenu->AddComponent(testcmp);
-
-    std::cout << "Component \"" << testcmp->GetName() << "\" size is " << testcmp->GetSize().x << "x" << testcmp->GetSize().y << "\n";
-    std::cout << "Component \"" << testcmp->GetName() << "\" pos is " << testcmp->GetPosition().x << ", " << testcmp->GetPosition().y << "\n";
-
 
     mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
     testcmp2->SetPosition(200, 0);
@@ -50,7 +52,7 @@ void Magnet::Hook_Setup(){
     testcmp2->SetColor(sf::Color(0, 0, 255, 255));
     testcmp2->EnableOutline(true);
     testcmp2->SetVisible(true);
-    testcmp2->Create();
+    //testcmp2->Create();
     testmenu->AddComponent(testcmp2);
 
     testmenu->SetPosition(sf::Vector2f(100, 100));

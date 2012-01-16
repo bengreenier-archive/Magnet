@@ -77,8 +77,15 @@ void Resource::Init(sf::Thread* loadThread, std::string resourceDir){
     _resource_ptr   =   new Resource(loadThread, resourceDir);
 }
 
-void Resource::Add(std::string file){
-    if(Resource::Loading()) return;
+void Resource::AddFile(std::string file) throw(Exception){
+    Exception newEx;
+
+    if(Resource::Loading()){
+        newEx.type = Exception::SyncError;
+        newEx.what = "Sync Error";
+        newEx.why = "Could not add resource \"" + file + "\" as Resources are currently being loaded.";
+
+    }
 
     if(Object()->m_load_state.get() == State::Ready){
         Object()->m_load_state.set(State::Null);
@@ -89,7 +96,87 @@ void Resource::Add(std::string file){
     Object()->m_loadLeft = Object()->m_load_queue.size();
 
     if(Object()->m_debug)
-        std::cout << "[Resource] Added \"" << file << "\" to the load queue\n";
+        std::cout << "[Resource] Added \"" << file << "\"\n";
+}
+
+void Resource::AddDir(std::string dir) throw(Exception){
+    //Prepare for failure...
+    std::string error = "\0";
+    if(FindDir(dir)){
+        std::string fullPath = GetRealPath(dir);
+        std::string filepath;
+        DIR *dp;
+        struct dirent *dirp;
+        struct stat filestat;
+
+
+        dp = opendir( fullPath.c_str() );
+        if (dp == NULL)
+            std::cout << "Error(" << errno << ") opening " << fullPath << std::endl;
+
+        while ((dirp = readdir( dp ))){
+            filepath = fullPath + dirp->d_name;
+
+            // If the file is a directory (or is in some way invalid) skip it
+            if (stat( filepath.c_str(), &filestat )) continue;
+            if (S_ISDIR( filestat.st_mode ))         continue;
+
+            Resource::AddFile(dir + dirp->d_name);
+        }
+
+        closedir( dp );
+    }else{
+        error = "Could not find \"" + dir + "\" within search directories";
+    }
+
+    if(error != "\0"){
+        Exception newEx;
+        newEx.type = Exception::MissingDir;
+        newEx.what = "Missing Directory";
+        newEx.why = error;
+
+        throw newEx; //this ends execution
+    }
+ }
+
+bool Resource::FindDir(std::string dir){
+    if(FileAction::FindDir(Object()->ResourceDir + dir)){
+        return true;
+    }
+
+    if(FileAction::FindDir(Object()->ConfigDir + dir)){
+        return true;
+    }
+
+    if(FileAction::FindDir(Object()->ImageDir + dir)){
+        return true;
+    }
+
+    if(FileAction::FindDir(Object()->FontDir + dir)){
+        return true;
+    }
+
+    return false;
+}
+
+std::string Resource::GetRealPath(std::string dir){
+    if(!FindDir(dir)) return dir;
+
+    if(FileAction::FindDir(Object()->ResourceDir + dir)){
+        return Object()->ResourceDir + dir;
+    }
+
+    if(FileAction::FindDir(Object()->ConfigDir + dir)){
+        return Object()->ConfigDir + dir;
+    }
+
+    if(FileAction::FindDir(Object()->ImageDir + dir)){
+        return Object()->ImageDir + dir;
+    }
+
+    if(FileAction::FindDir(Object()->FontDir + dir)){
+        return Object()->FontDir + dir;
+    }
 }
 
 bool Resource::NeedLoad(){
