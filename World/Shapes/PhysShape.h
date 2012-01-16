@@ -7,6 +7,7 @@
 #include "ref.h"
 #include "../Material/Material.h"
 #include "../WorldStandards.h"
+#include "../SelectiveCollision.h"
 
 //this class is legit useless. other then all PhysShapes inherit it.
 
@@ -92,6 +93,9 @@ class PhysShape
          */
         void Set_Body(b2Body* val) { m_Body = val; }
 
+        SelectiveCollision* Get_AdjustCollision() {return m_AdjustCollision; }
+        void Set_AdjustCollision(SelectiveCollision* val){ m_AdjustCollision = val; }
+
     protected:
     private:
         sf::Shape*          m_Shape;    //!< Member variable "m_Shape"
@@ -101,6 +105,7 @@ class PhysShape
         sf::Vector2f        m_Position; //!< Member variable "m_Position"
         float               m_Angle;    //!< Member variable "m_Angle"
         bool                m_Static;   //!< Member variable "m_Static"
+        SelectiveCollision* m_AdjustCollision;
 };
 
 #endif // PHYSSHAPE_H

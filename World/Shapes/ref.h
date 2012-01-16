@@ -8,7 +8,9 @@ namespace WorldShapes
         Rect,
         Circle,
         StaticRect,
-        StaticCircle
+        StaticCircle,
+        Triangle,
+        StaticTriange
     };
 }
 

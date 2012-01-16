@@ -233,7 +233,14 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Rect(460,100,true,sf::Vector2f(1033,1350), new Material(MatType::Floor),310));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
-     World::Access()->Queue.push_back(new Line(100,100,600,200));
+     World::Access()->Queue.push_back(new Line(510,100,800,200));
+     World::Access()->Queue.push_back(new Line(320,390,900,240));
+     World::Access()->Queue.push_back(new Line(900,180,900,240));
+     World::Access()->Queue.push_back(new Line(100,390,320,390));
+     World::Access()->Queue.push_back(new Line(32,435,10,200));
+
+
+
      //World::Access()->Queue.push_back(new Triangle(sf::Vector2f(0,0),sf::Vector2f(3,0),sf::Vector2f(3,4),sf::Vector2f(100,100)));
 }
 //sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
