@@ -8,6 +8,7 @@ class Rect : public PhysShape
 {
     public:
         /** Default constructor */
+        Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
         Rect(int width,int height,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
         Rect(int width,int height,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
 

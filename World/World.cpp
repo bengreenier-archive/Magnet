@@ -29,6 +29,10 @@ World::World()
     //max bodies allowed
     maxPhysicsBodies = 500;
 
+    //mousevector generation
+    m_MouseVector1 = b2Vec2(-1,-1);
+    m_MouseVector2 = b2Vec2(-1,-1);
+
     if (WorldStandards::debug)
         std::cout<<"[World] [Init] Hooked. \n";
 
@@ -38,8 +42,9 @@ World::World()
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::ClickCircle));
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::ClickBox));
 
-
+    EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, &World::Event_MouseMove));
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed,&World::Event_KeyPresed));
+
     m_curMat = new Material();
     //temp material msg
     sf::String* msg = new sf::String("Materials = 1,2(HVY),3(LGT),4(RBR),5(WOOD)");
@@ -228,8 +233,10 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Rect(460,100,true,sf::Vector2f(1033,1350), new Material(MatType::Floor),310));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
+     World::Access()->Queue.push_back(new Line(100,100,600,200));
+     //World::Access()->Queue.push_back(new Triangle(sf::Vector2f(0,0),sf::Vector2f(3,0),sf::Vector2f(3,4),sf::Vector2f(100,100)));
 }
-
+//sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
 
 void World::SetTimestep(float in)
 {
@@ -262,12 +269,18 @@ bool World::Event_KeyPresed(sf::Event evt){
 
 bool World::ClickBox(sf::Event evt)
 {
+
+    //attempt to generate a throwforce. Objects[i]->ApplyForce(throwForce);
+    b2Vec2 throwForce = b2Vec2(Access()->m_MouseVector2.x-Access()->m_MouseVector1.x,Access()->m_MouseVector2.y-Access()->m_MouseVector1.y);
+     if (WorldStandards::debug)
+        std::cout<<"[ThrowForce] "<<throwForce.x<<","<<throwForce.y<<" .\n";
+
      int w = 10;
      int h = w;
      int i=0; //if for is commented out, just do this for now.
      if (evt.MouseButton.Button == sf::Mouse::Right)
         //for(int i=0; i<100; i++)
-            Access()->Queue.push_back(new Rect(w,h,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentMaterial()));
+            Access()->Queue.push_back(new Rect(w,h/*,throwForce*/,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentMaterial()));
 
     return true;
 
@@ -314,4 +327,34 @@ void World::Rubber(sf::Event evt)
 void World::Wood(sf::Event evt)
 {
     Access()->m_curMat=new Material(MatType::Wood);
+}
+
+
+bool World::Event_MouseMove(sf::Event evt)
+{
+    int curx = evt.MouseButton.X;
+    int cury = evt.MouseButton.Y;
+
+    if ((Access()->m_MouseVector1.x == -1)&&(Access()->m_MouseVector1.y == -1))
+    {
+        Access()->m_MouseVector1.x = curx;
+        Access()->m_MouseVector1.y = cury;
+    }else
+    {
+        if ((Access()->m_MouseVector2.x == -1)&&(Access()->m_MouseVector2.y == -1))
+        {
+            Access()->m_MouseVector2.x = curx;
+            Access()->m_MouseVector2.y = cury;
+        }else
+        {
+            Access()->m_MouseVector1.x = -1;
+            Access()->m_MouseVector1.y = -1;
+            Access()->m_MouseVector2.x = -1;
+            Access()->m_MouseVector2.y = -1;
+            //reset.
+        }
+
+    }
+
+return true;
 }

@@ -11,6 +11,18 @@ Circle::Circle(int radius,sf::Vector2f pos,Material* mat,float degangle)
     Set_Static(false);
 }
 
+Circle::Circle(int radius,b2Vec2 tForce,sf::Vector2f pos,Material* mat,float degangle)
+{
+    //ctor
+    Set_Radius(radius);
+    Set_Position(sf::Vector2f(pos.x,pos.y));
+    Set_Mat(mat);
+    Set_Angle(degangle);
+    Set_Static(false);
+    ApplyForce(tForce);
+}
+
+
 Circle::Circle(int radius,bool staticc,sf::Vector2f pos,Material* mat,float degangle)
 {
     //ctor

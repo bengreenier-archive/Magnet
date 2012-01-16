@@ -16,6 +16,8 @@
 #include "Shapes/PhysShape.h"
 #include "Shapes/Circle.h"
 #include "Shapes/Rect.h"
+#include "Shapes/Line.h"
+#include "Shapes/Triangle.h"
 
 class World
 {
@@ -41,6 +43,8 @@ class World
         static bool ClickBox(sf::Event evt);
         static bool Event_KeyPresed(sf::Event evt);
 
+        static bool Event_MouseMove(sf::Event evt);
+
         //static binders for material-current changing
         static void Default(sf::Event evt);
         static void Heavy(sf::Event evt);
@@ -54,6 +58,9 @@ class World
         int32 m_velocityIterations;
         int32 m_positionIterations;
         bool m_hooked;
+        b2Vec2 m_MouseVector1;
+        b2Vec2 m_MouseVector2;
+
 
         static World* m_ptr;
 

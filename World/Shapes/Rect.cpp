@@ -13,6 +13,19 @@ Rect::Rect(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
     Set_ShapeType(WorldShapes::Rect);
 }
 
+Rect::Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos,Material* mat,float degangle)
+{
+    //ctor
+    Set_Width(width);
+    Set_Height(height);
+    Set_Position(pos);
+    Set_Mat(mat);
+    Set_Static(false);//default staticicity
+    Set_Angle(degangle);
+    Set_ShapeType(WorldShapes::Rect);
+    ApplyForce(tForce);
+}
+
 Rect::Rect(int width,int height,bool staticc,sf::Vector2f pos,Material* mat,float degangle)
 {
     //ctor

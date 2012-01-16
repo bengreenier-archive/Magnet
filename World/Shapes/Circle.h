@@ -9,6 +9,7 @@ class Circle : public PhysShape
     public:
         /** Default constructor */
         Circle(int radius,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
+        Circle(int radius,b2Vec2 tForce,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
         Circle(int radius,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
 
         /** generic public functions */
