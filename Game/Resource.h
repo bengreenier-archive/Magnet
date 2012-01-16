@@ -49,12 +49,12 @@ class Resource
         ////////////////////////////////
         /// Add a directory
         ////////////////////////////////
-        static void AddDir(std::string dir) throw(Exception);
+        static void AddDir(std::string dir, bool recursive = false) throw(Exception);
 
         ////////////////////////////////
         /// Add a directory recursively
         ////////////////////////////////
-        static void AddDirRecursive(std::string dir) throw(Exception);
+        static void AddDirRecursive(std::string dir, bool recursive) throw(Exception);
 
         ////////////////////////////////
         /// Check if a directory exists

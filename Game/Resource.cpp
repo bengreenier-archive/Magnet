@@ -99,7 +99,7 @@ void Resource::AddFile(std::string file) throw(Exception){
         std::cout << "[Resource] Added \"" << file << "\"\n";
 }
 
-void Resource::AddDir(std::string dir) throw(Exception){
+void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
     //Prepare for failure...
     std::string error = "\0";
     if(FindDir(dir)){
@@ -119,9 +119,17 @@ void Resource::AddDir(std::string dir) throw(Exception){
 
             // If the file is a directory (or is in some way invalid) skip it
             if (stat( filepath.c_str(), &filestat )) continue;
-            if (S_ISDIR( filestat.st_mode ))         continue;
-
-            Resource::AddFile(dir + dirp->d_name);
+            if (S_ISDIR( filestat.st_mode )){
+                if(recursive){
+                    if(((std::string)dirp->d_name).find(".") == std::string:: npos){
+                         AddDir(dir + dirp->d_name + "/", true);
+                    }
+                }else{
+                    continue;
+                }
+            }else{
+                Resource::AddFile(dir + dirp->d_name);
+            }
         }
 
         closedir( dp );
@@ -138,6 +146,34 @@ void Resource::AddDir(std::string dir) throw(Exception){
         throw newEx; //this ends execution
     }
  }
+
+/*
+ void AddDirRecursive(std::string dir) throw(Exception){
+    if(FindDir(dir)){
+        std::string fullPath = GetRealPath(dir);
+        std::string filepath;
+        DIR *dp;
+        struct dirent *dirp;
+        struct stat filestat;
+
+
+        dp = opendir( fullPath.c_str() );
+        if (dp == NULL)
+            std::cout << "Error(" << errno << ") opening " << fullPath << std::endl;
+
+        while ((dirp = readdir( dp ))){
+            filepath = fullPath + dirp->d_name;
+
+            // If the file is a directory (or is in some way invalid) skip it
+            if (S_ISDIR( filestat.st_mode )){
+                Resource::AddDir(dir + dirp->d_name);
+            }
+        }
+
+        closedir( dp );
+    }
+ }
+ */
 
 bool Resource::FindDir(std::string dir){
     if(FileAction::FindDir(Object()->ResourceDir + dir)){

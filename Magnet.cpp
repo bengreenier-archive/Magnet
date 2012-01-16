@@ -26,7 +26,7 @@ Magnet::~Magnet()
 void Magnet::Hook_Initialize(){
     try{
         Resource::AddFile(Resource::Object()->ErrorImage);
-        Resource::AddDir("guns/");
+        Resource::AddDir("guns/", true);
     }
 
     catch(Exception e){
