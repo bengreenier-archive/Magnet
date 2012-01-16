@@ -2,9 +2,11 @@
 #define COMPONENT_H
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
 
 namespace mgui{
-
+    class Group;
     class Component : public sf::Shape
     {
         public:
@@ -24,11 +26,21 @@ namespace mgui{
 
             void SetSize(float width, float height);
             void SetSize(sf::Vector2f size);
+            sf::Vector2f GetSize();
 
             void SetName(const char* newName){ m_name = newName; }
             const char* GetName(){ return m_name; }
 
-            virtual bool onClick(){};
+            void SetGroup(Group* parent);
+            Group* GetGroup(){return m_parent;}
+
+            /////////////////////////////////////////////////////////////
+            /// Check if an sf::Vector2f is within the bounds of this
+            /// component
+            /////////////////////////////////////////////////////////////
+            virtual bool CheckBounds(sf::Vector2f coord);
+
+            virtual bool onClick(){ std::cout << "You clicked " << m_name << std::endl; };
             void Update();
         protected:
         private:
@@ -41,6 +53,8 @@ namespace mgui{
             void format();
             void init(float x, float y, float width, float height);
             const char* m_name;
+            bool m_grouped;
+            Group* m_parent;
     };
 }
 

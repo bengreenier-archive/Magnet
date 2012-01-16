@@ -9,7 +9,7 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
     m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
-    EventHandler::AddListener(new EventListener(sf::Event::MouseLeft, Event_MouseClick));
+    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, Event_MouseClick));
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, Event_MouseMove));
 
     m_renderThread_ptr  =   &renderThread;
@@ -33,12 +33,15 @@ void Magnet::Hook_Setup(){
 
     mgui::Component* testcmp = new mgui::Component("test_cmp1");
     //testcmp->SetPosition(200, 200);
-    testcmp->SetSize(200, 200);
+    testcmp->SetSize(sf::Vector2f(200, 200));
     testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->EnableOutline(true);
-    testcmp->SetVisible(false);
+    testcmp->SetVisible(true);
     testcmp->Create();
     testmenu->AddComponent(testcmp);
+
+    std::cout << "Component \"" << testcmp->GetName() << "\" size is " << testcmp->GetSize().x << "x" << testcmp->GetSize().y << "\n";
+    std::cout << "Component \"" << testcmp->GetName() << "\" pos is " << testcmp->GetPosition().x << ", " << testcmp->GetPosition().y << "\n";
 
 
     mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
@@ -46,7 +49,7 @@ void Magnet::Hook_Setup(){
     testcmp2->SetSize(200, 200);
     testcmp2->SetColor(sf::Color(0, 0, 255, 255));
     testcmp2->EnableOutline(true);
-    testcmp2->SetVisible(false);
+    testcmp2->SetVisible(true);
     testcmp2->Create();
     testmenu->AddComponent(testcmp2);
 
@@ -63,6 +66,8 @@ bool Magnet::Event_MouseMove(sf::Event evt){
 }
 
 bool Magnet::Event_MouseClick(sf::Event evt){
+    std::cout << "Mouse click\n";
+    Object()->m_menus.onEvent(evt);
     return true;
 }
 

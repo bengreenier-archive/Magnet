@@ -1,5 +1,8 @@
 #include "Component.h"
 #include "../Game/Renderer.h"
+
+
+#include "Group.h"
 using namespace mgui;
 
 Component::Component(const char* name)
@@ -27,12 +30,28 @@ void Component::init(float x, float y, float width, float height){
     SetOutlineColor(sf::Color(255, 0, 0, 255));
 }
 
+bool Component::CheckBounds(sf::Vector2f coord){
+    //Check x bounds
+    if(coord.x > GetPosition().x && coord.x < (GetPosition().x+GetSize().x)){
+        //Check y bounds
+        if(coord.y > GetPosition().y && coord.y < (GetPosition().y+GetSize().y)){
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Component::SetSize(float width, float height){
     SetSize(sf::Vector2f(width, height));
 }
 void Component::SetSize(sf::Vector2f size){
     m_size = size;
     format();
+}
+
+sf::Vector2f Component::GetSize(){
+    return m_size;
 }
 
 void Component::format(){
@@ -89,4 +108,9 @@ void Component::EnableOutline(bool enable){
 
 void Component::Create(){
     Renderer::CreateLink(this, Renderer::HudLayer);
+}
+
+void Component::SetGroup(Group* parent){
+    m_parent = parent;
+    m_grouped = true;
 }
