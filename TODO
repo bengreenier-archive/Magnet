@@ -2,7 +2,7 @@ IMPROVE EFFICIENCY EVERYWHERE
       I.E.  *Look at algorithms and attempt to see if there is another possible solition
             *Assess if the new solition is more efficent than the original
               -Check for number of times memory needs to be accessed.
-              -If pointers are created, ensure they are destroyed!
+              -If pointers are created, ensure they are destroyed! (lol, dont think mine are always...-ben)
               (Add more)
 
 Resource: 
