@@ -37,7 +37,11 @@ void Circle::Create()
     bodyDef.allowSleep = true;
 	bodyDef.awake = true;
 
-	bodyDef.position.Set((Get_Position().x+Get_Radius())*WorldStandards::ppm, (Get_Position().y+Get_Radius())*WorldStandards::ppm);
+    //OKAY, SO THIS WORKS ALL COMMENTED OUT.
+    //if (Get_Static())
+        bodyDef.position.Set((Get_Position().x/*+Get_Radius()*/)*WorldStandards::ppm, (Get_Position().y/*+Get_Radius()*/)*WorldStandards::ppm);
+    //else
+    //  bodyDef.position.Set(((Get_Position().x+Get_Radius())/2)*WorldStandards::ppm, ((Get_Position().y+Get_Radius())/2)*WorldStandards::ppm);
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
@@ -65,6 +69,7 @@ void Circle::Create()
         std::cout << "[Box2D] Added Circle.\n";
 
     //do sfml
+
     Set_Shape(new sf::Shape(sf::Shape::Circle(0,0,Get_Radius(),Get_Mat()->GetColor())));
     Get_Shape()->SetPosition(Get_Position());
     Get_Shape()->Rotate(Get_Angle());

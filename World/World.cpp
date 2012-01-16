@@ -225,7 +225,7 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(0,1000), new Material(MatType::Floor),340));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(400,1000), new Material(MatType::Floor)));
      World::Access()->Queue.push_back(new Circle(50,true,sf::Vector2f(600,550), new Material(MatType::Floor)));
-     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(980,1400), new Material(MatType::Floor),300));
+     World::Access()->Queue.push_back(new Rect(460,100,true,sf::Vector2f(1033,1350), new Material(MatType::Floor),310));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
 }
