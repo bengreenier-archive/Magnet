@@ -14,7 +14,7 @@ class PhysShape
 {
     public:
         /** Default constructor */
-        PhysShape();
+        //PhysShape();
 
         /*overide these in each PhysShape*/
         virtual void Destroy() { std::cout<<"[PhysShape] [Destroy] Not overidden.\n"; }
@@ -94,13 +94,13 @@ class PhysShape
 
     protected:
     private:
-        sf::Shape* m_Shape; //!< Member variable "m_Shape"
-        b2Body* m_Body; //!< Member variable "m_Rect"
-        Material* m_Mat; //!< Member variable "m_Mat"
-        WorldShapes::Type m_ShapeType; //!< Member variable "m_ShapeType"
-        sf::Vector2f m_Position; //!< Member variable "m_Position"
-        float m_Angle; //!< Member variable "m_Angle"
-        bool m_Static; //!< Member variable "m_Static"
+        sf::Shape*          m_Shape;    //!< Member variable "m_Shape"
+        b2Body*             m_Body;     //!< Member variable "m_Rect"
+        Material*           m_Mat;      //!< Member variable "m_Mat"
+        WorldShapes::Type   m_ShapeType;//!< Member variable "m_ShapeType"
+        sf::Vector2f        m_Position; //!< Member variable "m_Position"
+        float               m_Angle;    //!< Member variable "m_Angle"
+        bool                m_Static;   //!< Member variable "m_Static"
 };
 
 #endif // PHYSSHAPE_H

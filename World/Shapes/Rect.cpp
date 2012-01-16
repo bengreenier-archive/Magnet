@@ -69,10 +69,18 @@ void Rect::Create()
     if (WorldStandards::debug)
         std::cout << "[Box2D] Added Box.\n";
 
+
+    float b2posx = Get_Body()->GetPosition().x;
+    float b2posy = Get_Body()->GetPosition().y;
+    float b2rot  = Get_Body()->GetAngle();
+
+    float sfposx = b2posx*WorldStandards::mpp;
+    float sfposy = b2posy*WorldStandards::mpp;
+
     //do sfml
-    Set_Shape(new sf::Shape(sf::Shape::Rectangle(0,0,Get_Width(),Get_Height(),Get_Mat()->GetColor())));
-    Get_Shape()->SetPosition(Get_Position());
-    Get_Shape()->SetCenter(sf::Vector2f(Get_Width()/2, Get_Height()/2));
+    Set_Shape(new sf::Shape(sf::Shape::Rectangle(0, 0,Get_Width(),Get_Height(),Get_Mat()->GetColor())));
+    Get_Shape()->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
+    Get_Shape()->SetCenter(sf::Vector2f((Get_Width()/2), (Get_Height()/2)));
     Get_Shape()->Rotate(Get_Angle());
 
     Renderer::CreateLink(Get_Shape());
@@ -97,6 +105,5 @@ void Rect::Destroy()
 void Rect::Update()
 {
     Get_Shape()->SetPosition(Get_Position());
-    Get_Shape()->SetCenter(sf::Vector2f(Get_Width()/2, Get_Height()/2));
     Get_Shape()->Rotate(Get_Angle());
 }

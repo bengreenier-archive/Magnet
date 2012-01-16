@@ -263,12 +263,10 @@ bool World::Event_KeyPresed(sf::Event evt){
 
 bool World::ClickBox(sf::Event evt)
 {
-
-     const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      int w = 10;
      if (evt.MouseButton.Button == sf::Mouse::Right)
         for(int i=0; i<100; i++)
-            Access()->Queue.push_back(new Rect(w,w,sf::Vector2f(Input.GetMouseX(),Input.GetMouseY()),Access()->CurrentMaterial()));
+            Access()->Queue.push_back(new Rect(w,w,sf::Vector2f(evt.MouseButton.X+(i*w),evt.MouseButton.Y),Access()->CurrentMaterial()));
 
     return true;
 

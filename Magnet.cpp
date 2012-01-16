@@ -15,7 +15,7 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
 
-    m_mouseTrail.on = true;
+    m_mouseTrail.on = false;
 }
 
 Magnet::~Magnet()
@@ -36,7 +36,7 @@ void Magnet::Hook_Setup(){
     testcmp->SetSize(200, 200);
     testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->EnableOutline(true);
-    testcmp->SetVisible(true);
+    testcmp->SetVisible(false);
     testcmp->Create();
     testmenu->AddComponent(testcmp);
 
@@ -46,7 +46,7 @@ void Magnet::Hook_Setup(){
     testcmp2->SetSize(200, 200);
     testcmp2->SetColor(sf::Color(0, 0, 255, 255));
     testcmp2->EnableOutline(true);
-    testcmp2->SetVisible(true);
+    testcmp2->SetVisible(false);
     testcmp2->Create();
     testmenu->AddComponent(testcmp2);
 
