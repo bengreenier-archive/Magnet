@@ -221,11 +221,10 @@ void World::HookHelper()
 void World::Hook_Setup()
 {
 
+    //add our demo-world-scape
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(0,1000), new Material(MatType::Floor),340));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(400,1000), new Material(MatType::Floor)));
-
-     //World::Access()->Queue.push_back(new Cricle(50,true,sf::Vector2f(1000,1000), new Material(MatType::Floor)));
-
+     World::Access()->Queue.push_back(new Circle(50,true,sf::Vector2f(600,550), new Material(MatType::Floor)));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(980,1400), new Material(MatType::Floor),300));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
@@ -264,9 +263,11 @@ bool World::Event_KeyPresed(sf::Event evt){
 bool World::ClickBox(sf::Event evt)
 {
      int w = 10;
+     int h = w;
+     int i=0; //if for is commented out, just do this for now.
      if (evt.MouseButton.Button == sf::Mouse::Right)
-        for(int i=0; i<100; i++)
-            Access()->Queue.push_back(new Rect(w,w,sf::Vector2f(evt.MouseButton.X+(i*w),evt.MouseButton.Y),Access()->CurrentMaterial()));
+        //for(int i=0; i<100; i++)
+            Access()->Queue.push_back(new Rect(w,h,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentMaterial()));
 
     return true;
 
@@ -275,11 +276,11 @@ bool World::ClickBox(sf::Event evt)
 bool World::ClickCircle(sf::Event evt)
 {
     int radius = 5;
+    int i=0; //if for is commented out, just do this for now.
 
-     const sf::Input& Input = Renderer::GetRenderWindow()->GetInput();
      if (evt.MouseButton.Button == sf::Mouse::Left)
-            for(int i=0; i<100; i++)
-                Access()->Queue.push_back(new Circle(radius,sf::Vector2f(Input.GetMouseX()-radius+i*radius,Input.GetMouseY()-radius),Access()->CurrentMaterial()));
+            //for(int i=0; i<100; i++)
+                Access()->Queue.push_back(new Circle(radius,sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentMaterial()));
 
     return true;
 

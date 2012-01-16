@@ -41,7 +41,11 @@ void Rect::Create()
     bodyDef.allowSleep = true;
 	bodyDef.awake = true;
 
-	bodyDef.position.Set(((Get_Position().x+Get_Width())/2)*WorldStandards::ppm, ((Get_Position().y+Get_Height())/2)*WorldStandards::ppm);
+    //NO FUCKING CLUE...THIS IS DUMB. but it works...
+    if (!Get_Static())
+        bodyDef.position.Set(/*(*/(Get_Position().x+Get_Width())/*/2)*/*WorldStandards::ppm, /*(*/(Get_Position().y+Get_Height())/*/2)*/*WorldStandards::ppm);
+    else
+        bodyDef.position.Set(((Get_Position().x+Get_Width())/2)*WorldStandards::ppm, ((Get_Position().y+Get_Height())/2)*WorldStandards::ppm);
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
