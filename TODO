@@ -9,10 +9,12 @@ Resource:
       *Add Fonts, Config, and Sounds
 EventHandler:
       *Add ability to remove events
-mgui
+mgui:
       *Comment methods
 Exceptions*
-
+Hooks:
+      *Add ability to remove hooks
+      *Apply BaseListener/Parameter to hooks to allow arguments to be passes
 [DIRECTORY CHANGES] 
       Move directory "Game/Handlers/" to "Game/Handler"
             -Classes in folder should be named after their
