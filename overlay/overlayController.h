@@ -14,7 +14,7 @@ class overlayController
 
 
         static overlayController* overlay_pointer;
-        std::map <std::string,overlay::overlay> object_map;
+        //std::map <std::string,overlay::overlay> object_map;
 
 };
 

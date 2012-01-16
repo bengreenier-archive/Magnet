@@ -15,7 +15,7 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
 
-    m_mouseTrail.on = false;
+    m_mouseTrail.on = true;
 }
 
 Magnet::~Magnet()
@@ -56,7 +56,7 @@ void Magnet::Hook_Setup(){
 
 bool Magnet::Event_MouseMove(sf::Event evt){
     if(Object("Event_MouseMove")->m_mouseTrail.on){
-        Object("Event_MouseMove")->m_mouseTrail.MouseMove(sf::Vector2i(evt.MouseMove.X, evt.MouseMove.Y));
+       Object("Event_MouseMove")->m_mouseTrail.MouseMove(sf::Vector2i(evt.MouseMove.X, evt.MouseMove.Y));
     }
 
     return true;

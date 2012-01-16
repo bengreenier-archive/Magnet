@@ -6,7 +6,7 @@
 MouseTrail::MouseTrail()
 {
     on = true;
-    m_maxSize   =   1;
+    m_maxSize   = 50;
 }
 
 MouseTrail::~MouseTrail()
@@ -47,8 +47,10 @@ void MouseTrail::MouseMove(sf::Vector2i mouse){
 void MouseTrail::Frame(){
    if(!trail.empty()){
         if(trail.size() > m_maxSize){
-            for(int i = 0; i < (trail.size()-m_maxSize); i++)
+            for(int i = 0; i < (trail.size()-m_maxSize); i++){
+                (*trail.begin())->RemoveLink();
                 trail.erase(trail.begin());
+            }
         }
 
         trail_it = trail.begin();
@@ -56,6 +58,7 @@ void MouseTrail::Frame(){
             (*trail_it)->Update();
 
             if((*trail_it)->ShouldRemove()){
+                (*trail_it)->RemoveLink();
                 trail_it = trail.erase(trail_it);
             }else{
                 trail_it++;

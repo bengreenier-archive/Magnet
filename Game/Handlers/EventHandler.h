@@ -6,10 +6,6 @@
 #include "../EventListener.h"
 
 #include <iostream>
-
-//This class should call only static events
-//  Non-statics event callbacks should be
-//  excecuted by a static event call back
 class EventHandler
 {
     public:
@@ -18,11 +14,10 @@ class EventHandler
         static void Listen();
         ////////////////////////////////////////////////////////////////////////////////////////////
         ///    Function:        static void AddListener()
-        ///    \param name            c string name to map the
-        ///    \param listenerptr     a pointer to the lisener
         ////////////////////////////////////////////////////////////////////////////////////////////
-        static void AddListener(AbstractListener* listener);
-        void CallEvent(sf::Event& newEvent);
+        static void AddListener(EventListener* listener);
+
+        void CallEvent(sf::Event::EventType event_type, ...);
 
 
         static EventHandler* Object();
@@ -34,21 +29,18 @@ class EventHandler
         static EventHandler* EventObject;
 
         sf::Event Event;
-        typedef std::multimap<sf::Event::EventType, AbstractListener*>              listener_map_t;
-        typedef std::pair<sf::Event::EventType, AbstractListener*>                  listener_pair_t;
-        typedef std::multimap<sf::Event::EventType, AbstractListener*>::iterator    listener_map_it;
+        typedef std::multimap<sf::Event::EventType, EventListener*>              listener_map_t;
+        typedef std::pair<sf::Event::EventType, EventListener*>                  listener_pair_t;
+        typedef std::multimap<sf::Event::EventType, EventListener*>::iterator    listener_map_it;
         typedef std::pair<listener_map_it, listener_map_it>                         listener_map_pair_t;
         typedef std::queue<sf::Event>                                               event_queue_t;
 
         listener_map_t  m_listener_map;
         event_queue_t   m_event_queue;
 
-        /**************************************
-                "Calls all stored evnts of
-                    event type `type` "
-
-            \param  type The Event type to be called
-        *******************************************/
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        ///   Call all events within a range of listeners
+        ////////////////////////////////////////////////////////////////////////////////////////////
         void doCallEvent(sf::Event& evt, listener_map_pair_t lrange);
 
 

@@ -6,6 +6,8 @@
 #include <queue>
 #include <string>
 #include <iostream>
+
+#include "EventListener.h"
 /*************************************
     Renderer is a static class allows
         an easy API with RenderHandler
@@ -132,6 +134,7 @@ class Renderer
     protected:
         Renderer();
     private:
+
         struct link{
             sf::Drawable*   object;
             Layer           layer;

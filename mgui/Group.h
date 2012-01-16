@@ -45,6 +45,11 @@ namespace mgui{
             /// Been added to the group
             ////////////////////////////////
             bool ComponentExists(Component* checkcmp);
+
+            ////////////////////////////////
+            /// Call component's events
+            ////////////////////////////////
+            void onEvent(sf::Event evt);
         protected:
         private:
             const char* m_name;

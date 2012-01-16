@@ -33,3 +33,28 @@ bool Registry::GroupExists(Group* checkgrp){
 bool Registry::GroupExists(const char* grpname){
     return (bool)m_group_map.count(grpname);
 }
+
+void Registry::group_iterator_start(){
+    m_group_map_it = m_group_map.begin();
+}
+
+bool Registry::do_iterate(){
+    m_group_map_it++;
+
+    if(m_group_map_it == m_group_map.end()){
+        return false;
+    }
+
+    return true;
+}
+
+void Registry::onEvent(sf::Event evt){
+    group_iterator_start();
+
+    do{
+        get_iterator()->second->onEvent(evt);
+    }while(do_iterate());
+}
+
+
+Registry::group_map_iterator_type Registry::get_iterator(){ return m_group_map_it; }

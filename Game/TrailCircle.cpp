@@ -20,7 +20,6 @@ void TrailCircle::Link(){
 }
 
 void TrailCircle::RemoveLink(){
-
     Renderer::RemoveLink(&m_circle);
 }
 
@@ -40,7 +39,7 @@ void TrailCircle::Update(){
     m_circle.SetScale(m_scale, m_scale);
     m_circle.SetPosition((m_initalX-(m_initalX*m_scale))+(m_shake*neg), (m_initialY-(m_initialY*m_scale))+(m_shake*neg));
 
-    if(m_scale < .1){
+    if(m_scale < .5){
         m_remove=true;
     }
 }

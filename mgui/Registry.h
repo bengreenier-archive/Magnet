@@ -18,7 +18,8 @@ namespace mgui {
             ///     map to map a unique name
             ///     to the group of components
             ////////////////////////////////
-            typedef std::map<const char*, Group*>    group_map_type;
+            typedef std::map<const char*, Group*>           group_map_type;
+            typedef std::map<const char*, Group*>::iterator  group_map_iterator_type;
 
             Registry();
             virtual ~Registry();
@@ -39,10 +40,34 @@ namespace mgui {
             ////////////////////////////////
             bool GroupExists(Group* checkgrp);
             bool GroupExists(const char* grpname);
+
+            ////////////////////////////////
+            /// Called when an event occurs
+            ////////////////////////////////
+            void onEvent(sf::Event evt);
         protected:
         private:
 
-            group_map_type m_group_map;
+            group_map_type          m_group_map;
+            group_map_iterator_type m_group_map_it;
+
+
+
+            ////////////////////////////////
+            /// Begin group iteration
+            ////////////////////////////////
+            void group_iterator_start();
+            ////////////////////////////////
+            /// Get group iteration
+            ////////////////////////////////
+            group_map_iterator_type get_iterator();
+            ////////////////////////////////
+            /// Iterate
+            /// returns false when map.end()
+            /// is reached
+            ////////////////////////////////
+            bool do_iterate();
+
     };
 }
 

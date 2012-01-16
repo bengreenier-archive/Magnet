@@ -29,17 +29,17 @@ void EventHandler::Listen(){
     }
 }
 
-void EventHandler::AddListener(AbstractListener* listener_ptr){
+void EventHandler::AddListener(EventListener* listener_ptr){
     EventHandler* EventHandler = Object();
 
-    EventHandler->m_listener_map.insert(std::pair<sf::Event::EventType, AbstractListener*>(listener_ptr->eventType, listener_ptr));
+    EventHandler->m_listener_map.insert(std::pair<sf::Event::EventType, EventListener*>(listener_ptr->eventType, listener_ptr));
 }
 
 void EventHandler::doCallEvent(sf::Event& evt, listener_map_pair_t lrange){
     listener_map_it itr;
 
     for(itr = lrange.first; itr != lrange.second; itr++ )
-        itr->second->onEvent(evt);
+        itr->second->onHear(evt);
 
 }
 EventHandler* EventHandler::Object(){

@@ -35,5 +35,10 @@ void Group::AddComponent(Component* newCmp){
 bool Group::ComponentExists(Component* checkcmp){
     return (bool)m_component_map.count(checkcmp->GetName());
 }
+
+void Group::onEvent(sf::Event evt){
+
+}
+
 const char* Group::GetName(){ return m_name; }
 
