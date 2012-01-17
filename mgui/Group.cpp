@@ -29,7 +29,7 @@ void Group::SetPosition(sf::Vector2f newPosition){
 void Group::AddComponent(Component* newCmp){
     if(ComponentExists(newCmp)) return;
 
-    newCmp->SetGroup(this);
+    //newCmp->SetParent(this);
     m_component_map.insert(std::pair<const char*, Component*>(newCmp->GetName(), newCmp));
 }
 

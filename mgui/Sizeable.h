@@ -8,8 +8,7 @@ namespace mgui{
         Sizeable(sf::Vector2f size) : m_size(size){}
         Sizeable() : m_size(sf::Vector2f(0, 0)){}
 
-        virtual void SetSize(sf::Vector2f newSize){ m_size = newSize; }
-        virtual void SetSize(float nwidth, float nheight){ m_size = sf::Vector2f(nwidth, nheight); }
+        virtual void SetSize(sf::Vector2f newSize){ std::cout << "[Sizeable] Setting size...\n"; m_size = newSize; }
         virtual sf::Vector2f GetSize(){ return m_size; }
 
         sf::Vector2f m_size;

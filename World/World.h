@@ -51,6 +51,8 @@ class World
         static void Rubber(sf::Event evt);
         static void Wood(sf::Event evt);
 
+        static void AddShape(PhysShape* shape);
+
     protected:
     private:
         float32 m_timeStep;

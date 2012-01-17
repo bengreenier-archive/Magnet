@@ -4,10 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "Sizeable.h"
+#include "Positionable.h"
 
 namespace mgui{
     class Group;
-    class Component : public sf::Shape
+    class Component : virtual public sf::Shape, virtual public Sizeable
     {
         public:
             //Default constructor
@@ -16,7 +18,10 @@ namespace mgui{
             virtual ~Component();
 
             virtual void Create();
-            virtual void SetVisible(bool toggle);
+
+            void SetVisible(bool toggle);
+            bool GetVisible(bool toggle) { return m_visible; }
+
             void EnableOutline(bool enable);
 
             void SetOutlineColor(sf::Color outlineCol);
@@ -24,15 +29,34 @@ namespace mgui{
             void SetColor(sf::Color color);
             sf::Color GetColor();
 
-            void SetSize(float width, float height);
-            void SetSize(sf::Vector2f size);
-            sf::Vector2f GetSize();
+            //////////////////////////////////////////
+            /// Overrides sf::Shape::GetPosition
+            /// Returns the Position-OutlineWidth
+            /// use sf::Shape::GetPosition for the
+            /// position without the outline
+            //////////////////////////////////////////
+            sf::Vector2f GetPosition();
+
+            //////////////////////////////////////////
+            /// Overrides Sizeable::SetSize
+            /// Provides same functionality, but calls
+            /// format() after setting the size
+            //////////////////////////////////////////
+            virtual void SetSize(sf::Vector2f size);
+
+            //////////////////////////////////////////
+            /// Overrides Sizeable::GetSize
+            /// Gets the total size (Size+border)
+            /// *To get the size without the border,
+            /// Call Sizeable::GetSize()
+            //////////////////////////////////////////
+            virtual sf::Vector2f GetSize();
 
             void SetName(const char* newName){ m_name = newName; }
             const char* GetName(){ return m_name; }
 
-            void SetGroup(Group* parent);
-            Group* GetGroup(){return m_parent;}
+            void SetParent(Component* parent);
+            Component* GetParent(){return m_parent;}
 
             /////////////////////////////////////////////////////////////
             /// Check if an sf::Vector2f is within the bounds of this
@@ -40,21 +64,22 @@ namespace mgui{
             /////////////////////////////////////////////////////////////
             virtual bool CheckBounds(sf::Vector2f coord);
 
-            virtual bool onClick(){ std::cout << "You clicked " << m_name << std::endl; };
-            void Update();
+            virtual bool onClick(){ std::cout << "You clicked " << m_name << std::endl; return true; };
+            //virtual void Update();
         protected:
         private:
-            sf::Vector2f    m_size;
             sf::Color       m_outlineColor;
             sf::Color       m_color;
 
-            bool m_outline;
-
-            void format();
+            virtual void format();
             void init(float x, float y, float width, float height);
+
             const char* m_name;
-            bool m_grouped;
-            Group* m_parent;
+            bool m_outline;
+            bool m_isChild;
+            bool m_created;
+            bool m_visible;
+            Component* m_parent;
     };
 }
 

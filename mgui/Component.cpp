@@ -23,7 +23,7 @@ Component::~Component()
 
 void Component::init(float x, float y, float width, float height){
     SetPosition(x, y);
-    SetSize(width, height);
+    SetSize(sf::Vector2f(width, height));
     EnableOutline(true);
     SetVisible(false);
     SetOutlineWidth(2);
@@ -42,17 +42,19 @@ bool Component::CheckBounds(sf::Vector2f coord){
     return false;
 }
 
-void Component::SetSize(float width, float height){
-    SetSize(sf::Vector2f(width, height));
+sf::Vector2f Component::GetSize(){
+    return sf::Vector2f(Sizeable::GetSize().x + GetOutlineWidth()*2, Sizeable::GetSize().y + GetOutlineWidth()*2);
 }
+
 void Component::SetSize(sf::Vector2f size){
-    m_size = size;
+    Sizeable::SetSize(size);
     format();
 }
 
-sf::Vector2f Component::GetSize(){
-    return m_size;
+sf::Vector2f Component::GetPosition(){
+    return sf::Vector2f(sf::Shape::GetPosition().x - GetOutlineWidth(), sf::Shape::GetPosition().y - GetOutlineWidth());
 }
+
 
 void Component::format(){
     if(GetNbPoints() == 0){
@@ -99,6 +101,8 @@ void Component::SetVisible(bool toggle){
     }
 
     EnableFill(toggle);
+
+    m_visible = toggle;
 }
 
 void Component::EnableOutline(bool enable){
@@ -107,10 +111,10 @@ void Component::EnableOutline(bool enable){
 }
 
 void Component::Create(){
-    Renderer::CreateLink(this, Renderer::HudLayer);
+    Renderer::CreateLink(static_cast<sf::Shape*>(this), Renderer::HudLayer);
 }
 
-void Component::SetGroup(Group* parent){
+void Component::SetParent(Component* parent){
     m_parent = parent;
-    m_grouped = true;
+    m_isChild = true;
 }

@@ -27,7 +27,7 @@ World::World()
     worldConstraint[1].y = 500 + Renderer::GetRenderWindow()->GetHeight();
 
     //max bodies allowed
-    maxPhysicsBodies = 500;
+    maxPhysicsBodies = 1000;
 
     //mousevector generation
     m_MouseVector1 = b2Vec2(-1,-1);
@@ -40,6 +40,8 @@ World::World()
     Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::Event_Click));
+    EventHandler::AddListener(new EventListener(sf::Event::MouseWheelMoved, &World::Event_Click));
+
 
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, &World::Event_MouseMove));
@@ -147,7 +149,7 @@ void World::Step()
         if ((Access()->Objects.size() > Access()->maxPhysicsBodies)&&(mpb_notchecked))
         {   mpb_notchecked=false;
 
-            for (int a=0;a<15;a++)//11 at a time from the front
+            for (int a=0;a<Access()->Objects.size()-Access()->maxPhysicsBodies;a++)//11 at a time from the front
             EraseQueue.push_back(Objects[a]);
 
 
@@ -223,6 +225,10 @@ void World::HookHelper()
     Access()->Step();
 }
 
+void World::AddShape(PhysShape* shape){
+    World::Access()->Queue.push_back(shape);
+}
+
 void World::Hook_Setup()
 {
 
@@ -275,10 +281,11 @@ bool World::Event_Click(sf::Event evt)
 {
     int radius = 5;
     int i=0; //if for is commented out, just do this for now.
-    int w = 10;
+    int w = radius*2;
      int h = w;
      int tHeight=w;
 
+    if(evt.Type == sf::Event::MouseButtonReleased){
      if (evt.MouseButton.Button == sf::Mouse::Left)
             //for(int i=0; i<100; i++)
                 Access()->Queue.push_back(new Circle(radius,sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentMaterial()));
@@ -290,6 +297,12 @@ bool World::Event_Click(sf::Event evt)
      if (evt.MouseButton.Button == sf::Mouse::Middle)
         //for(int i=0; i<100; i++)
             Access()->Queue.push_back(new Triangle(tHeight,sf::Vector2f(evt.MouseButton.X-tHeight+i*tHeight,evt.MouseButton.Y-tHeight),Access()->CurrentMaterial()));
+    }else{
+        const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
+        for(int i=0; i<5; i++)
+        Access()->Queue.push_back(new Circle(radius,sf::Vector2f(inpt.GetMouseX()-tHeight+i*tHeight,inpt.GetMouseY()-tHeight),Access()->CurrentMaterial()));
+
+    }
 
 
 

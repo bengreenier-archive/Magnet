@@ -41,17 +41,17 @@ void Magnet::Hook_Setup(){
     testcmp->SetSize(sf::Vector2f(200, 200));
     testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->EnableOutline(true);
-    testcmp->SetVisible(true);
-    //testcmp->Create();
+    testcmp->SetVisible(false);
+    testcmp->Create();
     testmenu->AddComponent(testcmp);
 
     mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
-    testcmp2->SetPosition(200, 0);
-    testcmp2->SetSize(200, 200);
+    testcmp2->SetPosition(testcmp->GetPosition().x+testcmp->GetSize().x, 0);
+    testcmp2->SetSize(sf::Vector2f(200, 200));
     testcmp2->SetColor(sf::Color(0, 0, 255, 255));
     testcmp2->EnableOutline(true);
-    testcmp2->SetVisible(true);
-    //testcmp2->Create();
+    testcmp2->SetVisible(false);
+    testcmp2->Create();
     testmenu->AddComponent(testcmp2);
 
     testmenu->SetPosition(sf::Vector2f(100, 100));
@@ -59,8 +59,10 @@ void Magnet::Hook_Setup(){
 }
 
 bool Magnet::Event_MouseMove(sf::Event evt){
-    if(Object("Event_MouseMove")->m_mouseTrail.on){
-       Object("Event_MouseMove")->m_mouseTrail.MouseMove(sf::Vector2i(evt.MouseMove.X, evt.MouseMove.Y));
+    if(World::Access() != NULL){
+        if(Object("Event_MouseMove")->m_mouseTrail.on){
+           Object("Event_MouseMove")->m_mouseTrail.MouseMove(sf::Vector2i(evt.MouseMove.X, evt.MouseMove.Y));
+        }
     }
 
     return true;

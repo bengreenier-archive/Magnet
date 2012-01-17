@@ -1,5 +1,6 @@
 #include "TrailCircle.h"
 #include "../Magnet.h"
+
 TrailCircle::TrailCircle(float x, float y, float radius, const sf::Color color)
 {
     m_circle = sf::Shape::Circle(x, y, radius, color);

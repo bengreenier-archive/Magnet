@@ -12,6 +12,7 @@ class MouseTrail
         MouseTrail();
         virtual ~MouseTrail();
 
+        void Hook_Init();
         void MouseMove(sf::Vector2i mouse);
 
         void Frame();
