@@ -21,7 +21,7 @@ class PhysShape
         virtual void Destroy() { std::cout<<"[PhysShape] [Destroy] Not overidden.\n"; }
         virtual void Create() { std::cout<<"[PhysShape] [Create] Not overidden.\n"; }
         virtual void Update() { std::cout<<"[PhysShape] [Update] Not overidden.\n"; }
-        void ApplyForce(b2Vec2 force) { Get_Body()->ApplyForceToCenter(force); }
+        void ApplyForce(b2Vec2 force) {std::cout<<"gotin\n"; Get_Body()->ApplyForce(force,Get_Body()->GetWorldCenter()); std::cout<<"gotit\n"; }
 
         /** Access m_Mat
          * \return The current value of m_Mat

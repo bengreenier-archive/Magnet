@@ -39,10 +39,9 @@ class World
         static void HookHelper();
         static void Hook_Setup();
 
-        static bool ClickCircle(sf::Event evt);
-        static bool ClickBox(sf::Event evt);
-        static bool Event_KeyPresed(sf::Event evt);
 
+        static bool Event_Click(sf::Event evt);
+        static bool Event_KeyPresed(sf::Event evt);
         static bool Event_MouseMove(sf::Event evt);
 
         //static binders for material-current changing

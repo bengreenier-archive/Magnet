@@ -39,8 +39,8 @@ World::World()
     Magnet::Hooks()->Register(Hook::Frame,&World::HookHelper);
     Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
 
-    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::ClickCircle));
-    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::ClickBox));
+    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::Event_Click));
+
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, &World::Event_MouseMove));
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed,&World::Event_KeyPresed));
@@ -233,15 +233,11 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Rect(460,100,true,sf::Vector2f(1033,1350), new Material(MatType::Floor),310));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
      World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
-     World::Access()->Queue.push_back(new Line(510,100,800,200));
-     World::Access()->Queue.push_back(new Line(320,390,900,240));
-     World::Access()->Queue.push_back(new Line(900,180,900,240));
-     World::Access()->Queue.push_back(new Line(100,390,320,390));
+     World::Access()->Queue.push_back(new Line(310,100,600,200));
+     World::Access()->Queue.push_back(new Line(120,390,700,240));
+     World::Access()->Queue.push_back(new Line(700,180,700,240));
+     //World::Access()->Queue.push_back(new Line(100,390,320,390));
      World::Access()->Queue.push_back(new Line(32,435,10,200));
-
-
-
-     //World::Access()->Queue.push_back(new Triangle(sf::Vector2f(0,0),sf::Vector2f(3,0),sf::Vector2f(3,4),sf::Vector2f(100,100)));
 }
 //sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
 
@@ -274,33 +270,28 @@ bool World::Event_KeyPresed(sf::Event evt){
     return true;
 }
 
-bool World::ClickBox(sf::Event evt)
-{
 
-    //attempt to generate a throwforce. Objects[i]->ApplyForce(throwForce);
-    b2Vec2 throwForce = b2Vec2(Access()->m_MouseVector2.x-Access()->m_MouseVector1.x,Access()->m_MouseVector2.y-Access()->m_MouseVector1.y);
-     if (WorldStandards::debug)
-        std::cout<<"[ThrowForce] "<<throwForce.x<<","<<throwForce.y<<" .\n";
-
-     int w = 10;
-     int h = w;
-     int i=0; //if for is commented out, just do this for now.
-     if (evt.MouseButton.Button == sf::Mouse::Right)
-        //for(int i=0; i<100; i++)
-            Access()->Queue.push_back(new Rect(w,h/*,throwForce*/,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentMaterial()));
-
-    return true;
-
-}
-
-bool World::ClickCircle(sf::Event evt)
+bool World::Event_Click(sf::Event evt)
 {
     int radius = 5;
     int i=0; //if for is commented out, just do this for now.
+    int w = 10;
+     int h = w;
+     int tHeight=w;
 
      if (evt.MouseButton.Button == sf::Mouse::Left)
             //for(int i=0; i<100; i++)
                 Access()->Queue.push_back(new Circle(radius,sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentMaterial()));
+
+     if (evt.MouseButton.Button == sf::Mouse::Right)
+        //for(int i=0; i<100; i++)
+            Access()->Queue.push_back(new Rect(w,h,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentMaterial()));
+
+     if (evt.MouseButton.Button == sf::Mouse::Middle)
+        //for(int i=0; i<100; i++)
+            Access()->Queue.push_back(new Triangle(tHeight,sf::Vector2f(evt.MouseButton.X-tHeight+i*tHeight,evt.MouseButton.Y-tHeight),Access()->CurrentMaterial()));
+
+
 
     return true;
 

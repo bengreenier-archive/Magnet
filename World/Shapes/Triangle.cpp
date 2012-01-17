@@ -1,31 +1,34 @@
 #include "Triangle.h"
 #include "../World.h"
 
-Triangle::Triangle(sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos,Material* mat,float degangle)
+Triangle::Triangle(int size,sf::Vector2f Globalpos,Material* mat,float degangle)
 {
     //ctor
     Set_Mat(mat);
     Set_Angle(degangle);
     Set_Position(Globalpos);
+    m_size=size;
 }
 
-Triangle::Triangle(sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos,b2Vec2 tForce,Material* mat,float degangle)
+Triangle::Triangle(int size,sf::Vector2f Globalpos,b2Vec2 tForce,Material* mat,float degangle)
 {
     //ctor
     Set_Mat(mat);
     Set_Angle(degangle);
     Set_Position(Globalpos);
     ApplyForce(tForce);
+    m_size=size;
 }
 
 
-Triangle::Triangle(sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos,bool staticc,Material* mat,float degangle)
+Triangle::Triangle(int size,sf::Vector2f Globalpos,bool staticc,Material* mat,float degangle)
 {
     //ctor
     Set_Mat(mat);
     Set_Angle(degangle);
     Set_Position(Globalpos);
     Set_Static(staticc);
+    m_size=size;
 }
 
 Triangle::~Triangle()
@@ -46,6 +49,7 @@ void Triangle::Create()
 	bodyDef.awake = true;
 
 
+    float size = m_size;
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
 	Set_Body(World::Access()->CurrentWorld()->CreateBody(&bodyDef));
@@ -54,9 +58,10 @@ void Triangle::Create()
 
     //set 3 pts
       b2Vec2 vertices[3];
-      vertices[0].Set(pos1.x*WorldStandards::ppm,pos1.y*WorldStandards::ppm);
-      vertices[1].Set(pos2.x*WorldStandards::ppm,pos2.y*WorldStandards::ppm);
-      vertices[2].Set(pos3.x*WorldStandards::ppm,pos3.y*WorldStandards::ppm);
+      vertices[0].Set(Get_Position().x*WorldStandards::ppm,Get_Position().y*WorldStandards::ppm);
+      //vertices[1].Set(600*WorldStandards::ppm,500*WorldStandards::ppm);
+      vertices[1].Set((Get_Position().x+size)*WorldStandards::ppm,(Get_Position().y+size)*WorldStandards::ppm);
+      vertices[2].Set(Get_Position().x*WorldStandards::ppm,(Get_Position().y+size)*WorldStandards::ppm);
 
     dynamicBox.Set(vertices,3);
 	//fixture stuff
@@ -80,9 +85,10 @@ void Triangle::Create()
     //do sfml
     Set_Shape(new sf::Shape());
     //set 3 pts
-    Get_Shape()->AddPoint(pos1,Get_Mat()->GetColor());
-    Get_Shape()->AddPoint(pos2,Get_Mat()->GetColor());
-    Get_Shape()->AddPoint(pos3,Get_Mat()->GetColor());
+      Get_Shape()->AddPoint(sf::Vector2f(Get_Position().x,Get_Position().y),Get_Mat()->GetColor());
+      //Get_Shape()->AddPoint(sf::Vector2f(600,500),Get_Mat()->GetColor());
+      Get_Shape()->AddPoint(sf::Vector2f(Get_Position().x+size,Get_Position().y+size),Get_Mat()->GetColor());
+      Get_Shape()->AddPoint(sf::Vector2f(Get_Position().x,Get_Position().y+size),Get_Mat()->GetColor());
 
     //Get_Shape()->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
     //Get_Shape()->SetCenter(sf::Vector2f((Get_Width()/2), (Get_Height()/2)));
