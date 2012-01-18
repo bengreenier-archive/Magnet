@@ -79,7 +79,7 @@ void Renderer::Render(void* threadData){
             GetObject()->newlink_queue.pop();
         }
 
-        //Process the new link queue
+        //Process the remove link queue
         while(!GetObject()->delete_queue.empty()){
             GetObject()->_RemoveLink(GetObject()->delete_queue.front());
             GetObject()->delete_queue.pop();

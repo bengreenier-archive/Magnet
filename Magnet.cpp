@@ -37,23 +37,24 @@ void Magnet::Hook_Setup(){
     mgui::Group* testmenu = new mgui::Group("test_menu");
 
     mgui::Component* testcmp = new mgui::Component("test_cmp1");
-    //testcmp->SetPosition(200, 200);
     testcmp->SetSize(sf::Vector2f(200, 200));
     testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->EnableOutline(true);
-    testcmp->SetVisible(false);
+    testcmp->SetVisible(true);
     testcmp->Create();
     testmenu->AddComponent(testcmp);
 
-    mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
+    testcmp->DebugOn();
+
+    /*mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
     testcmp2->SetPosition(testcmp->GetPosition().x+testcmp->GetSize().x, 0);
     testcmp2->SetSize(sf::Vector2f(200, 200));
     testcmp2->SetColor(sf::Color(0, 0, 255, 255));
     testcmp2->EnableOutline(true);
-    testcmp2->SetVisible(false);
+    testcmp2->SetVisible(true);
     testcmp2->Create();
     testmenu->AddComponent(testcmp2);
-
+    */
     testmenu->SetPosition(sf::Vector2f(100, 100));
     Object()->m_menus.Register(testmenu);
 }

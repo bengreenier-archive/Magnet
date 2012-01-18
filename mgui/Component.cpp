@@ -22,6 +22,8 @@ Component::~Component()
 }
 
 void Component::init(float x, float y, float width, float height){
+    m_debug = false;
+
     SetPosition(x, y);
     SetSize(sf::Vector2f(width, height));
     EnableOutline(true);
@@ -52,7 +54,13 @@ void Component::SetSize(sf::Vector2f size){
 }
 
 sf::Vector2f Component::GetPosition(){
-    return sf::Vector2f(sf::Shape::GetPosition().x - GetOutlineWidth(), sf::Shape::GetPosition().y - GetOutlineWidth());
+    if(m_isChild){
+        std::cout << "I am a child!\n";
+        return m_parent->GetPosition()+sf::Shape::GetPosition();
+    }else{
+        std::cout << "I am not a child!\n";
+        return sf::Vector2f(sf::Shape::GetPosition().x - GetOutlineWidth(), sf::Shape::GetPosition().y - GetOutlineWidth());
+    }
 }
 
 
@@ -76,6 +84,11 @@ void Component::format(){
         SetPointColor(1, GetColor());
         SetPointColor(2, GetColor());
         SetPointColor(3, GetColor());
+    }
+
+    if(m_debug){
+        _RemoveDebugLines();
+        _CreateDebugLines();
     }
 }
 
@@ -117,4 +130,45 @@ void Component::Create(){
 void Component::SetParent(Component* parent){
     m_parent = parent;
     m_isChild = true;
+}
+
+void Component::DebugOn(){
+    m_debug = true;
+
+    _CreateDebugLines();
+}
+
+void Component::DebugOff(){
+    m_debug = false;
+
+    _RemoveDebugLines();
+}
+
+void Component::_CreateDebugLines(){
+    std::cout << "[Debug] Child: " << m_isChild << std::endl;
+    std::cout << "[Debug] Pos.x1 = " << GetPosition().x << std::endl;
+    std::cout << "[Debug] Pos.y1 = " << GetPosition().y << std::endl;
+    std::cout << "[Debug] Pos.x 2 = " << GetPosition().x+GetSize().x << std::endl;
+    std::cout << "[Debug] Pos.y2 = " << GetPosition().y << std::endl;
+    debug_size_top      = sf::Shape::Line(GetPosition().x, GetPosition().y, GetPosition().x+GetSize().x, GetPosition().y, 10, sf::Color(255, 255, 255));
+    /*debug_size_left     = sf::Shape::Line(GetPosition().x, GetPosition().y, GetPosition().x, GetPosition().y+GetSize().y, 1, sf::Color(255, 255, 255));
+    debug_size_right    = sf::Shape::Line(GetPosition().x+GetSize().x, GetPosition().y, GetPosition().x, GetPosition().y+GetSize().y, 1, sf::Color(255, 255, 255));
+    debug_size_bottom   = sf::Shape::Line(GetPosition().x, GetPosition().y+GetSize().y, GetPosition().x+GetSize().x, GetPosition().y+GetSize().y, 1, sf::Color(255, 255, 255));*/
+
+    Renderer::CreateLink(&debug_size_top, Renderer::MenuLayer, 10);
+    /*Renderer::CreateLink(&debug_size_left, Renderer::MenuLayer, 10);
+    Renderer::CreateLink(&debug_size_right, Renderer::MenuLayer, 10);
+    Renderer::CreateLink(&debug_size_bottom, Renderer::MenuLayer, 10);*/
+}
+
+void Component::_RemoveDebugLines(){
+    Renderer::RemoveLink(&debug_size_top);
+    Renderer::RemoveLink(&debug_size_left);
+    Renderer::RemoveLink(&debug_size_right);
+    Renderer::RemoveLink(&debug_size_bottom);
+
+    debug_size_top.~Drawable();
+    debug_size_left.~Drawable();
+    debug_size_right.~Drawable();
+    debug_size_bottom.~Drawable();
 }

@@ -22,7 +22,7 @@ Group* Registry::GetByName(const char* groupName){
     if(GroupExists(groupName)){
         return m_group_map[groupName];
     }else{
-        return new Group();
+        return new Group("GROUP_NOT_FOUND");
     }
 }
 

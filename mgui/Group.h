@@ -11,14 +11,12 @@
 ///     into a group
 ////////////////////////////////////////////////////////////////
 namespace mgui{
-    class Group : public Positionable
+    class Group : virtual public Component, virtual public Positionable
     {
         public:
             typedef std::map<const char*, Component*>           component_map_type;
             typedef std::map<const char*, Component*>::iterator component_map_iterator_type;
 
-            //default ctor
-            Group();
             //Construct with name
             Group(const char* name);
             virtual ~Group();

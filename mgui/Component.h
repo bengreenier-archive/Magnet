@@ -66,6 +66,13 @@ namespace mgui{
 
             virtual bool onClick(){ std::cout << "You clicked " << m_name << std::endl; return true; };
             //virtual void Update();
+
+            void DebugOn();
+            void DebugOff();
+
+            void _CreateDebugLines();
+            void _RemoveDebugLines();
+
         protected:
         private:
             sf::Color       m_outlineColor;
@@ -79,7 +86,13 @@ namespace mgui{
             bool m_isChild;
             bool m_created;
             bool m_visible;
+            bool m_debug;
             Component* m_parent;
+
+            sf::Shape debug_size_top;
+            sf::Shape debug_size_left;
+            sf::Shape debug_size_right;
+            sf::Shape debug_size_bottom;
     };
 }
 

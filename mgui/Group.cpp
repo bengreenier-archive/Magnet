@@ -2,14 +2,8 @@
 
 using namespace mgui;
 
-Group::Group()
+Group::Group(const char* name) : Component(name)
 {
-    m_name = "";
-}
-
-Group::Group(const char* name)
-{
-    m_name = name;
 }
 
 Group::~Group()
@@ -29,7 +23,7 @@ void Group::SetPosition(sf::Vector2f newPosition){
 void Group::AddComponent(Component* newCmp){
     if(ComponentExists(newCmp)) return;
 
-    //newCmp->SetParent(this);
+    newCmp->SetParent(this);
     m_component_map.insert(std::pair<const char*, Component*>(newCmp->GetName(), newCmp));
 }
 
