@@ -8,7 +8,7 @@
 //SHOULD HANDLE COLORS/TEXTURES/IMAGES EVENTUALLY TOO.
 #include <SFML/Graphics.hpp>
 
-namespace MatType{
+namespace MatType{ //! The List of all materials any PhysShape can have.
 
     enum Type{
         Default,
@@ -21,15 +21,15 @@ namespace MatType{
 
 }
 
-class Material
+class Material //! The material class, defining a material that a PhysShape can be.
 {
     public:
-        Material(MatType::Type in=MatType::Default);
-        ~Material();
-        float GetDensity();
-        float GetRestitution();
-        float GetFriction();
-        sf::Color GetColor();
+        Material(MatType::Type in=MatType::Default); //!< Default Constructor
+        ~Material(); //!< Default Deconstructor
+        float GetDensity(); //!< Get material instance's density
+        float GetRestitution(); //!< Get material instance's restitution
+        float GetFriction(); //!< Get material instance's friction
+        sf::Color GetColor(); //!< Get material instance's color
     protected:
     private:
         float m_density;

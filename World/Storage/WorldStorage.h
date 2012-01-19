@@ -14,7 +14,7 @@ namespace WorldShape
     };
 }
 
-class WorldStorage
+class WorldStorage //! outdated class that should be removed.
 {
     public:
         WorldStorage();

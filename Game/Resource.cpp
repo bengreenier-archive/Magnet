@@ -112,11 +112,9 @@ void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
 
         dp = opendir( fullPath.c_str() );
         if (dp == NULL)
-            std::cout << "Error(" << errno << ") opening " << fullPath << std::endl;
 
         while ((dirp = readdir( dp ))){
             filepath = fullPath + dirp->d_name;
-
             // If the file is a directory (or is in some way invalid) skip it
             if (stat( filepath.c_str(), &filestat )) continue;
             if (S_ISDIR( filestat.st_mode )){

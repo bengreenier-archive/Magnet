@@ -3,7 +3,7 @@
 
 #include "Material/Material.h"
 
-namespace Collision
+namespace Collision //! defines the types of collisions that can be selectively controlled
 {
     enum Type{
     Disengage,
@@ -12,13 +12,13 @@ namespace Collision
     };
 }
 
-class SelectiveCollision
+class SelectiveCollision //! a selective collision is a collision that can be programmically manipulated.
 {
     public:
-        /** Default constructor */
-        SelectiveCollision(Material* from,Material* to ,Collision::Type flag = Collision::Disengage);
-        /** Default destructor */
-        ~SelectiveCollision();
+
+        SelectiveCollision(Material* from,Material* to ,Collision::Type flag = Collision::Disengage); //!< Default constructor
+
+        ~SelectiveCollision(); //!< Default destructor
     protected:
     private:
 };

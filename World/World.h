@@ -19,39 +19,40 @@
 #include "Shapes/Line.h"
 #include "Shapes/Triangle.h"
 
-class World
+
+class World //! The world object. controls all physics and world-ly things. :)
 {
     public:
-        World();
+        World(); //!< Default Constructor
 
-        static World* Access(); //World::access()->  to work with. looks nice.
-        static void Init();
+        static World* Access(); //!< Access the world object.
+        static void Init(); //!< Initialize the world object. (calls constructor, setting pointer along the way)
 
-        sf::Color B2SFColor(const b2Color &color, int alpha = 255); //convert a b2color to sfml
+        sf::Color B2SFColor(const b2Color &color, int alpha = 255); //!< useless function that converts colors.
 
-        b2World* CurrentWorld();//returns current world.
+        b2World* CurrentWorld();//!< Returns a pointer to the current world.
 
-        void Step();//steps over world once.
+        void Step();//!< IMPORTANT: Does the stepping over the CurrentWorld().
 
-        void SetTimestep(float in);//set the world speed.
-        float GetTimestep();
+        void SetTimestep(float in);//!< Adjust the timestep
+        float GetTimestep(); //!< Get the timestep
 
-        static void HookHelper();
-        static void Hook_Setup();
+        static void HookHelper(); //!< Called on Hook::Frame
+        static void Hook_Setup(); //!< Setup World.
 
 
-        static bool Event_Click(sf::Event evt);
-        static bool Event_KeyPresed(sf::Event evt);
-        static bool Event_MouseMove(sf::Event evt);
+        static bool Event_Click(sf::Event evt); //!< Called on Event_Click
+        static bool Event_KeyPresed(sf::Event evt); //!< Called on Event_KeyPressed
+        static bool Event_MouseMove(sf::Event evt); //!< Event_MouseMove
 
         //static binders for material-current changing
-        static void Default(sf::Event evt);
-        static void Heavy(sf::Event evt);
-        static void Light(sf::Event evt);
-        static void Rubber(sf::Event evt);
-        static void Wood(sf::Event evt);
+        static void Default(sf::Event evt); //!< Binder for current material changing.
+        static void Heavy(sf::Event evt);//!< Binder for current material changing.
+        static void Light(sf::Event evt);//!< Binder for current material changing.
+        static void Rubber(sf::Event evt);//!< Binder for current material changing.
+        static void Wood(sf::Event evt);//!< Binder for current material changing.
 
-        static void AddShape(PhysShape* shape);
+        static void AddShape(PhysShape* shape); //!< Add a PhysShape to the world
 
     protected:
     private:
@@ -67,7 +68,7 @@ class World
 
         WorldStats* Stat;
 
-        Material* CurrentMaterial();
+        Material* CurrentMaterial(); //!< Points to the current material
 
         int maxPhysicsBodies;
         //our array of world constrainst. set in constructor.

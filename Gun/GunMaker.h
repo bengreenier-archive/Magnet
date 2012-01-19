@@ -3,14 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include "GunComponent.h"
 
-class GunMaker
+class GunMaker //! The GunFactory class that creates and formats/etc a new gun.
 {
     public:
-        GunMaker(float Scale);
-        void ConsoleAGun();
-        void SetPosition(int x,int y);
-        std::string name;
-        int damage;
+        GunMaker(float Scale); //!< Default Constructor
+        void ConsoleAGun(); //!< Print gun info to console
+        void SetPosition(int x,int y); //!< Set gun screen position
+        std::string name; //!< The gun name
+        int damage; //!< The gun damage multiplier
     protected:
     private:
         void        FormatDrawable(int x,int y);

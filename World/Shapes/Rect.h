@@ -4,21 +4,21 @@
 
 #include "PhysShape.h"
 
-class Rect : public PhysShape
+class Rect : public PhysShape //! The Rectangle PhysShape. Used in World.
 {
     public:
-        /** Default constructor */
-        Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
-        Rect(int width,int height,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
-        Rect(int width,int height,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0);
 
-        /** generic public functions */
-        virtual void Create();
-        virtual void Destroy();
-        virtual void Update();
+        Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Force Constructor
+        Rect(int width,int height,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Default Constructor
+        Rect(int width,int height,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Static Constuctor
 
-        /** Default destructor */
-        ~Rect();
+        /* generic public functions */
+        virtual void Create(); //!< Create the b2d/sfml Rectangle objects.
+        virtual void Destroy(); //!< Destroy and UnLink the sfml/b2d objects for this shape.
+        virtual void Update(); //!< Update shape stuff, based on set info, so Set_Position before this.
+
+
+        ~Rect();//!< Default Deconstructor
 
         /** Access m_Width
          * \return The current value of m_Width

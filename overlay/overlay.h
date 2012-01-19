@@ -2,7 +2,7 @@
 #define OVERLAY_H
 #include <SFML/Graphics.hpp>
 
-class overlay
+class overlay //! Old, useless and Depreciated.
 {
     public:
         overlay();

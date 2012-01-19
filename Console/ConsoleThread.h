@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-class ConsoleThread
+class ConsoleThread //! passes data to the executor from the listener
 {
     public:
         ConsoleThread();

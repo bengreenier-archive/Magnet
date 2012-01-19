@@ -3,7 +3,7 @@
 
 #include <Box2D/Box2D.h>
 
-namespace WorldStandards{
+namespace WorldStandards{ //! Contains Global variables (if you will) for World stuff. like ratios and debug info.
 
 
 static const float ratio = 30.0f;

@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 
-class FileAction
+class FileAction //! Allows program access to files.
 {
     public:
         FileAction();

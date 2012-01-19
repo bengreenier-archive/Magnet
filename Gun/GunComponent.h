@@ -6,24 +6,24 @@
 #include "GunEnum.h"
 
 
-class GunComponent
+class GunComponent //! Defines a piece of a gun, so that it can be used to create a whole gun
 {
     public:
         // Default Constructor, take the parts needed to make a component
-        GunComponent();
+        GunComponent();//!< Default Constructor
 
 
-        ~GunComponent();          // Default Constructor, take the parts needed to make a component
+        ~GunComponent(); //!< Default Destructor
 
 
-        sf::Sprite* GetSpritePtr();
-        std::string GetImagePath();                     // Return the components image path
-        int GetWidth();
-        int GetHeight();
-        void SetImagePath(std::string path);
+        sf::Sprite* GetSpritePtr(); //!< Get the Sprite for this component
+        std::string GetImagePath();                     //!< Return the components image path
+        int GetWidth(); //!< Get the width for this components sprite
+        int GetHeight(); //!< Get the height for this components sprite
+        void SetImagePath(std::string path); //!< Set the current image to an image, based on a sprite (Depreciated, should use Resource)
 
-        std::string GetType();                          // Return the components gun type
-        GunEnum::Type type;
+        std::string GetType();                          //!< Return the components gun type
+        GunEnum::Type type;     //!< The type of the component
 
     protected:
     private:

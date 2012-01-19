@@ -1,5 +1,8 @@
 #include "World.h"
 
+//!-----
+
+
 World* World::m_ptr = NULL;
 
 World::World()
@@ -57,6 +60,8 @@ World::World()
     m_hooked=true;
 
     Stat = new WorldStats(m_world1);
+
+
 
 
 }
@@ -244,6 +249,11 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Line(700,180,700,240));
      //World::Access()->Queue.push_back(new Line(100,390,320,390));
      World::Access()->Queue.push_back(new Line(32,435,10,200));
+
+
+
+
+
 }
 //sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
 

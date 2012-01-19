@@ -11,7 +11,7 @@
 #include "ConsoleThread.h"
 #include "FunctionPtrTemplate.h"
 
-class Console
+class Console //! Our threaded console that works while in game. currently uses cout
 {
     public:
         typedef void (*FuncType)();//used for function referencing and calling and etc.
@@ -20,23 +20,23 @@ class Console
         typedef bool (*FuncTypeBool)();
         //need this to work!!! //typedef ALL (*FuncTypeAll)(ALL);
 
-        Console();
-        ~Console();
-        static Console* GetObject();
-        static void Listener(void* UserData);//does the listening/calls execution of command.
+        Console(); //!< Default Constructor
+        ~Console(); //!< Default Destructor
+        static Console* GetObject(); //!< Get the singleton class (only instance) of Console
+        static void Listener(void* UserData);//!< Does the listening and spawns executor.
 
-        static void LaunchConsoleThread(sf::Event evt);
+        static void LaunchConsoleThread(sf::Event evt); //!< Launches the thread.
 
         bool listenerOn;
 
-        static void AddCommand(std::string name,FuncType function);//add a command via name and function reference
-        static void AddCommand(std::string name,FuncTypeBool function);
-        static void AddCommand(std::string name,FuncTypeInt function);
-        static void AddCommand(std::string name,FuncTypeString function);
+        static void AddCommand(std::string name,FuncType function);//!< Add (void* userdata) function to console interface
+        static void AddCommand(std::string name,FuncTypeBool function);//!< Add (bool) function to console interface
+        static void AddCommand(std::string name,FuncTypeInt function);//!< Add (int) function to console interface
+        static void AddCommand(std::string name,FuncTypeString function);//!< Add (string) function to console interface
 
-        static void PrintCommands();//print all command names
+        static void PrintCommands();//!< Print all commands that you can call via console
 
-        static void TellAJoke();
+        static void TellAJoke();//!< Test function, to be sure console is working.
 
         sf::Thread* consoleThread_ptr;  //A pointer to the console thread
 

@@ -4,7 +4,7 @@
 #include <string>
 #include "overlay.h"
 
-class overlayController
+class overlayController //! Old, useless and Depreciated.
 {
     public:
         overlayController();

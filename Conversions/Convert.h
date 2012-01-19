@@ -2,7 +2,7 @@
 #define CONVERT_H
 #include <string>
 
-class Convert
+class Convert //! Provides a way to convert to a string (not sure if in use), Depreciated.
 {
     public:
         Convert();

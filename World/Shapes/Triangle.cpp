@@ -58,6 +58,9 @@ void Triangle::Create()
 
     //set 3 pts
       b2Vec2 vertices[3];
+
+      //perhaps the order of operations is wrong here, maybe we should Get_Position().x*ppm and then size
+
       vertices[0].Set(Get_Position().x*WorldStandards::ppm,Get_Position().y*WorldStandards::ppm);
       //vertices[1].Set(600*WorldStandards::ppm,500*WorldStandards::ppm);
       vertices[1].Set((Get_Position().x+size)*WorldStandards::ppm,(Get_Position().y+size)*WorldStandards::ppm);

@@ -3,19 +3,24 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <vector>
 
-class Animation
+//#include "../Magnet.h"
+
+class Animation //! The class each animation gets wrapped in.
 {
     public:
-        /** Default constructor */
 
-        //each time you want to animate, associate a new Animator, with the path to imageDir (not full path), and time each img is visable for
-        Animation(std::string imageDir,int eachVisibleFor);
-        /** Default destructor */
-        ~Animation();
 
-        //run the animation cycle another frame.
-        void Cycle();
+
+        Animation(std::string imageDir,int eachVisibleFor); //!< Create a new animation from a dir (ex:"poof/") and a frametime for each image to be shown.
+
+
+        ~Animation(); //!< Deconstructor
+
+
+        void Cycle(); //!< run the animation cycle another frame.
+
 
         //------------------------------------------------------
         //REMEBER TO INIT IMAGES... BEFORE ANIMATOR USE    :/
@@ -23,17 +28,26 @@ class Animation
 
     protected:
     private:
-    //set by eachVisibleFor in the constructor.
-    int m_Fps;
 
-    //set by imageDir in constructor
-    std::string m_mainPath;
+    int m_Fps; /*!< set by eachVisibleFor in the constructor. */
 
-    //the image we Render-er.
-    sf::Image* Sprite;
 
-    //set to true when you dont need to run Cycle anymore.
-    bool unhooked;
+    int m_curframe; /*!< the currently shown frame */
+
+
+    int m_cyclecounter; /*!< +1 each cycle */
+
+
+    std::string m_mainPath; /*!< set by imageDir in constructor */
+
+
+    sf::Sprite* Sprite; /*!< the image we Render-er. */
+
+
+    bool m_unhooked; /*!< set to true when you dont need to run Cycle anymore. (until you can remove a hook) */
+
+
+    std::vector<std::string> m_files; /*!< a vector that gets filled with all the image names */
 };
 
-#endif // ANIMATion_H
+#endif // Animation_h

@@ -10,43 +10,36 @@
 #include "GunEnum.h"
 
 
-/*******************************
-This contains all the gun/weapon choices
-allows easy access to the gun peices mostly.
-
-
--Needs a getter, as we shouldn't want more then one instance.
-********************************/
-class GunLocker
+class GunLocker //!< A static class that contains lists of all guns in the game currently, as well as what they do.
 {
     public:
-        GunLocker();
-        static GunLocker* Get();
+        GunLocker(); //!< Default Constructor
+        static GunLocker* Get(); //!< Static singleton class, so this gets the instance
 
-        void         AddFrontComponent(GunComponent* Component);                // Add a front component to the list of available fronts
-        void         AddMiddleComponent(GunComponent* Component);               // Add a middle component to the list of available fronts
-        void         AddRearComponent(GunComponent* Component);                 // Add a rear component to the list of available fronts
+        void         AddFrontComponent(GunComponent* Component);                //!< Add a front component to the list of available fronts
+        void         AddMiddleComponent(GunComponent* Component);               //!< Add a middle component to the list of available fronts
+        void         AddRearComponent(GunComponent* Component);                 //!< Add a rear component to the list of available fronts
 
-        GunComponent GetFrontComponent(int Index);                              // Return a front component from vector[Index]
-        GunComponent GetMiddleComponent(int Index);                             // Return a middle component from vector[Index]
-        GunComponent GetRearComponent(int Index);                               // Return a rear component from vector[Index]
-        GunComponent GetRandomComponent(GunEnum::Component comp, GunEnum::Type type);
+        GunComponent GetFrontComponent(int Index);                              //!< Return a front component from vector[Index]
+        GunComponent GetMiddleComponent(int Index);                             //!< Return a middle component from vector[Index]
+        GunComponent GetRearComponent(int Index);                               //!< Return a rear component from vector[Index]
+        GunComponent GetRandomComponent(GunEnum::Component comp, GunEnum::Type type);//!< Get Random Component, and return it.
 
-        GunComponent GetRandomFrontComponent(GunEnum::Type type);
-        GunComponent GetRandomMiddleComponent(GunEnum::Type type);
-        GunComponent GetRandomRearComponent(GunEnum::Type type);
+        GunComponent GetRandomFrontComponent(GunEnum::Type type); //!< Get random front component (Depreciated)
+        GunComponent GetRandomMiddleComponent(GunEnum::Type type);//!< Get random middle component (Depreciated)
+        GunComponent GetRandomRearComponent(GunEnum::Type type);//!< Get random rear component (Depreciated)
 
-        std::string GetRandomName();
-        int Random(int range);
+        std::string GetRandomName(); //!< Get a random name
+        int Random(int range); //!< generate a random number from 0-range
 
-        int          FrontSize();                                   // Get the front vector's size
-        int          MiddleSize();                                  // Get the middle vector's size
-        int          RearSize();                                    // Get the rear vector's size
+        int          FrontSize();                                   //!< Get the front vector's size
+        int          MiddleSize();                                  //!< Get the middle vector's size
+        int          RearSize();                                    //!< Get the rear vector's size
 
 
-        static void  StaticGunsAdd(GunMaker in);
-        static void  StaticGunsLoad();
-        static GunMaker StaticGunsGet(std::string name);
+        static void  StaticGunsAdd(GunMaker in); //!< Add a static gun
+        static void  StaticGunsLoad(); //!< load all static guns (non changing/survies reload/saves/etc)
+        static GunMaker StaticGunsGet(std::string name); //!< Get a static gun based on name.
 
     protected:
     private:
