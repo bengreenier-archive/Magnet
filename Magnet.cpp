@@ -34,7 +34,7 @@ void Magnet::Hook_Initialize(){
 }
 
 void Magnet::Hook_Setup(){
-    mgui::Group* testmenu = new mgui::Group("test_menu");
+   // mgui::Group* testmenu = new mgui::Group("test_menu");
 
     mgui::Component* testcmp = new mgui::Component("test_cmp1");
     testcmp->SetSize(sf::Vector2f(200, 200));
@@ -42,7 +42,7 @@ void Magnet::Hook_Setup(){
     testcmp->EnableOutline(true);
     testcmp->SetVisible(true);
     testcmp->Create();
-    testmenu->AddComponent(testcmp);
+    //testmenu->AddComponent(testcmp);
 
     testcmp->DebugOn();
 
@@ -55,8 +55,8 @@ void Magnet::Hook_Setup(){
     testcmp2->Create();
     testmenu->AddComponent(testcmp2);
     */
-    testmenu->SetPosition(sf::Vector2f(100, 100));
-    Object()->m_menus.Register(testmenu);
+   // testmenu->SetPosition(sf::Vector2f(100, 100));
+    //Object()->m_menus.Register(testcmp);
 }
 
 bool Magnet::Event_MouseMove(sf::Event evt){

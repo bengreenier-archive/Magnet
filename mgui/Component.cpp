@@ -54,13 +54,7 @@ void Component::SetSize(sf::Vector2f size){
 }
 
 sf::Vector2f Component::GetPosition(){
-    if(m_isChild){
-        std::cout << "I am a child!\n";
-        return m_parent->GetPosition()+sf::Shape::GetPosition();
-    }else{
-        std::cout << "I am not a child!\n";
-        return sf::Vector2f(sf::Shape::GetPosition().x - GetOutlineWidth(), sf::Shape::GetPosition().y - GetOutlineWidth());
-    }
+    return sf::Vector2f(sf::Shape::GetPosition().x - GetOutlineWidth(), sf::Shape::GetPosition().y - GetOutlineWidth());
 }
 
 
@@ -145,11 +139,9 @@ void Component::DebugOff(){
 }
 
 void Component::_CreateDebugLines(){
-    std::cout << "[Debug] Child: " << m_isChild << std::endl;
-    std::cout << "[Debug] Pos.x1 = " << GetPosition().x << std::endl;
-    std::cout << "[Debug] Pos.y1 = " << GetPosition().y << std::endl;
-    std::cout << "[Debug] Pos.x 2 = " << GetPosition().x+GetSize().x << std::endl;
-    std::cout << "[Debug] Pos.y2 = " << GetPosition().y << std::endl;
+    std::cout << m_name << ": GETTING X POSITION\n";
+    float xpos  =   this->GetPosition().x;
+    std::cout << m_name << ": DONE GETTING X POSITION\t"<< xpos << "\n";
     debug_size_top      = sf::Shape::Line(GetPosition().x, GetPosition().y, GetPosition().x+GetSize().x, GetPosition().y, 10, sf::Color(255, 255, 255));
     /*debug_size_left     = sf::Shape::Line(GetPosition().x, GetPosition().y, GetPosition().x, GetPosition().y+GetSize().y, 1, sf::Color(255, 255, 255));
     debug_size_right    = sf::Shape::Line(GetPosition().x+GetSize().x, GetPosition().y, GetPosition().x, GetPosition().y+GetSize().y, 1, sf::Color(255, 255, 255));
@@ -163,12 +155,12 @@ void Component::_CreateDebugLines(){
 
 void Component::_RemoveDebugLines(){
     Renderer::RemoveLink(&debug_size_top);
-    Renderer::RemoveLink(&debug_size_left);
+    /*Renderer::RemoveLink(&debug_size_left);
     Renderer::RemoveLink(&debug_size_right);
-    Renderer::RemoveLink(&debug_size_bottom);
+    Renderer::RemoveLink(&debug_size_bottom);*/
 
     debug_size_top.~Drawable();
-    debug_size_left.~Drawable();
+    /*debug_size_left.~Drawable();
     debug_size_right.~Drawable();
-    debug_size_bottom.~Drawable();
+    debug_size_bottom.~Drawable();*/
 }
