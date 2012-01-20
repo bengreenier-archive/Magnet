@@ -124,6 +124,8 @@ class Renderer
        ////////////////////////////////////////////////
        int GetLinkIndex(sf::Drawable* drawable_ptr);
 
+       int GetLinkDepth(sf::Drawable* drawable_ptr);
+
        ////////////////////////////////////////////////
        ///  Checks to see if a drawable is linked
        ////////////////////////////////////////////////

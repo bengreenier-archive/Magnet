@@ -13,6 +13,7 @@ namespace mgui {
 }
 
 #include "Component.h"
+#include "Panel.h"
 #include "Group.h"
 #include "Registry.h"
 

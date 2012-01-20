@@ -38,8 +38,11 @@ void EventHandler::AddListener(EventListener* listener_ptr){
 void EventHandler::doCallEvent(sf::Event& evt, listener_map_pair_t lrange){
     listener_map_it itr;
 
-    for(itr = lrange.first; itr != lrange.second; itr++ )
-        itr->second->onHear(evt);
+    for(itr = lrange.first; itr != lrange.second; itr++ ){
+        if(!itr->second->onHear(evt)){
+            break;
+        }
+    }
 
 }
 EventHandler* EventHandler::Object(){

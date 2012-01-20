@@ -11,6 +11,7 @@ Resource:
 EventHandler:
       *Add ability to remove events
 mgui:
+	*Components get focus when clicked
 	*Change Component to a pure virtual class (All mGUI should inherirt this)
 		-Component functionality will be replaced by Panel
       	*Comment methods

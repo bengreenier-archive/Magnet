@@ -42,8 +42,9 @@ class Magnet
         /// Called on space press
         //////////////////////////////////////////
         static bool Event_SpacePressed(sf::Event evt);
-        static bool Event_MouseClick(sf::Event evt);
+        static bool Event_MouseButtonReleased(sf::Event evt);
         static bool Event_MouseMove(sf::Event evt);
+        static bool Event_MouseButtonPressed(sf::Event evt);
 
         //////////////////////////////////////////
         /// Start the game

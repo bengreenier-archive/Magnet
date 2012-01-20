@@ -193,6 +193,13 @@ int Renderer::GetLinkIndex(sf::Drawable* drawable_ptr){
     return -1;
 }
 
+int Renderer::GetLinkDepth(sf::Drawable* drawable_ptr){
+    int linkIndex = GetLinkIndex(drawable_ptr);
+    if(linkIndex == -1) return 0;
+
+    return links[linkIndex].depth;
+}
+
 
 void Renderer::SetLinkLayer(sf::Drawable* drawable_ptr, Layer newLayer){
     Renderer::RemoveLink(drawable_ptr);

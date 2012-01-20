@@ -7,6 +7,8 @@ Group::Group(const char* name) : Component(name)
     EnableFill(false);
     EnableOutline(false);
     SetOutlineWidth(0);
+
+    DebugOn();
 }
 
 Group::~Group()
@@ -38,21 +40,23 @@ bool Group::ComponentExists(Component* checkcmp){
 
 
 
-void Group::onEvent(sf::Event evt){
+bool Group::onMouseRelease(sf::Vector2f mouse_pos){
+    if(m_component_map.empty()) return true;
+
     component_map_iterator_type     cmp_map_it;
 
-    switch(evt.Type){
-        case sf::Event::MouseButtonReleased:
-            cmp_map_it = m_component_map.begin();
-            while(cmp_map_it != m_component_map.end()){
-                if(cmp_map_it->second->CheckBounds(sf::Vector2f(evt.MouseButton.X, evt.MouseButton.Y))){
-                    cmp_map_it->second->onClick();
-                }
-
-                cmp_map_it++;
+    cmp_map_it = m_component_map.begin();
+    while(cmp_map_it != m_component_map.end()){
+        if(cmp_map_it->second->CheckBounds(mouse_pos)){
+            if(!cmp_map_it->second->onMouseRelease(mouse_pos)){
+                return false;
             }
-            break;
+        }
+
+        cmp_map_it++;
     }
+
+    return true;
 }
 
 const char* Group::GetName(){ return m_name; }

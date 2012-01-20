@@ -1,8 +1,11 @@
 #ifndef REGISTRY_H
 #define REGISTRY_H
 
-#include <map>
-#include "Group.h"
+#include <vector>
+#include <queue>
+#include "../Game/Exception.h"
+#include "../Game/Renderer.h"
+#include "Component.h"
 
 ////////////////////////////////////////////////////////////////
 ///     This class acts as medium through
@@ -18,8 +21,9 @@ namespace mgui {
             ///     map to map a unique name
             ///     to the group of components
             ////////////////////////////////
-            typedef std::map<const char*, Group*>           group_map_type;
-            typedef std::map<const char*, Group*>::iterator  group_map_iterator_type;
+            typedef std::vector<Component*>                    cmp_vect_type;
+            typedef std::vector<Component*>::iterator          cmp_vect_iterator_type;
+            typedef std::queue<Component*>                       cmp_queue_type;
 
             Registry();
             virtual ~Registry();
@@ -28,39 +32,41 @@ namespace mgui {
             /// Register a group with the
             /// registry
             ////////////////////////////////
-            void Register(Group* newGroup);
+            void Register(Component* newGroup);
 
             ////////////////////////////////
             /// Get a group by it's name
             ////////////////////////////////
-            Group* GetByName(const char* groupName);
+            Component* GetByName(const char* groupName) throw(Exception);
+
+            Component*  GetComponentsByCoord(sf::Vector2f coord);
 
             ////////////////////////////////
             /// Check if a group exists
             ////////////////////////////////
-            bool GroupExists(Group* checkgrp);
-            bool GroupExists(const char* grpname);
+            bool ComponentExists(Component* checkgrp, Component* cmp = NULL);
+            bool ComponentExists(const char* grpname, Component* cmp = NULL);
 
             ////////////////////////////////
             /// Called when an event occurs
             ////////////////////////////////
-            void onEvent(sf::Event evt);
+            bool onEvent(sf::Event evt);
         protected:
         private:
 
-            group_map_type          m_group_map;
-            group_map_iterator_type m_group_map_it;
+            cmp_vect_type              m_cmp_vect;
+            cmp_vect_iterator_type          m_cmp_vect_it;
 
 
 
             ////////////////////////////////
             /// Begin group iteration
             ////////////////////////////////
-            void group_iterator_start();
+            bool cmp_iterator_start();
             ////////////////////////////////
             /// Get group iteration
             ////////////////////////////////
-            group_map_iterator_type get_iterator();
+            cmp_vect_iterator_type get_iterator();
             ////////////////////////////////
             /// Iterate
             /// returns false when map.end()

@@ -45,9 +45,10 @@ namespace mgui{
             bool ComponentExists(Component* checkcmp);
 
             ////////////////////////////////
-            /// Call component's events
+            /// Pass the click call to the
+            /// group's components
             ////////////////////////////////
-            void onEvent(sf::Event evt);
+            virtual bool onMouseRelease(sf::Vector2f mouse_pos);
         protected:
         private:
             const char* m_name;

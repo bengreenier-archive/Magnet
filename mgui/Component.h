@@ -5,10 +5,8 @@
 #include <iostream>
 
 #include "Sizeable.h"
-#include "Positionable.h"
 
 namespace mgui{
-    class Group;
     class Component : virtual public sf::Shape, virtual public Sizeable
     {
         public:
@@ -19,15 +17,15 @@ namespace mgui{
 
             virtual void Create();
 
-            void SetVisible(bool toggle);
-            bool GetVisible(bool toggle) { return m_visible; }
+            virtual void SetVisible(bool toggle);
+            virtual bool GetVisible(bool toggle) { return m_visible; }
 
-            void EnableOutline(bool enable);
+            virtual void EnableOutline(bool enable);
 
-            void SetOutlineColor(sf::Color outlineCol);
-            sf::Color GetOutlineColor();
-            void SetColor(sf::Color color);
-            sf::Color GetColor();
+            virtual void SetOutlineColor(sf::Color outlineCol);
+            virtual sf::Color GetOutlineColor();
+            virtual void SetColor(sf::Color color);
+            virtual sf::Color GetColor();
 
             //////////////////////////////////////////
             /// Overrides sf::Shape::GetPosition
@@ -35,7 +33,7 @@ namespace mgui{
             /// use sf::Shape::GetPosition for the
             /// position without the outline
             //////////////////////////////////////////
-            sf::Vector2f GetPosition();
+            virtual sf::Vector2f GetPosition();
 
             //////////////////////////////////////////
             /// Overrides Sizeable::SetSize
@@ -52,11 +50,11 @@ namespace mgui{
             //////////////////////////////////////////
             virtual sf::Vector2f GetSize();
 
-            void SetName(const char* newName){ m_name = newName; }
-            const char* GetName(){ return m_name; }
+            virtual void SetName(const char* newName){ m_name = newName; }
+            virtual const char* GetName(){ return m_name; }
 
-            void SetParent(Component* parent);
-            Component* GetParent(){return m_parent;}
+            virtual void SetParent(Component* parent);
+            virtual Component* GetParent(){return m_parent;}
 
             /////////////////////////////////////////////////////////////
             /// Check if an sf::Vector2f is within the bounds of this
@@ -64,21 +62,34 @@ namespace mgui{
             /////////////////////////////////////////////////////////////
             virtual bool CheckBounds(sf::Vector2f coord);
 
-            virtual bool onClick(){ std::cout << "You clicked " << m_name << std::endl; return true; };
-            //virtual void Update();
+            /////////////////////////////////////////////////////////////
+            /// Update Component
+            /////////////////////////////////////////////////////////////
+            virtual void Format();
+
+            ////////////////////////////////
+            /// Handle component's events
+            /// this essestially maps event
+            /// types to their corresponding
+            /// onNAME function
+            ////////////////////////////////
+            virtual bool onMouseEvent(sf::Event evt);
+
+            /////////////////////////////////////
+            /// Pure virtual mouse click handler
+            /////////////////////////////////////
+            virtual bool onMouseRelease(sf::Vector2f mouse_pos)  =   0;
+            virtual bool onMousePress(sf::Vector2f mouse_pos)  =   0;
+            virtual bool onMouseMove(sf::Vector2f mouse_pos)  =   0;
 
             void DebugOn();
             void DebugOff();
-
-            void _CreateDebugLines();
-            void _RemoveDebugLines();
 
         protected:
         private:
             sf::Color       m_outlineColor;
             sf::Color       m_color;
 
-            virtual void format();
             void init(float x, float y, float width, float height);
 
             const char* m_name;
@@ -89,10 +100,18 @@ namespace mgui{
             bool m_debug;
             Component* m_parent;
 
+            //Debug things
+            sf::Color debug_color;
+            sf::Color debug_color_focus;
             sf::Shape debug_size_top;
             sf::Shape debug_size_left;
             sf::Shape debug_size_right;
             sf::Shape debug_size_bottom;
+
+
+            void _CreateDebugLines();
+            void _RemoveDebugLines();
+            void _UpdateDebugLines();
     };
 }
 
