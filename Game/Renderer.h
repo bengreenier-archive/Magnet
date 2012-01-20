@@ -49,6 +49,11 @@ class Renderer
             std::string why;
         };
 
+        struct Link{
+            sf::Drawable*   object;
+            Layer           layer;
+            int             depth;
+        };
 
         ~Renderer();
 
@@ -63,24 +68,6 @@ class Renderer
         static sf::RenderWindow* GetRenderWindow();
 
         /*********************************************
-            "Check if the screen is valid"
-
-            returns TRUE if the screen is valid
-                    FALSE if the screen is invalid, aka doesn't represent the current data
-        *********************************************/
-        bool isValid();
-
-        /*********************************************
-            "Force the screen to redraw"
-        *********************************************/
-        static void invalidate();
-
-        /*********************************************
-            "sets m_isValid to true"
-        *********************************************/
-        void validate();
-
-        /*********************************************
             "Draw the screen"
         *********************************************/
         static void Render(void* threadData);
@@ -90,11 +77,13 @@ class Renderer
 
             When an object is mapped, it is assinged a unique index
         *********************************************/
-        static void CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth);
-        static void CreateLink(sf::Drawable* drawable_ptr, Layer layer);
-        static void CreateLink(sf::Drawable* drawable_ptr);
+        static Link* CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth);
+        static Link* CreateLink(sf::Drawable* drawable_ptr, Layer layer);
+        static Link* CreateLink(sf::Drawable* drawable_ptr);
+        static void CreateLink(Link* link_ptr);
 
         static void RemoveLink(sf::Drawable* drawable_ptr);
+        static void RemoveLink(Link* link_ptr);
         static void SetLinkLayer(sf::Drawable* drawable_ptr, Layer newLayer);
         /*********************************************
             "Close the RenderWindow"
@@ -107,45 +96,20 @@ class Renderer
         *********************************************/
         static void SetRenderWindow(sf::RenderWindow& Window);
 
+        Link* GetLinkByDrawable(sf::Drawable* drawable_ptr);
+        bool LinkExists(Renderer::Link* link_ptr);
+        int GetLinkIndex(Link* link_ptr);
+
         static void SetRenderThread(sf::Thread& renderThread);
-
-        /*********************************************
-            "Change the layer of a drawable"
-        *********************************************/
-        // static void SetLayer(sf::Drawable* drawable_ptr, Layer newLayer);
-        /*********************************************
-            "Change the depth of a drawable"
-        *********************************************/
-       // static void SetDepth(sf::Drawable* drawable_ptr, int newDepth);
-
-       ////////////////////////////////////////////////
-       ///  Gets the unique index assigned to a link
-       ///  returns -1 if the index is not found
-       ////////////////////////////////////////////////
-       int GetLinkIndex(sf::Drawable* drawable_ptr);
-
-       int GetLinkDepth(sf::Drawable* drawable_ptr);
-
-       ////////////////////////////////////////////////
-       ///  Checks to see if a drawable is linked
-       ////////////////////////////////////////////////
-       bool LinkExists(sf::Drawable* drawable_ptr);
-
        static sf::Mutex* Mutex();
 
     protected:
         Renderer();
     private:
 
-        struct link{
-            sf::Drawable*   object;
-            Layer           layer;
-            int             depth;
-        };
-
-        typedef vector<link>            links_t;
-        typedef vector<link>::iterator  links_iterator_t;
-        typedef queue<link>             link_queue_t;
+        typedef vector<Link*>            links_t;
+        typedef vector<Link*>::iterator  links_iterator_t;
+        typedef queue<Link*>             link_queue_t;
 
 
 
@@ -159,8 +123,8 @@ class Renderer
         link_queue_t     newlink_queue;
         link_queue_t      delete_queue;
 
-        void _RemoveLink(link oldLink);
-        void _CreateLink(link newLink);
+        void _RemoveLink(Link* oldLink);
+        void _CreateLink(Link* newLink);
 
         static Renderer*               RendererPtr;
 

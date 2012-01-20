@@ -7,6 +7,7 @@
 #include "Sizeable.h"
 
 namespace mgui{
+    class Registry;
     class Component : virtual public sf::Shape, virtual public Sizeable
     {
         public:
@@ -56,6 +57,11 @@ namespace mgui{
             virtual void SetParent(Component* parent);
             virtual Component* GetParent(){return m_parent;}
 
+            virtual void SetRegistry(Registry* reg);
+            virtual Registry* GetRegistry();
+
+            virtual bool HasFocus();
+
             /////////////////////////////////////////////////////////////
             /// Check if an sf::Vector2f is within the bounds of this
             /// component
@@ -85,6 +91,9 @@ namespace mgui{
             void DebugOn();
             void DebugOff();
 
+
+            virtual int GetLinkIndex(){ return m_link_index; }
+
         protected:
         private:
             sf::Color       m_outlineColor;
@@ -98,7 +107,9 @@ namespace mgui{
             bool m_created;
             bool m_visible;
             bool m_debug;
-            Component* m_parent;
+            int m_link_index;
+            Component*  m_parent;
+            Registry*   m_registry;
 
             //Debug things
             sf::Color debug_color;
@@ -111,7 +122,7 @@ namespace mgui{
 
             void _CreateDebugLines();
             void _RemoveDebugLines();
-            void _UpdateDebugLines();
+            void _UpdateDebugLines(sf::Color drawColor);
     };
 }
 

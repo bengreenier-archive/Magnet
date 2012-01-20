@@ -5,9 +5,9 @@ Renderer*               Renderer::RendererPtr         = NULL;
 
 Renderer::Renderer()
 {
-    m_cindex    =   0;
-    m_isValid = false;
-    m_shouldDraw = true;
+    m_cindex        =   0;
+    m_isValid       = false;
+    m_shouldDraw    = true;
 
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
 }
@@ -88,23 +88,24 @@ void Renderer::Render(void* threadData){
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
         for(int i=0; i < GetObject()->links.size(); i++){
-            GetRenderWindow()->Draw(*GetObject()->links[i].object);
+            GetRenderWindow()->Draw(*GetObject()->links[i]->object);
         }
 
         GetRenderWindow()->Display();
     }
 }
 
-void Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){
-    link newLink;
-    newLink.object = drawable_ptr;
-    newLink.layer  = layer;
-    newLink.depth  = depth;
+Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){
+    Link* newLink   =   new Link();
+    newLink->object  = drawable_ptr;
+    newLink->layer   = layer;
+    newLink->depth   = depth;
 
     GetObject()->newlink_queue.push(newLink);
+    return newLink;
 }
 
-void Renderer::_CreateLink(Renderer::link newLink){
+void Renderer::_CreateLink(Renderer::Link* newLink){
     if(GetObject()->links.empty()){
         GetObject()->links.push_back(newLink);
     }else{
@@ -114,13 +115,13 @@ void Renderer::_CreateLink(Renderer::link newLink){
 
         for(it = links.begin(); it != links.end(); it++){
 
-            if(it->layer > newLink.layer){
+            if((*it)->layer > newLink->layer){
                 insertBefore = true;
-            }else if(it->layer == newLink.layer){
-                if(it->depth > newLink.depth){
+            }else if((*it)->layer == newLink->layer){
+                if((*it)->depth > newLink->depth){
                     insertBefore = true;
-                }else if(it->depth == newLink.depth){
-                    if((it+1) == links.end() || (it+1)->layer != newLink.layer || (it+1)->depth != newLink.depth){
+                }else if((*it)->depth == newLink->depth){
+                    if((it+1) == links.end() || (*(it+1))->layer != newLink->layer || (*(it+1))->depth != newLink->depth){
                         insertAfter = true;
                     }
                 }
@@ -145,47 +146,63 @@ void Renderer::_CreateLink(Renderer::link newLink){
 }
 
 
-void Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer){
-    Renderer::CreateLink(drawable_ptr, layer, 0);
+Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer){
+    return Renderer::CreateLink(drawable_ptr, layer, 0);
 }
 
 
-void Renderer::CreateLink(sf::Drawable* drawable_ptr){
-    Renderer::CreateLink(drawable_ptr, Renderer::GameLayer, 0);
+Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr){
+    return Renderer::CreateLink(drawable_ptr, Renderer::GameLayer, 0);
 }
 
 void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
-    int linkIndex = GetObject()->GetLinkIndex(drawable_ptr);
+    Link* link = GetObject()->GetLinkByDrawable(drawable_ptr);
 
-    if(linkIndex == -1) return;
+    if(link == NULL) return;
 
     //GetObject()->links.erase(GetObject()->links.begin()+linkIndex);
-    GetObject()->delete_queue.push(GetObject()->links[linkIndex]);
+    GetObject()->delete_queue.push(link);
 }
 
-void Renderer::_RemoveLink(link oldLink){
-    int linkIndex = GetLinkIndex(oldLink.object);
+void Renderer::RemoveLink(Link* link_ptr){
+    if(GetObject()->LinkExists(link_ptr)){
+        GetObject()->delete_queue.push(link_ptr);
+    }
+}
+
+void Renderer::_RemoveLink(Link* oldLink){
+    int linkIndex = GetLinkIndex(oldLink);
 
     if(linkIndex == -1) return;
 
     links.erase(links.begin()+linkIndex);
 }
 
+Renderer::Link* Renderer::GetLinkByDrawable(sf::Drawable* drawable_ptr){
+    Link* link = NULL;
 
+    for(int i = 0; i < links.size(); i++){
+        if(links[i]->object == drawable_ptr){
+            link = links[i];
+        }
+    }
 
-bool Renderer::LinkExists(sf::Drawable* drawable_ptr){
-    if(GetLinkIndex(drawable_ptr) != -1){
+    return link;
+}
+
+bool Renderer::LinkExists(Renderer::Link* link_ptr){
+    if(GetLinkIndex(link_ptr) != -1){
         return true;
     }
 
     return false;
 }
 
-int Renderer::GetLinkIndex(sf::Drawable* drawable_ptr){
+int Renderer::GetLinkIndex(Link* link_ptr){
     links_iterator_t it;
 
     for(int i = 0; i < links.size(); i++){
-        if(links[i].object == drawable_ptr){
+        if(links[i] == link_ptr){
             return i;
         }
     }
@@ -193,15 +210,7 @@ int Renderer::GetLinkIndex(sf::Drawable* drawable_ptr){
     return -1;
 }
 
-int Renderer::GetLinkDepth(sf::Drawable* drawable_ptr){
-    int linkIndex = GetLinkIndex(drawable_ptr);
-    if(linkIndex == -1) return 0;
-
-    return links[linkIndex].depth;
-}
-
-
 void Renderer::SetLinkLayer(sf::Drawable* drawable_ptr, Layer newLayer){
-    Renderer::RemoveLink(drawable_ptr);
-    Renderer::CreateLink(drawable_ptr, newLayer);
+    //Renderer::RemoveLink(drawable_ptr);
+    //Renderer::CreateLink(drawable_ptr, newLayer);
 }

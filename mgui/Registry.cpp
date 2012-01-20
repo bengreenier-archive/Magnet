@@ -4,7 +4,7 @@ using namespace mgui;
 
 Registry::Registry()
 {
-    //ctor
+    m_focus = NULL;
 }
 
 Registry::~Registry()
@@ -15,6 +15,7 @@ Registry::~Registry()
 void Registry::Register(Component* newCmp){
     if(ComponentExists(newCmp)) return;
 
+    newCmp->SetRegistry(this);
     m_cmp_vect.push_back(newCmp);
 }
 
@@ -77,17 +78,46 @@ bool Registry::onEvent(sf::Event evt){
     do{
         if(evt.Type == sf::Event::MouseWheelMoved || evt.Type == sf::Event::MouseMoved || evt.Type == sf::Event::MouseButtonPressed || evt.Type == sf::Event::MouseButtonReleased){
             cmp_queue_type component_q;
+
             if(evt.Type == sf::Event::MouseMoved){
                 for(int i=0; i<m_cmp_vect.size(); i++)
                     component_q.push(m_cmp_vect[i]);
 
             }else{
                 const sf::Input&    input = Renderer::GetRenderWindow()->GetInput();
-                Component* component = GetComponentsByCoord(sf::Vector2f(input.GetMouseX(), input.GetMouseY()));
+                Component* cmp;
+                cmp_queue_type cmp_queue = GetComponentsByCoord(sf::Vector2f(input.GetMouseX(), input.GetMouseY()));
 
-                if(component == NULL) return true;
+                if(cmp_queue.empty()) return true;
 
-                component_q.push(component);
+                //If user has pressed the mouse down, give focus to the top
+                //of the stack and pass the event to that Component
+                if(sf::Event::MouseButtonPressed == evt.Type){
+                    //Find the top component
+                    SetFocus(GetTop(cmp_queue));
+                    cmp = GetFocus();
+                }else{
+
+
+
+                //If there is no focus, find the top Component
+                if(GetFocus() == NULL){
+                    SetFocus(GetTop(cmp_queue));
+                    cmp = GetFocus();
+                }else{
+                    //Check to see if the focus is in the stack
+                    int count = 0;
+                    while(count < cmp_queue.size()){
+                        if(cmp_queue.front() == GetFocus()){
+                            cmp = cmp_queue.front();
+                            break;
+                        }
+                        count++;
+                    }
+                }
+                }
+                component_q.push(cmp);
+
             }
 
             while(!component_q.empty()){
@@ -103,36 +133,64 @@ bool Registry::onEvent(sf::Event evt){
     return true;
 }
 
-Component* Registry::GetComponentsByCoord(sf::Vector2f coord){
-    Component* top_cmp = NULL;
-    int         top_i   =   -1;
-    int         checkDepth = 0;
-    int         topDepth = 0;
+Component* Registry::GetTop(cmp_queue_type stack){
+    Component* cmp_top = NULL;
+    int top_depth;
+    int check_depth;
+
+    while(!stack.empty()){
+        if(GetFocus() != NULL){
+            if(stack.front()->HasFocus()){
+                cmp_top = stack.front();
+                break;
+            }
+        }
+
+        if(cmp_top == NULL){
+            cmp_top = stack.front();
+        }else{
+            top_depth = 0;
+            check_depth = 0;
+
+            if(top_depth<check_depth){
+                cmp_top = stack.front();
+            }
+        }
+
+        stack.pop();
+    }
+
+    return cmp_top;
+}
+
+Registry::cmp_queue_type Registry::GetComponentsByCoord(sf::Vector2f coord){
+    cmp_queue_type found;
 
     for(int i=0; i<m_cmp_vect.size(); i++){
         if(m_cmp_vect[i]->CheckBounds(coord)){
-            if(top_cmp == NULL){
-                top_cmp = m_cmp_vect[i];
-                top_i = i;
-            }else{
-                checkDepth = Renderer::GetObject()->GetLinkDepth(static_cast<sf::Drawable*>(m_cmp_vect[i]));
-                topDepth = Renderer::GetObject()->GetLinkDepth(static_cast<sf::Drawable*>(top_cmp));
-
-                if(checkDepth == topDepth){
-                    if(i > top_i){
-                        top_cmp = m_cmp_vect[i];
-                        top_i = i;
-                    }
-                }else if(checkDepth > topDepth){
-                    top_cmp = m_cmp_vect[i];
-                    top_i   =   i;
-                }
-            }
+            found.push(m_cmp_vect[i]);
         }
     }
 
-    return top_cmp;
+    return found;
 }
 
+
+Component* Registry::GetFocus(){
+    return m_focus;
+}
+
+void Registry::SetFocus(Component* cmp){
+    if(m_focus == NULL){
+        m_focus = cmp;
+    }else{
+        std::cout << "Setting new focus to " << cmp->GetName() << std::endl;
+        Component* tmp = m_focus;
+        std::cout << "Stored old focus in" << tmp->GetName() << std::endl;
+        m_focus = cmp;
+        std::cout << "Set new focus, formatting old focus.\n";
+        tmp->Format();
+    }
+}
 
 Registry::cmp_vect_iterator_type Registry::get_iterator(){ return m_cmp_vect_it; }

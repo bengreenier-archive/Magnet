@@ -27,6 +27,7 @@ Magnet::~Magnet()
 void Magnet::Hook_Initialize(){
     try{
         Resource::AddFile(Resource::Object()->ErrorImage);
+        Resource::AddDir("poof/", true);
     }
 
     catch(Exception e){
@@ -38,26 +39,26 @@ void Magnet::Hook_Setup(){
    // mgui::Group* testmenu = new mgui::Group("test_menu");
 
     mgui::Panel* testcmp = new mgui::Panel("test_cmp1");
-    testcmp->DebugOn();
-    testcmp->SetPosition(sf::Vector2f(100, 100));
+    //testcmp->DebugOn();
+    /*testcmp->SetPosition(sf::Vector2f(100, 100));
     testcmp->SetSize(sf::Vector2f(200, 200));
     testcmp->SetColor(sf::Color(0, 255, 255, 255));
     testcmp->SetOutlineColor(sf::Color(0, 155, 155, 255));
     testcmp->SetOutlineWidth(5);
     testcmp->EnableOutline(true);
-    testcmp->SetVisible(true);
-    testcmp->Format();
+    testcmp->Format();*/
+    testcmp->SetVisible(false);
     testcmp->Create();
     //testmenu->AddComponent(testcmp);
 
-    mgui::Panel* testcmp2 = new mgui::Panel("test_cmp2");
-    testcmp2->DebugOn();
+    /*mgui::Panel* testcmp2 = new mgui::Panel("test_cmp2");
+    //testcmp2->DebugOn();
     testcmp2->SetSize(sf::Vector2f(200, 200));
     testcmp2->SetPosition(sf::Vector2f(150, 150));
     testcmp2->SetColor(sf::Color(255, 255, 255, 255));
     testcmp2->Format();
-    testcmp2->SetVisible(true);
-    testcmp2->Create();
+    testcmp2->SetVisible(true);*/
+    //testcmp2->Create();
 
     /*mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
     testcmp2->SetPosition(testcmp->GetPosition().x+testcmp->GetSize().x, 0);
@@ -70,7 +71,7 @@ void Magnet::Hook_Setup(){
     */
    // testmenu->SetPosition(sf::Vector2f(100, 100));
     Object()->m_menus.Register(testcmp);
-    Object()->m_menus.Register(testcmp2);
+    //Object()->m_menus.Register(testcmp2);
 }
 
 bool Magnet::Event_MouseMove(sf::Event evt){

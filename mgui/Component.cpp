@@ -1,8 +1,7 @@
 #include "Component.h"
 #include "../Game/Renderer.h"
+#include "Registry.h"
 
-
-#include "Group.h"
 using namespace mgui;
 
 Component::Component(const char* name)
@@ -25,6 +24,7 @@ void Component::init(float x, float y, float width, float height){
     m_debug     = false;
     m_created   = false;
     m_isChild   = false;
+    m_registry  = NULL;
     debug_color         = sf::Color(255, 0, 0, 255);
     debug_color_focus   = sf::Color(0, 255, 0, 255);
 
@@ -35,6 +35,7 @@ void Component::init(float x, float y, float width, float height){
     SetVisible(false);
     SetOutlineWidth(0);
     SetOutlineColor(sf::Color(255, 0, 0, 255));
+    SetColor(sf::Color(255, 255, 255));
 }
 
 bool Component::CheckBounds(sf::Vector2f coord){
@@ -90,7 +91,11 @@ void Component::Format(){
     }
 
     if(m_debug){
-        _UpdateDebugLines();
+        if(HasFocus()){
+            _UpdateDebugLines(debug_color_focus);
+        }else{
+            _UpdateDebugLines(debug_color);
+        }
     }
 }
 
@@ -141,7 +146,6 @@ bool Component::onMouseEvent(sf::Event evt){
     switch(evt.Type){
         case sf::Event::MouseButtonReleased:
             mouse_pos = sf::Vector2f(evt.MouseButton.X, evt.MouseButton.Y);
-            std::cout << "Mouse released on " << GetName() << std::endl;
             return onMouseRelease(mouse_pos);
             break;
         case sf::Event::MouseMoved:
@@ -160,6 +164,20 @@ bool Component::onMouseEvent(sf::Event evt){
     return true;
 }
 
+void Component::SetRegistry(Registry* reg){
+    m_registry = reg;
+}
+Registry* Component::GetRegistry(){
+    return m_registry;
+}
+
+bool Component::HasFocus(){
+    if(GetRegistry() == NULL) return false;
+    if(GetRegistry()->GetFocus() == NULL) return false;
+
+    return (bool)(GetRegistry()->GetFocus() == this);
+}
+
 void Component::DebugOn(){
     m_debug = true;
 
@@ -173,14 +191,15 @@ void Component::DebugOff(){
 }
 
 void Component::_CreateDebugLines(){
-    int depth = Renderer::GetObject()->GetLinkDepth(static_cast<sf::Drawable*>(this))+1;
+    //int depth = m_link->depth+1;
+    int depth = 1;
     Renderer::CreateLink(&debug_size_top, Renderer::MenuLayer, depth);
     Renderer::CreateLink(&debug_size_left, Renderer::MenuLayer, depth);
     Renderer::CreateLink(&debug_size_right, Renderer::MenuLayer, depth);
     Renderer::CreateLink(&debug_size_bottom, Renderer::MenuLayer, depth);
 }
 
-void Component::_UpdateDebugLines(){
+void Component::_UpdateDebugLines(sf::Color drawColor){
     float x             =   GetPosition().x;
     float y             =   GetPosition().y;
     float width         =   GetSize().x;
@@ -188,10 +207,10 @@ void Component::_UpdateDebugLines(){
     float line_width    =   1;
 
     //
-    debug_size_top      = sf::Shape::Line(x-line_width, y-line_width, x+width+line_width, y-line_width, line_width, debug_color);
-    debug_size_left     = sf::Shape::Line(x, y, x, y+height+line_width, line_width, debug_color);
-    debug_size_right    = sf::Shape::Line(x+width+line_width, y-line_width, x+width+line_width, y+height, line_width, debug_color);
-    debug_size_bottom   = sf::Shape::Line(x-line_width, y+height, x+width+line_width, y+height, line_width, debug_color);
+    debug_size_top      = sf::Shape::Line(x-line_width, y-line_width, x+width+line_width, y-line_width, line_width, drawColor);
+    debug_size_left     = sf::Shape::Line(x, y, x, y+height+line_width, line_width, drawColor);
+    debug_size_right    = sf::Shape::Line(x+width+line_width, y-line_width, x+width+line_width, y+height, line_width, drawColor);
+    debug_size_bottom   = sf::Shape::Line(x-line_width, y+height, x+width+line_width, y+height, line_width, drawColor);
 }
 
 void Component::_RemoveDebugLines(){
