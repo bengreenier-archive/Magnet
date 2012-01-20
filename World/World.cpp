@@ -289,7 +289,6 @@ bool World::Event_KeyPresed(sf::Event evt){
 
 bool World::Event_Click(sf::Event evt)
 {
-    std::cout << "World click...\n";
     int radius = 5;
     int i=0; //if for is commented out, just do this for now.
     int w = radius*2;
