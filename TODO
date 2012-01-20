@@ -8,19 +8,18 @@ IMPROVE EFFICIENCY EVERYWHERE
 Resource: 
       *Add Fonts, Config, and Sounds
 	*After config is added, allow for Search directories to be set in config
+	*Automagically load resource dir
 EventHandler:
       *Add ability to remove events
 mgui:
 	*Components get focus when clicked
-	*Change Component to a pure virtual class (All mGUI should inherirt this)
-		-Component functionality will be replaced by Panel
       	*Comment methods
-	*Use Sizable and Positionable on component, Be sure to cast component to sf::Shape* when 
-	linking to Renderer
 Exceptions*
 Hooks:
       *Add ability to remove hooks
       *Apply BaseListener/Parameter to hooks to allow arguments to be passes
+Renderer:
+	*Use lists rather than vectors (more efficient)
 [DIRECTORY CHANGES] 
       Move directory "Game/Handlers/" to "Game/Handler"
             -Classes in folder should be named after their
