@@ -51,6 +51,10 @@ namespace mgui {
             Component* GetFocus();
             void        SetFocus(Component* cmp);
 
+            int GetNextDepth();
+
+            void Remove(Component* remove);
+
             ////////////////////////////////
             /// Called when an event occurs
             ////////////////////////////////
@@ -61,7 +65,7 @@ namespace mgui {
             cmp_vect_type              m_cmp_vect;
             cmp_vect_iterator_type          m_cmp_vect_it;
             Component*      m_focus;
-
+            int         m_nextdepth;
 
             ////////////////////////////////
             /// Begin group iteration

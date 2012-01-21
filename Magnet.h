@@ -77,8 +77,12 @@ class Magnet
         //////////////////////////////////////////
         void ChangeState(State::_type newState);
 
+        void Debug_CreateMenu();
+
 
         MouseTrail m_mouseTrail;
+        mgui::Panel* test;
+        const char*  name;
 
     protected:
         //Magnet initialization stuff

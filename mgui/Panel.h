@@ -11,9 +11,9 @@ namespace mgui{
             Panel(const char* name);
             virtual ~Panel();
 
-            virtual bool onMouseRelease(sf::Vector2f mouse_pos);
+            virtual bool onMouseRelease(sf::Event evt);
             virtual bool onMouseMove(sf::Vector2f mouse_pos);
-            virtual bool onMousePress(sf::Vector2f mouse_pos);
+            virtual bool onMousePress(sf::Event evt);
         protected:
         private:
             bool            m_mouse_down;

@@ -71,14 +71,11 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
 *********************************************/
 void Renderer::Render(void* threadData){
     while(GetRenderWindow()->IsOpened() && Magnet::Initialized()){
-        Magnet::Hooks("Renderer::Render")->Call(Hook::Frame);
-
         //Process the new link queue
         while(!GetObject()->newlink_queue.empty()){
             GetObject()->_CreateLink(GetObject()->newlink_queue.front());
             GetObject()->newlink_queue.pop();
         }
-
         //Process the remove link queue
         while(!GetObject()->delete_queue.empty()){
             GetObject()->_RemoveLink(GetObject()->delete_queue.front());
@@ -92,6 +89,9 @@ void Renderer::Render(void* threadData){
         }
 
         GetRenderWindow()->Display();
+
+
+        Magnet::Hooks("Renderer::Render")->Call(Hook::Frame);
     }
 }
 
@@ -145,6 +145,9 @@ void Renderer::_CreateLink(Renderer::Link* newLink){
     }
 }
 
+void Renderer::CreateLink(Link* link_ptr){
+    GetObject()->newlink_queue.push(link_ptr);
+}
 
 Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer){
     return Renderer::CreateLink(drawable_ptr, layer, 0);
@@ -160,7 +163,6 @@ void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
 
     if(link == NULL) return;
 
-    //GetObject()->links.erase(GetObject()->links.begin()+linkIndex);
     GetObject()->delete_queue.push(link);
 }
 

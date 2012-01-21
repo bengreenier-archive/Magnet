@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "../Game/Renderer.h"
 #include "Sizeable.h"
 
 namespace mgui{
@@ -17,6 +18,8 @@ namespace mgui{
             virtual ~Component();
 
             virtual void Create();
+            virtual bool IsLinked();
+            virtual void Remove();
 
             virtual void SetVisible(bool toggle);
             virtual bool GetVisible(bool toggle) { return m_visible; }
@@ -59,6 +62,7 @@ namespace mgui{
 
             virtual void SetRegistry(Registry* reg);
             virtual Registry* GetRegistry();
+            virtual bool IsRegistered();
 
             virtual bool HasFocus();
 
@@ -84,8 +88,8 @@ namespace mgui{
             /////////////////////////////////////
             /// Pure virtual mouse click handler
             /////////////////////////////////////
-            virtual bool onMouseRelease(sf::Vector2f mouse_pos)  =   0;
-            virtual bool onMousePress(sf::Vector2f mouse_pos)  =   0;
+            virtual bool onMouseRelease(sf::Event evt)  =   0;
+            virtual bool onMousePress(sf::Event evt)  =   0;
             virtual bool onMouseMove(sf::Vector2f mouse_pos)  =   0;
 
             void DebugOn();
@@ -110,6 +114,7 @@ namespace mgui{
             int m_link_index;
             Component*  m_parent;
             Registry*   m_registry;
+            Renderer::Link*       m_link;
 
             //Debug things
             sf::Color debug_color;

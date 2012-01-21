@@ -12,8 +12,7 @@ Panel::~Panel()
     //dtor
 }
 
-bool Panel::onMouseRelease(sf::Vector2f mouse_pos){
-    std::cout << "Mouse release\n";
+bool Panel::onMouseRelease(sf::Event evt){
     m_mouse_down = false;
     return false;
 }
@@ -27,8 +26,12 @@ bool Panel::onMouseMove(sf::Vector2f mouse_pos){
     return true;
 }
 
-bool Panel::onMousePress(sf::Vector2f mouse_pos){
-    m_mouse_down = true;
-    m_mouse_dist = mouse_pos - GetPosition();
+bool Panel::onMousePress(sf::Event evt){
+    if(evt.MouseButton.Button == sf::Mouse::Left){
+        m_mouse_down = true;
+        m_mouse_dist = sf::Vector2f(evt.MouseButton.X - GetPosition().x, evt.MouseButton.Y-GetPosition().y);
+    }else if(evt.MouseButton.Button == sf::Mouse::Right){
+        Remove();
+    }
     return false;
 }

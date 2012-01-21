@@ -1,5 +1,4 @@
 #include "Component.h"
-#include "../Game/Renderer.h"
 #include "Registry.h"
 
 using namespace mgui;
@@ -17,7 +16,7 @@ Component::Component(const char* name, sf::Vector2f pos, sf::Vector2f size){
 
 Component::~Component()
 {
-    Renderer::RemoveLink(this);
+    //delete [] this;
 }
 
 void Component::init(float x, float y, float width, float height){
@@ -25,6 +24,8 @@ void Component::init(float x, float y, float width, float height){
     m_created   = false;
     m_isChild   = false;
     m_registry  = NULL;
+    m_link      = NULL;
+    m_parent    = NULL;
     debug_color         = sf::Color(255, 0, 0, 255);
     debug_color_focus   = sf::Color(0, 255, 0, 255);
 
@@ -131,8 +132,34 @@ void Component::EnableOutline(bool enable){
 }
 
 void Component::Create(){
-    Renderer::CreateLink(static_cast<sf::Shape*>(this), Renderer::HudLayer);
-    m_created = true;
+    if(m_link != NULL){ std::cout << "Link already created, return\n"; return; }
+
+    m_link          = new Renderer::Link();
+    m_link->object   = static_cast<sf::Shape*>(this);
+    m_link->layer    = Renderer::MenuLayer;
+    if(IsRegistered()){
+        m_link->depth = GetRegistry()->GetNextDepth();
+    }else{
+        m_link->depth = 0;
+    }
+
+    Renderer::CreateLink(m_link);
+}
+
+bool Component::IsLinked(){
+    if(m_link == NULL){
+        return false;
+    }
+
+    return true;
+}
+void Component::Remove(){
+    Renderer::RemoveLink(m_link);
+    m_link = NULL;
+
+    if(IsRegistered()){
+        GetRegistry()->Remove(this);
+    }
 }
 
 void Component::SetParent(Component* parent){
@@ -146,7 +173,8 @@ bool Component::onMouseEvent(sf::Event evt){
     switch(evt.Type){
         case sf::Event::MouseButtonReleased:
             mouse_pos = sf::Vector2f(evt.MouseButton.X, evt.MouseButton.Y);
-            return onMouseRelease(mouse_pos);
+            if(CheckBounds(mouse_pos))
+                return onMouseRelease(evt);
             break;
         case sf::Event::MouseMoved:
             mouse_pos = sf::Vector2f(evt.MouseMove.X, evt.MouseMove.Y);
@@ -157,7 +185,8 @@ bool Component::onMouseEvent(sf::Event evt){
             break;
         case sf::Event::MouseButtonPressed:
             mouse_pos = sf::Vector2f(evt.MouseButton.X, evt.MouseButton.Y);
-            return onMousePress(mouse_pos);
+            if(CheckBounds(mouse_pos))
+                return onMousePress(evt);
             break;
     }
 
@@ -167,8 +196,17 @@ bool Component::onMouseEvent(sf::Event evt){
 void Component::SetRegistry(Registry* reg){
     m_registry = reg;
 }
+
 Registry* Component::GetRegistry(){
     return m_registry;
+}
+
+bool Component::IsRegistered(){
+    if(m_registry == NULL){
+        return false;
+    }
+
+    return true;
 }
 
 bool Component::HasFocus(){

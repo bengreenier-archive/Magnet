@@ -48,7 +48,7 @@ namespace mgui{
             /// Pass the click call to the
             /// group's components
             ////////////////////////////////
-            virtual bool onMouseRelease(sf::Vector2f mouse_pos);
+            virtual bool onMouseRelease(sf::Event evt);
         protected:
         private:
             const char* m_name;

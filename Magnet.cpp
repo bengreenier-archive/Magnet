@@ -12,11 +12,13 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, Event_MouseButtonReleased));
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, Event_MouseMove));
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonPressed, Event_MouseButtonPressed));
+    EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, Event_SpacePressed ));
 
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
 
     m_mouseTrail.on = false;
+    name = "test_cmp";
 }
 
 Magnet::~Magnet()
@@ -35,43 +37,16 @@ void Magnet::Hook_Initialize(){
     }
 }
 
+void Magnet::Debug_CreateMenu(){
+    std::cout << "Create menu\n";
+    Object()->test = new mgui::Panel(name);
+    Object()->test->SetVisible(true);
+    Object()->test->Create();
+    Object()->m_menus.Register(Object()->test);
+}
+
 void Magnet::Hook_Setup(){
-   // mgui::Group* testmenu = new mgui::Group("test_menu");
-
-    mgui::Panel* testcmp = new mgui::Panel("test_cmp1");
-    //testcmp->DebugOn();
-    /*testcmp->SetPosition(sf::Vector2f(100, 100));
-    testcmp->SetSize(sf::Vector2f(200, 200));
-    testcmp->SetColor(sf::Color(0, 255, 255, 255));
-    testcmp->SetOutlineColor(sf::Color(0, 155, 155, 255));
-    testcmp->SetOutlineWidth(5);
-    testcmp->EnableOutline(true);
-    testcmp->Format();*/
-    testcmp->SetVisible(false);
-    testcmp->Create();
-    //testmenu->AddComponent(testcmp);
-
-    /*mgui::Panel* testcmp2 = new mgui::Panel("test_cmp2");
-    //testcmp2->DebugOn();
-    testcmp2->SetSize(sf::Vector2f(200, 200));
-    testcmp2->SetPosition(sf::Vector2f(150, 150));
-    testcmp2->SetColor(sf::Color(255, 255, 255, 255));
-    testcmp2->Format();
-    testcmp2->SetVisible(true);*/
-    //testcmp2->Create();
-
-    /*mgui::Component* testcmp2 = new mgui::Component("test_cmp2");
-    testcmp2->SetPosition(testcmp->GetPosition().x+testcmp->GetSize().x, 0);
-    testcmp2->SetSize(sf::Vector2f(200, 200));
-    testcmp2->SetColor(sf::Color(0, 0, 255, 255));
-    testcmp2->EnableOutline(true);
-    testcmp2->SetVisible(true);
-    testcmp2->Create();
-    testmenu->AddComponent(testcmp2);
-    */
-   // testmenu->SetPosition(sf::Vector2f(100, 100));
-    Object()->m_menus.Register(testcmp);
-    //Object()->m_menus.Register(testcmp2);
+    Object()->Debug_CreateMenu();
 }
 
 bool Magnet::Event_MouseMove(sf::Event evt){
@@ -93,9 +68,17 @@ bool Magnet::Event_MouseButtonReleased(sf::Event evt){
 }
 
 bool Magnet::Event_SpacePressed(sf::Event evt){
-    if(Object("Event_SpacePressed")->gameState.get() == State::Menu){
-        Magnet::StartGame();
+    if(evt.Key.Code == sf::Key::Space){
+        Object()->Debug_CreateMenu();
+    }else{
+        bool linkExists = Renderer::GetObject()->LinkExists(Renderer::GetObject()->GetLinkByDrawable(static_cast<sf::Shape*>(Object()->test)));
+        std::cout << "Menu link exists:\t" << linkExists << std::endl;
+        std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
     }
+
+    /*if(Object("Event_SpacePressed")->gameState.get() == State::Menu){
+        Magnet::StartGame();
+    }*/
 }
 
 void Magnet::StartGame(){

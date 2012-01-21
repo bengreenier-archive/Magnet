@@ -5,6 +5,7 @@ using namespace mgui;
 Registry::Registry()
 {
     m_focus = NULL;
+    m_nextdepth = 0;
 }
 
 Registry::~Registry()
@@ -12,11 +13,28 @@ Registry::~Registry()
     //dtor
 }
 
+int Registry::GetNextDepth(){ return m_nextdepth; }
+
 void Registry::Register(Component* newCmp){
     if(ComponentExists(newCmp)) return;
 
     newCmp->SetRegistry(this);
     m_cmp_vect.push_back(newCmp);
+    m_nextdepth++;
+}
+
+void Registry::Remove(Component* remove){
+    cmp_vect_iterator_type it;
+
+    for(it = m_cmp_vect.begin(); it != m_cmp_vect.end(); it++){
+        if((*it) == remove){
+            remove->SetRegistry(NULL); //This will stop the component from calling Registry::Remove again
+            remove->Remove();
+            it = m_cmp_vect.erase(it);
+            delete remove;
+            break;
+        }
+    }
 }
 
 Component* Registry::GetByName(const char* cmpName) throw(Exception){
@@ -47,10 +65,14 @@ bool Registry::ComponentExists(const char* cmpname,  Component* cmp){
 
     for(it = m_cmp_vect.begin(); it != m_cmp_vect.end(); it++){
         if((*it)->GetName() == cmpname){
-            cmp = *it;
+            if(cmp != NULL){
+                cmp = *it;
+            }
             return true;
         }
     }
+
+    return false;
 }
 
 bool Registry::cmp_iterator_start(){
@@ -77,55 +99,8 @@ bool Registry::onEvent(sf::Event evt){
 
     do{
         if(evt.Type == sf::Event::MouseWheelMoved || evt.Type == sf::Event::MouseMoved || evt.Type == sf::Event::MouseButtonPressed || evt.Type == sf::Event::MouseButtonReleased){
-            cmp_queue_type component_q;
-
-            if(evt.Type == sf::Event::MouseMoved){
-                for(int i=0; i<m_cmp_vect.size(); i++)
-                    component_q.push(m_cmp_vect[i]);
-
-            }else{
-                const sf::Input&    input = Renderer::GetRenderWindow()->GetInput();
-                Component* cmp;
-                cmp_queue_type cmp_queue = GetComponentsByCoord(sf::Vector2f(input.GetMouseX(), input.GetMouseY()));
-
-                if(cmp_queue.empty()) return true;
-
-                //If user has pressed the mouse down, give focus to the top
-                //of the stack and pass the event to that Component
-                if(sf::Event::MouseButtonPressed == evt.Type){
-                    //Find the top component
-                    SetFocus(GetTop(cmp_queue));
-                    cmp = GetFocus();
-                }else{
-
-
-
-                //If there is no focus, find the top Component
-                if(GetFocus() == NULL){
-                    SetFocus(GetTop(cmp_queue));
-                    cmp = GetFocus();
-                }else{
-                    //Check to see if the focus is in the stack
-                    int count = 0;
-                    while(count < cmp_queue.size()){
-                        if(cmp_queue.front() == GetFocus()){
-                            cmp = cmp_queue.front();
-                            break;
-                        }
-                        count++;
-                    }
-                }
-                }
-                component_q.push(cmp);
-
-            }
-
-            while(!component_q.empty()){
-                if(!component_q.front()->onMouseEvent(evt)){
-                    return false;
-                }
-
-                component_q.pop();
+            for(int i=0; i<m_cmp_vect.size(); i++){
+                return m_cmp_vect[i]->onMouseEvent(evt);
             }
         }
     }while(do_iterate());

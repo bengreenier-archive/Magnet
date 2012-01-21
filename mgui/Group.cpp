@@ -40,21 +40,8 @@ bool Group::ComponentExists(Component* checkcmp){
 
 
 
-bool Group::onMouseRelease(sf::Vector2f mouse_pos){
-    if(m_component_map.empty()) return true;
+bool Group::onMouseRelease(sf::Event evt){
 
-    component_map_iterator_type     cmp_map_it;
-
-    cmp_map_it = m_component_map.begin();
-    while(cmp_map_it != m_component_map.end()){
-        if(cmp_map_it->second->CheckBounds(mouse_pos)){
-            if(!cmp_map_it->second->onMouseRelease(mouse_pos)){
-                return false;
-            }
-        }
-
-        cmp_map_it++;
-    }
 
     return true;
 }
