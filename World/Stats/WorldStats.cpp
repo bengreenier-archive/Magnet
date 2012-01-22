@@ -43,8 +43,13 @@ void WorldStats::HideFps()
 
 void WorldStats::UpdateFps(int x,int y)
 {
-    HideFps();
-    ShowFps(x,y);
+    //HideFps();
+    //ShowFps(x,y);
+
+    std::stringstream ss;
+    ss << (float)(1/Renderer::GetRenderWindow()->GetFrameTime());
+
+    m_fps->SetText(ss.str());
 }
 
 void WorldStats::ShowWorldCount(int x,int y)
@@ -65,6 +70,9 @@ void WorldStats::HideWorldCount()
 
 void WorldStats::UpdateWorldCount(int x,int y)
 {
-    HideWorldCount();
-    ShowWorldCount(x,y);
+    //HideWorldCount();
+    //ShowWorldCount(x,y);
+    std::stringstream ss;
+    ss << m_managedWorldPtr->GetBodyCount();
+    m_wc->SetText("Total Bodies: "+ss.str());
 }

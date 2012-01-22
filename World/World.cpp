@@ -19,7 +19,7 @@ World::World()
 
     m_hooked = false;
 
-	m_timeStep = 1.0f / 40.0f;
+	m_timeStep = 1.0f / 60.0f;
 	m_velocityIterations = 8;
 	m_positionIterations = 3;
 
@@ -61,9 +61,8 @@ World::World()
 
     Stat = new WorldStats(m_world1);
 
-
-
-
+    Stat->ShowFps(10, 0);
+    Stat->ShowWorldCount(10, 24);
 }
 
 World* World::Access()

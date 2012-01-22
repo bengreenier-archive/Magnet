@@ -6,6 +6,7 @@
 #include <queue>
 #include <string>
 #include <iostream>
+#include <string>
 
 #include "EventListener.h"
 /*************************************
@@ -64,8 +65,10 @@ class Renderer
 
             *Uses lazy initialization
         *********************************************/
-        static Renderer* GetObject();
+        static Renderer* Object(std::string from);
         static sf::RenderWindow* GetRenderWindow();
+
+        static void Init(sf::RenderWindow& window, sf::Thread& renderThread);
 
         /*********************************************
             "Draw the screen"
@@ -101,7 +104,11 @@ class Renderer
         int GetLinkIndex(Link* link_ptr);
 
         static void SetRenderThread(sf::Thread& renderThread);
-       static sf::Mutex* Mutex();
+        static sf::Mutex* Mutex();
+
+        static bool IsRunning(){ return Object("Renderer::IsRunning")->m_running; }
+
+        static void Frame();
 
     protected:
         Renderer();
@@ -116,6 +123,7 @@ class Renderer
 
         sf::RenderWindow*     RenderWindow_ptr;
         sf::Thread*           renderThread_ptr;
+        sf::Mutex             renderMutex;
 
         bool m_wait;
 
@@ -130,6 +138,7 @@ class Renderer
 
         bool            m_isValid;
         bool            m_shouldDraw;
+        bool            m_running;
         unsigned int    m_cindex; //Current mapping index
 
 };

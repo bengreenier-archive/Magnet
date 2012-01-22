@@ -3,9 +3,8 @@
 //Static memebetrs
 Magnet*         Magnet::magnet_ptr           =   NULL;
 
-Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
+Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
 {
-    m_hooks.Register(Hook::Frame, &Magnet::Frame);
     m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
     m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
@@ -16,9 +15,13 @@ Magnet::Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type de
 
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
+    m_renderWindow      =   &window;
+
+    m_renderWindow->SetFramerateLimit(30);
 
     m_mouseTrail.on = false;
     name = "test_cmp";
+    m_initialized = false;
 }
 
 Magnet::~Magnet()
@@ -43,9 +46,9 @@ void Magnet::Debug_CreateMenu(){
     int b = rand() % 255 + 1;
     Object()->test = new mgui::Panel(name);
     Object()->test->SetColor(sf::Color(r, g, b)) ;
-    //Object()->test->SetVisible(true);
-    //Object()->test->Create();
-    //Object()->m_menus.Register(Object()->test);
+    Object()->test->SetVisible(true);
+    Object()->test->Create();
+    Object()->m_menus.Register(Object()->test);
 }
 
 void Magnet::Hook_Setup(){
@@ -74,14 +77,14 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
     if(evt.Key.Code == sf::Key::Space){
         Object()->Debug_CreateMenu();
     }else if(evt.Key.Code == sf::Key::A){
-        bool linkExists = Renderer::GetObject()->LinkExists(Renderer::GetObject()->GetLinkByDrawable(static_cast<sf::Shape*>(Object()->test)));
+        bool linkExists = Renderer::Object("Magnet")->LinkExists(Renderer::Object("Magnet")->GetLinkByDrawable(static_cast<sf::Shape*>(Object("Magnet")->test)));
         std::cout << "Menu link exists:\t" << linkExists << std::endl;
         std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
     }else if(evt.Key.Code == sf::Key::R){
         Object()->test->Remove();
 
         int wait = 0;
-        while(wait<10000000){
+        while(wait<1000000000){
             wait ++;
         }
         Object()->Debug_CreateMenu();
@@ -90,6 +93,8 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
     /*if(Object("Event_SpacePressed")->gameState.get() == State::Menu){
         Magnet::StartGame();
     }*/
+
+    return true;
 }
 
 void Magnet::StartGame(){
@@ -128,9 +133,9 @@ Magnet* Magnet::Object(){
     return magnet_ptr;
 }
 
-void Magnet::Init(sf::Thread& renderThread, sf::Thread& loadThread){
+void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread){
     if(magnet_ptr == NULL){
-        magnet_ptr = new Magnet(renderThread, loadThread, State::Null);
+        magnet_ptr = new Magnet(window, renderThread, loadThread, State::Null);
     }else{
         if(Object()->gameState.get() == State::Null){
             Object()->ChangeState(State::Initialize);
@@ -139,8 +144,14 @@ void Magnet::Init(sf::Thread& renderThread, sf::Thread& loadThread){
 }
 
 bool Magnet::Initialized(){
-    if(magnet_ptr == NULL)
+    if(magnet_ptr == NULL){
         return false;
+    }
+
+    if(!Object()->m_initialized){
+        return false;
+    }
+
 
     return true;
 }
@@ -155,14 +166,15 @@ void Magnet::ChangeState(State::_type newState){
             break;
         case State::Initialize:
             std::cout << "**********\tINITALIZE\t**********\n";
+            std::cout << "[Magnet][Initialize] Initialize renderer...\n";
+            Renderer::Init(*Object()->m_renderWindow, *Object()->m_renderThread_ptr);
             std::cout << "[Magnet][Initialize] Initialize resource...\n";
             Resource::Init(Object("ChangeState")->m_loadThread_ptr, "resource/");
             std::cout << "[Magnet][Initialize] Initialize world...\n";
             World::Init();
 
-            Object("ChangeState")->m_hooks.Call(Hook::Initialize);
-
-            m_renderThread_ptr->Launch();
+            Object()->m_initialized = true;
+            Magnet::Hooks("Renderer::Render")->Call(Hook::Initialize);
 
             gameState.set(newState);
             break;
@@ -221,5 +233,12 @@ void Magnet::Frame(){
 
     if(Object("Frame")->m_mouseTrail.on){
         Object("Frame")->m_mouseTrail.Frame();
+    }
+
+    Magnet::Hooks("Renderer::Render")->Call(Hook::Frame);
+
+    if(!Renderer::IsRunning()){
+        //Draw the frame
+        Object()->m_renderThread_ptr->Launch();
     }
 }

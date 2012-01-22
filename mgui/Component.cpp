@@ -159,7 +159,7 @@ void Component::Remove(){
     }else{
         Renderer::RemoveLink(m_link);
 
-        delete m_link;
+        //delete m_link;
         m_link = NULL;
     }
 }

@@ -30,7 +30,7 @@ class Magnet
 
         static Magnet* Object(std::string from);    ///< DEBUG
         static Magnet* Object();
-        static void Init(sf::Thread& renderThread, sf::Thread& loadThread);
+        static void Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread);
         static bool Initialized(); //Check to see if we have initialized yet
         static void Hook_Initialize();
 
@@ -86,7 +86,7 @@ class Magnet
 
     protected:
         //Magnet initialization stuff
-        Magnet(sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
+        Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
     private:
         typedef std::vector<EventListener*>     eventlistener_vector_t;
 
@@ -96,6 +96,7 @@ class Magnet
         State gameState;
         sf::Thread* m_renderThread_ptr;
         sf::Thread* m_loadThread_ptr;
+        sf::RenderWindow* m_renderWindow;
 
         sf::Mutex m_globalMutex;
 
@@ -104,6 +105,7 @@ class Magnet
         mgui::Registry m_menus;
 
         bool m_loadingStarted; //Checks to see if the loading has started yet
+        bool m_initialized;
 
 
 };

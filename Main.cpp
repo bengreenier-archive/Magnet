@@ -43,21 +43,20 @@ int main()
     **************************************************/
 
     sf::Thread RenderThread(&Renderer::Render);
-    Renderer::SetRenderThread(RenderThread);
-
     sf::Thread ResourceLoader(&Resource::Load);
 
 
     sf::RenderWindow Window(sf::VideoMode::GetMode(0), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
-    Window.SetFramerateLimit(30);
     Window.SetActive(false);
-    Renderer::SetRenderWindow(Window);
 
-    while(Renderer::GetRenderWindow()->IsOpened()){
-        Magnet::Init(RenderThread, ResourceLoader);
 
-        //We always listen for events
-        EventHandler::Listen();
+    while(Window.IsOpened()){
+        Magnet::Init(Window, RenderThread, ResourceLoader);
+
+        if(Magnet::Initialized()){
+            EventHandler::Listen();
+            Magnet::Frame();
+        }
     }
 
     //RenderThread.Terminate();
