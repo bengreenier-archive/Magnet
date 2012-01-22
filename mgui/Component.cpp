@@ -154,11 +154,13 @@ bool Component::IsLinked(){
     return true;
 }
 void Component::Remove(){
-    Renderer::RemoveLink(m_link);
-    m_link = NULL;
-
     if(IsRegistered()){
         GetRegistry()->Remove(this);
+    }else{
+        Renderer::RemoveLink(m_link);
+
+        delete m_link;
+        m_link = NULL;
     }
 }
 

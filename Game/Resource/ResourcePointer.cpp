@@ -23,7 +23,11 @@ void ResourcePointer::set(std::string file){
 
     if(fileType.size() == 2){
         if(fileType[1] == "png"){
-            m_fullPath = Resource::Object()->ImageDir + file;
+            if(!file.find(Resource::Object()->ImageDir)){
+                m_fullPath = Resource::Object()->ImageDir + file;
+            }else{
+                m_fullPath = Resource::Object()->ResourceDir + file;
+            }
             if(ImageHandler::AddImage(m_fullPath)){
                 m_type = Image;
             }else{

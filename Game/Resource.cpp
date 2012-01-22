@@ -111,7 +111,7 @@ void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
 
 
         dp = opendir( fullPath.c_str() );
-        if (dp == NULL)
+        if (dp == NULL) { error = "Could not open \"" + dir + "\""; }
 
         while ((dirp = readdir( dp ))){
             filepath = fullPath + dirp->d_name;

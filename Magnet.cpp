@@ -28,8 +28,7 @@ Magnet::~Magnet()
 
 void Magnet::Hook_Initialize(){
     try{
-        Resource::AddFile(Resource::Object()->ErrorImage);
-        Resource::AddDir("poof/", true);
+        Resource::AddDir("images/", true);
     }
 
     catch(Exception e){
@@ -39,10 +38,14 @@ void Magnet::Hook_Initialize(){
 
 void Magnet::Debug_CreateMenu(){
     std::cout << "Create menu\n";
+    int r = rand() % 255 + 1;
+    int g = rand() % 255 + 1;
+    int b = rand() % 255 + 1;
     Object()->test = new mgui::Panel(name);
-    Object()->test->SetVisible(true);
-    Object()->test->Create();
-    Object()->m_menus.Register(Object()->test);
+    Object()->test->SetColor(sf::Color(r, g, b)) ;
+    //Object()->test->SetVisible(true);
+    //Object()->test->Create();
+    //Object()->m_menus.Register(Object()->test);
 }
 
 void Magnet::Hook_Setup(){
@@ -70,10 +73,18 @@ bool Magnet::Event_MouseButtonReleased(sf::Event evt){
 bool Magnet::Event_SpacePressed(sf::Event evt){
     if(evt.Key.Code == sf::Key::Space){
         Object()->Debug_CreateMenu();
-    }else{
+    }else if(evt.Key.Code == sf::Key::A){
         bool linkExists = Renderer::GetObject()->LinkExists(Renderer::GetObject()->GetLinkByDrawable(static_cast<sf::Shape*>(Object()->test)));
         std::cout << "Menu link exists:\t" << linkExists << std::endl;
         std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
+    }else if(evt.Key.Code == sf::Key::R){
+        Object()->test->Remove();
+
+        int wait = 0;
+        while(wait<10000000){
+            wait ++;
+        }
+        Object()->Debug_CreateMenu();
     }
 
     /*if(Object("Event_SpacePressed")->gameState.get() == State::Menu){

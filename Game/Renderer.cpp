@@ -71,17 +71,6 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
 *********************************************/
 void Renderer::Render(void* threadData){
     while(GetRenderWindow()->IsOpened() && Magnet::Initialized()){
-        //Process the new link queue
-        while(!GetObject()->newlink_queue.empty()){
-            GetObject()->_CreateLink(GetObject()->newlink_queue.front());
-            GetObject()->newlink_queue.pop();
-        }
-        //Process the remove link queue
-        while(!GetObject()->delete_queue.empty()){
-            GetObject()->_RemoveLink(GetObject()->delete_queue.front());
-            GetObject()->delete_queue.pop();
-        }
-
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
         for(int i=0; i < GetObject()->links.size(); i++){
@@ -92,6 +81,18 @@ void Renderer::Render(void* threadData){
 
 
         Magnet::Hooks("Renderer::Render")->Call(Hook::Frame);
+
+
+        //Process the new link queue
+        while(!GetObject()->newlink_queue.empty()){
+            GetObject()->_CreateLink(GetObject()->newlink_queue.front());
+            GetObject()->newlink_queue.pop();
+        }
+        //Process the remove link queue
+        while(!GetObject()->delete_queue.empty()){
+            GetObject()->_RemoveLink(GetObject()->delete_queue.front());
+            GetObject()->delete_queue.pop();
+        }
     }
 }
 

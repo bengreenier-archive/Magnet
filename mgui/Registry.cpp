@@ -31,7 +31,6 @@ void Registry::Remove(Component* remove){
             remove->SetRegistry(NULL); //This will stop the component from calling Registry::Remove again
             remove->Remove();
             it = m_cmp_vect.erase(it);
-            delete remove;
             break;
         }
     }
