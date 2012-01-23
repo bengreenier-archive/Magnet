@@ -9,10 +9,12 @@ Renderer::Renderer()
     m_isValid       = false;
     m_shouldDraw    = true;
     m_running       = false;
-    //m_max_process   =   1;  //The total amount of objects to add/remove in a frame
-    //m_max_atempts   =   5;  //The total amount of attempts to process in a frame
+    m_max_process   =    10;  //The total amount of objects to add/remove in a frame
+    m_max_attempts  =    5;  //The total amount of attempts to process in a frame
 
-    Magnet::Hooks()->Register(Hook::Frame, &Renderer::Frame);
+    m_hooks         =   new Hook::Registry();
+
+    Magnet::Hooks()->Register(Hook::Think, &Renderer::Think);
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
 }
 
@@ -21,6 +23,7 @@ Renderer::~Renderer()
 {
     delete [] RendererPtr;
     delete [] RenderWindow_ptr;
+    delete [] m_hooks;
 }
 
 bool Renderer::Event_KeyPressed(sf::Event evt){
@@ -31,24 +34,28 @@ bool Renderer::Event_KeyPressed(sf::Event evt){
     return true;
 }
 
+Hook::Registry* Renderer::Hooks(){
+    return Object()->m_hooks;
+}
+
 sf::Mutex* Renderer::Mutex(){
-    return &Object("Renderer::Mutex")->renderMutex;
+    return &Object()->renderMutex;
 }
 
 bool Renderer::Close(sf::Event evt){
     std::cout << "Closed\n";
     Renderer::GetRenderWindow()->Close();
-    Object("Renderer::Close")->renderThread_ptr->Wait();
+    Object()->renderThread_ptr->Wait();
 
     return true;
 }
 
 void Renderer::SetRenderWindow(sf::RenderWindow& Window){
-    Object("Renderer::SetRenderWindow")->RenderWindow_ptr = &Window;
+    Object()->RenderWindow_ptr = &Window;
 }
 
 void Renderer::SetRenderThread(sf::Thread& renderThread){
-    Object("Renderer::SetRenderThread")->renderThread_ptr = &renderThread;
+    Object()->renderThread_ptr = &renderThread;
 }
 
 /*********************************************
@@ -58,9 +65,9 @@ void Renderer::SetRenderThread(sf::Thread& renderThread){
 
     *Uses lazy initialization
 *********************************************/
-Renderer* Renderer::Object(std::string from){
+Renderer* Renderer::Object(){
     if(RendererPtr == NULL){
-        std::cout << "Renderer::Object("<<from<<")-> WARNING: Renderer not initialized! Null pointer returned\n";
+        std::cout << "Renderer::Object()-> WARNING: Renderer not initialized! Null pointer returned\n";
     }
 
     return RendererPtr;
@@ -79,26 +86,48 @@ void Renderer::Init(sf::RenderWindow& window, sf::Thread& renderThread){
     Returns a pointer to the sf::RenderWindow
 *********************************************/
 sf::RenderWindow* Renderer::GetRenderWindow(){
-    return Object("Renderer::GetRenderWindow()")->RenderWindow_ptr;
+    return Object()->RenderWindow_ptr;
 }
 
-void Renderer::Frame(){
+void Renderer::Think(){
+    int attempts = 0;
+    int process  = 0;
 
     //Process the remove link queue
-    while(!Object("Frame")->delete_queue.empty()){
-        Object("Frame")->_RemoveLink(Object("Frame")->delete_queue.front());
+    while(!Object()->delete_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
+        Object()->_RemoveLink(Object()->delete_queue.front());
 
-        if(!Renderer::Object("Frame")->LinkExists(Object("Frame")->delete_queue.front())){
-            Object("Frame")->delete_queue.pop();
+        if(!Renderer::Object()->LinkExists(Object()->delete_queue.front())){
+            Object()->delete_queue.pop();
+            process++;
         }
+
+        attempts++;
     }
 
-    while(!Object("Frame")->newlink_queue.empty()){
-        Object("Frame")->_CreateLink(Object("Frame")->newlink_queue.front());
+    attempts = 0;
 
-        if(Renderer::Object("Frame")->LinkExists(Object("Frame")->newlink_queue.front())){
-            Object("Frame")->newlink_queue.pop();
+    while(!Object()->newlink_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
+        Object()->_CreateLink(Object()->newlink_queue.front());
+
+        if(Renderer::Object()->LinkExists(Object()->newlink_queue.front())){
+            Object()->newlink_queue.pop();
+            process++;
         }
+
+        attempts++;
+    }
+
+    attempts = 0;
+
+    while(!Object()->depth_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
+        Object()->_SetLinkDepth(Object()->depth_queue.front());
+
+        if(Object()->depth_queue.front().first->depth == Object()->depth_queue.front().second){
+            process++;
+        }
+
+        attempts++;
     }
 }
 
@@ -109,18 +138,20 @@ void Renderer::Render(void* threadData){
     if(!GetRenderWindow()->IsOpened()) return;
 
     Renderer::Mutex()->Lock();
-    Object("Frame")->m_running = true;
+    Object()->m_running = true;
+
+    Hooks()->Call(Hook::Frame);
 
     GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
-    for(int i=0; i < Object("Frame")->links.size(); i++){
-        GetRenderWindow()->Draw(*Object("Frame")->links[i]->object);
+    for(int i=0; i < Object()->links.size(); i++){
+        GetRenderWindow()->Draw(*Object()->links[i]->object);
     }
 
     GetRenderWindow()->Display();
 
     Renderer::Mutex()->Unlock();
-    Object("Frame")->m_running = false;
+    Object()->m_running = false;
 }
 
 Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){
@@ -129,21 +160,21 @@ Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, in
     newLink->layer   = layer;
     newLink->depth   = depth;
 
-    Object("Frame")->newlink_queue.push(newLink);
+    Object()->newlink_queue.push(newLink);
     return newLink;
 }
 
 void Renderer::_CreateLink(Renderer::Link* newLink){
     Renderer::Mutex()->Lock();
 
-    if(Object("Frame")->links.empty()){
-        Object("Frame")->links.push_back(newLink);
+    if(Object()->links.empty()){
+        Object()->links.push_back(newLink);
     }else{
         links_iterator_t it;
         bool insertBefore = false;
         bool insertAfter = false;
 
-        for(it = Object("Create")->links.begin(); it != Object("Create")->links.end(); it++){
+        for(it = Object()->links.begin(); it != Object()->links.end(); it++){
 
             if((*it)->layer > newLink->layer){
                 insertBefore = true;
@@ -151,24 +182,24 @@ void Renderer::_CreateLink(Renderer::Link* newLink){
                 if((*it)->depth > newLink->depth){
                     insertBefore = true;
                 }else if((*it)->depth == newLink->depth){
-                    if((it+1) == Object("Create")->links.end() || (*(it+1))->layer != newLink->layer || (*(it+1))->depth != newLink->depth){
+                    if((it+1) == Object()->links.end() || (*(it+1))->layer != newLink->layer || (*(it+1))->depth != newLink->depth){
                         insertAfter = true;
                     }
                 }
             }
             if(!insertBefore && !insertAfter){
-                if((it+1) == Object("Create")->links.end()){
+                if((it+1) == Object()->links.end()){
                     insertAfter = true;
                 }
             }
 
             if(insertBefore){
-                Object("Create")->links.insert(it, newLink);
+                Object()->links.insert(it, newLink);
                 break;
             }
 
             if(insertAfter){
-                Object("Create")->links.insert(it+1, newLink);
+                Object()->links.insert(it+1, newLink);
                 break;
             }
         }
@@ -176,8 +207,56 @@ void Renderer::_CreateLink(Renderer::Link* newLink){
     Renderer::Mutex()->Unlock();
 }
 
+void Renderer::SetLinkDepth(Link* link, int depth){
+    int link_index = Object()->GetLinkIndex(link);
+
+    if(link_index == -1) return;
+    if(link->depth == depth) return;
+
+    Object()->depth_queue.push(depth_pair_t(link, depth));
+}
+
+void Renderer::_SetLinkDepth(depth_pair_t depth_pair){
+    int link_index = GetLinkIndex(depth_pair.first);
+
+    //Make sure the link wasn't removed
+    if(link_index == -1){
+        depth_queue.pop();
+        return;
+    }
+
+    int start_index;
+    int end_index;
+
+    if(depth_pair.second < depth_pair.first->depth){
+        start_index = 0;
+        end_index   = link_index;
+    }else{
+        start_index = link_index;
+        end_index   = links.size();
+    }
+
+    links_iterator_t position;
+    for(position = links.begin()+start_index; position != links.begin()+end_index; position++){
+        if((position+1) == links.end()){
+            break;//Insert before end
+        }
+
+        if(depth_pair.second <= (*position)->depth){
+            break;
+        }
+    }
+
+    depth_pair.first->depth = depth_pair.second;
+    links.insert(position, depth_pair.first);
+    links.erase(links.begin()+link_index);
+
+    depth_queue.pop();
+
+}
+
 void Renderer::CreateLink(Link* link_ptr){
-    Object("Create")->newlink_queue.push(link_ptr);
+    Object()->newlink_queue.push(link_ptr);
 }
 
 Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer){
@@ -190,16 +269,16 @@ Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr){
 }
 
 void Renderer::RemoveLink(sf::Drawable* drawable_ptr){
-    Link* link = Object("RemoveLink")->GetLinkByDrawable(drawable_ptr);
+    Link* link = Object()->GetLinkByDrawable(drawable_ptr);
 
     if(link == NULL) return;
 
-    Object("RemoveLink")->delete_queue.push(link);
+    Object()->delete_queue.push(link);
 }
 
 void Renderer::RemoveLink(Link* link_ptr){
-    if(Object("RemoveLink")->LinkExists(link_ptr)){
-        Object("RemoveLink")->delete_queue.push(link_ptr);
+    if(Object()->LinkExists(link_ptr)){
+        Object()->delete_queue.push(link_ptr);
     }
 }
 

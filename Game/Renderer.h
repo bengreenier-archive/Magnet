@@ -9,6 +9,7 @@
 #include <string>
 
 #include "EventListener.h"
+#include "Hook.h"
 /*************************************
     Renderer is a static class allows
         an easy API with RenderHandler
@@ -65,7 +66,7 @@ class Renderer
 
             *Uses lazy initialization
         *********************************************/
-        static Renderer* Object(std::string from);
+        static Renderer* Object();
         static sf::RenderWindow* GetRenderWindow();
 
         static void Init(sf::RenderWindow& window, sf::Thread& renderThread);
@@ -99,6 +100,8 @@ class Renderer
         *********************************************/
         static void SetRenderWindow(sf::RenderWindow& Window);
 
+        static void SetLinkDepth(Link* link, int new_depth);
+
         Link* GetLinkByDrawable(sf::Drawable* drawable_ptr);
         bool LinkExists(Renderer::Link* link_ptr);
         int GetLinkIndex(Link* link_ptr);
@@ -106,9 +109,10 @@ class Renderer
         static void SetRenderThread(sf::Thread& renderThread);
         static sf::Mutex* Mutex();
 
-        static bool IsRunning(){ return Object("Renderer::IsRunning")->m_running; }
+        static bool IsRunning(){ return Object()->m_running; }
 
-        static void Frame();
+        static void Think();
+        static Hook::Registry* Hooks();
 
     protected:
         Renderer();
@@ -117,6 +121,8 @@ class Renderer
         typedef vector<Link*>            links_t;
         typedef vector<Link*>::iterator  links_iterator_t;
         typedef queue<Link*>             link_queue_t;
+        typedef std::pair<Link*, int>    depth_pair_t;
+        typedef queue<depth_pair_t>      depth_queue_t;
 
 
 
@@ -124,13 +130,16 @@ class Renderer
         sf::RenderWindow*     RenderWindow_ptr;
         sf::Thread*           renderThread_ptr;
         sf::Mutex             renderMutex;
+        Hook::Registry*       m_hooks;
 
-        bool m_wait;
+        bool m_wait; //what is>?
 
         links_t          links;
         link_queue_t     newlink_queue;
-        link_queue_t      delete_queue;
+        link_queue_t     delete_queue;
+        depth_queue_t     depth_queue;
 
+        void _SetLinkDepth(depth_pair_t depth_pair);
         void _RemoveLink(Link* oldLink);
         void _CreateLink(Link* newLink);
 
@@ -139,6 +148,8 @@ class Renderer
         bool            m_isValid;
         bool            m_shouldDraw;
         bool            m_running;
+        int             m_max_process;
+        int             m_max_attempts;
         unsigned int    m_cindex; //Current mapping index
 
 };

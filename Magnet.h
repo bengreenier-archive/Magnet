@@ -34,7 +34,7 @@ class Magnet
         static bool Initialized(); //Check to see if we have initialized yet
         static void Hook_Initialize();
 
-        static void Frame();
+        static void Think();
         static void Hook_Setup();
         static void CreateSprite();
 

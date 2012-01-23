@@ -31,7 +31,7 @@ Magnet::~Magnet()
 
 void Magnet::Hook_Initialize(){
     try{
-        Resource::AddDir("images/", true);
+        Resource::AddDir("image/", true);
     }
 
     catch(Exception e){
@@ -47,6 +47,8 @@ void Magnet::Debug_CreateMenu(){
     Object()->test = new mgui::Panel(name);
     Object()->test->SetColor(sf::Color(r, g, b)) ;
     Object()->test->SetVisible(true);
+    //Object()->test->DebugOn();
+    Object()->test->Format();
     Object()->test->Create();
     Object()->m_menus.Register(Object()->test);
 }
@@ -77,16 +79,11 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
     if(evt.Key.Code == sf::Key::Space){
         Object()->Debug_CreateMenu();
     }else if(evt.Key.Code == sf::Key::A){
-        bool linkExists = Renderer::Object("Magnet")->LinkExists(Renderer::Object("Magnet")->GetLinkByDrawable(static_cast<sf::Shape*>(Object("Magnet")->test)));
+        bool linkExists = Renderer::Object()->LinkExists(Renderer::Object()->GetLinkByDrawable(static_cast<sf::Shape*>(Object()->test)));
         std::cout << "Menu link exists:\t" << linkExists << std::endl;
         std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
     }else if(evt.Key.Code == sf::Key::R){
         Object()->test->Remove();
-
-        int wait = 0;
-        while(wait<1000000000){
-            wait ++;
-        }
         Object()->Debug_CreateMenu();
     }
 
@@ -210,20 +207,16 @@ void Magnet::ChangeState(State::_type newState){
 
 }
 
-void Magnet::Frame(){
+void Magnet::Think(){
     if(magnet_ptr == NULL) return;
 
-    switch(Object("Frame")->gameState.get()){
+    switch(Object()->gameState.get()){
         case State::Initialize:
-            Object("ChangeState")->ChangeState(State::Loading);
+            Object()->ChangeState(State::Loading);
             break;
         case State::Loading:
-            if(Resource::Loading()){
-                std::cout << "[Magnet][Frame] Loading progress:\t" << Resource::LoadProgress() << std::endl;
-            }else{
-                if(Resource::Ready()){
-                    Object("Frame")->ChangeState(State::Setup);
-                }
+            if(!Resource::Loading() && Resource::Ready()){
+                Object()->ChangeState(State::Setup);
             }
             break;
         case State::Setup:
@@ -231,11 +224,11 @@ void Magnet::Frame(){
             break;
     }
 
-    if(Object("Frame")->m_mouseTrail.on){
-        Object("Frame")->m_mouseTrail.Frame();
+    if(Object()->m_mouseTrail.on){
+        Object()->m_mouseTrail.Frame();
     }
 
-    Magnet::Hooks("Renderer::Render")->Call(Hook::Frame);
+    Magnet::Hooks()->Call(Hook::Think);
 
     if(!Renderer::IsRunning()){
         //Draw the frame

@@ -9,6 +9,7 @@ namespace Hook{
     enum Type {
         Frame,              //Called immediately before the frame is drawn
                             //Should be used sparingly (is called every frame)
+        Think,              //Called every main iteration
         Close,              //Called when the game closes
         GameStateChange,    //Called after the game state has been changed
         Load,               //Called when resources should begin loading

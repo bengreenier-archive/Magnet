@@ -28,7 +28,7 @@ class Callback
             //delete [] m_object_ptr;
         }
 
-        bool Call(sf::Event evt){
+        void Call(sf::Event evt){
             if(m_call_type == Static){
                 m_func(evt);
             }else{

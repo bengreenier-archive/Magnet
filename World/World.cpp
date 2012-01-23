@@ -19,7 +19,7 @@ World::World()
 
     m_hooked = false;
 
-	m_timeStep = 1.0f / 60.0f;
+	m_timeStep = 1.0f / 40.0f;
 	m_velocityIterations = 8;
 	m_positionIterations = 3;
 
@@ -39,7 +39,7 @@ World::World()
     if (WorldStandards::debug)
         std::cout<<"[World] [Init] Hooked. \n";
 
-    Magnet::Hooks()->Register(Hook::Frame,&World::HookHelper);
+    Renderer::Hooks()->Register(Hook::Frame,&World::HookHelper);
     Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::Event_Click));

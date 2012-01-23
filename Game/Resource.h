@@ -116,7 +116,7 @@ class Resource
             float m_loadLeft = Object()->m_loadLeft;
             float m_loadSize = Object()->m_loadSize;
 
-            return ((m_loadLeft/m_loadSize)*100);
+            return (((m_loadSize-m_loadLeft)/m_loadSize)*100);
         }
         static void Load(void* data);
 

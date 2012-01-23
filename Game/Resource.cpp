@@ -251,6 +251,8 @@ void Resource::Load(void* data){
 
         Object()->m_load_queue.pop();
         Object()->m_loadLeft = Object()->m_load_queue.size();
+
+        std::cout << "[Resource][Load]\t" << LoadProgress() << "%\n ";
     }
 
 

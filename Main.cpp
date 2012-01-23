@@ -55,7 +55,7 @@ int main()
 
         if(Magnet::Initialized()){
             EventHandler::Listen();
-            Magnet::Frame();
+            Magnet::Think();
         }
     }
 
