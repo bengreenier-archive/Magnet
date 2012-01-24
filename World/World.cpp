@@ -68,13 +68,9 @@ World::World()
 
 
     //this should create an XmlParse and iterate its multimap
-    XmlParse xml("resource\\config\\AnimDemo.xml");
-    xml.Parse(); //set the parsed data
-    for (xml.Iterator=xml.Parse().begin() ; xml.Iterator != xml.Parse().end() ; xml.Iterator++ )
-    {
+    //XmlParse xml("resource\\config\\AnimDemo.xml");
+    //xml.Parse(); //set the parsed data
 
-        std::cout<<(*xml.Iterator).first<<" contains "<<(*xml.Iterator).second<<"\n";
-    }
 
 }
 
