@@ -63,6 +63,19 @@ World::World()
 
     Stat->ShowFps(10, 0);
     Stat->ShowWorldCount(10, 24);
+
+
+
+
+    //this should create an XmlParse and iterate its multimap
+    XmlParse xml("resource\\config\\AnimDemo.xml");
+    xml.Parse(); //set the parsed data
+    for (xml.Iterator=xml.Parse().begin() ; xml.Iterator != xml.Parse().end() ; xml.Iterator++ )
+    {
+
+        std::cout<<(*xml.Iterator).first<<" contains "<<(*xml.Iterator).second<<"\n";
+    }
+
 }
 
 World* World::Access()

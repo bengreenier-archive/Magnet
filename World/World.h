@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "../Magnet.h"
+#include "../FileActions/Xml/xml_include.h"
 
 //Other World-ly includes
 #include "WorldStandards.h"

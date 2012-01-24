@@ -1,6 +1,8 @@
 #include "Animation.h"
 #include "Resource.h"
 
+
+
 Animation::Animation(std::string imageDir,int eachVisibleFor)
 {
     //ctor
@@ -15,11 +17,10 @@ Animation::Animation(std::string imageDir,int eachVisibleFor)
     m_files.push_back("poof/poof-4.png");
     m_files.push_back("poof/poof-5.png");
 
-    //you cant do this here...
-    //so fuckin gay. Resource shit cant be done here.
+
+    //Sprite->SetImage(Resource::GetImage(m_files[m_curframe]));
 
 
-    Sprite->SetImage(Resource::GetImage(m_files[m_curframe]));
 
 }
 
@@ -32,15 +33,21 @@ Animation::~Animation()
 void Animation::Cycle()
 {
 
+    if (m_curframe < m_files.size()){
     m_cyclecounter++;
 
-    if ( m_Fps == m_cyclecounter ){
-
+    if ( m_Fps == m_cyclecounter )
+    {
     std::cout<<"Cycles match "<<m_cyclecounter<<" .\n";
+    m_curframe++; m_cyclecounter=0;
+    Sprite->SetImage(Resource::GetImage(m_files[m_curframe]));
+    }
 
-    m_curframe++; m_cyclecounter=0; Sprite->SetImage(Resource::GetImage(m_files[m_curframe]));
-
-                                }
+    }//only allow cycle if we haven't displayed all files already.
 
 }
 
+void Animation::Reset()
+{
+    m_curframe = 0;
+}

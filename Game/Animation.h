@@ -21,6 +21,7 @@ class Animation //! The class each animation gets wrapped in.
 
         void Cycle(); //!< run the animation cycle another frame.
 
+        void Reset(); //!< Reset m_curframe, allowing this animation to Cycle() once again.
 
         //------------------------------------------------------
         //REMEBER TO INIT IMAGES... BEFORE ANIMATOR USE    :/
