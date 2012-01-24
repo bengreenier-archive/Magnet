@@ -142,6 +142,7 @@ class Renderer
         void _SetLinkDepth(depth_pair_t depth_pair);
         void _RemoveLink(Link* oldLink);
         void _CreateLink(Link* newLink);
+        void _InsertLink(Link* newLink); //WARNING: This function should only be called by a function with a renderMutex lock!
 
         static Renderer*               RendererPtr;
 

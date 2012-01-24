@@ -124,6 +124,7 @@ void Renderer::Think(){
         Object()->_SetLinkDepth(Object()->depth_queue.front());
 
         if(Object()->depth_queue.front().first->depth == Object()->depth_queue.front().second){
+            Object()->depth_queue.pop();
             process++;
         }
 
@@ -170,39 +171,7 @@ void Renderer::_CreateLink(Renderer::Link* newLink){
     if(Object()->links.empty()){
         Object()->links.push_back(newLink);
     }else{
-        links_iterator_t it;
-        bool insertBefore = false;
-        bool insertAfter = false;
-
-        for(it = Object()->links.begin(); it != Object()->links.end(); it++){
-
-            if((*it)->layer > newLink->layer){
-                insertBefore = true;
-            }else if((*it)->layer == newLink->layer){
-                if((*it)->depth > newLink->depth){
-                    insertBefore = true;
-                }else if((*it)->depth == newLink->depth){
-                    if((it+1) == Object()->links.end() || (*(it+1))->layer != newLink->layer || (*(it+1))->depth != newLink->depth){
-                        insertAfter = true;
-                    }
-                }
-            }
-            if(!insertBefore && !insertAfter){
-                if((it+1) == Object()->links.end()){
-                    insertAfter = true;
-                }
-            }
-
-            if(insertBefore){
-                Object()->links.insert(it, newLink);
-                break;
-            }
-
-            if(insertAfter){
-                Object()->links.insert(it+1, newLink);
-                break;
-            }
-        }
+        _InsertLink(newLink);
     }
     Renderer::Mutex()->Unlock();
 }
@@ -217,42 +186,66 @@ void Renderer::SetLinkDepth(Link* link, int depth){
 }
 
 void Renderer::_SetLinkDepth(depth_pair_t depth_pair){
+    Renderer::Mutex()->Lock();
+    std::cout << "[Renderer][_SetLinkDepth] Getting link index\n";
     int link_index = GetLinkIndex(depth_pair.first);
 
+    std::cout << "[Renderer][_SetLinkDepth] Checking link index\n";
     //Make sure the link wasn't removed
     if(link_index == -1){
         depth_queue.pop();
+        std::cout << "[Renderer][_SetLinkDepth] Link was removed, cannot change depth\n";
         return;
     }
 
-    int start_index;
-    int end_index;
+    links.erase(links.begin()+link_index);
 
-    if(depth_pair.second < depth_pair.first->depth){
-        start_index = 0;
-        end_index   = link_index;
-    }else{
-        start_index = link_index;
-        end_index   = links.size();
-    }
+    depth_pair.first->depth = depth_pair.second;
+    _InsertLink(depth_pair.first);
 
-    links_iterator_t position;
-    for(position = links.begin()+start_index; position != links.begin()+end_index; position++){
-        if((position+1) == links.end()){
-            break;//Insert before end
+    std::cout << "[Renderer][_SetLinkDepth] Repositioning\n";
+    std::cout << "\tSize before: " << links.size() << std::endl;
+    std::cout << "\tSize after: " << links.size() << std::endl;
+
+
+    Renderer::Mutex()->Unlock();
+    std::cout << "[Renderer][_SetLinkDepth] Done\n";
+}
+
+void Renderer::_InsertLink(Link* newLink){
+    links_iterator_t it;
+    bool insertBefore = false;
+    bool insertAfter = false;
+
+    for(it = Object()->links.begin(); it != Object()->links.end(); it++){
+
+        if((*it)->layer > newLink->layer){
+            insertBefore = true;
+        }else if((*it)->layer == newLink->layer){
+            if((*it)->depth > newLink->depth){
+                insertBefore = true;
+            }else if((*it)->depth == newLink->depth){
+                if((it+1) == Object()->links.end() || (*(it+1))->layer != newLink->layer || (*(it+1))->depth != newLink->depth){
+                    insertAfter = true;
+                }
+            }
+        }
+        if(!insertBefore && !insertAfter){
+            if((it+1) == Object()->links.end()){
+                insertAfter = true;
+            }
         }
 
-        if(depth_pair.second <= (*position)->depth){
+        if(insertBefore){
+            Object()->links.insert(it, newLink);
+            break;
+        }
+
+        if(insertAfter){
+            Object()->links.insert(it+1, newLink);
             break;
         }
     }
-
-    depth_pair.first->depth = depth_pair.second;
-    links.insert(position, depth_pair.first);
-    links.erase(links.begin()+link_index);
-
-    depth_queue.pop();
-
 }
 
 void Renderer::CreateLink(Link* link_ptr){

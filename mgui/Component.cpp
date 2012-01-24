@@ -159,6 +159,10 @@ void Component::Remove(){
     }else{
         Renderer::RemoveLink(m_link);
 
+        if(m_debug){
+            DebugOff();
+        }
+
         //delete m_link;
         m_link = NULL;
     }
