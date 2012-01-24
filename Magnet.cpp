@@ -37,15 +37,6 @@ void Magnet::Hook_Initialize(){
     catch(Exception e){
         e.output();
     }
-
-    Object()->test1 = sf::Shape::Rectangle(100, 100, 200, 200, sf::Color(255, 255, 255));
-    Object()->test2 = sf::Shape::Rectangle(150, 100, 250, 200, sf::Color(0, 255, 255));
-
-    Renderer::CreateLink(&Object()->test1, Renderer::GameLayer, 1);
-    Renderer::CreateLink(&Object()->test2, Renderer::GameLayer);
-
-
-
 }
 
 void Magnet::Debug_CreateMenu(){
@@ -94,16 +85,6 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
     }else if(evt.Key.Code == sf::Key::R){
         Object()->test->Remove();
         Object()->Debug_CreateMenu();
-    }else if(evt.Key.Code == sf::Key::Z){
-        Renderer::Link* tmplink = Renderer::Object()->GetLinkByDrawable(&Object()->test2);
-        if(Renderer::Object()->LinkExists(tmplink)){
-            Renderer::SetLinkDepth(tmplink, 2);
-        }
-    }else if(evt.Key.Code == sf::Key::X){
-        Renderer::Link* tmplink = Renderer::Object()->GetLinkByDrawable(&Object()->test1);
-        if(Renderer::Object()->LinkExists(tmplink)){
-            Renderer::SetLinkDepth(tmplink, -1);
-        }
     }
 
     /*if(Object("Event_SpacePressed")->gameState.get() == State::Menu){

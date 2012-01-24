@@ -83,8 +83,6 @@ class Magnet
         MouseTrail m_mouseTrail;
         mgui::Panel* test;
         const char*  name;
-        sf::Shape test1;
-        sf::Shape test2;
 
     protected:
         //Magnet initialization stuff

@@ -187,14 +187,12 @@ void Renderer::SetLinkDepth(Link* link, int depth){
 
 void Renderer::_SetLinkDepth(depth_pair_t depth_pair){
     Renderer::Mutex()->Lock();
-    std::cout << "[Renderer][_SetLinkDepth] Getting link index\n";
+
     int link_index = GetLinkIndex(depth_pair.first);
 
-    std::cout << "[Renderer][_SetLinkDepth] Checking link index\n";
     //Make sure the link wasn't removed
     if(link_index == -1){
         depth_queue.pop();
-        std::cout << "[Renderer][_SetLinkDepth] Link was removed, cannot change depth\n";
         return;
     }
 
