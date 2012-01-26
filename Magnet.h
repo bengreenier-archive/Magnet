@@ -22,6 +22,8 @@
 
 #include "FileActions/FileAction.h"
 
+#include "Network/HttpReq.h"
+
 class Magnet
 {
     public:
@@ -68,7 +70,7 @@ class Magnet
         //////////////////////////////////////////
         static mgui::Registry* Menus();
 
-
+        static void ben_testing_space();//!< space for shit ben needs to test
 
         static State GetState(){ return Object("GetState")->gameState; }
 

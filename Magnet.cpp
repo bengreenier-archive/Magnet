@@ -8,6 +8,8 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
     m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
+    m_hooks.Register(Hook::Initialize,&Magnet::ben_testing_space);//call ben testing space
+
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, Event_MouseButtonReleased));
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, Event_MouseMove));
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonPressed, Event_MouseButtonPressed));
@@ -244,4 +246,15 @@ void Magnet::Think(){
         //Draw the frame
         Object()->m_renderThread_ptr->Launch();
     }
+}
+
+
+void Magnet::ben_testing_space()
+{
+
+    HttpReq demo(sf::Http::Request::Post,"http://bengreenier.com","/pages/magnet/network/query.php?name=magnet&desc=Program%20Made%20This&msg=so%20cool&score=100");
+    if (demo.Execute())
+    {
+        std::cout<<"[Http] [Demo] Posted Successfully!\n";
+    }else{ std::cout<<"[Http] [Demo] Failed.\n"; }
 }
