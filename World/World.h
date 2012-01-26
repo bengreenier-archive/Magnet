@@ -20,6 +20,9 @@
 #include "Shapes/Line.h"
 #include "Shapes/Triangle.h"
 
+//Network Mats
+#include "Material/Network/NetMaterialRegistry.h"
+
 
 class World //! The world object. controls all physics and world-ly things. :)
 {
@@ -66,6 +69,8 @@ class World //! The world object. controls all physics and world-ly things. :)
 
 
         static World* m_ptr;
+
+        NetMaterial::Registry* m_matreg;//the netregistry to materials
 
         WorldStats* Stat;
 

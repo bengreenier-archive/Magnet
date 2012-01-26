@@ -16,6 +16,15 @@ Material::Material(MatType::Type in)
     }
 }
 
+Material::Material(float density,float rest,float fric,sf::Color col,std::string name)
+{
+    m_density = density;
+    m_friction = fric;
+    m_restitution = rest;
+    m_color = col;
+    m_name = name;
+}
+
 Material::~Material()
 {
     //dtor

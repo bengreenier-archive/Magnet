@@ -65,6 +65,9 @@ World::World()
     Stat->ShowWorldCount(10, 24);
 
 
+    //attempt to pull NetMaterial info from this link
+    m_matreg = new NetMaterial::Registry();
+    m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
 
 
     //this should create an XmlParse and iterate its multimap
