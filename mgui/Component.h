@@ -65,6 +65,8 @@ namespace mgui{
             virtual bool IsRegistered();
 
             virtual bool HasFocus();
+            virtual int GetDepth();
+            virtual void SetDepth(int depth);
 
             /////////////////////////////////////////////////////////////
             /// Check if an sf::Vector2f is within the bounds of this
@@ -76,6 +78,9 @@ namespace mgui{
             /// Update Component
             /////////////////////////////////////////////////////////////
             virtual void Format();
+
+            virtual void ToggleFocus(bool canFocus){ m_canFocus = canFocus; }
+            virtual bool CanFocus(){ return m_canFocus; }
 
             ////////////////////////////////
             /// Handle component's events
@@ -111,6 +116,7 @@ namespace mgui{
             bool m_created;
             bool m_visible;
             bool m_debug;
+            bool m_canFocus;
             int m_link_index;
             Component*  m_parent;
             Registry*   m_registry;

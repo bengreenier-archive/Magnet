@@ -51,6 +51,16 @@ void Magnet::Debug_CreateMenu(){
     Object()->test->Format();
     Object()->test->Create();
     Object()->m_menus.Register(Object()->test);
+
+    mgui::Panel* panel = new mgui::Panel("button");
+    panel->SetColor(sf::Color(255, 255, 255));
+    panel->SetPosition(sf::Vector2f(100, 0));
+    panel->DebugOn();
+    panel->SetVisible(true);
+    panel->Format();
+    panel->Create();
+    Object()->m_menus.Register(panel);
+
 }
 
 void Magnet::Hook_Setup(){

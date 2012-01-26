@@ -39,7 +39,7 @@ namespace mgui {
             ////////////////////////////////
             Component* GetByName(const char* groupName) throw(Exception);
 
-            cmp_queue_type  GetComponentsByCoord(sf::Vector2f coord);
+            cmp_queue_type  GetComponentQueue(sf::Vector2f coord);
             Component* GetTop(cmp_queue_type stack);
 
             ////////////////////////////////
@@ -49,7 +49,8 @@ namespace mgui {
             bool ComponentExists(const char* grpname, Component* cmp = NULL);
 
             Component* GetFocus();
-            void        SetFocus(Component* cmp);
+            void       SetFocus(Component* cmp);
+            void       ReleaseFocus();
 
             int GetNextDepth();
 

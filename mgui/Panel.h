@@ -9,7 +9,12 @@ namespace mgui{
     {
         public:
             Panel(const char* name);
+            Panel(const char* name, const std::string label);
             virtual ~Panel();
+
+            virtual void Format();
+            virtual void Create();
+            virtual void Remove();
 
             virtual bool onMouseRelease(sf::Event evt);
             virtual bool onMouseMove(sf::Vector2f mouse_pos);
@@ -18,6 +23,7 @@ namespace mgui{
         private:
             bool            m_mouse_down;
             sf::Vector2f    m_mouse_dist;
+            sf::String      m_label;
     };
 }
 

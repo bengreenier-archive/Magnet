@@ -101,6 +101,7 @@ class Renderer
         static void SetRenderWindow(sf::RenderWindow& Window);
 
         static void SetLinkDepth(Link* link, int new_depth);
+        static void SetLinkLayer(Link* link, Layer new_layer);
 
         Link* GetLinkByDrawable(sf::Drawable* drawable_ptr);
         bool LinkExists(Renderer::Link* link_ptr);
@@ -122,7 +123,9 @@ class Renderer
         typedef vector<Link*>::iterator  links_iterator_t;
         typedef queue<Link*>             link_queue_t;
         typedef std::pair<Link*, int>    depth_pair_t;
+        typedef std::pair<Link*, Layer>  layer_pair_t;
         typedef queue<depth_pair_t>      depth_queue_t;
+        typedef queue<layer_pair_t>      layer_queue_t;
 
 
 
@@ -137,9 +140,11 @@ class Renderer
         links_t          links;
         link_queue_t     newlink_queue;
         link_queue_t     delete_queue;
-        depth_queue_t     depth_queue;
+        depth_queue_t    depth_queue;
+        layer_queue_t    layer_queue;
 
         void _SetLinkDepth(depth_pair_t depth_pair);
+        void _SetLinkLayer(layer_pair_t layer_pair);
         void _RemoveLink(Link* oldLink);
         void _CreateLink(Link* newLink);
         void _InsertLink(Link* newLink); //WARNING: This function should only be called by a function with a renderMutex lock!

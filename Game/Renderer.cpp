@@ -9,8 +9,8 @@ Renderer::Renderer()
     m_isValid       = false;
     m_shouldDraw    = true;
     m_running       = false;
-    m_max_process   =    10;  //The total amount of objects to add/remove in a frame
-    m_max_attempts  =    5;  //The total amount of attempts to process in a frame
+    m_max_process   =    10;  //The total amount of queue memebers to process every think
+    m_max_attempts  =    5;   //The amount of attempts to make to obtain a lock in think
 
     m_hooks         =   new Hook::Registry();
 
@@ -130,6 +130,19 @@ void Renderer::Think(){
 
         attempts++;
     }
+
+    attempts = 0;
+
+    while(!Object()->layer_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
+        Object()->_SetLinkDepth(Object()->layer_queue.front());
+
+        if(Object()->layer_queue.front().first->layer == Object()->layer_queue.front().second){
+            Object()->layer_queue.pop();
+            process++;
+        }
+
+        attempts++;
+    }
 }
 
 /*********************************************
@@ -137,6 +150,7 @@ void Renderer::Think(){
 *********************************************/
 void Renderer::Render(void* threadData){
     if(!GetRenderWindow()->IsOpened()) return;
+
 
     Renderer::Mutex()->Lock();
     Object()->m_running = true;
@@ -185,6 +199,34 @@ void Renderer::SetLinkDepth(Link* link, int depth){
     Object()->depth_queue.push(depth_pair_t(link, depth));
 }
 
+void Renderer::SetLinkLayer(Link* link, Layer new_layer){
+    int link_index = Object()->GetLinkIndex(link);
+
+    if(link_index == -1) return;
+    if(link->layer == new_layer) return;
+
+    Object()->layer_queue.push(layer_pair_t(link, new_layer));
+}
+
+void Renderer::_SetLinkLayer(layer_pair_t layer_pair){
+    Renderer::Mutex()->Lock();
+
+    int link_index = GetLinkIndex(layer_pair.first);
+
+    //Make sure the link wasn't removed
+    if(link_index == -1){
+        return;
+    }
+
+    links.erase(links.begin()+link_index);
+
+    layer_pair.first->layer = layer_pair.second;
+    _InsertLink(layer_pair.first);
+
+
+    Renderer::Mutex()->Unlock();
+}
+
 void Renderer::_SetLinkDepth(depth_pair_t depth_pair){
     Renderer::Mutex()->Lock();
 
@@ -192,7 +234,6 @@ void Renderer::_SetLinkDepth(depth_pair_t depth_pair){
 
     //Make sure the link wasn't removed
     if(link_index == -1){
-        depth_queue.pop();
         return;
     }
 
@@ -201,13 +242,8 @@ void Renderer::_SetLinkDepth(depth_pair_t depth_pair){
     depth_pair.first->depth = depth_pair.second;
     _InsertLink(depth_pair.first);
 
-    std::cout << "[Renderer][_SetLinkDepth] Repositioning\n";
-    std::cout << "\tSize before: " << links.size() << std::endl;
-    std::cout << "\tSize after: " << links.size() << std::endl;
-
 
     Renderer::Mutex()->Unlock();
-    std::cout << "[Renderer][_SetLinkDepth] Done\n";
 }
 
 void Renderer::_InsertLink(Link* newLink){

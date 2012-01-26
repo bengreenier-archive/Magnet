@@ -20,7 +20,6 @@ void Registry::Register(Component* newCmp){
 
     newCmp->SetRegistry(this);
     m_cmp_vect.push_back(newCmp);
-    m_nextdepth++;
 }
 
 void Registry::Remove(Component* remove){
@@ -92,42 +91,43 @@ bool Registry::do_iterate(){
 }
 
 bool Registry::onEvent(sf::Event evt){
-    if(!cmp_iterator_start()) return true;
+    if(evt.Type == sf::Event::MouseWheelMoved || evt.Type == sf::Event::MouseMoved || evt.Type == sf::Event::MouseButtonPressed || evt.Type == sf::Event::MouseButtonReleased){
+        if(evt.Type == sf::Event::MouseButtonPressed){
+            cmp_queue_type cmp_queue = GetComponentQueue(sf::Vector2f(evt.MouseButton.X, evt.MouseButton.Y));
 
-    Component* currentComponent;
-
-    do{
-        if(evt.Type == sf::Event::MouseWheelMoved || evt.Type == sf::Event::MouseMoved || evt.Type == sf::Event::MouseButtonPressed || evt.Type == sf::Event::MouseButtonReleased){
-            for(int i=0; i<m_cmp_vect.size(); i++){
-                return m_cmp_vect[i]->onMouseEvent(evt);
+            if(!cmp_queue.empty()){
+                SetFocus(GetTop(cmp_queue));
+            }else{
+                ReleaseFocus();
             }
         }
-    }while(do_iterate());
+
+        if(GetFocus() != NULL){
+            return GetFocus()->onMouseEvent(evt);
+        }
+    }
 
     return true;
 }
 
 Component* Registry::GetTop(cmp_queue_type stack){
     Component* cmp_top = NULL;
+    Component* cur = NULL;
     int top_depth;
     int check_depth;
 
     while(!stack.empty()){
-        if(GetFocus() != NULL){
-            if(stack.front()->HasFocus()){
-                cmp_top = stack.front();
-                break;
-            }
-        }
+        cur = stack.front();
 
         if(cmp_top == NULL){
-            cmp_top = stack.front();
+            cmp_top = cur;
+            top_depth = cmp_top->GetDepth();
         }else{
-            top_depth = 0;
-            check_depth = 0;
+            check_depth = cur->GetDepth();
 
             if(top_depth<check_depth){
-                cmp_top = stack.front();
+                cmp_top = cur;
+                top_depth = cmp_top->GetDepth();
             }
         }
 
@@ -137,7 +137,7 @@ Component* Registry::GetTop(cmp_queue_type stack){
     return cmp_top;
 }
 
-Registry::cmp_queue_type Registry::GetComponentsByCoord(sf::Vector2f coord){
+Registry::cmp_queue_type Registry::GetComponentQueue(sf::Vector2f coord){
     cmp_queue_type found;
 
     for(int i=0; i<m_cmp_vect.size(); i++){
@@ -155,16 +155,27 @@ Component* Registry::GetFocus(){
 }
 
 void Registry::SetFocus(Component* cmp){
+    if(!cmp->CanFocus()) return;
+
     if(m_focus == NULL){
         m_focus = cmp;
     }else{
-        std::cout << "Setting new focus to " << cmp->GetName() << std::endl;
-        Component* tmp = m_focus;
-        std::cout << "Stored old focus in" << tmp->GetName() << std::endl;
+        ReleaseFocus();
         m_focus = cmp;
-        std::cout << "Set new focus, formatting old focus.\n";
-        tmp->Format();
     }
+
+    m_focus->SetDepth(1);
+    m_focus->Format();
+}
+
+void Registry::ReleaseFocus(){
+    if(m_focus == NULL) return;
+
+    Component* tmp = m_focus;
+    m_focus = NULL;
+    tmp->SetDepth(tmp->GetDepth()-1);
+    tmp->Format();
+
 }
 
 Registry::cmp_vect_iterator_type Registry::get_iterator(){ return m_cmp_vect_it; }

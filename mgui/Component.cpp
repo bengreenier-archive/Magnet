@@ -23,6 +23,7 @@ void Component::init(float x, float y, float width, float height){
     m_debug     = false;
     m_created   = false;
     m_isChild   = false;
+    m_canFocus  = true;
     m_registry  = NULL;
     m_link      = NULL;
     m_parent    = NULL;
@@ -131,6 +132,18 @@ void Component::EnableOutline(bool enable){
     sf::Shape::EnableOutline(enable);
 }
 
+int Component::GetDepth(){
+    if(!IsLinked()) return 0;
+
+    return m_link->depth;
+}
+
+void Component::SetDepth(int depth){
+    if(!IsLinked()) return;
+
+    Renderer::SetLinkDepth(m_link, depth);
+}
+
 void Component::Create(){
     if(m_link != NULL){ std::cout << "Link already created, return\n"; return; }
 
@@ -179,20 +192,16 @@ bool Component::onMouseEvent(sf::Event evt){
     switch(evt.Type){
         case sf::Event::MouseButtonReleased:
             mouse_pos = sf::Vector2f(evt.MouseButton.X, evt.MouseButton.Y);
-            if(CheckBounds(mouse_pos))
-                return onMouseRelease(evt);
+            return onMouseRelease(evt);
             break;
         case sf::Event::MouseMoved:
             mouse_pos = sf::Vector2f(evt.MouseMove.X, evt.MouseMove.Y);
 
-            if(CheckBounds(mouse_pos)){
-                return onMouseMove(mouse_pos);
-            }
+            return onMouseMove(mouse_pos);
             break;
         case sf::Event::MouseButtonPressed:
             mouse_pos = sf::Vector2f(evt.MouseButton.X, evt.MouseButton.Y);
-            if(CheckBounds(mouse_pos))
-                return onMousePress(evt);
+            return onMousePress(evt);
             break;
     }
 

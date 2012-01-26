@@ -46,7 +46,7 @@ int main()
     sf::Thread ResourceLoader(&Resource::Load);
 
 
-    sf::RenderWindow Window(sf::VideoMode::GetMode(0), "Magnet", sf::Style::Titlebar, sf::WindowSettings(24, 8, 4)); //sf::WindowSettings(24, 8, 4)
+    sf::RenderWindow Window(sf::VideoMode::GetMode(0), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
     Window.SetActive(false);
 
 
