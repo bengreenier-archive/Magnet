@@ -251,10 +251,11 @@ void Magnet::Think(){
 
 void Magnet::ben_testing_space()
 {
-
+/*
     HttpReq demo(sf::Http::Request::Post,"http://bengreenier.com","/pages/magnet/network/query.php?name=magnet&desc=Program%20Made%20This&msg=so%20cool&score=100");
     if (demo.Execute())
     {
         std::cout<<"[Http] [Demo] Posted Successfully!\n";
     }else{ std::cout<<"[Http] [Demo] Failed.\n"; }
+*/
 }
