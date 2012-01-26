@@ -46,6 +46,7 @@ class World //! The world object. controls all physics and world-ly things. :)
 
 
         static bool Event_Click(sf::Event evt); //!< Called on Event_Click
+        static bool Event_Press(sf::Event evt); //!< Called on Event_Pressed
         static bool Event_KeyPresed(sf::Event evt); //!< Called on Event_KeyPressed
         static bool Event_MouseMove(sf::Event evt); //!< Event_MouseMove
 
@@ -91,6 +92,11 @@ class World //! The world object. controls all physics and world-ly things. :)
 
         //processes the above.
         void ProcessQueue(std::vector<PhysShape*>* Q,std::string fx);
+
+        //used for popup materials list
+        void HideMaterials();
+        void ShowMaterials();
+        sf::String* m_mat_msg;
 
 };
 

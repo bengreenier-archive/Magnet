@@ -3,7 +3,7 @@
 Material::Material(MatType::Type in)
 {
     //ctor
-
+    m_name = "";
     //switch types, and call their config methods.
     switch(in)
     {
@@ -103,4 +103,9 @@ float Material::GetFriction()
 sf::Color Material::GetColor()
 {
     return m_color;
+}
+
+std::string Material::GetName()
+{
+    return m_name;
 }
