@@ -89,7 +89,23 @@ static const bool debug = false;
 
 
                         //parse the color string at some point..
-                        All.push_back(new Material(density,rest,fric,sf::Color(200,200,12),name));
+
+                            temp = color.substr(0,color.find("-"));
+                            int r = atoi(temp.c_str());
+
+                            color = color.substr(color.find("-")+1);
+                            //std::cout<<"|"<<color<<"|\n";
+                            temp = color.substr(0,color.find("-")+1);
+
+                            int g = atoi(temp.c_str());
+
+                            color = color.substr(color.find("-")+1);
+                            temp = color.substr(0,color.find("-")+1);
+                            int b = atoi(temp.c_str());
+
+                            //std::cout<<"|g="<<g<<"|\n";
+
+                        All.push_back(new Material(density,rest,fric,sf::Color(r,g,b),name));
 
                         //std::cout<<"|"<<name<<"|"<<color<<"|"<<fric<<"|"<<density<<"|"<<rest<<"|\n";
 
@@ -99,17 +115,43 @@ static const bool debug = false;
                         //do for all lines of data
                         total = total.substr(total.find("\n")+1);
                     }
-
+                        m_cur_mat = All[0]; //assume we added one...
                     }else{ if (NetMaterial::debug){std::cout<<"[NetMaterial::Registry] [AddAll] GetResponse is null "<<data.length()<<" or no \\t.\n";} }
 
                 }else{ if (NetMaterial::debug){std::cout<<"[NetMaterial::Registry] [AddAll] Get Req Failure! :(\n";} }
 
             std::cout<<"[NetMaterial::Registry] [AddAll] Loaded.\n";
 
+
+
             }//!< AddAll Materials parsed from a web address in the form of host.com path
+
+
+            Material* NextMaterial() {
+
+                for (int i=0;i<All.size();i++)
+                {
+                    if (All[i]->GetName()==m_cur_mat->GetName()){
+                        if (i+1 < All.size())
+                            m_cur_mat = All[i+1];
+                        else
+                            m_cur_mat = All[0];
+
+                        return m_cur_mat;
+                    }
+
+
+                }
+
+    std::cout<<"failure to find next, returning current\n";
+                 return m_cur_mat;
+                 }//!< Cycle to next thing
+
+            Material* CurrentMaterial() { return m_cur_mat; }//!< the current cycled material
 
         private:
             std::vector<Material*> All;
+            Material* m_cur_mat;// used for cycling
 
 
 
