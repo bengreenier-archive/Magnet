@@ -301,7 +301,12 @@ bool World::Event_KeyRelease(sf::Event evt){
      }
 
      if (evt.Key.Code == sf::Key::LControl)
-        World::Access()->Queue.push_back(new Projectile(sf::Vector2f(evt.MouseButton.X,evt.MouseButton.Y),b2Vec2(0,50)));
+     {
+         const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
+         std::cout<<inpt.GetMouseX()<<","<<inpt.GetMouseY()<<"\n";
+         World::Access()->Queue.push_back(new Projectile(sf::Vector2f(inpt.GetMouseX(),inpt.GetMouseY()),b2Vec2(0,50)));
+     }
+
 
     return true;
 }
@@ -407,6 +412,9 @@ bool World::Event_MouseMove(sf::Event evt)
 {
     int curx = evt.MouseButton.X;
     int cury = evt.MouseButton.Y;
+
+    Access()->m_MouseVector.x = curx;
+    Access()->m_MouseVector.y = cury;
 
     if ((Access()->m_MouseVector1.x == -1)&&(Access()->m_MouseVector1.y == -1))
     {
