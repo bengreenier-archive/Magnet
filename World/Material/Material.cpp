@@ -3,7 +3,7 @@
 Material::Material(MatType::Type in)
 {
     //ctor
-
+    m_name = "";
     //switch types, and call their config methods.
     switch(in)
     {
@@ -14,6 +14,15 @@ Material::Material(MatType::Type in)
         case MatType::Wood:{m_Wood();}break;
         default:{m_Default();}break;
     }
+}
+
+Material::Material(float density,float rest,float fric,sf::Color col,std::string name)
+{
+    m_density = density;
+    m_friction = fric;
+    m_restitution = rest;
+    m_color = col;
+    m_name = name;
 }
 
 Material::~Material()
@@ -28,6 +37,7 @@ m_density = 1.0f;
 m_restitution = 0.002f;
 m_friction = 0.3f;
 m_color = sf::Color(255,0,0);
+m_name = "Default";
 
 }
 
@@ -38,6 +48,7 @@ m_density = 2.0f;
 m_restitution = 0.00002f;
 m_friction = 0.6f;
 m_color = sf::Color(121,10,250);
+m_name = "Heavy";
 
 }
 
@@ -48,6 +59,7 @@ m_density = 0.5f;
 m_restitution = 0.2f;
 m_friction = 0.003f;
 m_color = sf::Color(21,40,250);
+m_name = "Light";
 
 }
 
@@ -57,6 +69,7 @@ void Material::m_Floor()
     m_restitution = 0.00002f;
     m_friction = 0.6f;
     m_color = sf::Color(21,0,255);
+    m_name = "Floor";
 }
 
 void Material::m_Rubber()
@@ -65,6 +78,7 @@ void Material::m_Rubber()
     m_restitution = .5f;
     m_friction = 0.3f;
     m_color = sf::Color(0,255,85);
+    m_name = "Rubber";
 }
 
 void Material::m_Wood()
@@ -73,6 +87,7 @@ void Material::m_Wood()
     m_restitution = 0.05f;
     m_friction = 0.8f;
     m_color = sf::Color(255,192,0);
+    m_name = "Wood";
 }
 
 float Material::GetDensity()
@@ -94,4 +109,9 @@ float Material::GetFriction()
 sf::Color Material::GetColor()
 {
     return m_color;
+}
+
+std::string Material::GetName()
+{
+    return m_name;
 }

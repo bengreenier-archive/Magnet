@@ -43,9 +43,10 @@ World::World()
     Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::Event_Click));
+    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonPressed, &World::Event_Press));
     EventHandler::AddListener(new EventListener(sf::Event::MouseWheelMoved, &World::Event_Click));
 
-
+    EventHandler::AddListener(new EventListener(sf::Event::KeyReleased,&World::Event_KeyRelease));
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, &World::Event_MouseMove));
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed,&World::Event_KeyPresed));
@@ -65,6 +66,18 @@ World::World()
     Stat->ShowWorldCount(10, 24);
 
 
+    m_mat_msg_cur = new sf::String();
+    m_mat_msg = new sf::String();
+    mat_msg_up = false;
+    mat_msg_string = "";
+    //attempt to pull NetMaterial info from this link
+    m_matreg = new NetMaterial::Registry();
+
+    m_mat_msg_cur->SetText(mat_msg_string);
+     m_mat_msg_cur->SetPosition(540,80);
+    m_mat_msg_cur->SetColor(sf::Color(0,255,255));
+
+    Renderer::CreateLink(m_mat_msg_cur);
 
 
     //this should create an XmlParse and iterate its multimap
@@ -259,6 +272,8 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Line(32,435,10,200));
 
 
+    //pull net Materials
+    World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
 
 
 
@@ -273,6 +288,20 @@ void World::SetTimestep(float in)
 float World::GetTimestep()
 {
     return m_timeStep;
+}
+
+bool World::Event_KeyRelease(sf::Event evt){
+
+     if((evt.Key.Code == sf::Key::Num0)&&(Access()->mat_msg_up))
+     {
+
+            Access()->m_curMat = Access()->m_matreg->NextMaterial();
+            Access()->mat_msg_string = Access()->m_curMat->GetName();
+            std::cout<<"Cycle Choice:"<<Access()->m_curMat->GetName()<<"\n";
+            Access()->m_mat_msg_cur->SetText(Access()->mat_msg_string);
+     }
+
+    return true;
 }
 
 bool World::Event_KeyPresed(sf::Event evt){
@@ -295,6 +324,15 @@ bool World::Event_KeyPresed(sf::Event evt){
 }
 
 
+bool World::Event_Press(sf::Event evt)
+{
+        if((evt.Type == sf::Event::MouseButtonPressed)&&(evt.MouseButton.Button == sf::Mouse::Middle)){
+            Access()->ShowMaterials();
+            Access()->mat_msg_up = true;
+    }
+    return true;
+}
+
 bool World::Event_Click(sf::Event evt)
 {
     int radius = 5;
@@ -302,6 +340,7 @@ bool World::Event_Click(sf::Event evt)
     int w = radius*2;
      int h = w;
      int tHeight=w;
+
 
     if(evt.Type == sf::Event::MouseButtonReleased){
      if (evt.MouseButton.Button == sf::Mouse::Left)
@@ -312,9 +351,12 @@ bool World::Event_Click(sf::Event evt)
         //for(int i=0; i<100; i++)
             Access()->Queue.push_back(new Rect(w,h,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentMaterial()));
 
-     if (evt.MouseButton.Button == sf::Mouse::Middle)
+     if (evt.MouseButton.Button == sf::Mouse::Middle){
         //for(int i=0; i<100; i++)
-            Access()->Queue.push_back(new Triangle(tHeight,sf::Vector2f(evt.MouseButton.X-tHeight+i*tHeight,evt.MouseButton.Y-tHeight),Access()->CurrentMaterial()));
+            //Access()->Queue.push_back(new Triangle(tHeight,sf::Vector2f(evt.MouseButton.X-tHeight+i*tHeight,evt.MouseButton.Y-tHeight),Access()->CurrentMaterial()));
+            Access()->HideMaterials();
+            Access()->mat_msg_up = false;
+     }
     }else{
         const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
         for(int i=0; i<5; i++)
@@ -386,4 +428,36 @@ bool World::Event_MouseMove(sf::Event evt)
     }
 
 return true;
+}
+
+void World::ShowMaterials()
+{
+    std::string concat = "";
+    std::vector<Material*>* tvec = m_matreg->GetVector();
+
+    for (int i=0;i<tvec->size();i++)
+    {
+        concat+= tvec->at(i)->GetName();
+        concat+=" ";
+        if (i%5 == 0)
+            concat += "\n";
+    }
+
+
+    m_mat_msg->SetText(concat.c_str());
+
+    if (tvec->size()>0)
+        m_curMat = tvec->at(0);
+
+    m_mat_msg->SetPosition(540,50);
+    m_mat_msg->SetColor(sf::Color(255,255,255));
+
+
+    Renderer::CreateLink(m_mat_msg);
+}
+
+void World::HideMaterials()
+{
+
+    Renderer::RemoveLink(m_mat_msg);
 }

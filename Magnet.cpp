@@ -259,4 +259,11 @@ void Magnet::ben_testing_space()
         std::cout<<"[Http] [Demo] Posted Successfully!\n";
     }else{ std::cout<<"[Http] [Demo] Failed.\n"; }
 */
+/* //PULL TO CONSOLE EXAMPLE
+    HttpReq demo(sf::Http::Request::Get,"http://bengreenier.com","/pages/magnet/network/output.php");
+    if (demo.Execute())
+    {
+        std::cout<<"[Http] [Demo] Got Successfully!\n[Http] Response:\n"<<demo.GetResponse();
+    }else{ std::cout<<"[Http] [Demo] Failed.\n"; }
+*/
 }

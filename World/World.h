@@ -20,6 +20,9 @@
 #include "Shapes/Line.h"
 #include "Shapes/Triangle.h"
 
+//Network Mats
+#include "Material/Network/NetMaterialRegistry.h"
+
 
 class World //! The world object. controls all physics and world-ly things. :)
 {
@@ -43,7 +46,9 @@ class World //! The world object. controls all physics and world-ly things. :)
 
 
         static bool Event_Click(sf::Event evt); //!< Called on Event_Click
+        static bool Event_Press(sf::Event evt); //!< Called on Event_Pressed
         static bool Event_KeyPresed(sf::Event evt); //!< Called on Event_KeyPressed
+        static bool Event_KeyRelease(sf::Event evt); //!< Called on Event_KeyReleased
         static bool Event_MouseMove(sf::Event evt); //!< Event_MouseMove
 
         //static binders for material-current changing
@@ -67,6 +72,8 @@ class World //! The world object. controls all physics and world-ly things. :)
 
         static World* m_ptr;
 
+        NetMaterial::Registry* m_matreg;//the netregistry to materials
+
         WorldStats* Stat;
 
         Material* CurrentMaterial(); //!< Points to the current material
@@ -86,6 +93,14 @@ class World //! The world object. controls all physics and world-ly things. :)
 
         //processes the above.
         void ProcessQueue(std::vector<PhysShape*>* Q,std::string fx);
+
+        //used for popup materials list
+        void HideMaterials();
+        void ShowMaterials();
+        sf::String* m_mat_msg;
+        sf::String* m_mat_msg_cur;
+        bool mat_msg_up;
+        std::string mat_msg_string;
 
 };
 
