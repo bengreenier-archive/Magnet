@@ -34,6 +34,7 @@ Magnet::~Magnet()
 void Magnet::Hook_Initialize(){
     try{
         Resource::AddDir("image/", true);
+        Resource::AddDir("font/", true);
     }
 
     catch(Exception e){
@@ -55,7 +56,7 @@ void Magnet::Debug_CreateMenu(){
     Object()->m_menus.Register(Object()->test);
 
     mgui::Panel* panel = new mgui::Panel("button");
-    panel->SetColor(sf::Color(255, 255, 255));
+    panel->SetColor(sf::Color(100, 100, 100));
     panel->SetPosition(sf::Vector2f(100, 0));
     panel->DebugOn();
     panel->SetVisible(true);
