@@ -19,6 +19,8 @@
 #include "Shapes/Rect.h"
 #include "Shapes/Line.h"
 #include "Shapes/Triangle.h"
+#include "Shapes/Projectile.h"
+
 
 //Network Mats
 #include "Material/Network/NetMaterialRegistry.h"

@@ -271,7 +271,6 @@ void World::Hook_Setup()
      //World::Access()->Queue.push_back(new Line(100,390,320,390));
      World::Access()->Queue.push_back(new Line(32,435,10,200));
 
-
     //pull net Materials
     World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
 
@@ -300,6 +299,9 @@ bool World::Event_KeyRelease(sf::Event evt){
             std::cout<<"Cycle Choice:"<<Access()->m_curMat->GetName()<<"\n";
             Access()->m_mat_msg_cur->SetText(Access()->mat_msg_string);
      }
+
+     if (evt.Key.Code == sf::Key::LControl)
+        World::Access()->Queue.push_back(new Projectile(sf::Vector2f(evt.MouseButton.X,evt.MouseButton.Y),b2Vec2(0,50)));
 
     return true;
 }
