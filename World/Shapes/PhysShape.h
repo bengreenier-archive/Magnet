@@ -19,7 +19,7 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         virtual void Destroy() { std::cout<<"[PhysShape] [Destroy] Not overidden.\n"; } //!< A virtual Destroy function, that should get overridden.
         virtual void Create() { std::cout<<"[PhysShape] [Create] Not overidden.\n"; } //!< A virtual Create function, that should get overridden.
         virtual void Update() { std::cout<<"[PhysShape] [Update] Not overidden.\n"; } //!< A virtual Update function, that should get overridden.
-        void ApplyForce(b2Vec2 force) {std::cout<<"gotin\n"; Get_Body()->ApplyForce(force,Get_Body()->GetWorldCenter()); std::cout<<"gotit\n"; } //!< Apply a force to a body.
+        void ApplyForce(b2Vec2 force) {Get_Body()->ApplyForce(force,Get_Body()->GetWorldCenter()); } //!< Apply a force to a body.
 
         /** Access m_Mat
          * \return The current value of m_Mat

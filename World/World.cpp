@@ -275,7 +275,17 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Line(120,390,700,240));
      World::Access()->Queue.push_back(new Line(700,180,700,240));
      //World::Access()->Queue.push_back(new Line(100,390,320,390));
+<<<<<<< HEAD
      World::Access()->Queue.push_back(new Line(32,435,10,200));
+=======
+     World::Access()->Queue.push_back(new Line(32,435,10,200));
+
+    //pull net Materials
+    World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
+
+
+
+>>>>>>> 79b31dd838eb445874d4c4b956e293c75bb810b8
 }
 //sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
 
@@ -299,6 +309,14 @@ bool World::Event_KeyRelease(sf::Event evt){
             std::cout<<"Cycle Choice:"<<Access()->m_curMat->GetName()<<"\n";
             Access()->m_mat_msg_cur->SetText(Access()->mat_msg_string);
      }
+
+     if (evt.Key.Code == sf::Key::LControl)
+     {
+         const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
+         std::cout<<inpt.GetMouseX()<<","<<inpt.GetMouseY()<<"\n";
+         World::Access()->Queue.push_back(new Projectile(sf::Vector2f(inpt.GetMouseX(),inpt.GetMouseY()),b2Vec2(0,50)));
+     }
+
 
     return true;
 }
@@ -404,6 +422,9 @@ bool World::Event_MouseMove(sf::Event evt)
 {
     int curx = evt.MouseButton.X;
     int cury = evt.MouseButton.Y;
+
+    Access()->m_MouseVector.x = curx;
+    Access()->m_MouseVector.y = cury;
 
     if ((Access()->m_MouseVector1.x == -1)&&(Access()->m_MouseVector1.y == -1))
     {

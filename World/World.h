@@ -19,6 +19,8 @@
 #include "Shapes/Rect.h"
 #include "Shapes/Line.h"
 #include "Shapes/Triangle.h"
+#include "Shapes/Projectile.h"
+
 
 //Network Mats
 #include "Material/Network/NetMaterialRegistry.h"
@@ -69,6 +71,7 @@ class World //! The world object. controls all physics and world-ly things. :)
         bool m_hooked;
         b2Vec2 m_MouseVector1;
         b2Vec2 m_MouseVector2;
+        b2Vec2 m_MouseVector;
 
 
         static World* m_ptr;
