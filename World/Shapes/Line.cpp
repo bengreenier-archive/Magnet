@@ -1,5 +1,5 @@
 #include "Line.h"
-#include "../World.h"
+#include "../WorldManager.h"
 
 Line::Line(int x,int y,int x2,int y2,int thickness,Material* mat)
 {
@@ -55,7 +55,7 @@ void Line::Create()
 
     //bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-    Set_Body(World::Access()->CurrentWorld()->CreateBody(&bodyDef));
+    Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
 
     b2EdgeShape es;
 
@@ -95,7 +95,7 @@ void Line::Create()
 void Line::Destroy()
 {
         Renderer::RemoveLink(Get_Shape());
-    World::Access()->CurrentWorld()->DestroyBody(Get_Body());
+    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
     if (WorldStandards::debug)
         std::cout << "[SFML/Box2D] Removed Line.\n";
 
@@ -105,4 +105,9 @@ void Line::Update()
 {
     Get_Shape()->SetPosition(Get_Position());
     //Get_Shape()->Rotate(Get_Angle());
+}
+
+void Line::Hide()
+{
+    Renderer::RemoveLink(Get_Shape());
 }

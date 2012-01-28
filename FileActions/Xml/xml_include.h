@@ -59,15 +59,15 @@ class XmlParse{//! The wrapper class for parsing xml
 
 
 
-            root = new xml_node;
-            root->name="root";
-            root->isdata=false;
+            //root = new xml_node;
+            //root->name="root";
+            //root->isdata=false;
 
 
 
             recurse(m_doc);
 
-            return Tree();
+            return new xml_node;
 
 		}//!< Do the grunt work, open and parse the file...returns the nodetree
 
@@ -100,7 +100,7 @@ class XmlParse{//! The wrapper class for parsing xml
                         if (temp != m_doc->RootElement() )
                         {
 
-                            xml_node* tmnode = new xml_node;
+                            //xml_node* tmnode = new xml_node;
 
                             for (tempElem = temp->ToElement()->FirstAttribute(); tempElem; tempElem = tempElem->Next() )
                             {
@@ -108,16 +108,16 @@ class XmlParse{//! The wrapper class for parsing xml
                                 if (xmlglobals::debug)
                                     std::cout<<"Attr = "<<tempElem->Value()<<"\n";
 
-                                tmnode->attribute.insert(std::pair<std::string,std::string>(tempElem->Name(),tempElem->Value()));
+                                //tmnode->attribute.insert(std::pair<std::string,std::string>(tempElem->Name(),tempElem->Value()));
                             }
 
                             if (xmlglobals::debug)
                                 std::cout<<"[XmlParse] [Recurse]"<<temp->Value()<<"\n";
 
-                            tmnode->isdata=false;
-                            tmnode->name = temp->Value();
+                            //tmnode->isdata=false;
+                            //tmnode->name = temp->Value();
 
-                            root->children.push_back(tmnode);
+                            //root->children.push_back(tmnode);
                         }
                         recurse(temp);
 
@@ -125,17 +125,18 @@ class XmlParse{//! The wrapper class for parsing xml
                     else
                     {
                         //is content
-                         xml_node* tmnode = new xml_node;
-                            tmnode->isdata=true;
-                            tmnode->data = temp->Value();
+
 
                             for (tempElem = temp->ToElement()->FirstAttribute(); tempElem; tempElem = tempElem->Next() )
                             {
+                            //xml_node* tmnode = new xml_node;
+                            //tmnode->isdata=true;
+                            //tmnode->data = temp->Value();
                                 //scroll the attrs
                                 if (xmlglobals::debug)
                                     std::cout<<"Attr = "<<tempElem->Value()<<"\n";
 
-                                tmnode->attribute.insert(std::pair<std::string,std::string>(tempElem->Name(),tempElem->Value()));
+                                //tmnode->attribute.insert(std::pair<std::string,std::string>(tempElem->Name(),tempElem->Value()));
                             }
 
                         //this is a child node of Parent...

@@ -16,6 +16,7 @@ class Circle : public PhysShape //! A PhysShape, that is a circle. Used in World
         virtual void Create(); //!< Does all the work of creating both the sfml and the b2d shape.
         virtual void Destroy(); //!< Removes the sfml Renderer Link, and the b2d body.
         virtual void Update(); //!< Updates shape based on definitions. ie: Set_Position() then call this.
+        virtual void Hide();
 
         /** Default destructor */
         ~Circle();//!< Deconstructor

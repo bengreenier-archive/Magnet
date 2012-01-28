@@ -1,19 +1,16 @@
 #ifndef REF_H
 #define REF_H
 
-namespace WorldShapes //! Contains WorldShape type enums, to tell what shape an object is.
-{
-    enum Type //!< The definitions of all the types that can be created in World
-    {
-        Rect,
-        Circle,
-        StaticRect,
-        StaticCircle,
-        Triangle,
-        StaticTriange
-    };
-}
+#include <SFML/Graphics.hpp>
 
+
+//all our shapes
+#include "PhysShape.h"
+#include "Circle.h"
+#include "Rect.h"
+#include "Line.h"
+#include "Triangle.h"
+#include "Projectile.h"
 
 
 

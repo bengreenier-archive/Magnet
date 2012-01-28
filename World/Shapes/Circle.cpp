@@ -1,5 +1,5 @@
 #include "Circle.h"
-#include "../World.h"
+#include "../WorldManager.h"
 
 Circle::Circle(int radius,sf::Vector2f pos,Material* mat,float degangle)
 {
@@ -57,7 +57,7 @@ void Circle::Create()
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-	Set_Body(World::Access()->CurrentWorld()->CreateBody(&bodyDef));
+	Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
 
 	b2CircleShape circle;
 
@@ -96,7 +96,7 @@ void Circle::Create()
 void Circle::Destroy()
 {
     Renderer::RemoveLink(Get_Shape());
-    World::Access()->CurrentWorld()->DestroyBody(Get_Body());
+    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
         if (WorldStandards::debug)
         std::cout << "[SFML/Box2D] Removed Circle.\n";
 
@@ -106,4 +106,9 @@ void Circle::Update()
 {
         Get_Shape()->SetPosition(Get_Position());
         Get_Shape()->Rotate(Get_Angle());
+}
+
+void Circle::Hide()
+{
+    Renderer::RemoveLink(Get_Shape());
 }

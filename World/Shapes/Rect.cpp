@@ -1,5 +1,5 @@
 #include "Rect.h"
-#include "../World.h"
+#include "../WorldManager.h"
 
 Rect::Rect(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
 {
@@ -62,7 +62,7 @@ void Rect::Create()
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-	Set_Body(World::Access()->CurrentWorld()->CreateBody(&bodyDef));
+	Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
 
 	b2PolygonShape dynamicBox;
 
@@ -112,7 +112,7 @@ void Rect::Destroy()
 {
     //
     Renderer::RemoveLink(Get_Shape());
-    World::Access()->CurrentWorld()->DestroyBody(Get_Body());
+    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
     if (WorldStandards::debug)
         std::cout << "[SFML/Box2D] Removed Box.\n";
 
@@ -123,4 +123,9 @@ void Rect::Update()
 {
     Get_Shape()->SetPosition(Get_Position());
     Get_Shape()->Rotate(Get_Angle());
+}
+
+void Rect::Hide()
+{
+    Renderer::RemoveLink(Get_Shape());
 }

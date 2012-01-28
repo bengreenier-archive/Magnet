@@ -5,63 +5,38 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-#include "../Magnet.h"
-#include "../FileActions/Xml/xml_include.h"
+#include "../Game/Renderer.h"
+
+//PhysShapes
+#include "Shapes/ref.h"
+
 
 //Other World-ly includes
 #include "WorldStandards.h"
 #include "Material/Material.h"
 #include "Stats/WorldStats.h"
 
-//PhysShape Includes
-#include "Shapes/PhysShape.h"
-#include "Shapes/Circle.h"
-#include "Shapes/Rect.h"
-#include "Shapes/Line.h"
-#include "Shapes/Triangle.h"
-#include "Shapes/Projectile.h"
-
-
-//Network Mats
-#include "Material/Network/NetMaterialRegistry.h"
-
-
 class World //! The world object. controls all physics and world-ly things. :)
 {
     public:
-        World(); //!< Default Constructor
+        World(int constraint); //!< Default Constructor
 
-        static World* Access(); //!< Access the world object.
-        static void Init(); //!< Initialize the world object. (calls constructor, setting pointer along the way)
-
-        sf::Color B2SFColor(const b2Color &color, int alpha = 255); //!< useless function that converts colors.
-
-        b2World* CurrentWorld();//!< Returns a pointer to the current world.
+        b2World* CurrentB2World();//!< Returns a pointer to the current world.
 
         void Step();//!< IMPORTANT: Does the stepping over the CurrentWorld().
 
         void SetTimestep(float in);//!< Adjust the timestep
         float GetTimestep(); //!< Get the timestep
 
-        static void HookHelper(); //!< Called on Hook::Frame
-        static void Hook_Setup(); //!< Setup World.
-        static void Hook_Loading(); //!< Load resources
+        void AddShape(PhysShape* in);
+
+        int uuid;//!< WorldManager sets this and its different for each World
+        Material* CurrentMaterial(); //!< Points to the current material
+        void SetCurrentMaterial(Material* in){ m_curMat = in; }//!< Changes the current material
 
 
-        static bool Event_Click(sf::Event evt); //!< Called on Event_Click
-        static bool Event_Press(sf::Event evt); //!< Called on Event_Pressed
-        static bool Event_KeyPresed(sf::Event evt); //!< Called on Event_KeyPressed
-        static bool Event_KeyRelease(sf::Event evt); //!< Called on Event_KeyReleased
-        static bool Event_MouseMove(sf::Event evt); //!< Event_MouseMove
-
-        //static binders for material-current changing
-        static void Default(sf::Event evt); //!< Binder for current material changing.
-        static void Heavy(sf::Event evt);//!< Binder for current material changing.
-        static void Light(sf::Event evt);//!< Binder for current material changing.
-        static void Rubber(sf::Event evt);//!< Binder for current material changing.
-        static void Wood(sf::Event evt);//!< Binder for current material changing.
-
-        static void AddShape(PhysShape* shape); //!< Add a PhysShape to the world
+        void Unload();//!< Unloads the World. UnLinking Renderer, then deleting whatever it can
+        void Hide();//!< De Renderer's the Worlds stuff.
 
     protected:
     private:
@@ -74,13 +49,9 @@ class World //! The world object. controls all physics and world-ly things. :)
         b2Vec2 m_MouseVector;
 
 
-        static World* m_ptr;
-
-        NetMaterial::Registry* m_matreg;//the netregistry to materials
 
         WorldStats* Stat;
 
-        Material* CurrentMaterial(); //!< Points to the current material
 
         int maxPhysicsBodies;
         //our array of world constrainst. set in constructor.
@@ -91,20 +62,14 @@ class World //! The world object. controls all physics and world-ly things. :)
         b2World* m_selected;// a pointer to the selected world.
         b2World* m_world1; //our first/potentially-only physics world.
 
-        std::vector<PhysShape*> Objects;
+        std::vector<PhysShape*> Objects,StaticObjects;
 
         std::vector <PhysShape*> Queue;
 
         //processes the above.
         void ProcessQueue(std::vector<PhysShape*>* Q,std::string fx);
 
-        //used for popup materials list
-        void HideMaterials();
-        void ShowMaterials();
-        sf::String* m_mat_msg;
-        sf::String* m_mat_msg_cur;
-        bool mat_msg_up;
-        std::string mat_msg_string;
+
 
 };
 

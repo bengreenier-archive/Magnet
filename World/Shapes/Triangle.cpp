@@ -1,5 +1,5 @@
 #include "Triangle.h"
-#include "../World.h"
+#include "../WorldManager.h"
 
 Triangle::Triangle(int size,sf::Vector2f Globalpos,Material* mat,float degangle)
 {
@@ -37,6 +37,10 @@ Triangle::~Triangle()
     Destroy();
 }
 
+void Triangle::Hide()
+{
+    Renderer::RemoveLink(Get_Shape());
+}
 
 void Triangle::Create()
 {
@@ -52,7 +56,7 @@ void Triangle::Create()
     float size = m_size;
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-	Set_Body(World::Access()->CurrentWorld()->CreateBody(&bodyDef));
+	Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
 
 	b2PolygonShape dynamicBox;
 
@@ -109,7 +113,7 @@ void Triangle::Destroy()
 {
     //
     Renderer::RemoveLink(Get_Shape());
-    World::Access()->CurrentWorld()->DestroyBody(Get_Body());
+    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
     if (WorldStandards::debug)
         std::cout << "[SFML/Box2D] Removed Triangle.\n";
 

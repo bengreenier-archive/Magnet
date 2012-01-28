@@ -183,8 +183,8 @@ void Magnet::ChangeState(State::_type newState){
             Renderer::Init(*Object()->m_renderWindow, *Object()->m_renderThread_ptr);
             std::cout << "[Magnet][Initialize] Initialize resource...\n";
             Resource::Init(Object("ChangeState")->m_loadThread_ptr, "resource/");
-            std::cout << "[Magnet][Initialize] Initialize world...\n";
-            World::Init();
+            std::cout << "[Magnet][Initialize] Initialize WorldManager...\n";
+            WorldManager::Init();
 
             Object()->m_initialized = true;
             Magnet::Hooks("Renderer::Render")->Call(Hook::Initialize);

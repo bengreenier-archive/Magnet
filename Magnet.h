@@ -24,6 +24,8 @@
 
 #include "Network/HttpReq.h"
 
+#include "World/WorldManager.h"
+
 class Magnet
 {
     public:

@@ -1,7 +1,6 @@
 #ifndef RECT_H
 #define RECT_H
 
-
 #include "PhysShape.h"
 
 class Rect : public PhysShape //! The Rectangle PhysShape. Used in World.
@@ -16,6 +15,7 @@ class Rect : public PhysShape //! The Rectangle PhysShape. Used in World.
         virtual void Create(); //!< Create the b2d/sfml Rectangle objects.
         virtual void Destroy(); //!< Destroy and UnLink the sfml/b2d objects for this shape.
         virtual void Update(); //!< Update shape stuff, based on set info, so Set_Position before this.
+        virtual void Hide();
 
 
         ~Rect();//!< Default Deconstructor

@@ -3,9 +3,7 @@
 //!-----
 
 
-World* World::m_ptr = NULL;
-
-World::World()
+World::World(int constraint)
 {
     //ctor
 
@@ -24,10 +22,10 @@ World::World()
 	m_positionIterations = 3;
 
     //world max/min
-    worldConstraint[0].x = -500; //left
-    worldConstraint[0].y = -500; //top
-    worldConstraint[1].x = 500 + Renderer::GetRenderWindow()->GetWidth();
-    worldConstraint[1].y = 500 + Renderer::GetRenderWindow()->GetHeight();
+    worldConstraint[0].x = -constraint; //left
+    worldConstraint[0].y = -constraint; //top
+    worldConstraint[1].x = constraint + Renderer::GetRenderWindow()->GetWidth();
+    worldConstraint[1].y = constraint + Renderer::GetRenderWindow()->GetHeight();
 
     //max bodies allowed
     maxPhysicsBodies = 1000;
@@ -39,25 +37,9 @@ World::World()
     if (WorldStandards::debug)
         std::cout<<"[World] [Init] Hooked. \n";
 
-    Renderer::Hooks()->Register(Hook::Frame,&World::HookHelper);
-    Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
-    Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Loading);
 
-    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::Event_Click));
-    EventHandler::AddListener(new EventListener(sf::Event::MouseButtonPressed, &World::Event_Press));
-    EventHandler::AddListener(new EventListener(sf::Event::MouseWheelMoved, &World::Event_Click));
+    m_curMat = new Material(MatType::Default);
 
-    EventHandler::AddListener(new EventListener(sf::Event::KeyReleased,&World::Event_KeyRelease));
-
-    EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, &World::Event_MouseMove));
-    EventHandler::AddListener(new EventListener(sf::Event::KeyPressed,&World::Event_KeyPresed));
-
-    m_curMat = new Material();
-    //temp material msg
-    sf::String* msg = new sf::String("Materials = 1,2(HVY),3(LGT),4(RBR),5(WOOD)");
-    msg->SetPosition(540,10);
-    Renderer::CreateLink(msg);
-    //--
 
     m_hooked=true;
 
@@ -66,56 +48,11 @@ World::World()
     Stat->ShowFps(10, 0);
     Stat->ShowWorldCount(10, 24);
 
-
-    m_mat_msg_cur = new sf::String();
-    m_mat_msg = new sf::String();
-    mat_msg_up = false;
-    mat_msg_string = "";
-    //attempt to pull NetMaterial info from this link
-    m_matreg = new NetMaterial::Registry();
-
-    m_mat_msg_cur->SetText(mat_msg_string);
-     m_mat_msg_cur->SetPosition(540,80);
-    m_mat_msg_cur->SetColor(sf::Color(0,255,255));
-
-    Renderer::CreateLink(m_mat_msg_cur);
-
-
-    //this should create an XmlParse and iterate its multimap
-    //XmlParse xml("resource\\config\\AnimDemo.xml");
-    //xml.Parse(); //set the parsed data
-
-
 }
 
-void World::Hook_Loading(){
-    //pull net Materials
-    World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
-}
-
-World* World::Access()
-{
-    if (!m_ptr)
-        std::cout << "[World] [Access]\tWorld has not been initialized! Null pointer returned!\n";
-    return m_ptr;
-
-}
-
-void World::Init(){
-    m_ptr = new World();
-}
-
-
-b2World* World::CurrentWorld()
+b2World* World::CurrentB2World()
 {
     return m_selected;
-}
-
-
-sf::Color World::B2SFColor(const b2Color &color, int alpha)
-{
-	sf::Color result((sf::Uint8)(color.r*255), (sf::Uint8)(color.g*255), (sf::Uint8)(color.b*255), (sf::Uint8) alpha);
-	return result;
 }
 
 void World::Step()
@@ -132,30 +69,30 @@ void World::Step()
 
 
     //step world
-    Access()->CurrentWorld()->Step(Access()->m_timeStep, Access()->m_velocityIterations, Access()->m_positionIterations);
+    CurrentB2World()->Step(m_timeStep, m_velocityIterations, m_positionIterations);
 
 
     //do remapping for sfml, and process creation of deletion commands.
-    for (int i=0;i<Access()->Objects.size();i++)
+    for (int i=0;i<Objects.size();i++)
     {
 
         //if body is asleep, and a bullet, remove it
-        if ((Access()->Objects[i]->Get_Body()->IsBullet())  &&  (!Access()->Objects[i]->Get_Body()->IsAwake()))
+        if ((Objects[i]->Get_Body()->IsBullet())  &&  (!Objects[i]->Get_Body()->IsAwake()))
                 EraseQueue.push_back(Objects[i]);
 
         //get b2Body info
-        float b2posx = Access()->Objects[i]->Get_Body()->GetPosition().x;
-        float b2posy = Access()->Objects[i]->Get_Body()->GetPosition().y;
-        float b2rot  = Access()->Objects[i]->Get_Body()->GetAngle();
+        float b2posx = Objects[i]->Get_Body()->GetPosition().x;
+        float b2posy = Objects[i]->Get_Body()->GetPosition().y;
+        float b2rot  = Objects[i]->Get_Body()->GetAngle();
 
         if ((WorldStandards::debug)&&(WorldStandards::debug_step))
         {
-            std::cout<<"[System] [Step] [ObjectInfo] MassData.mass = "<< Access()->Objects[i]->Get_Body()->GetMass() <<".\n";
+            std::cout<<"[System] [Step] [ObjectInfo] MassData.mass = "<< Objects[i]->Get_Body()->GetMass() <<".\n";
         }
 
         //create new angle for sf::Shape
         float deg = b2rot * WorldStandards::radtodeg;
-        float alreadyrot = Access()->Objects[i]->Get_Shape()->GetRotation();
+        float alreadyrot = Objects[i]->Get_Shape()->GetRotation();
         float newrot = (-1*b2rot) * WorldStandards::radtodeg;
         float rot= newrot - alreadyrot ;
 
@@ -168,13 +105,13 @@ void World::Step()
         if ((worldConstraint[0].x<sfposx)&&(sfposx<worldConstraint[1].x)&&(worldConstraint[0].y<sfposy)&&(sfposy<worldConstraint[1].y))
         {
 
-                    Access()->Objects[i]->Set_Position(sf::Vector2f(sfposx,sfposy));
-                    Access()->Objects[i]->Set_Angle(rot);
-                    Access()->Objects[i]->Update();
+                    Objects[i]->Set_Position(sf::Vector2f(sfposx,sfposy));
+                    Objects[i]->Set_Angle(rot);
+                    Objects[i]->Update();
 
         }else{
 
-               EraseQueue.push_back(Access()->Objects[i]);
+               EraseQueue.push_back(Objects[i]);
                 if (WorldStandards::debug)
                         std::cout<<"[System] [Step] [Erase] Shape Erase Chained. \n";
 
@@ -182,10 +119,10 @@ void World::Step()
         }
 
 
-        if ((Access()->Objects.size() > Access()->maxPhysicsBodies)&&(mpb_notchecked))
+        if ((Objects.size() > maxPhysicsBodies)&&(mpb_notchecked))
         {   mpb_notchecked=false;
 
-            for (int a=0;a<Access()->Objects.size()-Access()->maxPhysicsBodies;a++)//11 at a time from the front
+            for (int a=0;a<Objects.size()-maxPhysicsBodies;a++)//11 at a time from the front
             EraseQueue.push_back(Objects[a]);
 
 
@@ -197,7 +134,7 @@ void World::Step()
     }
 
         //add objects.
-    ProcessQueue(&Access()->Queue,"create");
+    ProcessQueue(&Queue,"create");
 
 
     //destroy objects.
@@ -221,7 +158,7 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
         for (int i =0; i<Q->size(); i++)
         {
             //iterate Q, match Q's PhysShape to an Objects, and destroy it, and erase the Objects.
-            for (int a=0;a<Access()->Objects.size();a++)
+            for (int a=0;a<Objects.size();a++)
             {
                 if (Q->at(i) == Objects[a]){
                     Objects[a]->Destroy();
@@ -240,7 +177,9 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
             Q->at(i)->Create();
             //only add nonstatics
             if (!Q->at(i)->Get_Static())
-                Access()->Objects.push_back(Q->at(i));
+                Objects.push_back(Q->at(i));
+            else
+                StaticObjects.push_back(Q->at(i));
         }
 
         Q->clear();
@@ -254,41 +193,6 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
 
 }
 
-
-
-void World::HookHelper()
-{
-    Access()->Step();
-}
-
-void World::AddShape(PhysShape* shape){
-    World::Access()->Queue.push_back(shape);
-}
-
-void World::Hook_Setup()
-{
-
-    //add our demo-world-scape
-     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(0,1000), new Material(MatType::Floor),340));
-     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(400,1000), new Material(MatType::Floor)));
-     World::Access()->Queue.push_back(new Circle(50,true,sf::Vector2f(600,550), new Material(MatType::Floor)));
-     World::Access()->Queue.push_back(new Rect(460,100,true,sf::Vector2f(1033,1350), new Material(MatType::Floor),310));
-     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
-     World::Access()->Queue.push_back(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
-     World::Access()->Queue.push_back(new Line(310,100,600,200));
-     World::Access()->Queue.push_back(new Line(120,390,700,240));
-     World::Access()->Queue.push_back(new Line(700,180,700,240));
-     //World::Access()->Queue.push_back(new Line(100,390,320,390));
-     World::Access()->Queue.push_back(new Line(32,435,10,200));
-     World::Access()->Queue.push_back(new Line(32,435,10,200));
-
-    //pull net Materials
-    World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
-
-
-}
-//sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
-
 void World::SetTimestep(float in)
 {
     m_timeStep = in;
@@ -299,185 +203,47 @@ float World::GetTimestep()
     return m_timeStep;
 }
 
-bool World::Event_KeyRelease(sf::Event evt){
 
-     if((evt.Key.Code == sf::Key::Num0)&&(Access()->mat_msg_up))
-     {
-
-            Access()->m_curMat = Access()->m_matreg->NextMaterial();
-            Access()->mat_msg_string = Access()->m_curMat->GetName();
-            std::cout<<"Cycle Choice:"<<Access()->m_curMat->GetName()<<"\n";
-            Access()->m_mat_msg_cur->SetText(Access()->mat_msg_string);
-     }
-
-     if (evt.Key.Code == sf::Key::LControl)
-     {
-         const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
-         std::cout<<inpt.GetMouseX()<<","<<inpt.GetMouseY()<<"\n";
-         World::Access()->Queue.push_back(new Projectile(sf::Vector2f(inpt.GetMouseX(),inpt.GetMouseY()),b2Vec2(0,50)));
-     }
-
-
-    return true;
-}
-
-bool World::Event_KeyPresed(sf::Event evt){
-    if(evt.Key.Code == sf::Key::Num1)
-        World::Default(evt);
-
-    if(evt.Key.Code == sf::Key::Num2)
-        World::Heavy(evt);
-
-    if(evt.Key.Code == sf::Key::Num3)
-        World::Light(evt);
-
-    if(evt.Key.Code == sf::Key::Num4)
-        World::Rubber(evt);
-
-    if(evt.Key.Code == sf::Key::Num5)
-        World::Wood(evt);
-
-    return true;
-}
-
-
-bool World::Event_Press(sf::Event evt)
-{
-        if((evt.Type == sf::Event::MouseButtonPressed)&&(evt.MouseButton.Button == sf::Mouse::Middle)){
-            Access()->ShowMaterials();
-            Access()->mat_msg_up = true;
-    }
-    return true;
-}
-
-bool World::Event_Click(sf::Event evt)
-{
-    int radius = 5;
-    int i=0; //if for is commented out, just do this for now.
-    int w = radius*2;
-     int h = w;
-     int tHeight=w;
-
-
-    if(evt.Type == sf::Event::MouseButtonReleased){
-     if (evt.MouseButton.Button == sf::Mouse::Left)
-            //for(int i=0; i<100; i++)
-                Access()->Queue.push_back(new Circle(radius,sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentMaterial()));
-
-     if (evt.MouseButton.Button == sf::Mouse::Right)
-        //for(int i=0; i<100; i++)
-            Access()->Queue.push_back(new Rect(w,h,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentMaterial()));
-
-     if (evt.MouseButton.Button == sf::Mouse::Middle){
-        //for(int i=0; i<100; i++)
-            //Access()->Queue.push_back(new Triangle(tHeight,sf::Vector2f(evt.MouseButton.X-tHeight+i*tHeight,evt.MouseButton.Y-tHeight),Access()->CurrentMaterial()));
-            Access()->HideMaterials();
-            Access()->mat_msg_up = false;
-     }
-    }else{
-        const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
-        for(int i=0; i<5; i++)
-        Access()->Queue.push_back(new Circle(radius,sf::Vector2f(inpt.GetMouseX()-tHeight+i*tHeight,inpt.GetMouseY()-tHeight),Access()->CurrentMaterial()));
-
-    }
-
-
-
-    return true;
-
-}
-
-
-
-
-/* MATERIAL SELECTOR STUFF */
 Material* World::CurrentMaterial()
 {
-    return Access()->m_curMat;
+    return m_curMat;
 }
 
-void World::Default(sf::Event evt)
+void World::AddShape(PhysShape* in)
 {
-    Access()->m_curMat=new Material(MatType::Default);
-}
-void World::Heavy(sf::Event evt)
-{
-    Access()->m_curMat=new Material(MatType::Heavy);
-}
-void World::Light(sf::Event evt)
-{
-    Access()->m_curMat=new Material(MatType::Light);
-}
-void World::Rubber(sf::Event evt)
-{
-    Access()->m_curMat=new Material(MatType::Rubber);
-}
-void World::Wood(sf::Event evt)
-{
-    Access()->m_curMat=new Material(MatType::Wood);
+    Queue.push_back(in);
 }
 
-
-bool World::Event_MouseMove(sf::Event evt)
+void World::Unload()
 {
-    int curx = evt.MouseButton.X;
-    int cury = evt.MouseButton.Y;
+    std::cout<<"Unload Called!\n";//then it crashes....
 
-    Access()->m_MouseVector.x = curx;
-    Access()->m_MouseVector.y = cury;
+    //the problem with this is gunna be how well can Renderer hold up, cause , at least for now imma make a shitton of RemoveLinks really fast
+    for (int i=0;i<StaticObjects.size();i++)
+    delete StaticObjects[i];
 
-    if ((Access()->m_MouseVector1.x == -1)&&(Access()->m_MouseVector1.y == -1))
-    {
-        Access()->m_MouseVector1.x = curx;
-        Access()->m_MouseVector1.y = cury;
-    }else
-    {
-        if ((Access()->m_MouseVector2.x == -1)&&(Access()->m_MouseVector2.y == -1))
-        {
-            Access()->m_MouseVector2.x = curx;
-            Access()->m_MouseVector2.y = cury;
-        }else
-        {
-            Access()->m_MouseVector1.x = -1;
-            Access()->m_MouseVector1.y = -1;
-            Access()->m_MouseVector2.x = -1;
-            Access()->m_MouseVector2.y = -1;
-            //reset.
-        }
 
-    }
+    for (int i=0;i<Objects.size();i++)
+    delete Objects[i];
 
-return true;
+    //now do stats
+    Stat->HideAll();
+
+    //then delete other things
+    delete Stat;
+    delete m_curMat;
+    delete m_selected;
+    delete m_world1;
+
 }
 
-void World::ShowMaterials()
+void World::Hide()
 {
-    std::string concat = "";
-    std::vector<Material*>* tvec = m_matreg->GetVector();
+    for (int i=0;i<Objects.size();i++)
+        Objects[i]->Hide();
 
-    for (int i=0;i<tvec->size();i++)
-    {
-        concat+= tvec->at(i)->GetName();
-        concat+=" ";
-        if (i%5 == 0)
-            concat += "\n";
-    }
+    for (int i=0;i<StaticObjects.size();i++)
+        StaticObjects[i]->Hide();
 
-
-    m_mat_msg->SetText(concat.c_str());
-
-    if (tvec->size()>0)
-        m_curMat = tvec->at(0);
-
-    m_mat_msg->SetPosition(540,50);
-    m_mat_msg->SetColor(sf::Color(255,255,255));
-
-
-    Renderer::CreateLink(m_mat_msg);
-}
-
-void World::HideMaterials()
-{
-
-    Renderer::RemoveLink(m_mat_msg);
+    Stat->HideAll();
 }

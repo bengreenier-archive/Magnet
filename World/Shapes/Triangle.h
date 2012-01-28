@@ -17,6 +17,7 @@ class Triangle: public PhysShape
         virtual void Create(); //!< Create the triangle in both physics engine and render engine.
         virtual void Destroy(); //!< Remove the triangle in both physics engine and render engine.
         virtual void Update(); //!< Updaye the triangle from set values, so Set_Position before calling this.
+        virtual void Hide();
 
     protected:
     private:

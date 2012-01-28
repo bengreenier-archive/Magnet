@@ -13,9 +13,10 @@ class Line : public PhysShape //! The line PhysShape, used in World.
         ~Line(); //!< Deconstructor
 
         /** Overide these virtual f(x)'s*/
-        void Create(); //!< Does everything to create both the sfml and b2d objects.
-        void Destroy(); //!< Removes the b2d and sfml objects.
-        void Update(); //!< Updates the sfml/b2d objects based on currently defined info. ie: change Set_Position() then call this.
+        virtual void Create(); //!< Does everything to create both the sfml and b2d objects.
+        virtual void Destroy(); //!< Removes the b2d and sfml objects.
+        virtual void Update(); //!< Updates the sfml/b2d objects based on currently defined info. ie: change Set_Position() then call this.
+        virtual void Hide();
 
         /** Getters/Setters */
         void Set_x1(int val){ m_x1 = val; } //!< Set x1

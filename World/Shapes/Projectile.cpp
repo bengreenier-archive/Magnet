@@ -1,5 +1,5 @@
 #include "Projectile.h"
-#include "../World.h"
+#include "../WorldManager.h"
 
 Projectile::Projectile(sf::Vector2f pos,b2Vec2 tForce,Material* mat,float degangle)
 {
@@ -40,7 +40,7 @@ void Projectile::Create()
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-	Set_Body(World::Access()->CurrentWorld()->CreateBody(&bodyDef));
+	Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
 
 	b2PolygonShape dynamicBox;
 
@@ -94,7 +94,7 @@ void Projectile::Destroy()
 {
     //
     Renderer::RemoveLink(Get_Shape());
-    World::Access()->CurrentWorld()->DestroyBody(Get_Body());
+    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
     if (WorldStandards::debug)
         std::cout << "[SFML/Box2D] Removed Box.\n";
 
@@ -105,4 +105,9 @@ void Projectile::Update()
 {
     Get_Shape()->SetPosition(Get_Position());
     Get_Shape()->Rotate(Get_Angle());
+}
+
+void Projectile::Hide()
+{
+    Renderer::RemoveLink(Get_Shape());
 }
