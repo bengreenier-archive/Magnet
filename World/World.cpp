@@ -275,9 +275,8 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Line(120,390,700,240));
      World::Access()->Queue.push_back(new Line(700,180,700,240));
      //World::Access()->Queue.push_back(new Line(100,390,320,390));
-<<<<<<< HEAD
      World::Access()->Queue.push_back(new Line(32,435,10,200));
-=======
+
      World::Access()->Queue.push_back(new Line(32,435,10,200));
 
     //pull net Materials
@@ -285,7 +284,6 @@ void World::Hook_Setup()
 
 
 
->>>>>>> 79b31dd838eb445874d4c4b956e293c75bb810b8
 }
 //sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
 
