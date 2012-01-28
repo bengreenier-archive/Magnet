@@ -269,3 +269,14 @@ sf::Image& Resource::GetImage(std::string file){
         return Object()->m_resource_vect[Object()->ErrorImage]->getImage();
     }
 }
+
+sf::Font& Resource::GetFont(std::string file){
+    if(Object()->m_resource_vect.count(file)){
+        return Object()->m_resource_vect[file]->getFont();
+    }else{
+        std::cout << "Font " << file << " doesn't exit... crashing now.\n";
+        for(resource_vect_it_t it = Object()->m_resource_vect.begin(); it != Object()->m_resource_vect.end(); it++){
+            std::cout << it->first << std::endl;
+        }
+    }
+}

@@ -51,7 +51,7 @@ class ResourcePointer
         ///     throws NullPointer exception if the resource is
         ///     not of type font;
         ////////////////////////////////////////////////////////////
-        sf::Font*   getFont();
+        sf::Font&   getFont();
 
         ////////////////////////////////////////////////////////////
         ///     Get a pointer to a resource of type text

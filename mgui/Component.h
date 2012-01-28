@@ -100,8 +100,14 @@ namespace mgui{
             void DebugOn();
             void DebugOff();
 
+            //This allows for non-default linking
+            virtual Renderer::Link* GetRendererLink(){ return m_link; }
+            virtual void SetRendererLink(Renderer::Link* link){ m_link = link; }
 
-            virtual int GetLinkIndex(){ return m_link_index; }
+            virtual bool IsCreated(){ return m_created; }
+            virtual bool IsChild(){ return m_isChild; }
+
+            virtual Renderer::Link* Link();
 
         protected:
         private:
@@ -121,6 +127,7 @@ namespace mgui{
             Component*  m_parent;
             Registry*   m_registry;
             Renderer::Link*       m_link;
+            Renderer::Link*       m_default_link;
 
             //Debug things
             sf::Color debug_color;

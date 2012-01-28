@@ -16,7 +16,13 @@ Component::Component(const char* name, sf::Vector2f pos, sf::Vector2f size){
 
 Component::~Component()
 {
-    //delete [] this;
+    if(m_created){
+        Remove();
+    }
+
+    if(m_link != m_default_link){
+        delete m_default_link;
+    }
 }
 
 void Component::init(float x, float y, float width, float height){
@@ -38,6 +44,17 @@ void Component::init(float x, float y, float width, float height){
     SetOutlineWidth(0);
     SetOutlineColor(sf::Color(255, 0, 0, 255));
     SetColor(sf::Color(255, 255, 255));
+
+    //Set up default component link
+    SetRendererLink(new Renderer::Link());
+    Link()->object   = static_cast<sf::Shape*>(this);
+    Link()->layer    = Renderer::MenuLayer;
+    if(IsRegistered()){
+        Link()->depth = GetRegistry()->GetNextDepth();
+    }else{
+        Link()->depth = 0;
+    }
+    m_default_link = Link();
 }
 
 bool Component::CheckBounds(sf::Vector2f coord){
@@ -130,37 +147,34 @@ void Component::SetVisible(bool toggle){
 void Component::EnableOutline(bool enable){
     m_outline = enable;
     sf::Shape::EnableOutline(enable);
+
+    if(!enable){
+        SetOutlineWidth(0);
+    }
 }
 
 int Component::GetDepth(){
     if(!IsLinked()) return 0;
 
-    return m_link->depth;
+    return Link()->depth;
 }
 
 void Component::SetDepth(int depth){
     if(!IsLinked()) return;
 
-    Renderer::SetLinkDepth(m_link, depth);
+    Renderer::SetLinkDepth(Link(), depth);
 }
 
 void Component::Create(){
-    if(m_link != NULL){ std::cout << "Link already created, return\n"; return; }
+    if(Link() == NULL) return;
+    if(Renderer::Object()->LinkExists(Link())) return;
+    Renderer::CreateLink(Link());
 
-    m_link          = new Renderer::Link();
-    m_link->object   = static_cast<sf::Shape*>(this);
-    m_link->layer    = Renderer::MenuLayer;
-    if(IsRegistered()){
-        m_link->depth = GetRegistry()->GetNextDepth();
-    }else{
-        m_link->depth = 0;
-    }
-
-    Renderer::CreateLink(m_link);
+    m_created = true;
 }
 
 bool Component::IsLinked(){
-    if(m_link == NULL){
+    if(Link() == NULL){
         return false;
     }
 
@@ -170,15 +184,22 @@ void Component::Remove(){
     if(IsRegistered()){
         GetRegistry()->Remove(this);
     }else{
-        Renderer::RemoveLink(m_link);
+        Renderer::RemoveLink(Link());
 
         if(m_debug){
             DebugOff();
         }
-
-        //delete m_link;
-        m_link = NULL;
+        m_created = false;
     }
+
+}
+
+Renderer::Link* Component::Link(){
+    if(m_link == NULL){
+        std::cout << "[Component][Link]\tWARNING: " << GetName() << " link is null, returning NULL\n";
+    }
+
+    return m_link;
 }
 
 void Component::SetParent(Component* parent){

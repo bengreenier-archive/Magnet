@@ -14,6 +14,10 @@ sf::Image&  ResourcePointer::getImage(){
     return ImageHandler::GetImage(m_fullPath);
 }
 
+sf::Font&   ResourcePointer::getFont(){
+    return FontHandler::GetFont(m_fullPath);
+}
+
 void ResourcePointer::set(std::string file){
     m_file = file;
 
@@ -34,7 +38,11 @@ void ResourcePointer::set(std::string file){
                 m_type = Invalid;
             }
         }else if(fileType[1] == "ttf"){
-            m_fullPath = Resource::Object()->FontDir + file;
+            if(!file.find(Resource::Object()->FontDir)){
+                m_fullPath = Resource::Object()->FontDir + file;
+            }else{
+                m_fullPath = Resource::Object()->ResourceDir + file;
+            }
             if(FontHandler::AddFont(m_fullPath)){
                 m_type = Font;
             }else{

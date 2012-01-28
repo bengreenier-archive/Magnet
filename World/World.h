@@ -43,6 +43,7 @@ class World //! The world object. controls all physics and world-ly things. :)
 
         static void HookHelper(); //!< Called on Hook::Frame
         static void Hook_Setup(); //!< Setup World.
+        static void Hook_Loading(); //!< Load resources
 
 
         static bool Event_Click(sf::Event evt); //!< Called on Event_Click

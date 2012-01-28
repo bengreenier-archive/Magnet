@@ -27,9 +27,14 @@ void Registry::Remove(Component* remove){
 
     for(it = m_cmp_vect.begin(); it != m_cmp_vect.end(); it++){
         if((*it) == remove){
+            const char* name = remove->GetName();
+            if(GetFocus() == remove){
+                ReleaseFocus();
+            }
             remove->SetRegistry(NULL); //This will stop the component from calling Registry::Remove again
             remove->Remove();
             it = m_cmp_vect.erase(it);
+            std::cout << "[Registry][Remove]\t" << name << ": Removed.\n";
             break;
         }
     }

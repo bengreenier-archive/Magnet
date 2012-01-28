@@ -93,6 +93,31 @@ void Renderer::Think(){
     int attempts = 0;
     int process  = 0;
 
+
+    while(!Object()->depth_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
+        Object()->_SetLinkDepth(Object()->depth_queue.front());
+
+        if(Object()->depth_queue.front().first->depth == Object()->depth_queue.front().second || !Renderer::Object()->LinkExists(Object()->depth_queue.front().first)){
+            Object()->depth_queue.pop();
+            process++;
+        }
+
+        attempts++;
+    }
+
+    attempts = 0;
+
+    while(!Object()->layer_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
+        Object()->_SetLinkLayer(Object()->layer_queue.front());
+
+        if(Object()->layer_queue.front().first->layer == Object()->layer_queue.front().second){
+            Object()->layer_queue.pop();
+            process++;
+        }
+
+        attempts++;
+    }
+
     //Process the remove link queue
     while(!Object()->delete_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
         Object()->_RemoveLink(Object()->delete_queue.front());
@@ -112,32 +137,6 @@ void Renderer::Think(){
 
         if(Renderer::Object()->LinkExists(Object()->newlink_queue.front())){
             Object()->newlink_queue.pop();
-            process++;
-        }
-
-        attempts++;
-    }
-
-    attempts = 0;
-
-    while(!Object()->depth_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
-        Object()->_SetLinkDepth(Object()->depth_queue.front());
-
-        if(Object()->depth_queue.front().first->depth == Object()->depth_queue.front().second){
-            Object()->depth_queue.pop();
-            process++;
-        }
-
-        attempts++;
-    }
-
-    attempts = 0;
-
-    while(!Object()->layer_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
-        Object()->_SetLinkDepth(Object()->layer_queue.front());
-
-        if(Object()->layer_queue.front().first->layer == Object()->layer_queue.front().second){
-            Object()->layer_queue.pop();
             process++;
         }
 
@@ -311,14 +310,11 @@ void Renderer::RemoveLink(Link* link_ptr){
 
 void Renderer::_RemoveLink(Link* oldLink){
     Renderer::Mutex()->Lock();
-    int linkIndex = GetLinkIndex(oldLink);
+     int linkIndex = GetLinkIndex(oldLink);
 
     if(linkIndex == -1) return;
-
+    delete oldLink;
     links.erase(links.begin()+linkIndex);
-
-    //Make sure the link has been erased
-    while(LinkExists(oldLink)){}
 
     Renderer::Mutex()->Unlock();
 }

@@ -74,6 +74,7 @@ class Magnet
 
         static State GetState(){ return Object("GetState")->gameState; }
 
+
         //////////////////////////////////////////
         /// Change the current state of the game
         //////////////////////////////////////////

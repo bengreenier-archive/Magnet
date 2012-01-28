@@ -124,14 +124,19 @@ class Resource
         /// Get an image
         ////////////////////////////////
         static sf::Image& GetImage(std::string file);
+        ////////////////////////////////
+        /// Get a font
+        ////////////////////////////////
+        static sf::Font& GetFont(std::string file);
     protected:
         Resource(sf::Thread* loadThread, std::string resourceDir);
     private:
         static Resource* _resource_ptr;
         sf::Thread*     m_loadThread_ptr;
 
-        typedef std::queue<std::string>           load_queue_t;
-        typedef std::map<std::string, ResourcePointer*>    resource_vect_t;
+        typedef std::queue<std::string>                              load_queue_t;
+        typedef std::map<std::string, ResourcePointer*>              resource_vect_t;
+        typedef std::map<std::string, ResourcePointer*>::iterator    resource_vect_it_t;
 
         resource_vect_t m_resource_vect;
         load_queue_t    m_load_queue;

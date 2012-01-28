@@ -1,17 +1,21 @@
 #include "Panel.h"
+#include "../Game/Resource.h"
 
 using namespace mgui;
 
 Panel::Panel(const char* name) : Component(name)
 {
     m_mouse_down = false;
-    m_label.SetText("Default label");
+    m_text.SetText("Default panel text");
+    m_text.SetFontSize(14);
+    m_text.SetParent(this);
+    //m_label.SetFont(Resource::GetFont("font/tahomabd.ttf"));
 }
 
-Panel::Panel(const char* name, const std::string label) : Component(name)
+Panel::Panel(const char* name, const char* label) : Component(name)
 {
     m_mouse_down = false;
-    m_label.SetText(label);
+    m_text.SetText(label);
 }
 
 Panel::~Panel()
@@ -19,21 +23,36 @@ Panel::~Panel()
     //dtor
 }
 
-void Panel::Format(){
-    Component::Format();
+void Panel::DebugOn(){
+    m_text.DebugOn();
+    Component::DebugOn();
+}
 
-    m_label.SetPosition(GetPosition());
+void Panel::DebugOff(){
+    m_text.DebugOff();
+    Component::DebugOff();
+}
+
+void Panel::Format(){
+    m_text.Update();
+    Component::Format();
 }
 
 void Panel::Create(){
-    std::cout << "Create**\n";
     Component::Create();
-    Renderer::CreateLink(&m_label, Renderer::MenuLayer, GetDepth());
+    m_text.Create();
 }
 
 void Panel::Remove(){
-    Renderer::RemoveLink(&m_label);
+    if(m_text.IsCreated()){
+        m_text.Remove();
+    }
     Component::Remove();
+}
+
+void Panel::SetDepth(int depth){
+    m_text.SetDepth(depth+1);
+    Component::SetDepth(depth);
 }
 
 bool Panel::onMouseRelease(sf::Event evt){
@@ -42,21 +61,21 @@ bool Panel::onMouseRelease(sf::Event evt){
 }
 
 bool Panel::onMouseMove(sf::Vector2f mouse_pos){
-    /*if(m_mouse_down){
+    if(m_mouse_down){
         SetPosition(mouse_pos - m_mouse_dist);
     }
 
-    Format();*/
+    Format();
     return true;
 }
 
 bool Panel::onMousePress(sf::Event evt){
-    /*if(evt.MouseButton.Button == sf::Mouse::Left){
+    if(evt.MouseButton.Button == sf::Mouse::Left){
         m_mouse_down = true;
         m_mouse_dist = sf::Vector2f(evt.MouseButton.X - GetPosition().x, evt.MouseButton.Y-GetPosition().y);
     }else if(evt.MouseButton.Button == sf::Mouse::Right){
         Remove();
-    }*/
+    }
     m_mouse_down = true;
     return false;
 }

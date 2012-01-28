@@ -41,6 +41,7 @@ World::World()
 
     Renderer::Hooks()->Register(Hook::Frame,&World::HookHelper);
     Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Setup);
+    Magnet::Hooks()->Register(Hook::Setup,&World::Hook_Loading);
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, &World::Event_Click));
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonPressed, &World::Event_Press));
@@ -85,6 +86,11 @@ World::World()
     //xml.Parse(); //set the parsed data
 
 
+}
+
+void World::Hook_Loading(){
+    //pull net Materials
+    World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
 }
 
 World* World::Access()
@@ -270,13 +276,6 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Line(700,180,700,240));
      //World::Access()->Queue.push_back(new Line(100,390,320,390));
      World::Access()->Queue.push_back(new Line(32,435,10,200));
-
-
-    //pull net Materials
-    World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
-
-
-
 }
 //sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
 

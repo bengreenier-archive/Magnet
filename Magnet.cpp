@@ -55,14 +55,17 @@ void Magnet::Debug_CreateMenu(){
     Object()->test->Create();
     Object()->m_menus.Register(Object()->test);
 
-    mgui::Panel* panel = new mgui::Panel("button");
+    /*mgui::Panel* panel = new mgui::Panel("button");
     panel->SetColor(sf::Color(100, 100, 100));
     panel->SetPosition(sf::Vector2f(100, 0));
+    panel->SetOutlineWidth(1);
+    panel->SetOutlineColor(sf::Color(0, 255, 255, 255));
+    panel->EnableOutline(true);
     panel->DebugOn();
     panel->SetVisible(true);
     panel->Format();
     panel->Create();
-    Object()->m_menus.Register(panel);
+    Object()->m_menus.Register(panel);*/
 
 }
 
