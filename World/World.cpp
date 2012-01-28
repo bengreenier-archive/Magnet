@@ -139,6 +139,10 @@ void World::Step()
     for (int i=0;i<Access()->Objects.size();i++)
     {
 
+        //if body is asleep, and a bullet, remove it
+        if ((Access()->Objects[i]->Get_Body()->IsBullet())  &&  (!Access()->Objects[i]->Get_Body()->IsAwake()))
+                EraseQueue.push_back(Objects[i]);
+
         //get b2Body info
         float b2posx = Access()->Objects[i]->Get_Body()->GetPosition().x;
         float b2posy = Access()->Objects[i]->Get_Body()->GetPosition().y;
@@ -275,17 +279,13 @@ void World::Hook_Setup()
      World::Access()->Queue.push_back(new Line(120,390,700,240));
      World::Access()->Queue.push_back(new Line(700,180,700,240));
      //World::Access()->Queue.push_back(new Line(100,390,320,390));
-<<<<<<< HEAD
      World::Access()->Queue.push_back(new Line(32,435,10,200));
-=======
      World::Access()->Queue.push_back(new Line(32,435,10,200));
 
     //pull net Materials
     World::Access()->m_matreg->AddAll("http://bengreenier.com","/pages/magnet/network/ReadNetMaterial.php");
 
 
-
->>>>>>> 79b31dd838eb445874d4c4b956e293c75bb810b8
 }
 //sf::Vector2f pos1,sf::Vector2f pos2,sf::Vector2f pos3,sf::Vector2f Globalpos
 
