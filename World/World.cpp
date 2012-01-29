@@ -193,6 +193,16 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
 
 }
 
+
+void World::HookHelper()
+{
+    Access()->Step();
+}
+
+void World::AddShape(PhysShape* shape){
+    World::Access()->Queue.push_back(shape);
+}
+
 void World::SetTimestep(float in)
 {
     m_timeStep = in;
