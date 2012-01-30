@@ -9,8 +9,16 @@ class Parameter
             sf::Event data;
         };
 
+        struct HookParam{
+            int     inum;
+            float   fnum;
+            bool    condition;
+            void*   void_ptr;
+        };
+
         union{
             EventParam  Event;
+            HookParam   Hook;
         };
 
 };

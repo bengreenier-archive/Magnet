@@ -8,7 +8,7 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
     m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
-    m_hooks.Register(Hook::Initialize,&Magnet::ben_testing_space);//call ben testing space
+    m_hooks.Register(Hook::Think,&Magnet::ben_testing_space);//call ben testing space
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, Event_MouseButtonReleased));
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, Event_MouseMove));
@@ -232,16 +232,10 @@ void Magnet::Think(){
             Object()->State_Setup();
             break;
     }
-
-    if(Object()->m_mouseTrail.on){
-        Object()->m_mouseTrail.Frame();
-    }
-
-    Magnet::Hooks()->Call(Hook::Think);
 }
 
 
-void Magnet::ben_testing_space()
+void Magnet::ben_testing_space(Parameter p)
 {
 /*
     HttpReq demo(sf::Http::Request::Post,"http://bengreenier.com","/pages/magnet/network/query.php?name=magnet&desc=Program%20Made%20This&msg=so%20cool&score=100");

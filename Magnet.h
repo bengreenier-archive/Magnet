@@ -72,7 +72,7 @@ class Magnet
         //////////////////////////////////////////
         static mgui::Registry* Menus();
 
-        static void ben_testing_space();//!< space for shit ben needs to test
+        static void ben_testing_space(Parameter p);//!< space for shit ben needs to test
 
         static State::_type GetState(){ return Object("GetState")->gameState.get(); }
 
