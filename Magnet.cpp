@@ -22,8 +22,9 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     m_renderWindow->SetFramerateLimit(30);
 
     m_mouseTrail.on = false;
+    m_initialized   = false;
+    m_load_started  = false;
     name = "test_cmp";
-    m_initialized = false;
 }
 
 Magnet::~Magnet()
@@ -32,14 +33,7 @@ Magnet::~Magnet()
 }
 
 void Magnet::Hook_Initialize(){
-    try{
-        Resource::AddDir("image/", true);
-        Resource::AddDir("font/", true);
-    }
 
-    catch(Exception e){
-        e.output();
-    }
 }
 
 void Magnet::Debug_CreateMenu(){
@@ -70,7 +64,14 @@ void Magnet::Debug_CreateMenu(){
 }
 
 void Magnet::Hook_Setup(){
-    Object()->Debug_CreateMenu();
+    try{
+        Resource::AddDir("image/", true);
+        Resource::AddDir("font/", true);
+    }
+
+    catch(Exception e){
+        e.output();
+    }
 }
 
 bool Magnet::Event_MouseMove(sf::Event evt){
@@ -149,10 +150,6 @@ Magnet* Magnet::Object(){
 void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread){
     if(magnet_ptr == NULL){
         magnet_ptr = new Magnet(window, renderThread, loadThread, State::Null);
-    }else{
-        if(Object()->gameState.get() == State::Null){
-            Object()->ChangeState(State::Initialize);
-        }
     }
 }
 
@@ -161,82 +158,78 @@ bool Magnet::Initialized(){
         return false;
     }
 
-    if(!Object()->m_initialized){
-        return false;
-    }
-
-
     return true;
 }
 
 void Magnet::ChangeState(State::_type newState){
     if(newState == gameState.get()) return;
-    switch(newState){
-        case State::Null:
-            std::cout << "**********\tNULL\t**********\n";
 
-            gameState.set(newState);
-            break;
-        case State::Initialize:
-            std::cout << "**********\tINITALIZE\t**********\n";
-            std::cout << "[Magnet][Initialize] Initialize renderer...\n";
-            Renderer::Init(*Object()->m_renderWindow, *Object()->m_renderThread_ptr);
-            std::cout << "[Magnet][Initialize] Initialize resource...\n";
-            Resource::Init(Object("ChangeState")->m_loadThread_ptr, "resource/");
-            std::cout << "[Magnet][Initialize] Initialize WorldManager...\n";
-            WorldManager::Init();
+    gameState.set(newState);
+    m_hooks.Call(Hook::GameStateChange);
+}
 
-            Object()->m_initialized = true;
-            Magnet::Hooks("Renderer::Render")->Call(Hook::Initialize);
+bool Magnet::LoadNeeded(){
+    return !m_load_started;
+}
 
-            gameState.set(newState);
-            break;
-        case State::Loading:
-            std::cout << "**********\tLOADING\t**********\n";
+void Magnet::State_Initialize(){
+    if(!m_initialized){
+        std::cout << "**********\tINITALIZE\t**********\n";
+        std::cout << "[Magnet][Initialize] Initialize renderer...\n";
+        Renderer::Init(*m_renderWindow, *Object()->m_renderThread_ptr);
+        std::cout << "[Magnet][Initialize] Initialize resource...\n";
+        Resource::Init(m_loadThread_ptr, "resource/");
+        std::cout << "[Magnet][Initialize] Initialize WorldManager...\n";
+        WorldManager::Init();
+
+        m_initialized = true;
+
+
+        Magnet::Hooks("Renderer::Render")->Call(Hook::Initialize);
+    }else{
+        if(LoadNeeded()){
+            ChangeState(State::Setup);
+        }else{
+            ChangeState(State::Ready);
+        }
+    }
+}
+
+void Magnet::State_Setup(){
+    std::cout << "**********\tSETUP\t**********\n";
+    m_hooks.Call(Hook::Setup);
+
+    ChangeState(State::Load);
+}
+
+void Magnet::State_Load(){
+    if(!Resource::Loading() && Resource::Ready()){
+        //m_load_started = false;
+        Object()->ChangeState(State::Initialize); //Should return to previous state
+    }else{
+        if(!m_load_started){
+            std::cout << "**********\tLOAD\t**********\n";
             m_hooks.Call(Hook::Load);
 
-            gameState.set(newState);
-            break;
-        case State::Setup:
-            std::cout << "**********\tSETUP\t**********\n";
-            m_hooks.Call(Hook::Setup);
-
-            gameState.set(newState);
-            break;
-        case State::Menu:
-            std::cout << "**********\tMENU\t**********\n";
-
-
-            gameState.set(newState);
-            break;
-        case State::Game:
-            std::cout << "**********\tGAME\t**********\n";
-
-            gameState.set(newState);
-            break;
-        default:
-            std::cout << "*** ERROR: State \"" << typeid(newState).name() << "\" is not a valid game state! Setting to default state.\n";
-            gameState.reset();
+            m_load_started = true;
+        }
     }
-    m_hooks.Call(Hook::GameStateChange);
-
-
 }
 
 void Magnet::Think(){
-    if(magnet_ptr == NULL) return;
+    if(!Initialized()) return;
 
     switch(Object()->gameState.get()){
+        case State::Null:
+            Object()->ChangeState(State::Initialize);
         case State::Initialize:
-            Object()->ChangeState(State::Loading);
+            Object()->State_Initialize();
             break;
-        case State::Loading:
-            if(!Resource::Loading() && Resource::Ready()){
-                Object()->ChangeState(State::Setup);
-            }
+        case State::Load:
+            Object()->State_Load();
             break;
         case State::Setup:
-            StartGame();
+            Object()->State_Setup();
             break;
     }
 
@@ -245,11 +238,6 @@ void Magnet::Think(){
     }
 
     Magnet::Hooks()->Call(Hook::Think);
-
-    if(!Renderer::IsRunning()){
-        //Draw the frame
-        Object()->m_renderThread_ptr->Launch();
-    }
 }
 
 

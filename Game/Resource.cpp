@@ -224,7 +224,7 @@ bool Resource::NeedLoad(){
 
 void Resource::Hook_Load(){
     if(Resource::NeedLoad()){
-        Object()->m_load_state.set(State::Loading);
+        Object()->m_load_state.set(State::Load);
 
         if(Object()->m_debug)
             std::cout << "[Resource][Load] Loading...\n";

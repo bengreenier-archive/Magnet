@@ -90,6 +90,8 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
 }
 
 void Renderer::Think(){
+    if(Magnet::GetState() != State::Ready) return;
+
     int attempts = 0;
     int process  = 0;
 
@@ -142,6 +144,8 @@ void Renderer::Think(){
 
         attempts++;
     }
+
+    Object()->renderThread_ptr->Launch();
 }
 
 /*********************************************

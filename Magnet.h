@@ -74,13 +74,22 @@ class Magnet
 
         static void ben_testing_space();//!< space for shit ben needs to test
 
-        static State GetState(){ return Object("GetState")->gameState; }
+        static State::_type GetState(){ return Object("GetState")->gameState.get(); }
 
 
         //////////////////////////////////////////
-        /// Change the current state of the game
+        /// Change the current state of the engine
         //////////////////////////////////////////
         void ChangeState(State::_type newState);
+
+        //////////////////////////////////////////
+        /// Returns true if setup hooks are
+        /// registered to m_hooks;
+        ///
+        /// always returns true for now until
+        /// hook is updated
+        /////////////////////////////////////////
+        bool LoadNeeded();
 
         void Debug_CreateMenu();
 
@@ -109,8 +118,25 @@ class Magnet
         Hook::Registry m_hooks;
         mgui::Registry m_menus;
 
-        bool m_loadingStarted; //Checks to see if the loading has started yet
-        bool m_initialized;
+        bool m_load_started;  //True when a load has been started
+        bool m_initialized;     //True when Engine critical classes are initialized
+
+        //////////////////////////////////////////
+        /// Called on initialize
+        //////////////////////////////////////////
+        void State_Initialize();
+        //////////////////////////////////////////
+        /// Called on setup
+        //////////////////////////////////////////
+        void State_Setup();
+        //////////////////////////////////////////
+        /// Called on load
+        //////////////////////////////////////////
+        void State_Load();
+        //////////////////////////////////////////
+        /// Called on ready
+        //////////////////////////////////////////
+        void State_Ready();
 
 
 };

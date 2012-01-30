@@ -79,7 +79,7 @@ class Resource
         /// resources are loading
         ////////////////////////////////
         static bool Loading(){
-          if(Object()->m_load_state.get() == State::Loading){
+          if(Object()->m_load_state.get() == State::Load){
             return true;
           }
 

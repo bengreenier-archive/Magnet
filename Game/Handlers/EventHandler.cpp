@@ -13,12 +13,12 @@ EventHandler::~EventHandler()
     //dtor
 }
 
-void EventHandler::Listen(){
+void EventHandler::Listen(sf::RenderWindow& Window){
     event_queue_t& queue = Object()->m_event_queue;
     listener_map_pair_t ptr_range;
     sf::Event nextEvent;
 
-    while (Renderer::GetRenderWindow()->GetEvent(nextEvent))
+    while (Window.GetEvent(nextEvent))
     {
         queue.push(nextEvent);
     }

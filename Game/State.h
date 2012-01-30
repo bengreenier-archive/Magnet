@@ -6,7 +6,7 @@ class State {
     public:
         enum _type{
             Null,       //initial state
-            Loading,
+            Load,
             Menu,       //In a menu
             Game,       //In game
             Initialize, //Initialize resources

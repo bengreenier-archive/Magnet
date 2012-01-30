@@ -51,11 +51,11 @@ int main()
 
 
     while(Window.IsOpened()){
-        Magnet::Init(Window, RenderThread, ResourceLoader);
-
         if(Magnet::Initialized()){
-            EventHandler::Listen();
+            EventHandler::Listen(Window);
             Magnet::Think();
+        }else{
+            Magnet::Init(Window, RenderThread, ResourceLoader);
         }
     }
 
