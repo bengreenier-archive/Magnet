@@ -8,7 +8,7 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
     m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
-    m_hooks.Register(Hook::Think,&Magnet::ben_testing_space);//call ben testing space
+    m_hooks.Register(Hook::Initialize,&Magnet::ben_testing_space);//call ben testing space
 
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, Event_MouseButtonReleased));
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, Event_MouseMove));
@@ -25,6 +25,7 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     m_initialized   = false;
     m_load_started  = false;
     name = "test_cmp";
+    test = NULL;
 }
 
 Magnet::~Magnet()
@@ -96,8 +97,12 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
     if(evt.Key.Code == sf::Key::Space){
         Object()->Debug_CreateMenu();
     }else if(evt.Key.Code == sf::Key::A){
-        bool linkExists = Renderer::Object()->LinkExists(Renderer::Object()->GetLinkByDrawable(static_cast<sf::Shape*>(Object()->test)));
-        std::cout << "Menu link exists:\t" << linkExists << std::endl;
+        if(Object()->test == NULL){
+            std::cout << "Menu link exists:\t0\n";
+        }else{
+            bool linkExists = Renderer::Object()->LinkExists(Object()->test->GetRendererLink());
+            std::cout << "Menu link exists:\t" << linkExists << std::endl;
+        }
         std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
     }else if(evt.Key.Code == sf::Key::R){
         Object()->test->Remove();
@@ -232,10 +237,12 @@ void Magnet::Think(){
             Object()->State_Setup();
             break;
     }
+
+    Hooks()->Call(Hook::Think);
 }
 
 
-void Magnet::ben_testing_space(Parameter p)
+void Magnet::ben_testing_space()
 {
 /*
     HttpReq demo(sf::Http::Request::Post,"http://bengreenier.com","/pages/magnet/network/query.php?name=magnet&desc=Program%20Made%20This&msg=so%20cool&score=100");
@@ -251,4 +258,6 @@ void Magnet::ben_testing_space(Parameter p)
         std::cout<<"[Http] [Demo] Got Successfully!\n[Http] Response:\n"<<demo.GetResponse();
     }else{ std::cout<<"[Http] [Demo] Failed.\n"; }
 */
+   // XmlParse ben("resource/config/AnimDemo.xml");
+    //ben.Parse();
 }

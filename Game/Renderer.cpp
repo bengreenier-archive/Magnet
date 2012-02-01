@@ -336,6 +336,7 @@ Renderer::Link* Renderer::GetLinkByDrawable(sf::Drawable* drawable_ptr){
 }
 
 bool Renderer::LinkExists(Renderer::Link* link_ptr){
+    std::cout << "Link exists\n";
     if(GetLinkIndex(link_ptr) != -1){
         return true;
     }
