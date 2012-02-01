@@ -144,7 +144,6 @@ void Renderer::Think(){
 
         attempts++;
     }
-
     Object()->renderThread_ptr->Launch();
 }
 
