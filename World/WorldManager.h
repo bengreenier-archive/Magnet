@@ -26,6 +26,9 @@ class WorldManager
         static bool Event_MouseMoved(sf::Event evt);
         static bool Event_KeyPresed(sf::Event evt);
 
+        static bool Achievement_Conditions(sf::Event evt);
+        static void Achievement_Completion(std::string name);
+
 
         World* Add(World* in){ m_WorldList.push_back(in); m_WorldList.back()->uuid = m_curuuid; m_curuuid++;  m_curWorld=m_WorldList.back(); return m_WorldList.back(); }
         World* AddUndefinedWorld(){ return Add(new World(defaultconstraint)); }
@@ -80,6 +83,9 @@ class WorldManager
         int m_curuuid;
         int defaultconstraint;
         static WorldManager* m_ptr;
+
+        //achiev varibles
+        bool has_clicked;
 
 };
 

@@ -8,6 +8,9 @@ WorldManager::WorldManager()
     m_curuuid=0;
     defaultconstraint=500;
 
+    //achievs
+    has_clicked=false;//player hasn't clicked originally
+
     //so that there is always at least one world, to prevent glitches
     AddUndefinedWorld();
 
@@ -22,6 +25,7 @@ WorldManager::WorldManager()
     EventHandler::AddListener(new EventListener(sf::Event::KeyReleased,&WorldManager::Event_KeyReleased));
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, &WorldManager::Event_MouseMoved));
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed,&WorldManager::Event_KeyPresed));
+    Magnet::Achieves()->Register(new Achievement("World_Mouse_Click","You learned to click the screen!",&WorldManager::Achievement_Completion),new EventListener(sf::Event::MouseButtonReleased,&WorldManager::Achievement_Conditions));
 
 }
 
@@ -144,7 +148,8 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
      int h = w;
      int tHeight=w;
 
-
+    if (!Access()->has_clicked)
+    Access()->has_clicked=true;//now player has cliked
 
          if (evt.MouseButton.Button == sf::Mouse::Left)
                 //for(int i=0; i<100; i++)
@@ -184,3 +189,19 @@ bool WorldManager::Event_MouseMoved(sf::Event evt)
 
 
 //**EVENTS ABOVE**/
+//**ACHEIVES BELOW**/
+bool WorldManager::Achievement_Conditions(sf::Event evt)
+{
+    if (evt.Type == sf::Event::MouseButtonReleased)
+        {
+            if (Access()->has_clicked)
+                std::cout<<"Clicked via achievs";
+            else
+                return false;
+        }
+}
+
+void WorldManager::Achievement_Completion(std::string name)
+{
+    std::cout<<"[WorldManager][Achievement_Completion] Congrats! You completed "<<name<<"!\n";
+}

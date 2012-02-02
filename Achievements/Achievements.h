@@ -15,11 +15,18 @@ namespace Achievements{
     class Registry{
         public:
 
-            void Register(Achievement* in){
+            void Register(Achievement* in,EventListener* evt){
 
                 m_cheives.push_back(in);
+                EventHandler::AddListener(evt);//waiting at this stage for adam to add data capabilities to listeners
             }
 
+            void Finish(Achievement* in)
+            {
+                in->Completed();
+                Remove(in);
+                m_done.push_back(in);
+            }
 
             void Remove(std::string name){
                 cheives_iterator_t it;
@@ -61,6 +68,7 @@ namespace Achievements{
         protected:
         private:
             std::vector<Achievement*>           m_cheives;
+            std::vector<Achievement*>           m_done;
             typedef std::vector<Achievement*>::iterator cheives_iterator_t;
 
     };
