@@ -152,15 +152,6 @@ Access()->CurrentWorld()->AddShape(new Circle(34,true,sf::Vector2f(652,827),new 
         Access()->CurrentWorld()->SetTimestep(1.0f / 40.0f);
     }
 
-    if (evt.Key.Code == sf::Key::Comma)
-    {
-        Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()-(1.0f / 100.0f));
-    }
-
-    if (evt.Key.Code == sf::Key::Period)
-    {
-        Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()+(1.0f / 100.0f));
-    }
 
     if (evt.Key.Code == sf::Key::End)
     {
@@ -205,6 +196,20 @@ Access()->CurrentWorld()->AddShape(new Circle(34,true,sf::Vector2f(652,827),new 
 }
 
 bool WorldManager::Event_KeyPresed(sf::Event evt){
+
+  if (evt.Key.Code == sf::Key::Comma)
+    {
+        if(Access()->CurrentWorld()->GetTimestep() > .015){
+        Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()-(1.0f / 1000.0f));
+        }
+    }
+
+    if (evt.Key.Code == sf::Key::Period)
+    {
+
+        if(Access()->CurrentWorld()->GetTimestep() < .055)
+        Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()+(1.0f / 1000.0f));
+    }
 
 
     return true;
