@@ -19,7 +19,7 @@
 class World //! The world object. controls all physics and world-ly things. :)
 {
     public:
-        World(int constraint); //!< Default Constructor
+        World(int constraint,b2Vec2 m_grav); //!< Default Constructor
 
         b2World* CurrentB2World();//!< Returns a pointer to the current world.
 
@@ -27,6 +27,10 @@ class World //! The world object. controls all physics and world-ly things. :)
 
         void SetTimestep(float in);//!< Adjust the timestep
         float GetTimestep(); //!< Get the timestep
+        void SetGravity(b2Vec2 in);
+        b2Vec2 GetGravity();
+
+        void AwakenAll();//!< Awaken all b2bodies.
 
         void AddShape(PhysShape* in);
 
@@ -48,7 +52,7 @@ class World //! The world object. controls all physics and world-ly things. :)
         b2Vec2 m_MouseVector2;
         b2Vec2 m_MouseVector;
 
-
+        b2Vec2 m_grav;
 
         WorldStats* Stat;
 

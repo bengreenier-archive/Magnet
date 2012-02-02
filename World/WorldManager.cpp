@@ -82,11 +82,6 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
      }
 
 
-    return true;
-}
-
-bool WorldManager::Event_KeyPresed(sf::Event evt){
-
 
 
     if (evt.Key.Code == sf::Key::Num1)
@@ -129,6 +124,37 @@ bool WorldManager::Event_KeyPresed(sf::Event evt){
             Access()->CurrentWorld()->AddShape(new Line(32,435,10,200));
             Access()->CurrentWorld()->AddShape(new Line(32,435,10,200));
     }
+
+    if (evt.Key.Code == sf::Key::Up)
+    {
+        Access()->CurrentWorld()->AwakenAll();
+        Access()->CurrentWorld()->SetGravity(b2Vec2(0.0f,-10.0f));
+    }
+
+    if (evt.Key.Code == sf::Key::Down)
+    {
+        Access()->CurrentWorld()->AwakenAll();
+        Access()->CurrentWorld()->SetGravity(b2Vec2(0.0f,10.0f));
+    }
+
+    if (evt.Key.Code == sf::Key::Left)
+    {
+        Access()->CurrentWorld()->AwakenAll();
+        Access()->CurrentWorld()->SetGravity(b2Vec2(-10.0f,0.0f));
+    }
+
+    if (evt.Key.Code == sf::Key::Right)
+    {
+        Access()->CurrentWorld()->AwakenAll();
+        Access()->CurrentWorld()->SetGravity(b2Vec2(10.0f,0.0f));
+    }
+
+
+    return true;
+}
+
+bool WorldManager::Event_KeyPresed(sf::Event evt){
+
 
     return true;
 }

@@ -3,12 +3,12 @@
 //!-----
 
 
-World::World(int constraint)
+World::World(int constraint,b2Vec2 m_grav)
 {
     //ctor
 
 
-    m_world1 = new b2World(b2Vec2(0.0f,10.0f));
+    m_world1 = new b2World(m_grav);
 
     if (WorldStandards::debug)
         std::cout<<"[Box2D] World Created Successfully.\n";
@@ -193,7 +193,12 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
 
 }
 
-
+void World::AwakenAll()
+{
+    //toggle sleeping, so that everything becomes moveable, if only for a second
+    CurrentB2World()->SetAllowSleeping(false);
+    CurrentB2World()->SetAllowSleeping(true);
+}
 
 void World::SetTimestep(float in)
 {
@@ -203,6 +208,17 @@ void World::SetTimestep(float in)
 float World::GetTimestep()
 {
     return m_timeStep;
+}
+
+void World::SetGravity(b2Vec2 in)
+{
+    m_grav = in;
+    CurrentB2World()->SetGravity(m_grav);
+}
+
+b2Vec2 World::GetGravity()
+{
+    return m_grav;
 }
 
 

@@ -31,7 +31,7 @@ class WorldManager
 
 
         World* Add(World* in){ m_WorldList.push_back(in); m_WorldList.back()->uuid = m_curuuid; m_curuuid++;  m_curWorld=m_WorldList.back(); return m_WorldList.back(); }
-        World* AddUndefinedWorld(){ return Add(new World(defaultconstraint)); }
+        World* AddUndefinedWorld(){ return Add(new World(defaultconstraint,b2Vec2(0.0f,10.0f))); }
         void Remove(World* in)
             {
                 std::list<World*>::iterator it;
