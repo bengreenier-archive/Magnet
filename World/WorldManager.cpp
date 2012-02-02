@@ -125,6 +125,57 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
             Access()->CurrentWorld()->AddShape(new Line(32,435,10,200));
     }
 
+    if (evt.Key.Code == sf::Key::Num7)
+    {
+        Access()->CurrentWorld()->AddShape(new Circle(40,true,sf::Vector2f(288,214),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(60,true,sf::Vector2f(967,349),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(548,640),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(1187,150),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(25,true,sf::Vector2f(218,626),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(122,57),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(177,227),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(135,527),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(152,427),new Material(MatType::Floor)));
+
+Access()->CurrentWorld()->AddShape(new Rect(5,10,true,sf::Vector2f(1022,57),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Rect(87,110,true,sf::Vector2f(1477,627),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Rect(7,10,true,sf::Vector2f(735,227),new Material(MatType::Floor)));
+Access()->CurrentWorld()->AddShape(new Circle(34,true,sf::Vector2f(652,827),new Material(MatType::Floor)));
+
+
+    }
+
+    if (evt.Key.Code == sf::Key::Slash)
+    {
+        Access()->CurrentWorld()->SetTimestep(1.0f / 40.0f);
+    }
+
+    if (evt.Key.Code == sf::Key::Comma)
+    {
+        Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()-(1.0f / 100.0f));
+    }
+
+    if (evt.Key.Code == sf::Key::Period)
+    {
+        Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()+(1.0f / 100.0f));
+    }
+
+    if (evt.Key.Code == sf::Key::End)
+    {
+        Access()->CurrentWorld()->AwakenAll();
+        Access()->CurrentWorld()->SetGravity(b2Vec2(0.0f,0.0f));
+    }
+
+    if (evt.Key.Code == sf::Key::Num8)
+    {
+        Access()->CurrentWorld()->AddShape(new Line(0,0,2000,0));
+        Access()->CurrentWorld()->AddShape(new Line(0,0,0,2000));
+        Access()->CurrentWorld()->AddShape(new Line(0,873,2000,873));
+        Access()->CurrentWorld()->AddShape(new Line(1430,0,1430,2000));
+    }
+
     if (evt.Key.Code == sf::Key::Up)
     {
         Access()->CurrentWorld()->AwakenAll();
