@@ -10,6 +10,8 @@
 
 namespace achievementglobals{static const bool debug=true; };
 
+
+namespace Achievements{
     class Registry{
         public:
 
@@ -62,5 +64,5 @@ namespace achievementglobals{static const bool debug=true; };
             typedef std::vector<Achievement*>::iterator cheives_iterator_t;
 
     };
-
+}
 #endif // ACHEIVEMENTS_H

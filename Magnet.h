@@ -11,7 +11,7 @@
 #include "Game/State.h"
 #include "Game/Hook.h"
 
-
+#include "Achievements/Achievements.h"
 #include "Game/Renderer.h"
 #include "Game/Resource.h"
 #include "Game/MouseTrail.h"
@@ -77,6 +77,10 @@ class Magnet
 
         static State::_type GetState(){ return Object("GetState")->gameState.get(); }
 
+        //////////////////////////////////////////////
+        /// Retrieve the global achievement registry
+        //////////////////////////////////////////////
+        static Achievements::Registry* Achieves();
 
         //////////////////////////////////////////
         /// Change the current state of the engine
@@ -118,6 +122,7 @@ class Magnet
         //Registries
         Hook::Registry m_hooks;
         mgui::Registry m_menus;
+        Achievements::Registry m_acheivs;
 
         bool m_load_started;  //True when a load has been started
         bool m_initialized;     //True when Engine critical classes are initialized

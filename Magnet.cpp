@@ -120,7 +120,9 @@ void Magnet::StartGame(){
     Object("StartGame")->ChangeState(State::Game);
 }
 
-
+Achievements::Registry* Magnet::Achieves(){
+    return &Object()->m_acheivs;
+}
 
 sf::Mutex* Magnet::GlobalMutex(){
     return &Object("GlobalMutex")->m_globalMutex;
