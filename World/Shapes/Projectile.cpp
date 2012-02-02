@@ -18,11 +18,12 @@ Projectile::Projectile(sf::Vector2f pos,b2Vec2 tForce,Material* mat,float degang
 Projectile::~Projectile()
 {
     //dtor
-    Destroy();
+    Destroy(Get_C_World());
 }
 
-void Projectile::Create()
+void Projectile::Create(b2World* p_world)
 {
+    Set_C_World(p_world);
     //do box2d first..
     b2BodyDef bodyDef;
 	if (!Get_Static()){
@@ -40,7 +41,7 @@ void Projectile::Create()
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-	Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
+	Set_Body(p_world->CreateBody(&bodyDef));
 
 	b2PolygonShape dynamicBox;
 
@@ -87,27 +88,4 @@ void Projectile::Create()
         std::cout << "[SFML] Added Projectile.\n";
 
 
-}
-
-
-void Projectile::Destroy()
-{
-    //
-    Renderer::RemoveLink(Get_Shape());
-    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
-    if (WorldStandards::debug)
-        std::cout << "[SFML/Box2D] Removed Box.\n";
-
-}
-
-
-void Projectile::Update()
-{
-    Get_Shape()->SetPosition(Get_Position());
-    Get_Shape()->Rotate(Get_Angle());
-}
-
-void Projectile::Hide()
-{
-    Renderer::RemoveLink(Get_Shape());
 }

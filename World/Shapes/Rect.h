@@ -12,10 +12,7 @@ class Rect : public PhysShape //! The Rectangle PhysShape. Used in World.
         Rect(int width,int height,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Static Constuctor
 
         /* generic public functions */
-        virtual void Create(); //!< Create the b2d/sfml Rectangle objects.
-        virtual void Destroy(); //!< Destroy and UnLink the sfml/b2d objects for this shape.
-        virtual void Update(); //!< Update shape stuff, based on set info, so Set_Position before this.
-        virtual void Hide();
+        virtual void Create(b2World* p_world); //!< Create the b2d/sfml Rectangle objects.
 
 
         ~Rect();//!< Default Deconstructor

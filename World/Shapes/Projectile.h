@@ -13,10 +13,8 @@ class Projectile : public PhysShape
         ~Projectile();//!< Default Deconstructor
 
                 /* generic public functions */
-        virtual void Create(); //!< Create the b2d/sfml Rectangle objects.
-        virtual void Destroy(); //!< Destroy and UnLink the sfml/b2d objects for this shape.
-        virtual void Update(); //!< Update shape stuff, based on set info, so Set_Position before this.
-        virtual void Hide();
+        virtual void Create(b2World* p_world); //!< Create the b2d/sfml Rectangle objects.
+
 
         void Set_Bullet(bool val){ m_isbullet = val; }//!< True if is a bullet (default) false otherwise
         bool Get_Bullet(){ return m_isbullet; }//!< Returning if is bullet

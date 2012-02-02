@@ -1,6 +1,7 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
+#include <Box2D/Box2D.h>
 
 #include "PhysShape.h"
 
@@ -13,12 +14,9 @@ class Circle : public PhysShape //! A PhysShape, that is a circle. Used in World
         Circle(int radius,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Static Constructor
 
         /** generic public functions */
-        virtual void Create(); //!< Does all the work of creating both the sfml and the b2d shape.
-        virtual void Destroy(); //!< Removes the sfml Renderer Link, and the b2d body.
-        virtual void Update(); //!< Updates shape based on definitions. ie: Set_Position() then call this.
-        virtual void Hide();
+        virtual void Create(b2World* p_world); //!< Does all the work of creating both the sfml and the b2d shape.
 
-        /** Default destructor */
+          /** Default destructor */
         ~Circle();//!< Deconstructor
 
         /** Access m_Radius

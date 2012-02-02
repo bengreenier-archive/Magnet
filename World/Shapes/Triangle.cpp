@@ -34,16 +34,13 @@ Triangle::Triangle(int size,sf::Vector2f Globalpos,bool staticc,Material* mat,fl
 Triangle::~Triangle()
 {
     //dtor
-    Destroy();
+    Destroy(Get_C_World());
 }
 
-void Triangle::Hide()
-{
-    Renderer::RemoveLink(Get_Shape());
-}
 
-void Triangle::Create()
+void Triangle::Create(b2World* p_world)
 {
+    Set_C_World(p_world);
     //do box2d first..
     b2BodyDef bodyDef;
 	if (!Get_Static()){
@@ -56,7 +53,7 @@ void Triangle::Create()
     float size = m_size;
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-	Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
+	Set_Body(p_world->CreateBody(&bodyDef));
 
 	b2PolygonShape dynamicBox;
 
@@ -107,21 +104,4 @@ void Triangle::Create()
         std::cout << "[SFML] Added Triangle.\n";
 
 
-}
-
-void Triangle::Destroy()
-{
-    //
-    Renderer::RemoveLink(Get_Shape());
-    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
-    if (WorldStandards::debug)
-        std::cout << "[SFML/Box2D] Removed Triangle.\n";
-
-}
-
-
-void Triangle::Update()
-{
-    Get_Shape()->SetPosition(Get_Position());
-    Get_Shape()->Rotate(Get_Angle());
 }

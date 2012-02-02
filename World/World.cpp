@@ -161,7 +161,7 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
             for (int a=0;a<Objects.size();a++)
             {
                 if (Q->at(i) == Objects[a]){
-                    Objects[a]->Destroy();
+                    Objects[a]->Destroy(CurrentB2World());
                     Objects.erase(Objects.begin() + a);
                     }
             }
@@ -174,7 +174,7 @@ void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
         for (int i =0; i< Q->size(); i++)
         {
             //iterate Q, calling each PhysShapes create.
-            Q->at(i)->Create();
+            Q->at(i)->Create(CurrentB2World());
             //only add nonstatics
             if (!Q->at(i)->Get_Static())
                 Objects.push_back(Q->at(i));

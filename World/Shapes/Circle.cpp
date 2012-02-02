@@ -1,5 +1,4 @@
 #include "Circle.h"
-#include "../WorldManager.h"
 
 Circle::Circle(int radius,sf::Vector2f pos,Material* mat,float degangle)
 {
@@ -36,12 +35,13 @@ Circle::Circle(int radius,bool staticc,sf::Vector2f pos,Material* mat,float dega
 Circle::~Circle()
 {
     //dtor
-    Destroy();
+    Destroy(Get_C_World());
 }
 
-void Circle::Create()
+void Circle::Create(b2World* p_world)
 {
     //
+    Set_C_World(p_world);
     b2BodyDef bodyDef;
     if (!Get_Static()){
 	bodyDef.type = b2_dynamicBody;
@@ -57,7 +57,7 @@ void Circle::Create()
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-	Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
+	Set_Body(p_world->CreateBody(&bodyDef));
 
 	b2CircleShape circle;
 
@@ -91,24 +91,4 @@ void Circle::Create()
      if (WorldStandards::debug)
         std::cout << "[SFML] Added Circle.\n";
 
-}
-
-void Circle::Destroy()
-{
-    Renderer::RemoveLink(Get_Shape());
-    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
-        if (WorldStandards::debug)
-        std::cout << "[SFML/Box2D] Removed Circle.\n";
-
-}
-
-void Circle::Update()
-{
-        Get_Shape()->SetPosition(Get_Position());
-        Get_Shape()->Rotate(Get_Angle());
-}
-
-void Circle::Hide()
-{
-    Renderer::RemoveLink(Get_Shape());
 }

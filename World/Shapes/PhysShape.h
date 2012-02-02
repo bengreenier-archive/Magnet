@@ -9,20 +9,28 @@
 #include "../Material/Material.h"
 #include "../WorldStandards.h"
 #include "../SelectiveCollision.h"
-
+#include "../../Game/Renderer.h"
 
 class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
 {
     public:
 
         /*overide these in each PhysShape*/
-        virtual void Destroy() { std::cout<<"[PhysShape] [Destroy] Not overidden.\n"; } //!< A virtual Destroy function, that should get overridden.
-        virtual void Create() { std::cout<<"[PhysShape] [Create] Not overidden.\n"; } //!< A virtual Create function, that should get overridden.
-        virtual void Update() { std::cout<<"[PhysShape] [Update] Not overidden.\n"; } //!< A virtual Update function, that should get overridden.
+        virtual void Destroy(b2World* p_world) {
 
-        virtual void Hide() { std::cout<<"[PhysShape] [Hide] Not overidden.\n"; }
+            Renderer::RemoveLink(Get_Shape());
+            p_world->DestroyBody(Get_Body());
+        if (WorldStandards::debug)
+        std::cout << "[SFML/Box2D] Removed Shape.\n";
 
-        void ApplyForce(b2Vec2 force) {Get_Body()->ApplyForce(force,Get_Body()->GetWorldCenter()); } //!< Apply a force to a body.
+
+        } //!< A virtual Destroy function, that should get overridden.
+        virtual void Create(b2World* p_world) { std::cout<<"[PhysShape] [Create] Not overidden.\n"; } //!< A virtual Create function, that should get overridden.
+        virtual void Update() { Get_Shape()->SetPosition(Get_Position()); Get_Shape()->Rotate(Get_Angle()); } //!< A virtual Update function, that should get overridden.
+
+        virtual void Hide() { Renderer::RemoveLink(Get_Shape()); }
+
+        void ApplyForce(b2Vec2 force) { Get_Body()->ApplyForce(force,Get_Body()->GetWorldCenter()); } //!< Apply a force to a body.
 
         /** Access m_Mat
          * \return The current value of m_Mat
@@ -97,6 +105,9 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         SelectiveCollision* Get_AdjustCollision() {return m_AdjustCollision; }
         void Set_AdjustCollision(SelectiveCollision* val){ m_AdjustCollision = val; }
 
+        b2World* Get_C_World() { return m_created_with_world;}
+        void Set_C_World(b2World* in){m_created_with_world=in;}
+
     protected:
     private:
         sf::Shape*          m_Shape;    //!< Member variable "m_Shape"
@@ -107,6 +118,8 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         float               m_Angle;    //!< Member variable "m_Angle"
         bool                m_Static;   //!< Member variable "m_Static"
         SelectiveCollision* m_AdjustCollision;
+        b2World* m_created_with_world;
+
 };
 
 #endif // PHYSSHAPE_H

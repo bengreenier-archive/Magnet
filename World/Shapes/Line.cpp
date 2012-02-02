@@ -36,12 +36,12 @@ Line::Line(int x,int y,int x2,int y2,bool staticc,int thickness,Material* mat)
 Line::~Line()
 {
     //dtor
-    Destroy();
+    Destroy(Get_C_World());
 }
 
-void Line::Create()
+void Line::Create(b2World* p_world)
 {
-
+    Set_C_World(p_world);
     //do box2d first..
     b2BodyDef bodyDef;
 	if (!Get_Static()){
@@ -55,7 +55,7 @@ void Line::Create()
 
     //bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
-    Set_Body(WorldManager::Access()->CurrentWorld()->CurrentB2World()->CreateBody(&bodyDef));
+    Set_Body(p_world->CreateBody(&bodyDef));
 
     b2EdgeShape es;
 
@@ -90,24 +90,4 @@ void Line::Create()
         if (WorldStandards::debug)
         std::cout << "[SFML] Added Line.\n";
 
-}
-
-void Line::Destroy()
-{
-        Renderer::RemoveLink(Get_Shape());
-    WorldManager::Access()->CurrentWorld()->CurrentB2World()->DestroyBody(Get_Body());
-    if (WorldStandards::debug)
-        std::cout << "[SFML/Box2D] Removed Line.\n";
-
-}
-
-void Line::Update()
-{
-    Get_Shape()->SetPosition(Get_Position());
-    //Get_Shape()->Rotate(Get_Angle());
-}
-
-void Line::Hide()
-{
-    Renderer::RemoveLink(Get_Shape());
 }
