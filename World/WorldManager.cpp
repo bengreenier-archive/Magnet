@@ -250,7 +250,7 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
 
          if (evt.MouseButton.Button == sf::Mouse::Right)
             //for(int i=0; i<100; i++)
-                Access()->CurrentWorld()->AddShape(new Rect(w,h,/*b2Vec2(Access()->Released_Mouse.x-Access()->Init_Mouse.x,Access()->Released_Mouse.y-Access()->Init_Mouse.y)*/,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentWorld()->CurrentMaterial()));
+                Access()->CurrentWorld()->AddShape(new Rect(w,h/*,b2Vec2(Access()->Released_Mouse.x-Access()->Init_Mouse.x,Access()->Released_Mouse.y-Access()->Init_Mouse.y)*/,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentWorld()->CurrentMaterial()));
 
 
 
