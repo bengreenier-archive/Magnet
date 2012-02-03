@@ -17,7 +17,7 @@ mgui:
 Exceptions*
 Hooks:
       *Add ability to remove hooks
-      *Apply BaseListener/Parameter to hooks to allow arguments to be passes
+      *Apply BaseListener/Parameter to hooks to allow arguments to be passed
 Renderer:
 	*Use lists rather than vectors (more efficient)
 [DIRECTORY CHANGES] 
@@ -27,3 +27,11 @@ Renderer:
       Move directory "Game/EventListener.(h/cpp)" to "Game/EventListener/(file)"
             --Allows organization of different Listener types
       
+World:
+	Make radial gravity progressive, rather then, oh just suck me in
+	Fix Triangles
+	Radial Gravity Efficiency = not ideal; address
+	Apply Radial Gravity to all PhyShapes; not just circles
+	SoftBody Simulation? (Water?)
+	MouseVector's (click drag release to add shape)  need to be scaled
+	Apply MouseVector Mechanizims to all PhysShapes

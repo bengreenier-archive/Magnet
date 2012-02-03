@@ -12,6 +12,9 @@ Line::Line(int x,int y,int x2,int y2,int thickness,Material* mat)
     Set_Mat(mat);
     Set_Angle(0);
     Set_Static(true);
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(false);//is no
 
     //Just for shits n giggles
     Set_Width(Get_x2()-Get_x1());
@@ -28,9 +31,12 @@ Line::Line(int x,int y,int x2,int y2,bool staticc,int thickness,Material* mat)
     Set_Mat(mat);
     Set_Angle(0);
     Set_Static(staticc);
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
 
     //Just for shits n giggles
     Set_Width(Get_x2()-Get_x1());
+    Set_CreateWithForce(false);//is no
 }
 
 Line::~Line()
@@ -76,6 +82,8 @@ void Line::Create(b2World* p_world)
 
 	Get_Body()->CreateFixture(&fixtureDef);
 
+    if (Get_CreateWithForce())
+        ApplyForce(Get_CreateWithForce_Force());
 
     if (WorldStandards::debug)
         std::cout << "[Box2D] Added Line.\n";

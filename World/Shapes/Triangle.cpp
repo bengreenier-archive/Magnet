@@ -8,6 +8,9 @@ Triangle::Triangle(int size,sf::Vector2f Globalpos,Material* mat,float degangle)
     Set_Angle(degangle);
     Set_Position(Globalpos);
     m_size=size;
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(false);
 }
 
 Triangle::Triangle(int size,sf::Vector2f Globalpos,b2Vec2 tForce,Material* mat,float degangle)
@@ -18,6 +21,11 @@ Triangle::Triangle(int size,sf::Vector2f Globalpos,b2Vec2 tForce,Material* mat,f
     Set_Position(Globalpos);
     ApplyForce(tForce);
     m_size=size;
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+
+        Set_CreateWithForce(true);
+    Set_CreateWithForce_Force(tForce);
 }
 
 
@@ -29,6 +37,9 @@ Triangle::Triangle(int size,sf::Vector2f Globalpos,bool staticc,Material* mat,fl
     Set_Position(Globalpos);
     Set_Static(staticc);
     m_size=size;
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(false);
 }
 
 Triangle::~Triangle()
@@ -82,6 +93,9 @@ void Triangle::Create(b2World* p_world)
 	}
 
 	Get_Body()->CreateFixture(&fixtureDef);
+
+    if (Get_CreateWithForce())
+        ApplyForce(Get_CreateWithForce_Force());
 
     if (WorldStandards::debug)
         std::cout << "[Box2D] Added Triangle.\n";

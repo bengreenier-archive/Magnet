@@ -71,10 +71,76 @@ void World::Step()
     //step world
     CurrentB2World()->Step(m_timeStep, m_velocityIterations, m_positionIterations);
 
+    //step StaticObjects for checking Radial gravity
+    for (int i=0;i<StaticObjects.size();i++)
+    {
+
+        //radial gravity
+        if (StaticObjects[i]->HasRadialGravity())
+        {
+             if ((WorldStandards::debug)&&(WorldStandards::debug_step))
+                std::cout<<"[System] [Step] Static Radial Gravity Object!\n";
+
+            b2Vec2 GravityPoint = StaticObjects[i]->Get_Body()->GetWorldCenter();
+            float x1 = GravityPoint.x;
+            float y1 = GravityPoint.y;
+
+            for (int a=0;a<Objects.size();a++)
+            {
+                float x2 = Objects[a]->Get_Body()->GetWorldCenter().x;
+                float y2 = Objects[a]->Get_Body()->GetWorldCenter().y;
+
+                float dist = std::sqrt(std::pow(x2-x1,2) + std::pow(y2-y1,2));
+
+                if ((dist <= StaticObjects[i]->Get_Radial_Gravity_Distance())&&(StaticObjects[i] != Objects[a]))
+                {
+                    float slope = (y2-y1)/(x2-x1);
+                    float angle = std::tan(slope);//not sure if works everytime
+                    b2Vec2 CalculatedForce((x1-x2)*WorldStandards::rgrav_forceConst,(y1-y2)*WorldStandards::rgrav_forceConst);
+
+                    Objects[a]->Get_Body()->ApplyForce(CalculatedForce,Objects[a]->Get_Body()->GetWorldCenter());//apply a force to a's center that moves it toward i
+                }
+
+            }
+
+        }
+
+    }
 
     //do remapping for sfml, and process creation of deletion commands.
     for (int i=0;i<Objects.size();i++)
     {
+
+        //radial gravity
+        if (Objects[i]->HasRadialGravity())
+        {
+             if ((WorldStandards::debug)&&(WorldStandards::debug_step))
+                std::cout<<"[System] [Step] Radial Gravity Object!\n";
+
+            b2Vec2 GravityPoint = Objects[i]->Get_Body()->GetWorldCenter();
+            float x1 = GravityPoint.x;
+            float y1 = GravityPoint.y;
+
+            for (int a=0;a<Objects.size();a++)
+            {
+                float x2 = Objects[a]->Get_Body()->GetWorldCenter().x;
+                float y2 = Objects[a]->Get_Body()->GetWorldCenter().y;
+
+                float dist = std::sqrt(std::pow(x2-x1,2) + std::pow(y2-y1,2));
+
+                if ((dist <= Objects[i]->Get_Radial_Gravity_Distance())&&(Objects[i] != Objects[a]))
+                {
+                    float slope = (y2-y1)/(x2-x1);
+                    float angle = std::tan(slope);//not sure if works everytime
+                    b2Vec2 CalculatedForce((x1-x2)*WorldStandards::rgrav_forceConst,(y1-y2)*WorldStandards::rgrav_forceConst);
+
+                    Objects[a]->Get_Body()->ApplyForce(CalculatedForce,Objects[a]->Get_Body()->GetWorldCenter());//apply a force to a's center that moves it toward i
+                }
+
+            }
+
+        }
+
 
         //if body is asleep, and a bullet, remove it
         if ((Objects[i]->Get_Body()->IsBullet())  &&  (!Objects[i]->Get_Body()->IsAwake()))

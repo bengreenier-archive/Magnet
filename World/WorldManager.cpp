@@ -27,6 +27,10 @@ WorldManager::WorldManager()
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed,&WorldManager::Event_KeyPresed));
     Magnet::Achieves()->Register(new Achievement("World_Mouse_Click","You learned to click the screen!",&WorldManager::Achievement_Completion),new EventListener(sf::Event::MouseButtonReleased,&WorldManager::Achievement_Conditions));
 
+    //init mouseposes
+    Released_Mouse = b2Vec2(0,0);
+    Init_Mouse = b2Vec2(0,0);
+
 }
 
 WorldManager::~WorldManager()
@@ -109,6 +113,10 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
         Access()->HideWorld(temp);
     }
 
+    if (evt.Key.Code == sf::Key::Num6)
+    {
+        Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,10),500,true,sf::Vector2f(300,300), new Material(MatType::Floor)));
+    }
 
     if (evt.Key.Code == sf::Key::Num9)
     {
@@ -128,21 +136,21 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
     if (evt.Key.Code == sf::Key::Num7)
     {
         Access()->CurrentWorld()->AddShape(new Circle(40,true,sf::Vector2f(288,214),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(60,true,sf::Vector2f(967,349),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(548,640),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(1187,150),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(25,true,sf::Vector2f(218,626),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(122,57),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(177,227),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(135,527),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(152,427),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(60,true,sf::Vector2f(967,349),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(548,640),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(1187,150),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(25,true,sf::Vector2f(218,626),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(122,57),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(177,227),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(135,527),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(152,427),new Material(MatType::Floor)));
 
-Access()->CurrentWorld()->AddShape(new Rect(5,10,true,sf::Vector2f(1022,57),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Rect(87,110,true,sf::Vector2f(1477,627),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Rect(7,10,true,sf::Vector2f(735,227),new Material(MatType::Floor)));
-Access()->CurrentWorld()->AddShape(new Circle(34,true,sf::Vector2f(652,827),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Rect(5,10,true,sf::Vector2f(1022,57),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Rect(87,110,true,sf::Vector2f(1477,627),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Rect(7,10,true,sf::Vector2f(735,227),new Material(MatType::Floor)));
+        Access()->CurrentWorld()->AddShape(new Circle(34,true,sf::Vector2f(652,827),new Material(MatType::Floor)));
 
 
     }
@@ -199,7 +207,7 @@ bool WorldManager::Event_KeyPresed(sf::Event evt){
 
   if (evt.Key.Code == sf::Key::Comma)
     {
-        if(Access()->CurrentWorld()->GetTimestep() > .015){
+        if(Access()->CurrentWorld()->GetTimestep() > WorldStandards::minSpeed){
         Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()-(1.0f / 1000.0f));
         }
     }
@@ -207,7 +215,7 @@ bool WorldManager::Event_KeyPresed(sf::Event evt){
     if (evt.Key.Code == sf::Key::Period)
     {
 
-        if(Access()->CurrentWorld()->GetTimestep() < .055)
+        if(Access()->CurrentWorld()->GetTimestep() < WorldStandards::maxSpeed)
         Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()+(1.0f / 1000.0f));
     }
 
@@ -219,6 +227,7 @@ bool WorldManager::Event_KeyPresed(sf::Event evt){
 bool WorldManager::Event_MouseButtonPressed(sf::Event evt)
 {
 
+    Access()->Init_Mouse = b2Vec2(evt.MouseButton.X,evt.MouseButton.Y);
     return true;
 }
 
@@ -230,16 +239,18 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
      int h = w;
      int tHeight=w;
 
+    Access()->Released_Mouse = b2Vec2(evt.MouseButton.X,evt.MouseButton.Y);
+
     if (!Access()->has_clicked)
     Access()->has_clicked=true;//now player has cliked
 
          if (evt.MouseButton.Button == sf::Mouse::Left)
-                //for(int i=0; i<100; i++)
-                    Access()->CurrentWorld()->AddShape(new Circle(radius,sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentWorld()->CurrentMaterial()));
+                //for(int i=0; i<100; i++) //difference released-init
+                    Access()->CurrentWorld()->AddShape(new Circle(radius,b2Vec2(Access()->Released_Mouse.x-Access()->Init_Mouse.x,Access()->Released_Mouse.y-Access()->Init_Mouse.y),sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentWorld()->CurrentMaterial()));
 
          if (evt.MouseButton.Button == sf::Mouse::Right)
             //for(int i=0; i<100; i++)
-                Access()->CurrentWorld()->AddShape(new Rect(w,h,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentWorld()->CurrentMaterial()));
+                Access()->CurrentWorld()->AddShape(new Rect(w,h,/*b2Vec2(Access()->Released_Mouse.x-Access()->Init_Mouse.x,Access()->Released_Mouse.y-Access()->Init_Mouse.y)*/,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentWorld()->CurrentMaterial()));
 
 
 

@@ -13,6 +13,9 @@ Projectile::Projectile(sf::Vector2f pos,b2Vec2 tForce,Material* mat,float degang
     Set_ShapeType(WorldShapes::Rect);
     Set_Force(tForce);
     Set_Bullet(true);
+        Set_Radial_Gravity_Distance(0);
+        Set_CreateWithForce(false);//just..bullets do their own force stuff so this is no
+    Set_Radial_Gravity(b2Vec2(0,0));
 }
 
 Projectile::~Projectile()

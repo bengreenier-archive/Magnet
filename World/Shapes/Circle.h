@@ -12,7 +12,7 @@ class Circle : public PhysShape //! A PhysShape, that is a circle. Used in World
         Circle(int radius,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Standard Constructor
         Circle(int radius,b2Vec2 tForce,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< ApplyForce Constructor
         Circle(int radius,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Static Constructor
-
+        Circle(int radius,b2Vec2 radialgrav,int radialdist=10,bool staticc=true,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< radial grav Constructor
         /** generic public functions */
         virtual void Create(b2World* p_world); //!< Does all the work of creating both the sfml and the b2d shape.
 

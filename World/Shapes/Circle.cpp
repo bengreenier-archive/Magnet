@@ -8,6 +8,9 @@ Circle::Circle(int radius,sf::Vector2f pos,Material* mat,float degangle)
     Set_Mat(mat);
     Set_Angle(degangle);
     Set_Static(false);
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(false);
 }
 
 Circle::Circle(int radius,b2Vec2 tForce,sf::Vector2f pos,Material* mat,float degangle)
@@ -18,7 +21,12 @@ Circle::Circle(int radius,b2Vec2 tForce,sf::Vector2f pos,Material* mat,float deg
     Set_Mat(mat);
     Set_Angle(degangle);
     Set_Static(false);
-    ApplyForce(tForce);
+
+    Set_CreateWithForce(true);
+    Set_CreateWithForce_Force(tForce);
+
+    Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
 }
 
 
@@ -30,6 +38,24 @@ Circle::Circle(int radius,bool staticc,sf::Vector2f pos,Material* mat,float dega
     Set_Mat(mat);
     Set_Angle(degangle);
     Set_Static(staticc);
+    Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(false);
+}
+
+
+
+Circle::Circle(int radius,b2Vec2 radialgrav,int radialdist,bool staticc,sf::Vector2f pos,Material* mat,float degangle)
+{
+    //ctor
+    Set_Radius(radius);
+    Set_Position(sf::Vector2f(pos.x,pos.y));
+    Set_Mat(mat);
+    Set_Angle(degangle);
+    Set_Static(staticc);
+    Set_Radial_Gravity(radialgrav);
+    Set_Radial_Gravity_Distance(radialdist);
+    Set_CreateWithForce(false);
 }
 
 Circle::~Circle()
@@ -76,6 +102,11 @@ void Circle::Create(b2World* p_world)
     }
 
 	Get_Body()->CreateFixture(&fixtureDef);
+
+	if (Get_CreateWithForce()){
+	    std::cout<<"ApplyForce\n";
+        ApplyForce(Get_CreateWithForce_Force());
+	}
 
    if (WorldStandards::debug)
         std::cout << "[Box2D] Added Circle.\n";

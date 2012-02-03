@@ -11,6 +11,9 @@ Rect::Rect(int width,int height,sf::Vector2f pos,Material* mat,float degangle)
     Set_Static(false);//default staticicity
     Set_Angle(degangle);
     Set_ShapeType(WorldShapes::Rect);
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(false);
 }
 
 Rect::Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos,Material* mat,float degangle)
@@ -24,6 +27,10 @@ Rect::Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos,Material* mat,flo
     Set_Angle(degangle);
     Set_ShapeType(WorldShapes::Rect);
     ApplyForce(tForce);
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(true);
+    Set_CreateWithForce_Force(tForce);
 }
 
 Rect::Rect(int width,int height,bool staticc,sf::Vector2f pos,Material* mat,float degangle)
@@ -36,6 +43,9 @@ Rect::Rect(int width,int height,bool staticc,sf::Vector2f pos,Material* mat,floa
     Set_Mat(mat);
     Set_Angle(degangle);
     Set_ShapeType(WorldShapes::StaticRect);
+        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity(b2Vec2(0,0));
+    Set_CreateWithForce(false);
 }
 
 Rect::~Rect()
@@ -83,6 +93,9 @@ void Rect::Create(b2World* p_world)
 	}
 
 	Get_Body()->CreateFixture(&fixtureDef);
+
+    if (Get_CreateWithForce())
+        ApplyForce(Get_CreateWithForce_Force());
 
     if (WorldStandards::debug)
         std::cout << "[Box2D] Added Box.\n";

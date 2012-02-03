@@ -87,6 +87,10 @@ class WorldManager
         //achiev varibles
         bool has_clicked;
 
+        //MouseVectors
+        b2Vec2 Init_Mouse;
+        b2Vec2 Released_Mouse;
+
 };
 
 #endif // WORLDMANAGER_H

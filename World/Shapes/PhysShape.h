@@ -108,6 +108,19 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         b2World* Get_C_World() { return m_created_with_world;}
         void Set_C_World(b2World* in){m_created_with_world=in;}
 
+        bool HasRadialGravity() { if ((r_grav == b2Vec2(0,0))||(r_grav_dist<=0)){return false; }else{ return true;} }
+        void Set_Radial_Gravity(b2Vec2 in){ r_grav = b2Vec2(in.x*WorldStandards::ppm,in.y*WorldStandards::ppm);}
+        b2Vec2 Get_Radial_Gravity(){return r_grav;}
+
+        void Set_Radial_Gravity_Distance(int in ){r_grav_dist = in*WorldStandards::ppm;}
+        int Get_Radial_Gravity_Distance(){return r_grav_dist;}
+
+
+        void Set_CreateWithForce(bool in){m_createwithforce = in;}
+        void Set_CreateWithForce_Force(b2Vec2 tForce){m_createwithforce_force = tForce; }
+        bool Get_CreateWithForce(){return m_createwithforce;}
+        b2Vec2 Get_CreateWithForce_Force(){return m_createwithforce_force;}
+
     protected:
     private:
         sf::Shape*          m_Shape;    //!< Member variable "m_Shape"
@@ -119,6 +132,11 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         bool                m_Static;   //!< Member variable "m_Static"
         SelectiveCollision* m_AdjustCollision;
         b2World* m_created_with_world;
+        b2Vec2 r_grav;//!< gravity that this shape applies radially
+        int r_grav_dist;//!< how close a shape needs to be to be effected
+        bool m_createwithforce;
+        b2Vec2 m_createwithforce_force;
+
 
 };
 
