@@ -55,6 +55,7 @@ Circle::Circle(int radius,b2Vec2 radialgrav,int radialdist,bool staticc,sf::Vect
     Set_Static(staticc);
     Set_Radial_Gravity(radialgrav);
     Set_Radial_Gravity_Distance(radialdist);
+    pullorpush_val_set(radialgrav.y);
     Set_CreateWithForce(false);
 }
 

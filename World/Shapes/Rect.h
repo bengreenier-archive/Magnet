@@ -10,6 +10,7 @@ class Rect : public PhysShape //! The Rectangle PhysShape. Used in World.
         Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Force Constructor
         Rect(int width,int height,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Default Constructor
         Rect(int width,int height,bool staticc,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Static Constuctor
+        Rect(int width,int height,b2Vec2 radialgrav,int radialdist=10,bool staticc=true,sf::Vector2f pos = sf::Vector2f(0,0),Material* mat=new Material(MatType::Default),float degangle = 0); //!< Static Constuctor
 
         /* generic public functions */
         virtual void Create(b2World* p_world); //!< Create the b2d/sfml Rectangle objects.

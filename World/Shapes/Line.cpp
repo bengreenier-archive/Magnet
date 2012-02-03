@@ -16,6 +16,7 @@ Line::Line(int x,int y,int x2,int y2,int thickness,Material* mat)
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);//is no
 
+
     //Just for shits n giggles
     Set_Width(Get_x2()-Get_x1());
 }

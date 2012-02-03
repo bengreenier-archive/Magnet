@@ -16,7 +16,7 @@ static const float radtodeg = (180.0 / b2_pi);
 
 static const bool debug = false; //set to false to supress couts
 static const bool debug_step = false; //set to false to supress couts in stepping
-static const float rgrav_forceConst = 0.3;
+static const float rgrav_forceConst = 0.5;
 static const float minSpeed =.015;
 static const float maxSpeed =.055;
 

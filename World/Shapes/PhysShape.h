@@ -121,6 +121,9 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         bool Get_CreateWithForce(){return m_createwithforce;}
         b2Vec2 Get_CreateWithForce_Force(){return m_createwithforce_force;}
 
+        void pullorpush_val_set(int val){pop_val = val; }
+        int pullorpush_val(){return pop_val; }
+
     protected:
     private:
         sf::Shape*          m_Shape;    //!< Member variable "m_Shape"
@@ -136,6 +139,7 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         int r_grav_dist;//!< how close a shape needs to be to be effected
         bool m_createwithforce;
         b2Vec2 m_createwithforce_force;
+        int pop_val;
 
 
 };

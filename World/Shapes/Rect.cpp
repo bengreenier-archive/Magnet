@@ -44,9 +44,27 @@ Rect::Rect(int width,int height,bool staticc,sf::Vector2f pos,Material* mat,floa
     Set_Angle(degangle);
     Set_ShapeType(WorldShapes::StaticRect);
         Set_Radial_Gravity_Distance(0);
+
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);
 }
+
+Rect::Rect(int width,int height,b2Vec2 radialgrav,int radialdist,bool staticc,sf::Vector2f pos,Material* mat,float degangle)
+{
+    //ctor
+    Set_Width(width);
+    Set_Height(height);
+    Set_Static(staticc);
+    Set_Position(pos);
+    Set_Mat(mat);
+    Set_Angle(degangle);
+    Set_ShapeType(WorldShapes::StaticRect);
+    Set_Radial_Gravity_Distance(radialdist);
+    Set_Radial_Gravity(radialgrav);
+    Set_CreateWithForce(false);
+            pullorpush_val_set(radialgrav.y);
+}
+
 
 Rect::~Rect()
 {

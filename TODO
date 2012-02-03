@@ -28,10 +28,7 @@ Renderer:
             --Allows organization of different Listener types
       
 World:
-	Make radial gravity progressive, rather then, oh just suck me in
 	Fix Triangles
 	Radial Gravity Efficiency = not ideal; address
-	Apply Radial Gravity to all PhyShapes; not just circles
 	SoftBody Simulation? (Water?)
-	MouseVector's (click drag release to add shape)  need to be scaled
 	Apply MouseVector Mechanizims to all PhysShapes
