@@ -1,9 +1,10 @@
 #include "XmlParse.h"
+
 /*
 XmlParse::XmlParse(const char* path) {
     //Initialize variables
     m_loadOkay = false;
-
+    m_path = path;
     m_doc = new TiXmlDocument(path);
 
     Load();
@@ -27,7 +28,7 @@ TiXmlDocument* XmlParse::GetDocument(){
 
 bool XmlParse::Load(){
     if (XmlGlobals::debug)
-        std::cout<<"[XmlParse] Loading " << m_doc->ValueStr() << "\n";
+        std::cout<<"[XmlParse] Loading " << m_path << "\n";
 
     m_loadOkay = m_doc->LoadFile();
 
@@ -35,15 +36,16 @@ bool XmlParse::Load(){
         printf( "[XmlParse] %s.\n", m_doc->ErrorDesc() );
     }
 
-    return m_loadOkay
+    return m_loadOkay;
 }
 
 bool XmlParse::Load(const char* filename){
     m_doc->LoadFile(filename);
+    m_path = filename;
     Load();
 }
 
-XmlNode* Parse(TiXmlNode* initial_node, XmlNode* node=NULL){
+XmlNode* XmlParse::Parse(TiXmlNode* initial_node, XmlNode* node){
     if(!LoadOkay()) return node;
 
     //Set node to root
@@ -54,49 +56,5 @@ XmlNode* Parse(TiXmlNode* initial_node, XmlNode* node=NULL){
 
 
 
-}
-
-/*
-void XmlParse::recurse(TiXmlNode* incomingNode){
-    TiXmlNode* temp = 0;
-    TiXmlAttribute* tempElem = 0;
-
-    for (temp=incomingNode->FirstChild(); temp; temp = temp->NextSibling() ){
-        if (!temp->NoChildren()){
-            //is <TAG></TAG>
-            //if root element, ie: document, just recurse
-            if (temp != m_doc->RootElement() ){
-                //xml_node* tmnode = new xml_node;
-                for (tempElem = temp->ToElement()->FirstAttribute(); tempElem; tempElem = tempElem->Next() ){
-                    //scroll the attrs
-                    if (XmlGlobals::debug)
-                        std::cout<<"Attr = "<<tempElem->Value()<<"\n";
-                }
-
-                if (XmlGlobals::debug)
-                    std::cout<<"[XmlParse] [Recurse]"<<temp->Value()<<"\n";
-            }
-            recurse(temp);
-
-        }
-        else
-        {
-            //is content
-
-
-                for (tempElem = temp->ToElement()->FirstAttribute(); tempElem; tempElem = tempElem->Next() )
-                {
-                    //scroll the attrs
-                    if (XmlGlobals::debug)
-                        std::cout<<"Attr = "<<tempElem->Value()<<"\n";
-                }
-
-            //this is a child node of Parent...
-
-
-            if (XmlGlobals::debug)
-                std::cout<<"[XmlParse] [Recurse]"<<temp->Parent()->Value()<<" contains "<<temp->Value()<<"\n";
-        }
-    }
 }
 */

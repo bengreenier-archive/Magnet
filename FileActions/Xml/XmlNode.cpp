@@ -1,5 +1,5 @@
 #include "XmlNode.h"
-/*
+
 XmlNode::XmlNode()
 {
     //ctor
@@ -13,4 +13,4 @@ XmlNode::~XmlNode()
 void XmlNode::CreateFromDocument(TiXmlDocument* document){
 
 }
-*/
+

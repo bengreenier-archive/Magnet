@@ -106,8 +106,10 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
         }
         std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
     }else if(evt.Key.Code == sf::Key::R){
-        Object()->test->Remove();
-        Object()->Debug_CreateMenu();
+
+        //In setup hook
+        //Magnet::Loader->Add(new Config("resource/config/test.mcf"));
+        //data = Resource::GetConfig("test.mcf");
     }
 
     /*if(Object("Event_SpacePressed")->gameState.get() == State::Menu){

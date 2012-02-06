@@ -21,6 +21,7 @@
 #include "mgui/mgui.h"
 
 #include "FileActions/FileAction.h"
+#include "FileActions/Cfg/CfgInclude.h"
 
 #include "Network/HttpReq.h"
 #include "FileActions/Xml/xml_include.h"
