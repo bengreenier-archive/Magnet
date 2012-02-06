@@ -85,12 +85,12 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
                 /** Access m_Shape
          * \return The current value of m_Shape
          */
-        sf::Shape* Get_Shape() { return m_Shape; }
+        sf::Drawable* Get_Shape() { return m_Shape; }
 
         /** Set m_Shape
          * \param val New value to set
          */
-        void Set_Shape(sf::Shape* val) { m_Shape = val; }
+        void Set_Shape(sf::Drawable* val) { m_Shape = val; }
 
         /** Access m_Body
          * \return The current value of m_Body
@@ -126,7 +126,7 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
 
     protected:
     private:
-        sf::Shape*          m_Shape;    //!< Member variable "m_Shape"
+        sf::Drawable*          m_Shape;    //!< Member variable "m_Shape"
         b2Body*             m_Body;     //!< Member variable "m_Rect"
         Material*           m_Mat;      //!< Member variable "m_Mat"
         WorldShapes::Type   m_ShapeType;//!< Member variable "m_ShapeType"

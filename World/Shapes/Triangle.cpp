@@ -101,13 +101,14 @@ void Triangle::Create(b2World* p_world)
         std::cout << "[Box2D] Added Triangle.\n";
 
     //do sfml
-    Set_Shape(new sf::Shape());
-    //set 3 pts
-      Get_Shape()->AddPoint(sf::Vector2f(Get_Position().x,Get_Position().y),Get_Mat()->GetColor());
-      //Get_Shape()->AddPoint(sf::Vector2f(600,500),Get_Mat()->GetColor());
-      Get_Shape()->AddPoint(sf::Vector2f(Get_Position().x+size,Get_Position().y+size),Get_Mat()->GetColor());
-      Get_Shape()->AddPoint(sf::Vector2f(Get_Position().x,Get_Position().y+size),Get_Mat()->GetColor());
+    sf::Shape* temp = new sf::Shape();
 
+    //set 3 pts
+      temp->AddPoint(sf::Vector2f(Get_Position().x,Get_Position().y),Get_Mat()->GetColor());
+      //Get_Shape()->AddPoint(sf::Vector2f(600,500),Get_Mat()->GetColor());
+      temp->AddPoint(sf::Vector2f(Get_Position().x+size,Get_Position().y+size),Get_Mat()->GetColor());
+      temp->AddPoint(sf::Vector2f(Get_Position().x,Get_Position().y+size),Get_Mat()->GetColor());
+    Set_Shape(temp);
     //Get_Shape()->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
     //Get_Shape()->SetCenter(sf::Vector2f((Get_Width()/2), (Get_Height()/2)));
     Get_Shape()->Rotate(Get_Angle());
