@@ -4,6 +4,8 @@
 #include <iostream>
 #include <Box2D/Box2D.h>
 
+#include "../../Game/Animation.h"
+
 //things shapes use
 #include "WorldShapes.h"
 #include "../Material/Material.h"
@@ -28,7 +30,8 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         virtual void Create(b2World* p_world) { std::cout<<"[PhysShape] [Create] Not overidden.\n"; } //!< A virtual Create function, that should get overridden.
         virtual void Update() { Get_Shape()->SetPosition(Get_Position()); Get_Shape()->Rotate(Get_Angle()); } //!< A virtual Update function, that should get overridden.
 
-        virtual void Hide() { Renderer::RemoveLink(Get_Shape()); }
+        virtual void Hide() { Renderer::RemoveLink(Get_Shape());  }
+        virtual void Step() { /*no need for this right now*/ }//!< Things that need to happen on step
 
         void ApplyForce(b2Vec2 force) { Get_Body()->ApplyForce(force,Get_Body()->GetWorldCenter()); } //!< Apply a force to a body.
 
@@ -124,6 +127,10 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         void pullorpush_val_set(int val){pop_val = val; }
         int pullorpush_val(){return pop_val; }
 
+        void startanim(bool ib){animation_cycle=ib;}
+        bool doianim(){return animation_cycle;}
+
+
     protected:
     private:
         sf::Drawable*          m_Shape;    //!< Member variable "m_Shape"
@@ -140,6 +147,9 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
         bool m_createwithforce;
         b2Vec2 m_createwithforce_force;
         int pop_val;
+        Animation* poof_anim;
+        bool animation_cycle;
+        Renderer::Link* m_RendererLink;
 
 
 };

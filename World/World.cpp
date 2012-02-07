@@ -197,6 +197,7 @@ void World::Step()
 
         }
 
+        Objects[i]->Step();//call the virtual step of nonstatic PhysShapes
     }
 
         //add objects.

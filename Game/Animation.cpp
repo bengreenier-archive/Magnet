@@ -3,24 +3,55 @@
 
 
 
-Animation::Animation(std::string imageDir,int eachVisibleFor)
+Animation::Animation(std::string name,int eachVisibleFor,sf::Drawable& shape)
 {
     //ctor
-    m_mainPath = imageDir;
+    m_mainPath = "NULL";
     m_Fps = eachVisibleFor;
     m_curframe=0;
+    m_cyclecounter=0;
+    Sprite = new sf::Sprite();
 
-    //for now. later, Resource::AddDir will populate this.
-    m_files.push_back("poof/poof-1.png");
-    m_files.push_back("poof/poof-2.png");
-    m_files.push_back("poof/poof-3.png");
-    m_files.push_back("poof/poof-4.png");
-    m_files.push_back("poof/poof-5.png");
-
-
-    //Sprite->SetImage(Resource::GetImage(m_files[m_curframe]));
+    Sprite->SetCenter(shape.GetCenter());
+    Sprite->SetRotation(shape.GetRotation());
+    Sprite->SetPosition(shape.GetPosition());
+    Sprite->SetScale(shape.GetScale());
+    //map over our shit
 
 
+
+    if (animationglobals::debug)
+        std::cout<<"[Animation] Trying...\n";
+
+    Config poof_config;
+    CfgParse poof_parse("Animations.mcf");
+    poof_parse.Load();
+    poof_parse.Parse(poof_config);
+
+    if (animationglobals::debug)
+        std::cout<<"[Animation] Parsed...\n";
+
+    int total_poof_files = atoi(poof_config.GetKeyValue(name,"count").c_str());
+    std::string path = poof_config.GetKeyValue(name,"image-path");
+
+    for (int i = 0 ; i< total_poof_files; i++)
+    {
+        std::string temp = path+"/"+name+"/"+name+"-";
+        temp+=(i+1);
+        temp+=".png";
+        m_files.push_back(temp);
+    }
+
+    if (animationglobals::debug)
+        std::cout<<"[Animation] Pushed Files...\n";
+
+    if (total_poof_files>0)
+        Sprite->SetImage(Resource::GetImage(m_files[0]));
+
+    if (animationglobals::debug)
+        std::cout<<"[Animation] Set Image...\n";
+
+        shape = *Sprite;
 
 }
 
@@ -33,17 +64,19 @@ Animation::~Animation()
 void Animation::Cycle()
 {
 
-    if (m_curframe < m_files.size()){
-    m_cyclecounter++;
+    if (animationglobals::debug)
+        std::cout<<"[Animation] Cycling...\n";
 
-    if ( m_Fps == m_cyclecounter )
-    {
-    std::cout<<"Cycles match "<<m_cyclecounter<<" .\n";
-    m_curframe++; m_cyclecounter=0;
-    Sprite->SetImage(Resource::GetImage(m_files[m_curframe]));
-    }
-
-    }//only allow cycle if we haven't displayed all files already.
+   // if (m_curframe < m_files.size()){
+   //     m_cyclecounter++;
+   //     if ( m_Fps == m_cyclecounter )
+   //     {
+   //         std::cout<<"Cycles match "<<m_cyclecounter<<" .\n";
+   //         m_curframe++; m_cyclecounter=0;
+   //         Sprite->SetImage(Resource::GetImage(m_files[m_curframe]));
+   //     }
+   // std::cout<<"b";
+   // }else{std::cout<<"a";}//only allow cycle if we haven't displayed all files already.
 
 }
 

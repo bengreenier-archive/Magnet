@@ -11,6 +11,7 @@ Circle::Circle(int radius,sf::Vector2f pos,Material* mat,float degangle)
         Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);
+    startanim(false);
 }
 
 Circle::Circle(int radius,b2Vec2 tForce,sf::Vector2f pos,Material* mat,float degangle)
@@ -27,6 +28,7 @@ Circle::Circle(int radius,b2Vec2 tForce,sf::Vector2f pos,Material* mat,float deg
 
     Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
+    startanim(false);
 }
 
 
@@ -41,6 +43,7 @@ Circle::Circle(int radius,bool staticc,sf::Vector2f pos,Material* mat,float dega
     Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);
+    startanim(false);
 }
 
 
@@ -57,6 +60,7 @@ Circle::Circle(int radius,b2Vec2 radialgrav,int radialdist,bool staticc,sf::Vect
     Set_Radial_Gravity_Distance(radialdist);
     pullorpush_val_set(radialgrav.y);
     Set_CreateWithForce(false);
+    startanim(false);
 }
 
 Circle::~Circle()

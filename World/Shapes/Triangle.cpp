@@ -11,6 +11,7 @@ Triangle::Triangle(int size,sf::Vector2f Globalpos,Material* mat,float degangle)
         Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);
+    startanim(false);
 }
 
 Triangle::Triangle(int size,sf::Vector2f Globalpos,b2Vec2 tForce,Material* mat,float degangle)
@@ -23,7 +24,7 @@ Triangle::Triangle(int size,sf::Vector2f Globalpos,b2Vec2 tForce,Material* mat,f
     m_size=size;
         Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
-
+startanim(false);
         Set_CreateWithForce(true);
     Set_CreateWithForce_Force(tForce);
 }
@@ -37,6 +38,7 @@ Triangle::Triangle(int size,sf::Vector2f Globalpos,bool staticc,Material* mat,fl
     Set_Position(Globalpos);
     Set_Static(staticc);
     m_size=size;
+    startanim(false);
         Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);

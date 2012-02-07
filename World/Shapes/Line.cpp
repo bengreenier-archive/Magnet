@@ -16,7 +16,7 @@ Line::Line(int x,int y,int x2,int y2,int thickness,Material* mat)
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);//is no
 
-
+startanim(false);
     //Just for shits n giggles
     Set_Width(Get_x2()-Get_x1());
 }
@@ -34,7 +34,7 @@ Line::Line(int x,int y,int x2,int y2,bool staticc,int thickness,Material* mat)
     Set_Static(staticc);
         Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
-
+startanim(false);
     //Just for shits n giggles
     Set_Width(Get_x2()-Get_x1());
     Set_CreateWithForce(false);//is no
