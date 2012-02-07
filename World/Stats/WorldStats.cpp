@@ -33,7 +33,7 @@ void WorldStats::ShowFps(int x, int y)
     m_fps = new sf::String(ss.str()+" FPS");
     m_fps->SetPosition(x,y);
     m_fps->SetColor(sf::Color(255,255,255));
-    Renderer::CreateLink(m_fps);
+    Renderer::CreateLink(m_fps,Renderer::MenuLayer);
 }
 
 void WorldStats::HideFps()
@@ -60,7 +60,7 @@ void WorldStats::ShowWorldCount(int x,int y)
     m_wc = new sf::String("Total Bodies: "+ss.str());
     m_wc->SetPosition(x,y);
     m_wc->SetColor(sf::Color(255,255,255));
-    Renderer::CreateLink(m_wc);
+    Renderer::CreateLink(m_wc,Renderer::MenuLayer);
 }
 
 void WorldStats::HideWorldCount()

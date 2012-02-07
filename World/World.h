@@ -36,7 +36,7 @@ class World //! The world object. controls all physics and world-ly things. :)
 
         int uuid;//!< WorldManager sets this and its different for each World
         Material* CurrentMaterial(); //!< Points to the current material
-        void SetCurrentMaterial(Material* in){ m_curMat = in; }//!< Changes the current material
+        void SetCurrentMaterial(Material* in);//!< Changes the current material
 
 
         void Unload();//!< Unloads the World. UnLinking Renderer, then deleting whatever it can

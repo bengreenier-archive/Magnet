@@ -118,9 +118,23 @@ void Circle::Create(b2World* p_world)
 
     //do sfml
 
-    Set_Shape(new sf::Shape(sf::Shape::Circle(0,0,Get_Radius(),Get_Mat()->GetColor())));
-    Get_Shape()->SetPosition(Get_Position());
-    Get_Shape()->Rotate(Get_Angle());
+    if (!Get_Mat()->UsesImage())
+    {
+        Set_Shape(new sf::Shape(sf::Shape::Circle(0,0,Get_Radius(),Get_Mat()->GetColor())));
+        Get_Shape()->SetPosition(Get_Position());
+        Get_Shape()->Rotate(Get_Angle());
+    }
+    else
+    {
+        sf::Sprite* temp = new sf::Sprite();
+        temp->SetImage(*Get_Mat()->GetImage());
+        temp->SetPosition(Get_Position());
+        temp->Rotate(Get_Angle());
+        temp->Resize(Get_Radius()*2, Get_Radius()*2);
+        temp->SetCenter(Get_Radius()*(1/temp->GetScale().x),Get_Radius()*(1/temp->GetScale().y));
+        Set_Shape(temp);
+    }
+
 
     Renderer::CreateLink(Get_Shape());
 

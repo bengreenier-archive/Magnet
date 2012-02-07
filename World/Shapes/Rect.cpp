@@ -27,7 +27,7 @@ Rect::Rect(int width,int height,b2Vec2 tForce,sf::Vector2f pos,Material* mat,flo
     Set_Static(false);//default staticicity
     Set_Angle(degangle);
     Set_ShapeType(WorldShapes::Rect);
-    ApplyForce(tForce);
+
         Set_Radial_Gravity_Distance(0);
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(true);
@@ -131,10 +131,28 @@ void Rect::Create(b2World* p_world)
     float sfposy = b2posy*WorldStandards::mpp;
 
     //do sfml
-    Set_Shape(new sf::Shape(sf::Shape::Rectangle(0, 0,Get_Width(),Get_Height(),Get_Mat()->GetColor())));
-    Get_Shape()->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
-    Get_Shape()->SetCenter(sf::Vector2f((Get_Width()/2), (Get_Height()/2)));
-    Get_Shape()->Rotate(Get_Angle());
+    if (!Get_Mat()->UsesImage())
+    {
+        Set_Shape(new sf::Shape(sf::Shape::Rectangle(0, 0,Get_Width(),Get_Height(),Get_Mat()->GetColor())));
+        Get_Shape()->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
+        Get_Shape()->SetCenter(sf::Vector2f((Get_Width()/2), (Get_Height()/2)));
+        Get_Shape()->Rotate(Get_Angle());
+    }
+    else
+    {
+        sf::Sprite* temp = new sf::Sprite();
+        temp->SetImage(*Get_Mat()->GetImage());
+
+        float img_width   = Get_Mat()->GetImage()->GetWidth();
+        float img_height  = Get_Mat()->GetImage()->GetHeight();
+
+        temp->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
+        temp->Rotate(Get_Angle());
+        temp->Resize(Get_Width(), Get_Height());
+        temp->SetCenter((Get_Width()*(1/temp->GetScale().x))/2,(Get_Height()*(1/temp->GetScale().y))/2);
+
+        Set_Shape(temp);
+    }
 
     Renderer::CreateLink(Get_Shape());
 

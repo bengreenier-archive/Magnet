@@ -101,8 +101,8 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
     {
         Access()->CurrentWorld()->SetCurrentMaterial(new Material(MatType::Rubber));
     }else if (evt.Key.Code == sf::Key::Num5)
-    {
-        Access()->CurrentWorld()->SetCurrentMaterial(new Material(MatType::Wood));
+    {//float density,float rest,float fric,std::string path,std::string name
+        Access()->CurrentWorld()->SetCurrentMaterial(new Material(2,0.5f,0.3f,"image/tire.png","Tire"));
     }
 
     //for demo purposes only!!
@@ -116,10 +116,10 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
     if (evt.Key.Code == sf::Key::Num6)
     {
         //when making repellers/radial gravity, the bVec2(should be 0,-1 push or 0,1 pull) for now
-        Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,1),500,true,sf::Vector2f(300,300), new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,1),500,true,sf::Vector2f(900,300), new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,-1),500,true,sf::Vector2f(600,50), new Material(MatType::Rubber)));
-        Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,-1),500,true,sf::Vector2f(600,550), new Material(MatType::Rubber)));
+        Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,1),500,false,sf::Vector2f(300,300), new Material(MatType::Floor)));
+        //Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,1),500,true,sf::Vector2f(900,300), new Material(MatType::Floor)));
+        //Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,-1),500,true,sf::Vector2f(600,50), new Material(MatType::Rubber)));
+        //Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0,-1),500,true,sf::Vector2f(600,550), new Material(MatType::Rubber)));
     }
 
 
@@ -247,11 +247,13 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
     Access()->Released_Mouse = b2Vec2(evt.MouseButton.X,evt.MouseButton.Y);
 
     if (!Access()->has_clicked)
-    Access()->has_clicked=true;//now player has cliked
+    Access()->has_clicked=true;//now player has cliked (achieves)
 
-         if (evt.MouseButton.Button == sf::Mouse::Left){
-                //for(int i=0; i<100; i++) //difference released-init
-                    b2Vec2 force = b2Vec2(WorldStandards::rgrav_forceConst*(Access()->Released_Mouse.x-Access()->Init_Mouse.x), WorldStandards::rgrav_forceConst*(Access()->Released_Mouse.y-Access()->Init_Mouse.y));
+
+
+
+
+    b2Vec2 force = b2Vec2(WorldStandards::rgrav_forceConst*(Access()->Released_Mouse.x-Access()->Init_Mouse.x), WorldStandards::rgrav_forceConst*(Access()->Released_Mouse.y-Access()->Init_Mouse.y));
 
                     if(force.x < 0){
                         if(force.x < -30){
@@ -274,11 +276,18 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
                     }
 
                     std::cout << "X: " << force.x << " Y: " << force.y << std::endl;
+
+
+
+
+         if (evt.MouseButton.Button == sf::Mouse::Left){
+                //for(int i=0; i<100; i++) //difference released-init
+
                     Access()->CurrentWorld()->AddShape(new Circle(radius,force,sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentWorld()->CurrentMaterial()));
          }
          if (evt.MouseButton.Button == sf::Mouse::Right)
             //for(int i=0; i<100; i++)
-                Access()->CurrentWorld()->AddShape(new Rect(w,h/*,b2Vec2(Access()->Released_Mouse.x-Access()->Init_Mouse.x,Access()->Released_Mouse.y-Access()->Init_Mouse.y)*/,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentWorld()->CurrentMaterial()));
+                Access()->CurrentWorld()->AddShape(new Rect(w,h,force,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentWorld()->CurrentMaterial()));
 
 
 

@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "../../Game/Resource.h"
 
 Material::Material(MatType::Type in)
 {
@@ -24,6 +25,22 @@ Material::Material(float density,float rest,float fric,sf::Color col,std::string
     m_color = col;
     m_name = name;
 }
+
+
+Material::Material(float density,float rest,float fric,std::string path,std::string name)
+{
+    m_density = density;
+    m_friction = fric;
+    m_restitution = rest;
+    m_color = sf::Color(0,0,0);
+    m_name = name;
+
+
+    m_image = Resource::GetImage(path);
+    m_useImage=true;
+
+}
+
 
 Material::~Material()
 {
@@ -114,4 +131,9 @@ sf::Color Material::GetColor()
 std::string Material::GetName()
 {
     return m_name;
+}
+
+sf::Image* Material::GetImage()
+{
+    return &m_image;
 }
