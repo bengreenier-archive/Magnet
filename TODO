@@ -4,6 +4,8 @@ IMPROVE EFFICIENCY EVERYWHERE
               -Check for number of times memory needs to be accessed.
               -If pointers are created, ensure they are destroyed! (lol, dont think mine are always...-ben)
               (Add more)
+	*Is it faster to make copies to a temporary variable than to make  a get variable?
+		Not if the function returns by reference. I.E. ret_value& func()
 
 Resource: 
       *Add Fonts, Config, and Sounds
