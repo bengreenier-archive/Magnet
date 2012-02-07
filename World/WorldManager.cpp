@@ -74,11 +74,11 @@ void WorldManager::Renderer_Frame_Hook()
     Access()->lol_sprite->SetImage(Resource::GetImage("image/boot-logo.png"));
     Access()->lol_sprite->SetCenter(Resource::GetImage("image/boot-logo.png").GetWidth()/2,Resource::GetImage("image/boot-logo.png").GetHeight()/2);
     Access()->lol_sprite->SetPosition(Renderer::GetRenderWindow()->GetWidth()/2,Renderer::GetRenderWindow()->GetHeight()/2);
-    Renderer::CreateLink(Access()->lol_sprite);
+    Renderer::CreateLink(Access()->lol_sprite,Renderer::MenuLayer);
 
     }
 
-    if (Access()->lol_logo_counter>90)
+    if (Access()->lol_logo_counter>100)
     {
         Renderer::RemoveLink(Access()->lol_sprite);
     }
