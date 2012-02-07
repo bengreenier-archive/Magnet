@@ -91,6 +91,10 @@ class WorldManager
         b2Vec2 Init_Mouse;
         b2Vec2 Released_Mouse;
 
+        //lol logo
+        int lol_logo_counter;
+        sf::Sprite* lol_sprite;
+
 };
 
 #endif // WORLDMANAGER_H

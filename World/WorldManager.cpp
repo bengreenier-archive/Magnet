@@ -31,6 +31,11 @@ WorldManager::WorldManager()
     Released_Mouse = b2Vec2(0,0);
     Init_Mouse = b2Vec2(0,0);
 
+    //lol_logo
+    lol_logo_counter=0;
+    lol_sprite = new sf::Sprite();
+
+
 }
 
 WorldManager::~WorldManager()
@@ -63,6 +68,24 @@ World* WorldManager::CurrentWorld()
 
 void WorldManager::Renderer_Frame_Hook()
 {
+    if (Access()->lol_logo_counter==0)
+    {
+
+    Access()->lol_sprite->SetImage(Resource::GetImage("image/boot-logo.png"));
+    Access()->lol_sprite->SetCenter(Resource::GetImage("image/boot-logo.png").GetWidth()/2,Resource::GetImage("image/boot-logo.png").GetHeight()/2);
+    Access()->lol_sprite->SetPosition(Renderer::GetRenderWindow()->GetWidth()/2,Renderer::GetRenderWindow()->GetHeight()/2);
+    Renderer::CreateLink(Access()->lol_sprite);
+
+    }
+
+    if (Access()->lol_logo_counter>90)
+    {
+        Renderer::RemoveLink(Access()->lol_sprite);
+    }
+
+
+    Access()->lol_logo_counter++;
+
     if (Access()->CurrentWorld())
     Access()->CurrentWorld()->Step();
 }
@@ -125,12 +148,12 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
 
     if (evt.Key.Code == sf::Key::Num9)
     {
-            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(0,1000), new Material(MatType::Floor),340));
-            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(400,1000), new Material(MatType::Floor)));
-            Access()->CurrentWorld()->AddShape(new Circle(50,true,sf::Vector2f(600,550), new Material(MatType::Floor)));
-            Access()->CurrentWorld()->AddShape(new Rect(460,100,true,sf::Vector2f(1033,1350), new Material(MatType::Floor),310));
-            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(MatType::Floor)));
-            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(MatType::Floor),30));
+            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(0,1000), new Material(1,0.5f,0.3f,"image/ground-depth.png","Ground"),340));
+            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(400,1000), new Material(1,0.5f,0.3f,"image/ground-depth.png","Ground")));
+            Access()->CurrentWorld()->AddShape(new Circle(50,true,sf::Vector2f(600,550), new Material(1,0.5f,0.3f,"image/round-ground-depth.png","Ground")));
+            Access()->CurrentWorld()->AddShape(new Rect(460,100,true,sf::Vector2f(1033,1350), new Material(1,0.5f,0.3f,"image/ground-depth.png","Ground"),310));
+            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(1500,1700), new Material(1,0.5f,0.3f,"image/ground-depth.png","Ground")));
+            Access()->CurrentWorld()->AddShape(new Rect(400,100,true,sf::Vector2f(1900,1700), new Material(1,0.5f,0.3f,"image/ground-depth.png","Ground"),30));
             Access()->CurrentWorld()->AddShape(new Line(310,100,600,200));
             Access()->CurrentWorld()->AddShape(new Line(120,390,700,240));
             Access()->CurrentWorld()->AddShape(new Line(700,180,700,240));
@@ -298,7 +321,7 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
 bool WorldManager::Event_MouseWheelMoved(sf::Event evt)
 {
 
-        int radius = 5;
+        int radius = 15;
     int i=0; //if for is commented out, just do this for now.
     int w = radius*2;
      int h = w;
