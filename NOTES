@@ -1,3 +1,4 @@
 -KeyBindings will work similar to the sfml threading
 -FileActions: Encrypt/Decrypt .mgf's
 -ResourceHandler: Load resources
+-PhysShapes are positioned to the center. sf::Vector2f(centerx,centery)
