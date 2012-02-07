@@ -8,20 +8,16 @@ IMPROVE EFFICIENCY EVERYWHERE
 		Not if the function returns by reference. I.E. ret_value& func()
 
 Resource: 
-      *Add Fonts, Config, and Sounds
-	*After config is added, allow for Search directories to be set in config
-	*Automagically load resource dir
+      *Finish Config updates
 EventHandler:
       *Add ability to remove events
 mgui:
-	*Components get focus when clicked
+	*Define all classes listed in doc v1
       	*Comment methods
-Exceptions*
 Hooks:
       *Add ability to remove hooks
-      *Apply BaseListener/Parameter to hooks to allow arguments to be passed
 Renderer:
-	*Use lists rather than vectors (more efficient)
+	*Apply concurrent queues as stated in docv1
 [DIRECTORY CHANGES] 
       Move directory "Game/Handlers/" to "Game/Handler"
             -Classes in folder should be named after their
