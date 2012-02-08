@@ -30,3 +30,6 @@ World:
 	Radial Gravity Efficiency = not ideal; address
 	SoftBody Simulation? (Water?)
 	Apply MouseVector Mechanizims to all PhysShapes
+
+Might Need this someday:
+	http://www.cplusplus.com/reference/clibrary/cstdlib/getenv/
