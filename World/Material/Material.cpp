@@ -5,6 +5,8 @@ Material::Material(MatType::Type in)
 {
     //ctor
     m_name = "";
+    m_useImage=false;
+    m_useText=false;
     //switch types, and call their config methods.
     switch(in)
     {
@@ -13,6 +15,7 @@ Material::Material(MatType::Type in)
         case MatType::Floor:{m_Floor();}break;
         case MatType::Rubber:{m_Rubber();}break;
         case MatType::Wood:{m_Wood();}break;
+        case MatType::Ground:{m_Ground_Img();}break;
         default:{m_Default();}break;
     }
 }
@@ -24,23 +27,41 @@ Material::Material(float density,float rest,float fric,sf::Color col,std::string
     m_restitution = rest;
     m_color = col;
     m_name = name;
+    m_useImage=false;
+    m_useText=false;
 }
 
 
-Material::Material(float density,float rest,float fric,std::string path,std::string name)
+Material::Material(float density,float rest,float fric,std::string imagepath)
 {
     m_density = density;
     m_friction = fric;
     m_restitution = rest;
     m_color = sf::Color(0,0,0);
-    m_name = name;
+    m_name = imagepath;
 
 
-    m_image = Resource::GetImage(path);
+    m_image = Resource::GetImage(imagepath);
     m_useImage=true;
+    m_useText=false;
 
 }
 
+Material::Material(float density,float rest,float fric,std::string text,std::string fontpath)
+{
+    m_density = density;
+    m_friction = fric;
+    m_restitution = rest;
+    m_color = sf::Color(0,0,0);
+    m_name = text;
+
+
+    m_text = text;
+    m_font = Resource::GetFont(fontpath);
+    m_useImage=false;
+    m_useText=true;
+
+}
 
 Material::~Material()
 {
@@ -107,6 +128,18 @@ void Material::m_Wood()
     m_name = "Wood";
 }
 
+void Material::m_Ground_Img()
+{
+    m_density = 1.0f;
+    m_restitution = 0.002f;
+    m_friction = 0.3f;
+    m_color = sf::Color(255,0,0);
+    m_name = "Default";
+    m_image = Resource::GetImage("image/ground-depth.png");
+    m_useImage=true;
+
+}
+
 float Material::GetDensity()
 {
     return m_density;
@@ -136,4 +169,14 @@ std::string Material::GetName()
 sf::Image* Material::GetImage()
 {
     return &m_image;
+}
+
+std::string Material::GetText()
+{
+    return m_text;
+}
+
+sf::Font* Material::GetFont()
+{
+    return &m_font;
 }

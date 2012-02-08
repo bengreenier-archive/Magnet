@@ -18,7 +18,8 @@ namespace MatType{ //! The List of all materials any PhysShape can have.
         Light,
         Floor,
         Rubber,
-        Wood
+        Wood,
+        Ground
     };
 
 }
@@ -28,7 +29,8 @@ class Material //! The material class, defining a material that a PhysShape can 
     public:
         Material(MatType::Type in=MatType::Default); //!< Default Constructor
         Material(float density,float rest,float fric,sf::Color col,std::string name);//!< Long Contructor
-        Material(float density,float rest,float fric,std::string path,std::string name);//!< Long Contructor, for image use
+        Material(float density,float rest,float fric,std::string imagepath);//!< Long Contructor, for image use
+        Material(float density,float rest,float fric,std::string text,std::string fontpath);//!< Long text constructor, for text use
 
         ~Material(); //!< Default Deconstructor
         float GetDensity(); //!< Get material instance's density
@@ -37,7 +39,11 @@ class Material //! The material class, defining a material that a PhysShape can 
         sf::Color GetColor(); //!< Get material instance's color
         std::string GetName();//!< Get materials name (not always defined)
         sf::Image* GetImage();//!< REturns image , only call if UsesImage
+        std::string GetText();//!< return std::string text.
+        sf::Font* GetFont();//!< Returns font
 
+
+        bool UsesText(){return m_useText;}
         bool UsesImage(){return m_useImage;}
     protected:
     private:
@@ -47,7 +53,9 @@ class Material //! The material class, defining a material that a PhysShape can 
         sf::Color m_color;
         std::string m_name;//!< Not always needed/used.
         sf::Image m_image;
-        bool m_useImage;
+        std::string m_text;
+        sf::Font m_font;
+        bool m_useImage,m_useText;
 
         //these set things up for each type. each type has a function here.
         void m_Default();
@@ -56,6 +64,7 @@ class Material //! The material class, defining a material that a PhysShape can 
         void m_Floor();
         void m_Rubber();
         void m_Wood();
+        void m_Ground_Img();
 
 };
 

@@ -46,7 +46,7 @@ Rect::Rect(int width,int height,bool staticc,sf::Vector2f pos,Material* mat,floa
     startanim(false);
     Set_Angle(degangle);
     Set_ShapeType(WorldShapes::StaticRect);
-        Set_Radial_Gravity_Distance(0);
+    Set_Radial_Gravity_Distance(0);
 
     Set_Radial_Gravity(b2Vec2(0,0));
     Set_CreateWithForce(false);
@@ -87,11 +87,11 @@ void Rect::Create(b2World* p_world)
     bodyDef.allowSleep = true;
 	bodyDef.awake = true;
 
-    //NO FUCKING CLUE...THIS IS DUMB. but it works...
-    if (!Get_Static())
-        bodyDef.position.Set(/*(*/(Get_Position().x+Get_Width())/*/2)*/*WorldStandards::ppm, /*(*/(Get_Position().y+Get_Height())/*/2)*/*WorldStandards::ppm);
-    else
-        bodyDef.position.Set(((Get_Position().x+Get_Width())/2)*WorldStandards::ppm, ((Get_Position().y+Get_Height())/2)*WorldStandards::ppm);
+    //
+    //std::cout<<Get_Position().x<<" , "<<Get_Position().y<<"\t"<<Get_Position().x*WorldStandards::ppm<<" , "<<Get_Position().y*WorldStandards::ppm<<"\n";
+
+    //Get_Position() and then box2d it
+    bodyDef.position.Set(Get_Position().x*WorldStandards::ppm, Get_Position().y*WorldStandards::ppm);
 
     bodyDef.angle = (((-1)*Get_Angle())*WorldStandards::degtorad);
 
@@ -99,7 +99,20 @@ void Rect::Create(b2World* p_world)
 
 	b2PolygonShape dynamicBox;
 
+
+        if (Get_Mat()->UsesText()){//Text size of rect. disregard other size
+        sf::String* temp = new sf::String();
+        temp->SetText(Get_Mat()->GetText());
+        Set_Width(temp->GetRect().GetWidth());
+        Set_Height(temp->GetRect().GetHeight());
+        delete temp;
+        }
+
+
+
+
 	dynamicBox.SetAsBox((Get_Width()/2)*WorldStandards::ppm, (Get_Height()/2)*WorldStandards::ppm);
+
 
 	//fixture stuff
 	b2FixtureDef fixtureDef;
@@ -123,22 +136,16 @@ void Rect::Create(b2World* p_world)
         std::cout << "[Box2D] Added Box.\n";
 
 
-    float b2posx = Get_Body()->GetPosition().x;
-    float b2posy = Get_Body()->GetPosition().y;
-    float b2rot  = Get_Body()->GetAngle();
+    //float b2posx = Get_Body()->GetPosition().x;
+    //float b2posy = Get_Body()->GetPosition().y;
+    //float b2rot  = Get_Body()->GetAngle();
 
-    float sfposx = b2posx*WorldStandards::mpp;
-    float sfposy = b2posy*WorldStandards::mpp;
+    float sfposx = Get_Position().x;//b2posx*WorldStandards::mpp;
+    float sfposy = Get_Position().y;//b2posy*WorldStandards::mpp;
 
     //do sfml
-    if (!Get_Mat()->UsesImage())
-    {
-        Set_Shape(new sf::Shape(sf::Shape::Rectangle(0, 0,Get_Width(),Get_Height(),Get_Mat()->GetColor())));
-        Get_Shape()->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
-        Get_Shape()->SetCenter(sf::Vector2f((Get_Width()/2), (Get_Height()/2)));
-        Get_Shape()->Rotate(Get_Angle());
-    }
-    else
+
+    if (Get_Mat()->UsesImage())
     {
         sf::Sprite* temp = new sf::Sprite();
         temp->SetImage(*Get_Mat()->GetImage());
@@ -152,7 +159,31 @@ void Rect::Create(b2World* p_world)
         temp->SetCenter((Get_Width()*(1/temp->GetScale().x))/2,(Get_Height()*(1/temp->GetScale().y))/2);
 
         Set_Shape(temp);
+    }else if (Get_Mat()->UsesText())
+    {
+
+        //if were using text, lets blatantly ignore rect size, and use text width and height instead.
+
+        sf::String* temp = new sf::String();
+        temp->SetText(Get_Mat()->GetText());
+
+        temp->SetFont(*Get_Mat()->GetFont());
+        temp->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
+        temp->Rotate(Get_Angle());
+
+        temp->SetCenter((Get_Width()*(1/temp->GetScale().x))/2,(Get_Height()*(1/temp->GetScale().y))/2);
+
+        Set_Shape(temp);
+
     }
+    else
+    {
+        Set_Shape(new sf::Shape(sf::Shape::Rectangle(0, 0,Get_Width(),Get_Height(),Get_Mat()->GetColor())));
+        Get_Shape()->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
+        Get_Shape()->SetCenter(sf::Vector2f((Get_Width()/2), (Get_Height()/2)));
+        Get_Shape()->Rotate(Get_Angle());
+    }
+
 
     Renderer::CreateLink(Get_Shape());
 

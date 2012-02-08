@@ -3,7 +3,7 @@
 //!-----
 
 
-World::World(int constraint,b2Vec2 m_grav)
+World::World(int constraint,b2Vec2 m_grav,float timestep,int velocityit, int positionit,int maxbodies,Material* defaultmaterial)
 {
     //ctor
 
@@ -17,9 +17,9 @@ World::World(int constraint,b2Vec2 m_grav)
 
     m_hooked = false;
 
-	m_timeStep = 1.0f / 40.0f;
-	m_velocityIterations = 8;
-	m_positionIterations = 3;
+	m_timeStep = timestep;
+	m_velocityIterations = velocityit;
+	m_positionIterations = positionit;
 
     //world max/min
     worldConstraint[0].x = -constraint; //left
@@ -28,7 +28,7 @@ World::World(int constraint,b2Vec2 m_grav)
     worldConstraint[1].y = constraint + Renderer::GetRenderWindow()->GetHeight();
 
     //max bodies allowed
-    maxPhysicsBodies = 800;
+    maxPhysicsBodies = maxbodies;
 
     //mousevector generation
     m_MouseVector1 = b2Vec2(-1,-1);
@@ -38,7 +38,7 @@ World::World(int constraint,b2Vec2 m_grav)
         std::cout<<"[World] [Init] Hooked. \n";
 
 
-    m_curMat = new Material(MatType::Default);
+    m_curMat = defaultmaterial;
 
 
     m_hooked=true;
@@ -96,7 +96,8 @@ void World::Step()
                 {
                     float slope = (y2-y1)/(x2-x1);
                     float angle = std::tan(slope);//not sure if works everytime
-                    b2Vec2 CalculatedForce((StaticObjects[i]->pullorpush_val()*(x1-x2)*WorldStandards::rgrav_forceConst)/dist,(StaticObjects[i]->pullorpush_val()*(y1-y2)*WorldStandards::rgrav_forceConst)/dist);
+
+                    b2Vec2 CalculatedForce((StaticObjects[i]->pullorpush_val()*(x1-x2)*StaticObjects[i]->Get_Radial_Gravity().x)/dist,(StaticObjects[i]->pullorpush_val()*(y1-y2)*StaticObjects[i]->Get_Radial_Gravity().x)/dist);
 
                     Objects[a]->Get_Body()->ApplyForce(CalculatedForce,Objects[a]->Get_Body()->GetWorldCenter());//apply a force to a's center that moves it toward i
                 }
@@ -132,7 +133,7 @@ void World::Step()
                 {
                     float slope = (y2-y1)/(x2-x1);
                     float angle = std::tan(slope);//not sure if works everytime
-                    b2Vec2 CalculatedForce((Objects[i]->pullorpush_val()*(x1-x2)*WorldStandards::rgrav_forceConst)/dist,(Objects[i]->pullorpush_val()*(y1-y2)*WorldStandards::rgrav_forceConst)/dist);
+                    b2Vec2 CalculatedForce((Objects[i]->pullorpush_val()*(x1-x2)*Objects[i]->Get_Radial_Gravity().x)/dist,(Objects[i]->pullorpush_val()*(y1-y2)*Objects[i]->Get_Radial_Gravity().x)/dist);
 
                     Objects[a]->Get_Body()->ApplyForce(CalculatedForce,Objects[a]->Get_Body()->GetWorldCenter());//apply a force to a's center that moves it toward i
                 }

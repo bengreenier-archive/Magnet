@@ -185,7 +185,7 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
 
     if (evt.Key.Code == sf::Key::Num9)
     {
-        Access()->CurrentWorld()->AddShape(new Rect(0,0,sf::Vector2f(200,100),new Material(.5,0.002f,0.3f,"Magnet","font/tahoma.ttf")));
+        Access()->CurrentWorld()->AddShape(new Circle(40,sf::Vector2f(200,100),new Material(.5,0.002f,0.3f,"S","font/tahoma.ttf")));
     }
 
     if (evt.Key.Code == sf::Key::Num7)
@@ -357,7 +357,7 @@ bool WorldManager::Event_MouseWheelMoved(sf::Event evt)
 
      const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
         for(int i=0; i<5; i++)
-        Access()->CurrentWorld()->AddShape(new Circle(radius,sf::Vector2f(inpt.GetMouseX()-tHeight+i*tHeight,inpt.GetMouseY()-tHeight),new Material(1,0.002f,0.3f,"image/moon.png")));
+        Access()->CurrentWorld()->AddShape(new Circle(radius,b2Vec2(0.6,1),100,false,sf::Vector2f(inpt.GetMouseX()-tHeight+i*tHeight,inpt.GetMouseY()-tHeight),new Material(1,0.002f,0.3f,"image/moon.png")));
 
     return true;
 }

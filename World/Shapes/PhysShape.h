@@ -13,7 +13,7 @@
 #include "../SelectiveCollision.h"
 #include "../../Game/Renderer.h"
 
-class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc.
+class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc. they get positioned at the center. ie the Vector2f is the center coords
 {
     public:
 

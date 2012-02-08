@@ -30,52 +30,16 @@ class WorldManager
         static void Achievement_Completion(std::string name);
 
 
-        World* Add(World* in){ m_WorldList.push_back(in); m_WorldList.back()->uuid = m_curuuid; m_curuuid++;  m_curWorld=m_WorldList.back(); return m_WorldList.back(); }
-        World* AddUndefinedWorld(){ return Add(new World(defaultconstraint,b2Vec2(0.0f,10.0f))); }
-        void Remove(World* in)
-            {
-                std::list<World*>::iterator it;
-                for (it=m_WorldList.begin();it != m_WorldList.end();it++)
-                {
-
-                    if ((*it)->uuid == in->uuid){
-                        (*it)->Unload();
-                        m_WorldList.erase(it);
-                    }
-
-                }
-            }
-
+        World* Add(World* in){ m_WorldList.push_back(in); m_WorldList.back()->uuid = m_curuuid; m_curuuid++; return m_WorldList.back(); }
+        World* AddUndefinedWorld(){ return Add(new World()); }
+        void RemoveCurrentWorld() { Remove(CurrentWorld()); }
         void HideWorld(World* in){ GetWorld(in)->Hide(); }
 
+        void SelectWorld(World* in);
         World* CurrentWorld();
+        World* GetWorld(World* in);
+        void Remove(World* in);
 
-        void RemoveCurrentWorld() { Remove(CurrentWorld()); }
-
-        void SelectWorld(World* in)
-            {
-                std::list<World*>::iterator it;
-                for (it=m_WorldList.begin();it != m_WorldList.end();it++)
-                {
-
-                    if ((*it)->uuid == in->uuid)
-                        m_curWorld = (*it);
-
-                }
-
-            }
-
-        World* GetWorld(World* in)
-        {
-            std::list<World*>::iterator it;
-                for (it=m_WorldList.begin();it != m_WorldList.end();it++)
-                {
-
-                    if ((*it)->uuid == in->uuid)
-                        return (*it);
-
-                }
-        }
     protected:
     private:
         std::list<World*> m_WorldList;

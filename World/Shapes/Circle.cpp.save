@@ -90,20 +90,6 @@ void Circle::Create(b2World* p_world)
 
 	Set_Body(p_world->CreateBody(&bodyDef));
 
-        if (Get_Mat()->UsesText()){//Text size of rect. disregard other size
-
-        sf::String* temp = new sf::String();
-        temp->SetText(Get_Mat()->GetText());
-
-        if (temp->GetRect().GetWidth() > temp->GetRect().GetHeight())
-        Set_Radius(temp->GetRect().GetWidth());
-
-        if (temp->GetRect().GetWidth() < temp->GetRect().GetHeight())
-        Set_Radius(temp->GetRect().GetHeight());
-
-        delete temp;
-        }
-
 	b2CircleShape circle;
 
 	circle.m_radius = Get_Radius()*WorldStandards::ppm;
@@ -133,15 +119,15 @@ void Circle::Create(b2World* p_world)
     //do sfml
 
     if (Get_Mat()->UsesText())
-    {//should really avoid this tho, looks quite odd.
+    {
          sf::String* temp = new sf::String();
         temp->SetText(Get_Mat()->GetText());
 
         temp->SetFont(*Get_Mat()->GetFont());
-        temp->SetPosition(sf::Vector2f(Get_Position().x, Get_Position().y)); //Get_Position()
+        temp->SetPosition(sf::Vector2f(sfposx, sfposy)); //Get_Position()
         temp->Rotate(Get_Angle());
 
-        temp->SetCenter((Get_Radius()*(1/temp->GetScale().x))/2,(Get_Radius()*(1/temp->GetScale().y))/2);
+        temp->SetCenter((Get_Width()*(1/temp->GetScale().x))/2,(Get_Height()*(1/temp->GetScale().y))/2);
 
         Set_Shape(temp);
     }

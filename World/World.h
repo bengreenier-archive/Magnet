@@ -19,7 +19,7 @@
 class World //! The world object. controls all physics and world-ly things. :)
 {
     public:
-        World(int constraint,b2Vec2 m_grav); //!< Default Constructor
+        World(int constraint=500,b2Vec2 m_grav=b2Vec2(0,10),float timestep = (1.0f/40.0f),int velocityit = 8, int positionit = 3,int maxbodies = 800, Material* defaultmaterial = new Material(MatType::Default)); //!< Default Constructor
 
         b2World* CurrentB2World();//!< Returns a pointer to the current world.
 
