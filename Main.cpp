@@ -55,7 +55,14 @@ int main()
             EventHandler::Listen(Window);
             Magnet::Think();
         }else{
-            Magnet::Init(Window, RenderThread, ResourceLoader);
+            try{
+                Magnet::Init(Window, RenderThread, ResourceLoader);
+            }
+
+            catch(Exception e){
+                std::cout << "ABORT MAGNET INITIALIZATION\n";
+                return -1;
+            }
         }
     }
 

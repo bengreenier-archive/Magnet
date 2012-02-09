@@ -1,8 +1,8 @@
 #include "Animation.h"
-#include "Resource.h"
+//#include "Resource.h"
 
 
-
+/*
 Animation::Animation(std::string name,int eachVisibleFor,sf::Drawable& shape)
 {
     //ctor
@@ -84,3 +84,4 @@ void Animation::Reset()
 {
     m_curframe = 0;
 }
+*/

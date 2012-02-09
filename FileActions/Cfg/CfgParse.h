@@ -13,6 +13,7 @@ class CfgParse
 {
     public:
         CfgParse(const char* path);
+        CfgParse();
         virtual ~CfgParse();
 
         //////////////////////////////////////
@@ -30,12 +31,15 @@ class CfgParse
         ///Returns true when ready for a parse
         bool IsReady();
 
+        bool IsParsed(){return m_parsed;};
+
         void TrimString(std::string& to_trim, bool left=true, bool right=true);
         void ToLower(std::string& str);
         bool StringIsInt(std::string str);
     protected:
     private:
         const char* m_path;
+        bool m_parsed;
         std::ifstream m_config_file;
 };
 

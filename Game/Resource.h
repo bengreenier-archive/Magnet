@@ -4,15 +4,74 @@
 #include "../Magnet.h"
 #include <string>
 #include <queue>
+#include <map>
+#include <iterator>
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <SFML/Audio.hpp>
+
+#include "../FileActions/Cfg/CfgInclude.h"
+#include "../FileActions/FileAction.h"
 
 #include "Handlers/ImageHandler.h"
 
 #include "Exception.h"
 #include "Resource/ResourcePointer.h"
+
+
+template<class T>
+class ResourceHandler{
+    public:
+        virtual ~ResourceHandler()
+        {
+            for(int i = 0; i < m_resource_map.size(); i++){
+                //delete &m_resource_map[i].second;
+            }
+            m_resource_map.clear();
+        }
+
+        bool Load(FileAction::file_node* fnode){
+            T* new_resource = new T();
+
+            //if(dynamic_cast<Config*>(new_resource) == 0){ //Specialization if new_resource is config, see else
+                if(new_resource->LoadFromFile(fnode->path)){
+                    m_resource_map.insert(resource_pair_type(fnode->path, new_resource));
+                    fnode->loaded = true;
+                }else{
+                    fnode->loaded = false;
+                }
+            /*}else{
+                CfgParse parser(fnode->path);
+                parser.Parse(*new_resource);
+                if(parser.IsParsed()){
+                    fnode->loaded = true;
+                }else{
+                    fnode->loaded = false;
+                }
+            }*/
+
+            return fnode->loaded;
+        }
+
+        T* Get(FileAction::file_node* fnode) throw(Exception){
+            return Get(fnode->path);
+        }
+
+        T* Get(std::string file) throw(Exception){
+            if(m_resource_map.count(file) == 0){
+                throw (Exception(Exception::NullPointer, "null pointer", "resource '" + file + "' does not exist"));
+            }
+
+            return m_resource_map.find(file)->second;
+        }
+    private:
+        typedef std::map<std::string, T*>            resource_map_type;
+        //typedef std::map<std::string, T*>::iterator  resource_map_it_type;
+        typedef std::pair<std::string, T*>           resource_pair_type;
+        resource_map_type m_resource_map;
+};
 
 ////////////////////////////////
 /// Static class to handle
@@ -21,12 +80,6 @@
 class Resource
 {
     public:
-        const std::string ResourceDir;
-        const std::string ConfigDir;
-        const std::string ImageDir;
-        const std::string FontDir;
-        const std::string ErrorImage;
-
         virtual ~Resource();
 
         ////////////////////////////////
@@ -45,6 +98,7 @@ class Resource
         /// on the next Load hook
         ////////////////////////////////
         static void AddFile(std::string file) throw(Exception);
+        static void AddFile(FileAction::file_node* filenode) throw(Exception);
 
         ////////////////////////////////
         /// Add a directory
@@ -58,9 +112,28 @@ class Resource
 
         ////////////////////////////////
         /// Check if a directory exists
-        /// in search paths
+        /// in search paths or if the dir
+        /// is a search directory
         ////////////////////////////////
-        static bool FindDir(std::string dir);
+        bool FindInSearchDirectory(std::string dir);
+
+        ////////////////////////////////
+        /// Get the root path
+        ////////////////////////////////
+        static const std::string& GetRootPath();
+        ////////////////////////////////
+        /// Get the full path of a
+        /// search directory.
+        ///
+        ///dir = image
+        ///if image is a search directory
+        ///this function will return
+        ///[root]/image/
+        ////////////////////////////////
+        static std::string GetFullPath(std::string dir);
+        static std::string GetSearchPath(std::string path_name);
+        //Returns true if the
+        static bool SearchPathExists(std::string path_name);
 
         ////////////////////////////////
         /// Gets the full path of a dir
@@ -85,6 +158,8 @@ class Resource
 
           return false;
         };
+
+        static FileAction::file_node* GetFileNode(std::string file_path);
 
         ////////////////////////////////
         /// Return true when the
@@ -123,31 +198,45 @@ class Resource
         ////////////////////////////////
         /// Get an image
         ////////////////////////////////
-        static sf::Image& GetImage(std::string file);
+        static const sf::Image& GetImage(std::string file) throw(Exception);
         ////////////////////////////////
         /// Get a font
         ////////////////////////////////
-        static sf::Font& GetFont(std::string file);
+        static const sf::Font& GetFont(std::string file);
     protected:
         Resource(sf::Thread* loadThread, std::string resourceDir);
     private:
         static Resource* _resource_ptr;
         sf::Thread*     m_loadThread_ptr;
 
-        typedef std::queue<std::string>                              load_queue_t;
-        typedef std::map<std::string, ResourcePointer*>              resource_vect_t;
-        typedef std::map<std::string, ResourcePointer*>::iterator    resource_vect_it_t;
+        typedef std::queue<FileAction::file_node*>                              load_queue_t;
+        typedef ResourceHandler<sf::Image>          image_handler_type;
+        typedef ResourceHandler<sf::Font>           font_handler_type;
+        typedef ResourceHandler<sf::SoundBuffer>    soundbuffer_handler_type;
+        typedef ResourceHandler<Config>             config_handler_type;
 
-        resource_vect_t m_resource_vect;
+        //Define handlers
+        image_handler_type          m_image_handler;
+        font_handler_type           m_font_handler;
+        soundbuffer_handler_type    m_soundbuffer_handler;
+        config_handler_type         m_config_handler;
+
         load_queue_t    m_load_queue;
         State           m_load_state;
         int             m_loadSize;         //load total
         int             m_loadLeft;         //current queue size
         bool            m_loading;          //True when loading is in process
         bool            m_debug;
+        std::vector<std::string>  m_search_directories;
+        std::string     m_rootdir;
+        FileAction::directory_tree_t m_resource_tree;
+
+        Config m_config;
 
 
 
 };
+
+
 
 #endif // RESOURCE_H

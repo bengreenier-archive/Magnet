@@ -246,7 +246,7 @@ GunComponent GunLocker::GetRandomRearComponent(GunEnum::Type type){
     return *newComponent;
 }
 
-
+//NOBODY CAN SEE ME HERE
 
 
 
@@ -256,7 +256,7 @@ GunComponent GunLocker::GetRandomRearComponent(GunEnum::Type type){
 ***********************/
 void GunLocker::ParseList(std::string ListPath,std::vector<std::string>& List)
 {
-    if(!FileAction::FindFile(ListPath))
+    if(!FileAction::Find(ListPath))
     {
         std::cout<<"ParseList("<<ListPath<<") Failed.\n";
         return;

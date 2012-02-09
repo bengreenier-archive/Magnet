@@ -3,11 +3,17 @@
 CfgParse::CfgParse(const char* path)
 {
     m_path = path;
+    m_parsed = false;
 
     if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
         std::cout << "[CfgParse]Created new parse element from path \"" << path << "\"\n";
 
     Load();
+}
+
+CfgParse::CfgParse(){
+    m_path = "";
+    m_parsed = false;
 }
 
 CfgParse::~CfgParse()
@@ -34,6 +40,9 @@ bool CfgParse::Load(){
 
 Config& CfgParse::Parse(Config& data){
     if(!IsReady()) return data;
+
+    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+        std::cout << "[CfgParse][Load] Parsing from \"" << m_path << "\"\n";
 
     std::string line;
 
@@ -73,6 +82,10 @@ Config& CfgParse::Parse(Config& data){
         line_n++;
     }
 
+    m_config_file.close();
+
+    m_parsed = true;
+
     return data;
 }
 
@@ -111,11 +124,27 @@ bool CfgParse::StringIsInt(std::string str){
 }
 
 bool CfgParse::IsReady(){
-   if(m_config_file.is_open() && m_config_file.good()){
-        if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+   if(m_config_file.is_open()){
+       if(m_config_file.good()){
+            if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
             std::cout << "[CfgParse][IsReady] Parser is ready\n";
 
-        return true;
+            return true;
+       }else{
+            if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+            std::cout << "[CfgParse][IsReady] File not open.\n";
+       }
+    }else{
+        if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE){
+            std::cout << "[CfgParse][IsReady] File not good:\n";
+            if((m_config_file.rdstate() & std::ifstream::failbit ) != 0){
+                std::cout << "\tFailbit set\n";
+            }
+
+            if((m_config_file.rdstate() & std::ifstream::badbit ) != 0){
+                std::cout << "\tBadbit set\n";
+            }
+        }
     }
 
     if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)

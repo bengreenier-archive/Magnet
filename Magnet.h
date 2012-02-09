@@ -28,15 +28,16 @@
 
 #include "World/WorldManager.h"
 
+#include "FileActions/Cfg/CfgInclude.h"
+
 class Magnet
 {
     public:
-        //Garbage collection
         virtual ~Magnet();
 
         static Magnet* Object(std::string from);    ///< DEBUG
         static Magnet* Object();
-        static void Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread);
+        static void Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread)  throw(Exception);
         static bool Initialized(); //Check to see if we have initialized yet
         static void Hook_Initialize();
 
@@ -73,6 +74,10 @@ class Magnet
         /// Retrieve the global menu registry
         //////////////////////////////////////////
         static mgui::Registry* Menus();
+        //////////////////////////////////////////
+        /// Retrieve the global config object
+        //////////////////////////////////////////
+        static Config* GlobalConfig();
 
         static void ben_testing_space();//!< space for shit ben needs to test
 
@@ -124,6 +129,8 @@ class Magnet
         Hook::Registry m_hooks;
         mgui::Registry m_menus;
         Achievements::Registry m_acheivs;
+
+        Config m_config;
 
         bool m_load_started;  //True when a load has been started
         bool m_initialized;     //True when Engine critical classes are initialized

@@ -9,6 +9,8 @@
 #include "../Handlers/ImageHandler.h"
 #include "../Handlers/FontHandler.h"
 
+#include "../Exception.h"
+
 class ResourcePointer
 {
     public:
@@ -35,7 +37,7 @@ class ResourcePointer
         ///     throws NullPointer exception if the resource is
         ///     not valid;
         ////////////////////////////////////////////////////////////
-        void* getGeneric();
+        void* getGeneric() throw(Exception);
 
         ////////////////////////////////////////////////////////////
         ///     Get a pointer to a resource of type image
@@ -43,7 +45,7 @@ class ResourcePointer
         ///     throws NullPointer exception if the resource is
         ///     not of type image;
         ////////////////////////////////////////////////////////////
-        sf::Image&  getImage();
+        sf::Image&  getImage() throw(Exception);
 
         ////////////////////////////////////////////////////////////
         ///     Get a pointer to a resource of type font

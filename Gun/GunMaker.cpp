@@ -57,7 +57,7 @@ void GunMaker::FormatDrawable(int x,int y)
     int mLength =MiddleComponent->Length;
     int rLength =RearComponent->Length;
     */
-
+    //I love you
     std::cout << "Making changes!\n";
 
     int fWidth  =FrontComponent.GetWidth();

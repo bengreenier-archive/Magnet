@@ -3,12 +3,12 @@
 Resource*   Resource::_resource_ptr =   NULL;
 
 Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
-    :   m_load_state(State::Null),
-        ResourceDir(resourceDir),
-        ConfigDir(ResourceDir+"config/"),
-        ImageDir(ResourceDir+"image/"),
-        FontDir(ResourceDir+"font/"),
-        ErrorImage("error.png")
+    :   m_load_state(State::Null)/*,
+        m_image_handler(),
+        m_font_handler(),
+        m_soundbuffer_handler(),
+        m_config_handler()*/
+
 {
     m_debug = true;
 
@@ -21,32 +21,16 @@ Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
     if(m_debug)
         std::cout << "\tInitializing directories...\n";
 
-    if(!FileAction::FindDir(ResourceDir)){
-        FileAction::MakeDir(ResourceDir);
+    m_rootdir = (Magnet::GlobalConfig()->KeyExists("resource", "root")) ? Magnet::GlobalConfig()->GetKeyValue("resource", "root") : "resource/";
+    m_resource_tree = FileAction::CreateDirectoryTree(m_rootdir);
 
-        if(m_debug)
-            std::cout << "\tCreated\t" << ResourceDir << "\n";
-    }
-
-    if(!FileAction::FindDir(ConfigDir)){
-        FileAction::MakeDir(ConfigDir);
-
-        if(m_debug)
-            std::cout << "\tCreated\t" << ConfigDir << "\n";
-    }
-
-    if(!FileAction::FindDir(ImageDir)){
-        FileAction::MakeDir(ImageDir);
-
-        if(m_debug)
-            std::cout << "\tCreated\t" << ImageDir << "\n";
-    }
-
-    if(!FileAction::FindDir(FontDir)){
-        FileAction::MakeDir(FontDir);
-
-        if(m_debug)
-            std::cout << "\tCreated\t" << FontDir << "\n";
+    for(int i = 0; i < m_resource_tree.size(); i++){
+        FileAction::dir_node* dir = m_resource_tree[i];
+        if(dir->parent != NULL){
+            if(dir->parent->name+"/" == m_rootdir){
+                m_search_directories.push_back(dir->full_path);
+            }
+        }
     }
 
     m_loadThread_ptr    =   loadThread;
@@ -77,140 +61,143 @@ void Resource::Init(sf::Thread* loadThread, std::string resourceDir){
     _resource_ptr   =   new Resource(loadThread, resourceDir);
 }
 
-void Resource::AddFile(std::string file) throw(Exception){
-    Exception newEx;
+const std::string& Resource::GetRootPath(){
+    return Object()->m_rootdir;
+}
 
+std::string Resource::GetFullPath(std::string dir){
+    std::cout << "[Resource][GetFullPath] Converting " << dir;
+    if(SearchPathExists(dir)){
+        if(dir.find(GetRootPath()) == std::string::npos){
+            dir = GetRootPath() + dir;
+        }
+
+        if(dir.find("/", dir.length()-1)){
+            dir = dir + "/";
+        }
+    }
+
+    std::cout << " to " << dir << std::endl;
+
+    return dir;
+}
+
+bool Resource::SearchPathExists(std::string path_name){
+    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+        std::cout << "[Resource][SearchPathExists] Checking '" << path_name << "' ... ";
+    if(GetRootPath() == path_name){
+
+        if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+            std::cout << "is root. Return true.\n";
+        return true;
+    }
+    std::cout << "!!!\n";
+    for(int i = 0; i < Object()->m_search_directories.size(); i++){
+        if(Object()->m_search_directories[i] == path_name){
+            if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+                std::cout << "is search directory. Return true.\n";
+            return true;
+        }
+    }
+
+
+    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+        std::cout << "doesn't exist. Return false.\n";
+    return false;
+}
+
+void Resource::AddFile(FileAction::file_node* filenode) throw(Exception){
     if(Resource::Loading()){
-        newEx.type = Exception::SyncError;
-        newEx.what = "Sync Error";
-        newEx.why = "Could not add resource \"" + file + "\" as Resources are currently being loaded.";
+        throw(Exception(Exception::SyncError, "out of sync", "cannot add resources when a load is in progress"));
+    }
 
+    if(!FileAction::FindFile(filenode->path)){
+        throw(Exception(Exception::MissingFile, "missing file", "file '" + filenode->path + "' doesn't exist"));
+    }
+
+    if(filenode->loaded){
+        throw(Exception(Exception::SyncError, "out of sync", "file '" + filenode->path + "' is already loaded"));
     }
 
     if(Object()->m_load_state.get() == State::Ready){
         Object()->m_load_state.set(State::Null);
     }
 
-    Object()->m_load_queue.push(file);
+    Object()->m_load_queue.push(filenode);
     Object()->m_loadSize = Object()->m_load_queue.size();
     Object()->m_loadLeft = Object()->m_load_queue.size();
 
-    if(Object()->m_debug)
-        std::cout << "[Resource] Added \"" << file << "\"\n";
+    if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+        std::cout << "[Resource] Added \"" << filenode->path << "\"\n";
+}
+
+FileAction::file_node* Resource::GetFileNode(std::string file_path){
+    for(int i = 0; i < Object()->m_resource_tree.size(); i++){
+        if(!Object()->m_resource_tree[i]->files.empty()){
+            for(int j = 0; j < Object()->m_resource_tree[i]->files.size(); j++){
+                if(Object()->m_resource_tree[i]->files[j]->path == file_path){
+                    return Object()->m_resource_tree[i]->files[j];
+                }
+            }
+        }
+    }
+
+    return NULL;
+}
+
+void Resource::AddFile(std::string file_path) throw(Exception){
+    FileAction::file_node* fnode = GetFileNode(file_path);
+
+    if(!fnode){
+        throw(Exception(Exception::MissingFile, "missing file", "file '" + file_path + "' doesn't exist in the node tree"));
+    }
+
+    AddFile(fnode);
 }
 
 void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
-    //Prepare for failure...
-    std::string error = "\0";
-    if(FindDir(dir)){
-        std::string fullPath = GetRealPath(dir);
-        std::string filepath;
-        DIR *dp;
-        struct dirent *dirp;
-        struct stat filestat;
+    if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool()){
+        std::cout << "[Resource][AddDir] Adding " << dir;
+        if(recursive){
+            std::cout << " recursively\n";
+        }else{
+            std::cout << std::endl;
+        }
+    }
 
+    if(Resource::Object()->FindInSearchDirectory(dir) || dir == GetRootPath()){
+        if(dir == GetRootPath() && recursive){
+            throw Exception(Exception::Recursive, "recursive attempt", "cannot add root dir recursivley");
+        }
 
-        dp = opendir( fullPath.c_str() );
-        if (dp == NULL) { error = "Could not open \"" + dir + "\""; }
-
-        while ((dirp = readdir( dp ))){
-            filepath = fullPath + dirp->d_name;
-            // If the file is a directory (or is in some way invalid) skip it
-            if (stat( filepath.c_str(), &filestat )) continue;
-            if (S_ISDIR( filestat.st_mode )){
-                if(recursive){
-                    if(((std::string)dirp->d_name).find(".") == std::string:: npos){
-                         AddDir(dir + dirp->d_name + "/", true);
+        for(int i = 0; i < Object()->m_resource_tree.size(); i++){
+            if(Object()->m_resource_tree[i]->full_path == dir){
+                if(!Object()->m_resource_tree[i]->files.empty()){
+                    for(int j = 0; j < Object()->m_resource_tree[i]->files.size(); j ++){
+                        std::cout << "Found file '" << Object()->m_resource_tree[i]->files[j]->file << "' path '" << Object()->m_resource_tree[i]->files[j]->path << "'" << std::endl;
+                        Resource::AddFile(Object()->m_resource_tree[i]->files[j]);
                     }
                 }else{
-                    continue;
+                    throw Exception(Exception::MissingFile, "missing file", "no files exist in '" + dir + "'");
                 }
-            }else{
-                Resource::AddFile(dir + dirp->d_name);
             }
         }
-
-        closedir( dp );
     }else{
-        error = "Could not find \"" + dir + "\" within search directories";
+        throw Exception(Exception::MissingDir, "missing directory", "directory '" + dir + "' doesn't exist within search paths");
     }
 
-    if(error != "\0"){
-        Exception newEx;
-        newEx.type = Exception::MissingDir;
-        newEx.what = "Missing Directory";
-        newEx.why = error;
-
-        throw newEx; //this ends execution
-    }
- }
-
-/*
- void AddDirRecursive(std::string dir) throw(Exception){
-    if(FindDir(dir)){
-        std::string fullPath = GetRealPath(dir);
-        std::string filepath;
-        DIR *dp;
-        struct dirent *dirp;
-        struct stat filestat;
+}
 
 
-        dp = opendir( fullPath.c_str() );
-        if (dp == NULL)
-            std::cout << "Error(" << errno << ") opening " << fullPath << std::endl;
-
-        while ((dirp = readdir( dp ))){
-            filepath = fullPath + dirp->d_name;
-
-            // If the file is a directory (or is in some way invalid) skip it
-            if (S_ISDIR( filestat.st_mode )){
-                Resource::AddDir(dir + dirp->d_name);
-            }
+bool Resource::FindInSearchDirectory(std::string dir){
+    if(FileAction::Find(GetRootPath() + dir)) return true;
+    for(int i = 0; i < m_search_directories.size(); i++){
+        if(FileAction::Find(GetFullPath(m_search_directories[i]) + dir)){
+            return true;
         }
-
-        closedir( dp );
-    }
- }
- */
-
-bool Resource::FindDir(std::string dir){
-    if(FileAction::FindDir(Object()->ResourceDir + dir)){
-        return true;
-    }
-
-    if(FileAction::FindDir(Object()->ConfigDir + dir)){
-        return true;
-    }
-
-    if(FileAction::FindDir(Object()->ImageDir + dir)){
-        return true;
-    }
-
-    if(FileAction::FindDir(Object()->FontDir + dir)){
-        return true;
     }
 
     return false;
-}
-
-std::string Resource::GetRealPath(std::string dir){
-    if(!FindDir(dir)) return dir;
-
-    if(FileAction::FindDir(Object()->ResourceDir + dir)){
-        return Object()->ResourceDir + dir;
-    }
-
-    if(FileAction::FindDir(Object()->ConfigDir + dir)){
-        return Object()->ConfigDir + dir;
-    }
-
-    if(FileAction::FindDir(Object()->ImageDir + dir)){
-        return Object()->ImageDir + dir;
-    }
-
-    if(FileAction::FindDir(Object()->FontDir + dir)){
-        return Object()->FontDir + dir;
-    }
 }
 
 bool Resource::NeedLoad(){
@@ -237,15 +224,29 @@ void Resource::Hook_Load(){
 void Resource::Load(void* data){
     //Process load queue
     while(!Object()->m_load_queue.empty()){
-        std::string file = Object()->m_load_queue.front();
+        FileAction::file_node* filenode = Object()->m_load_queue.front();
 
-        if(!Object()->m_resource_vect.count(file)){
-            ResourcePointer* resource = new ResourcePointer(file);
+        std::cout << "File type: " << filenode->type << std::endl;
 
-            if(resource->isValid()){
-                Object()->m_resource_vect[resource->file()] = resource;
+        if(!filenode->loaded){
+            if(FileAction::GetFileType(filenode->type) != FileAction::Invalid){
+                switch(FileAction::GetFileType(filenode->type)){
+                    case FileAction::Image:
+                        Object()->m_image_handler.Load(filenode);
+                        break;
+                    case FileAction::Font:
+                        Object()->m_font_handler.Load(filenode);
+                        break;
+                    case FileAction::Config:
+                        //Object()->m_config_handler.Load(filenode);
+                        break;
+                    case FileAction::Sound:
+                        Object()->m_soundbuffer_handler.Load(filenode);
+                        break;
+                }
             }else{
-                std::cout << "*[Resource] [Load] Warning: Couldn't load resource \"" << file << "\"\n";
+                if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+                    std::cout << "[Resource][Load] Could not load '" << filenode->path << "', file type " << filenode->type << "' is not supported\n";
             }
         }
 
@@ -255,28 +256,74 @@ void Resource::Load(void* data){
         std::cout << "[Resource][Load]\t" << LoadProgress() << "%\n ";
     }
 
-
-    if(Object()->m_debug)
+    if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
         std::cout << "[Resource][Load] Done loading\n";
 
     Object()->m_load_state.set(State::Ready);
 }
 
-sf::Image& Resource::GetImage(std::string file){
-    if(Object()->m_resource_vect.count(file)){
-        return Object()->m_resource_vect[file]->getImage();
-    }else{
-        return Object()->m_resource_vect[Object()->ErrorImage]->getImage();
+const sf::Image& Resource::GetImage(std::string file) throw(Exception){
+    if(file.find(GetRootPath()) == std::string::npos){
+        file = GetRootPath() + file;
     }
+
+    FileAction::file_node* fnode = GetFileNode(file);
+    sf::Image* img;
+    bool user_error = false;
+    if(fnode != 0){
+        try{
+            img = Object()->m_image_handler.Get(file);
+        }
+
+        catch(Exception e){
+            user_error = true;
+            e.output();
+        }
+    }else{
+        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+            std::cout << "[Resource][GetImage] Image " << file << " doesn't exist\n";
+
+        user_error = true;
+    }
+
+    if(user_error){
+        img = new sf::Image(32, 32, sf::Color(255, 0, 0, 60));
+    }
+
+    return *img;
 }
 
-sf::Font& Resource::GetFont(std::string file){
-    if(Object()->m_resource_vect.count(file)){
-        return Object()->m_resource_vect[file]->getFont();
-    }else{
-        std::cout << "Font " << file << " doesn't exit... crashing now.\n";
-        for(resource_vect_it_t it = Object()->m_resource_vect.begin(); it != Object()->m_resource_vect.end(); it++){
-            std::cout << it->first << std::endl;
-        }
+const sf::Font& Resource::GetFont(std::string file){
+    if(file.find(GetRootPath()) == std::string::npos){
+        file = GetRootPath() + file;
     }
+
+    std::cout << file << std::endl;
+
+    FileAction::file_node* fnode = GetFileNode(file);
+    const sf::Font* font;
+    bool user_error = false;
+    if(Resource::GetFileNode(file)){
+        try{
+            font = Object()->m_font_handler.Get(file);
+        }
+
+        catch(Exception e){
+            user_error = true;
+            e.output();
+        }
+    }else{
+        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+            std::cout << "[Resource][GetImage] Font " << file << " node doesn't exist\n";
+
+        user_error = true;
+    }
+
+    if(user_error){
+        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+            std::cout << "[Resource][GetImage] Font " << file << " doesn't exist, using default\n";
+        font = &sf::Font::GetDefaultFont();
+    }
+
+    return *font;
 }

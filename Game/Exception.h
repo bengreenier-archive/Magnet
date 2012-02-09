@@ -9,19 +9,20 @@ struct Exception {
         ///////////////////////
         ///     Generic
         NullPointer,
+        SyncError,
 
         ///////////////////////
         ///     Resource
         LoadFail,
         MissingDir,
         MissingFile,
-        SyncError
+        Recursive
     };
     //Default
-    Exception(){ type = Unknown; what = "UNKNOWN EXCEPTION"; why = "Unknown"; }
-    Exception(Type exType, std::string  _what, std::string  _why)
+    Exception(){ what = "UNKNOWN EXCEPTION"; why = "Unknown"; }
+    Exception(Type _type, std::string  _what, std::string  _why)
     {
-        type = exType;
+        type = _type;
         what = _what;
         why = _why;
     }

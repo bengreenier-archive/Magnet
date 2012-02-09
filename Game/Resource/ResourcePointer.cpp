@@ -10,7 +10,14 @@ ResourcePointer::~ResourcePointer()
     //dtor
 }
 
-sf::Image&  ResourcePointer::getImage(){
+sf::Image&  ResourcePointer::getImage() throw(Exception){
+    std::cout << "Get image\n";
+    if(!isValid()){
+        std::cout << "IMage is inbalid, throw...\n";
+        Exception e(Exception::NullPointer, "Invalid image", m_file + " is not a valid image");
+        throw e;
+    }
+
     return ImageHandler::GetImage(m_fullPath);
 }
 
@@ -18,42 +25,12 @@ sf::Font&   ResourcePointer::getFont(){
     return FontHandler::GetFont(m_fullPath);
 }
 
-void ResourcePointer::set(std::string file){
+void ResourcePointer::set(std::string fnode){
+/*    std::cout << "Creating resource pointer from file: " << fnode->path << std::endl;
     m_file = file;
 
-    std::vector<std::string> fileType;
 
-    parse(file, ".", &fileType);
-
-    if(fileType.size() == 2){
-        if(fileType[1] == "png"){
-            if(!file.find(Resource::Object()->ImageDir)){
-                m_fullPath = Resource::Object()->ImageDir + file;
-            }else{
-                m_fullPath = Resource::Object()->ResourceDir + file;
-            }
-            if(ImageHandler::AddImage(m_fullPath)){
-                m_type = Image;
-            }else{
-                m_type = Invalid;
-            }
-        }else if(fileType[1] == "ttf"){
-            if(!file.find(Resource::Object()->FontDir)){
-                m_fullPath = Resource::Object()->FontDir + file;
-            }else{
-                m_fullPath = Resource::Object()->ResourceDir + file;
-            }
-            if(FontHandler::AddFont(m_fullPath)){
-                m_type = Font;
-            }else{
-                m_type = Invalid;
-            }
-        }else{
-            m_type = Invalid;
-        }
-    }else{
-        m_type = Invalid;
-    }
+    m_type = Invalid;*/
 }
 
 void ResourcePointer::parse(std::string str, std::string separator, std::vector<std::string>* results){

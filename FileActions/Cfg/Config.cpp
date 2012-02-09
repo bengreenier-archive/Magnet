@@ -87,18 +87,44 @@ const std::string& Config::GetKeyValue(std::string category_name, std::string ke
 }
 
 void Config::AddKeyObject(CfgObject* cfg_ob){
-    bool should_push = true;
+    bool should_push    = true;
+    bool rewrite        = false;
 
     if(KeyExists(cfg_ob->GetCategory(), cfg_ob->GetName())){
-        should_push = false;
-        if(CfgGlobals::DEBUG)
-            std::cout << "[Config][AddKeyObject] Key '" << cfg_ob->GetCategory() << ", " << cfg_ob->GetName() << "'already exists!\n";
+        switch(CfgGlobals::OVERRIDE_KEYS){
+            case 0: //Override
+                should_push = true;
+                rewrite = true;
+
+                if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+                    std::cout << "[Config][AddKeyObject] Key '" << cfg_ob->GetCategory() << ", " << cfg_ob->GetName() << "' already exists. The key will be rewritten.\n";
+                break;
+            case 1: //Ignore
+                should_push = false;
+                rewrite = false;
+
+                if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+                    std::cout << "[Config][AddKeyObject] Key '" << cfg_ob->GetCategory() << ", " << cfg_ob->GetName() << "' already exists. The key will be ignored.\n";
+
+                break;
+            case 2: //Add
+                should_push = true;
+                rewrite = false;
+
+                if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+                    std::cout << "[Config][AddKeyObject] Key '" << cfg_ob->GetCategory() << ", " << cfg_ob->GetName() << "' already exists. A duplicate key will be added.\n";
+                break;
+        }
+
+
     }
 
-    if(should_push)
+    if(should_push && !rewrite){
         m_cfg_vect.push_back(cfg_ob);
-
-
+    }else if(should_push && rewrite){
+        RemoveKeyObject(cfg_ob->GetCategory(), cfg_ob->GetName());
+        m_cfg_vect.push_back(cfg_ob);
+    }
 }
 
 void Config::RemoveKeyObject(std::string category_name, std::string key){

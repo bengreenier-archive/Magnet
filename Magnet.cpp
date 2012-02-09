@@ -27,6 +27,13 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     m_load_started  = false;
     name = "test_cmp";
     test = NULL;
+
+    CfgParse cfgparser("config.mcf");
+    cfgparser.Parse(m_config);
+
+    if(!cfgparser.IsParsed()){
+        throw Exception(Exception::LoadFail, "Missing config", "The Magnet configuration file is missing");
+    }
 }
 
 Magnet::~Magnet()
@@ -67,12 +74,14 @@ void Magnet::Debug_CreateMenu(){
 
 void Magnet::Hook_Setup(){
     try{
-        Resource::AddDir("image/", true);
-        Resource::AddDir("font/", true);
+        Resource::AddDir(Resource::GetRootPath());
+        Resource::AddFile("resource/font/tahoma.ttf");
+        Resource::AddFile("resource/image/earth.png");
     }
 
     catch(Exception e){
         e.output();
+        std::cout << "[Magnet][Hook_Setup] Could not add files from directory '" << Resource::GetRootPath() << "'\n";
     }
 }
 
@@ -106,7 +115,37 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
         }
         std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
     }else if(evt.Key.Code == sf::Key::R){
+        try{
+            //Resource::GetImage("images/guns/assault1.png");
+            /*FileAction::directory_tree_t tree = FileAction::CreateDirectoryTree("resource/");
+            std::cout << "Here\n";
+            for(int i = 0; i < tree.size(); i++){
+                FileAction::dir_node* dir = tree[i];
+                if(dir->files.size() > 0){
+                    std::cout << "Folder " << dir->name << " has " << dir->files.size() << " files ";
+                }else{
+                    std::cout << "Folder " << dir->name << " does not have files";
+                }
 
+                if(dir->children.size() > 0){
+                    std::cout << " and has " << dir->children.size() << " sub folders\n";
+                }else{
+                    std::cout << " and has no sub folders\n";
+                }
+            }*/
+        }
+
+        catch(Exception e){
+            e.output();
+        }
+        catch(...){
+            std::cout << "[Magnet][KeyPress] Unhandled exception\n";
+        }
+        /*if(!Object()->once){
+        Object()->spr->SetImage(Resource::GetImage("images/guns/assault1.png"));
+        Renderer::CreateLink(Object()->spr);
+        Object()->once = true;
+        }*/
         //In setup hook
         //Magnet::Loader->Add(new Config("resource/config/test.mcf"));
         //data = Resource::GetConfig("test.mcf");
@@ -157,9 +196,17 @@ Magnet* Magnet::Object(){
     return magnet_ptr;
 }
 
-void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread){
+void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread) throw(Exception){
     if(magnet_ptr == NULL){
-        magnet_ptr = new Magnet(window, renderThread, loadThread, State::Null);
+        try{
+            magnet_ptr = new Magnet(window, renderThread, loadThread, State::Null);
+        }
+
+        catch(Exception e){
+            e.output();
+            magnet_ptr = NULL;
+            throw e;
+        }
     }
 }
 
@@ -182,6 +229,10 @@ bool Magnet::LoadNeeded(){
     return !m_load_started;
 }
 
+Config* Magnet::GlobalConfig(){
+    return &Object()->m_config;
+}
+
 void Magnet::State_Initialize(){
     if(!m_initialized){
         std::cout << "**********\tINITALIZE\t**********\n";
@@ -200,6 +251,7 @@ void Magnet::State_Initialize(){
         if(LoadNeeded()){
             ChangeState(State::Setup);
         }else{
+            std::cout << "****Ready...\n";
             ChangeState(State::Ready);
         }
     }

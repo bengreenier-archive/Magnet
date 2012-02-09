@@ -4,6 +4,7 @@
 //#include <pair>
 #include <string>
 #include <stdlib.h>
+#include "CfgGlobals.h"
 
 class CfgObject
 {
