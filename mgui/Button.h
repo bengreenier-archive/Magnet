@@ -1,3 +1,4 @@
+/*
 #ifndef BUTTON_H
 #define BUTTON_H
 
@@ -13,3 +14,4 @@ namespace mgui{
     };
 }
 #endif // BUTTON_H
+*/

@@ -5,6 +5,7 @@
 #include "../Parameter.h"
 
 #include <vector>
+#include <cstdarg>
 
 class BaseListener {
     private:

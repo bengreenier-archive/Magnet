@@ -1,3 +1,4 @@
+/*
 #ifndef TEXT_H
 #define TEXT_H
 
@@ -63,3 +64,4 @@ namespace mgui{
 }
 
 #endif // TEXT_H
+*/

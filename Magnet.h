@@ -18,13 +18,13 @@
 
 #include "World/World.h"
 
-#include "mgui/mgui.h"
+//#include "mgui/mgui.h"
 
 #include "FileActions/FileAction.h"
 #include "FileActions/Cfg/CfgInclude.h"
 
 #include "Network/HttpReq.h"
-#include "FileActions/Xml/xml_include.h"
+//#include "FileActions/Xml/xml_include.h"
 
 #include "World/WorldManager.h"
 
@@ -73,7 +73,7 @@ class Magnet
         //////////////////////////////////////////
         /// Retrieve the global menu registry
         //////////////////////////////////////////
-        static mgui::Registry* Menus();
+        //static mgui::Registry* Menus();
         //////////////////////////////////////////
         /// Retrieve the global config object
         //////////////////////////////////////////
@@ -106,7 +106,6 @@ class Magnet
 
 
         MouseTrail m_mouseTrail;
-        mgui::Panel* test;
         const char*  name;
 
     protected:
@@ -127,7 +126,7 @@ class Magnet
 
         //Registries
         Hook::Registry m_hooks;
-        mgui::Registry m_menus;
+        //mgui::Registry m_menus;
         Achievements::Registry m_acheivs;
 
         Config m_config;

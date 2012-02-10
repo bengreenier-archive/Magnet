@@ -1,3 +1,4 @@
+/*
 #ifndef GROUP_H
 #define GROUP_H
 
@@ -57,3 +58,4 @@ namespace mgui{
 }
 
 #endif // GROUP_H
+*/

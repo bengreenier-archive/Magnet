@@ -1,8 +1,9 @@
 #ifndef EVENTHANDLER_H
 #define EVENTHANDLER_H
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <map>
+#include <queue>
 #include "../EventListener.h"
 
 #include <iostream>

@@ -251,7 +251,6 @@ void Magnet::State_Initialize(){
         if(LoadNeeded()){
             ChangeState(State::Setup);
         }else{
-            std::cout << "****Ready...\n";
             ChangeState(State::Ready);
         }
     }

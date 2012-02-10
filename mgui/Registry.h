@@ -1,3 +1,4 @@
+/*
 #ifndef REGISTRY_H
 #define REGISTRY_H
 
@@ -87,3 +88,4 @@ namespace mgui {
 }
 
 #endif // REGISTRY_H
+*/

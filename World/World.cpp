@@ -133,7 +133,7 @@ void World::Step()
                 {
                     float slope = (y2-y1)/(x2-x1);
                     float angle = std::tan(slope);//not sure if works everytime
-                    b2Vec2 CalculatedForce((Objects[i]->pullorpush_val()*(x1-x2)*Objects[i]->Get_Radial_Gravity().x)/dist,(Objects[i]->pullorpush_val()*(y1-y2)*Objects[i]->Get_Radial_Gravity().x)/dist);
+                     b2Vec2 CalculatedForce((Objects[i]->pullorpush_val()*(x1-x2)*WorldStandards::rgrav_forceConst)/dist,(Objects[i]->pullorpush_val()*(y1-y2)*WorldStandards::rgrav_forceConst)/dist);//b2Vec2 CalculatedForce((Objects[i]->pullorpush_val()*(x1-x2)*Objects[i]->Get_Radial_Gravity().x)/dist,(Objects[i]->pullorpush_val()*(y1-y2)*Objects[i]->Get_Radial_Gravity().x)/dist);
 
                     Objects[a]->Get_Body()->ApplyForce(CalculatedForce,Objects[a]->Get_Body()->GetWorldCenter());//apply a force to a's center that moves it toward i
                 }

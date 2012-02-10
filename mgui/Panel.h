@@ -1,3 +1,4 @@
+/*
 #ifndef PANEL_H
 #define PANEL_H
 
@@ -35,3 +36,4 @@ namespace mgui{
 }
 
 #endif // PANEL_H
+*/
