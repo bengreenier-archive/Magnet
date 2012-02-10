@@ -1,3 +1,4 @@
+/*
 #include "Triangle.h"
 #include "../WorldManager.h"
 
@@ -122,3 +123,4 @@ void Triangle::Create(b2World* p_world)
 
 
 }
+*/

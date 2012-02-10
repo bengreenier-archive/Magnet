@@ -1,4 +1,4 @@
-#include "Text.h"
+/*#include "Text.h"
 #include "../Game/Resource.h"
 
 using namespace mgui;
@@ -71,4 +71,4 @@ void Text::Update(){
 
     Format();
 }
-
+*/

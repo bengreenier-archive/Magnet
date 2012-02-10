@@ -1,4 +1,4 @@
-#include "Group.h"
+/*#include "Group.h"
 
 using namespace mgui;
 
@@ -48,3 +48,4 @@ bool Group::onMouseRelease(sf::Event evt){
 
 const char* Group::GetName(){ return m_name; }
 
+*/

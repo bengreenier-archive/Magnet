@@ -193,7 +193,7 @@ class Resource
 
             return (((m_loadSize-m_loadLeft)/m_loadSize)*100);
         }
-        static void Load(void* data);
+        static void Load();
 
         ////////////////////////////////
         /// Get an image

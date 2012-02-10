@@ -1,4 +1,4 @@
-#ifndef TRIANGLE_H
+/*#ifndef TRIANGLE_H
 #define TRIANGLE_H
 
 #include "PhysShape.h"
@@ -22,3 +22,4 @@ class Triangle: public PhysShape
 };
 
 #endif // TRIANGLE_H
+*/

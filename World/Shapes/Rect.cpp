@@ -1,3 +1,4 @@
+/*
 #include "Rect.h"
 #include "../WorldManager.h"
 
@@ -191,4 +192,4 @@ void Rect::Create(b2World* p_world)
         std::cout << "[SFML] Added Box.\n";
 
 
-}
+}*/

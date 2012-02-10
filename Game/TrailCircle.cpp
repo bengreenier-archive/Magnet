@@ -1,4 +1,4 @@
-#include "TrailCircle.h"
+/*#include "TrailCircle.h"
 #include "../Magnet.h"
 
 TrailCircle::TrailCircle(float x, float y, float radius, const sf::Color color)
@@ -43,4 +43,4 @@ void TrailCircle::Update(){
     if(m_scale < .5){
         m_remove=true;
     }
-}
+}*/

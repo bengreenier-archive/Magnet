@@ -1,3 +1,4 @@
+/*
 #include "FontHandler.h"
 #include "../../Magnet.h"
 
@@ -68,3 +69,4 @@ sf::String* FontHandler::MakeStringWithFont(std::string in,std::string font,int 
 {
     return new sf::String(in,GetFont(font),size);
 }
+*/

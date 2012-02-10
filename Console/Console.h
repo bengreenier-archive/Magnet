@@ -1,3 +1,4 @@
+/*
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
@@ -23,7 +24,7 @@ class Console //! Our threaded console that works while in game. currently uses 
         Console(); //!< Default Constructor
         ~Console(); //!< Default Destructor
         static Console* GetObject(); //!< Get the singleton class (only instance) of Console
-        static void Listener(void* UserData);//!< Does the listening and spawns executor.
+        static void Listener();//!< Does the listening and spawns executor.
 
         static void LaunchConsoleThread(sf::Event evt); //!< Launches the thread.
 
@@ -45,7 +46,7 @@ class Console //! Our threaded console that works while in game. currently uses 
     private:
     //the two f(x) below are static because they are called from a static scope, and cannot use GetObject.
 
-        static void Executor(void* UserData);//launches command
+        static void Executor();//launches command
         bool CanGetCommand(std::string name);//returns if you can Get said Command function
 
         std::vector< std::pair<std::string,FuncType> > commands;
@@ -60,3 +61,4 @@ class Console //! Our threaded console that works while in game. currently uses 
 };
 
 #endif // CONSOLE_H
+*/

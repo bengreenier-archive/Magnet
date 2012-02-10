@@ -1,4 +1,4 @@
-#include "Panel.h"
+/*#include "Panel.h"
 #include "../Game/Resource.h"
 
 using namespace mgui;
@@ -78,4 +78,4 @@ bool Panel::onMousePress(sf::Event evt){
     }
     m_mouse_down = true;
     return false;
-}
+}*/

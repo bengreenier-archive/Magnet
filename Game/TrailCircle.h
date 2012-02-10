@@ -1,3 +1,4 @@
+/*
 #ifndef TRAILCIRCLE_H
 #define TRAILCIRCLE_H
 
@@ -46,3 +47,5 @@ class TrailCircle
 };
 
 #endif // TRAILCIRCLE_H
+
+*/

@@ -1,4 +1,4 @@
-#include "Registry.h"
+/*#include "Registry.h"
 
 using namespace mgui;
 
@@ -184,3 +184,4 @@ void Registry::ReleaseFocus(){
 }
 
 Registry::cmp_vect_iterator_type Registry::get_iterator(){ return m_cmp_vect_it; }
+*/

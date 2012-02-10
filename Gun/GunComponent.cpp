@@ -1,7 +1,8 @@
+/*
 #include "GunComponent.h"
 #include <iostream>
 #include <string>
-
+*/
 /*********************************************************************
 
     The GunComponent Constructor, maps pieces to the component values,
@@ -9,6 +10,7 @@
     to create a full fledged gun.
 
 *********************************************************************/
+/*
 GunComponent::GunComponent()
 {
 
@@ -21,6 +23,7 @@ GunComponent::~GunComponent()
 sf::Sprite* GunComponent::GetSpritePtr(){
     return &m_sprite;
 }
+*/
 
 /**************************************
 
@@ -28,6 +31,7 @@ sf::Sprite* GunComponent::GetSpritePtr(){
     components imagepath at any time.
 
 **************************************/
+/*
 std::string GunComponent::GetImagePath()
 {
     return m_imagepath;
@@ -69,4 +73,4 @@ else if (m_imagepath.find("Light Machine")!=std::string::npos)
         return "Light Machine";
 else
         return "Invalid";
-}
+}*/

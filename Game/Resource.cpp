@@ -221,7 +221,7 @@ void Resource::Hook_Load(){
     }
 }
 
-void Resource::Load(void* data){
+void Resource::Load(){
     //Process load queue
     while(!Object()->m_load_queue.empty()){
         FileAction::file_node* filenode = Object()->m_load_queue.front();
@@ -287,7 +287,8 @@ const sf::Image& Resource::GetImage(std::string file) throw(Exception){
     }
 
     if(user_error){
-        img = new sf::Image(32, 32, sf::Color(255, 0, 0, 60));
+        img = new sf::Image();
+        img->Create(32, 32, sf::Color(255, 0, 0, 60));
     }
 
     return *img;

@@ -74,7 +74,7 @@ class Renderer
         /*********************************************
             "Draw the screen"
         *********************************************/
-        static void Render(void* threadData);
+        static void Render();
 
         /*********************************************
             "Add a drawable to the handler"

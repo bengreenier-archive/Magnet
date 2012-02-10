@@ -1,3 +1,4 @@
+/*
 #include "World.h"
 
 //!-----
@@ -338,3 +339,4 @@ void World::Hide()
 
     Stat->HideAll();
 }
+*/

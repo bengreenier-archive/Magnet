@@ -1,4 +1,4 @@
-#include "Circle.h"
+/*#include "Circle.h"
 
 Circle::Circle(int radius,sf::Vector2f pos,Material* mat,float degangle)
 {
@@ -82,7 +82,7 @@ void Circle::Create(b2World* p_world)
 
     //OKAY, SO THIS WORKS ALL COMMENTED OUT.
     //if (Get_Static())
-        bodyDef.position.Set((Get_Position().x/*+Get_Radius()*/)*WorldStandards::ppm, (Get_Position().y/*+Get_Radius()*/)*WorldStandards::ppm);
+        bodyDef.position.Set((Get_Position().x)*WorldStandards::ppm, (Get_Position().y)*WorldStandards::ppm);
     //else
     //  bodyDef.position.Set(((Get_Position().x+Get_Radius())/2)*WorldStandards::ppm, ((Get_Position().y+Get_Radius())/2)*WorldStandards::ppm);
 
@@ -169,3 +169,4 @@ void Circle::Create(b2World* p_world)
         std::cout << "[SFML] Added Circle.\n";
 
 }
+*/

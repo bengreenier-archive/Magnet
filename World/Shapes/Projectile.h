@@ -1,4 +1,4 @@
-#ifndef PROJECTILE_H
+/*#ifndef PROJECTILE_H
 #define PROJECTILE_H
 
 
@@ -13,28 +13,28 @@ class Projectile : public PhysShape
         ~Projectile();//!< Default Deconstructor
 
                 /* generic public functions */
-        virtual void Create(b2World* p_world); //!< Create the b2d/sfml Rectangle objects.
+        //virtual void Create(b2World* p_world); //!< Create the b2d/sfml Rectangle objects.
 
 
-        void Set_Bullet(bool val){ m_isbullet = val; }//!< True if is a bullet (default) false otherwise
-        bool Get_Bullet(){ return m_isbullet; }//!< Returning if is bullet
+       // void Set_Bullet(bool val){ m_isbullet = val; }//!< True if is a bullet (default) false otherwise
+        //bool Get_Bullet(){ return m_isbullet; }//!< Returning if is bullet
 
-        int Get_Width() { return m_Width; }
+        //int Get_Width() { return m_Width; }
 
         /** Set m_Width
          * \param val New value to set
          */
-        void Set_Width(int val) { m_Width = val; }
+        //void Set_Width(int val) { m_Width = val; }
 
         /** Access m_Height
          * \return The current value of m_Height
          */
-        int Get_Height() { return m_Height; }
+       // int Get_Height() { return m_Height; }
 
         /** Set m_Height
          * \param val New value to set
          */
-        void Set_Height(int val) { m_Height = val; }
+     /*   void Set_Height(int val) { m_Height = val; }
 
         void Set_Force(b2Vec2 val) { m_force = val; }
 
@@ -49,3 +49,4 @@ class Projectile : public PhysShape
 };
 
 #endif // PROJECTILE_H
+*/

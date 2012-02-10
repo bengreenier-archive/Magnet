@@ -1,3 +1,4 @@
+/*
 #ifndef WORLDMANAGER_H
 #define WORLDMANAGER_H
 
@@ -11,10 +12,10 @@ class WorldManager
 {
     public:
         /** Default constructor */
-        WorldManager();
+       // WorldManager();
         /** Default destructor */
-        ~WorldManager();
-
+       // ~WorldManager();
+/*
         static void Init();
         static WorldManager* Access();
         static void Renderer_Frame_Hook();
@@ -62,3 +63,4 @@ class WorldManager
 };
 
 #endif // WORLDMANAGER_H
+*/

@@ -1,4 +1,4 @@
-#include "WorldManager.h"
+/*#include "WorldManager.h"
 
 WorldManager* WorldManager::m_ptr = NULL;
 
@@ -105,16 +105,11 @@ World* WorldManager::CurrentWorld()
 }
 
 //**HOOKS BELOW**/
-
+/*
 void WorldManager::Renderer_Frame_Hook()
 {
     if (Access()->lol_logo_counter==0)
     {
-
-   /* Access()->lol_sprite->SetImage(Resource::GetImage("image/boot-logo.png"));
-    Access()->lol_sprite->SetCenter(Resource::GetImage("image/boot-logo.png").GetWidth()/2,Resource::GetImage("image/boot-logo.png").GetHeight()/2);
-    Access()->lol_sprite->SetPosition(Renderer::GetRenderWindow()->GetWidth()/2,Renderer::GetRenderWindow()->GetHeight()/2);
-    Renderer::CreateLink(Access()->lol_sprite,Renderer::MenuLayer);*/
 
     }
 
@@ -136,10 +131,11 @@ void WorldManager::Magnet_Load_Hook()
     //create a world on startup
     Access()->SelectWorld(Access()->AddUndefinedWorld());//add a new undefined world, and select it
 
-}
+}*/
 
 //**HOOKS ABOVE**/
 //**EVENTS BELOW**/
+/*
 bool WorldManager::Event_KeyReleased(sf::Event evt){
 
      if (evt.Key.Code == sf::Key::LControl)
@@ -367,9 +363,10 @@ bool WorldManager::Event_MouseMoved(sf::Event evt)
     return true;
 }
 
-
+*/
 //**EVENTS ABOVE**/
 //**ACHEIVES BELOW**/
+/*
 bool WorldManager::Achievement_Conditions(sf::Event evt)
 {
     if (evt.Type == sf::Event::MouseButtonReleased)
@@ -385,3 +382,4 @@ void WorldManager::Achievement_Completion(std::string name)
 {
     std::cout<<"[WorldManager][Achievement_Completion] Congrats! You completed "<<name<<"!\n";
 }
+*/

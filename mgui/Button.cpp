@@ -1,4 +1,4 @@
-#include "Button.h"
+/*#include "Button.h"
 
 using namespace mgui;
 
@@ -10,4 +10,4 @@ Button::Button(const char* name) : Component(name)
 Button::~Button()
 {
     //dtor
-}
+}*/

@@ -1,4 +1,4 @@
-#include "Console.h"
+/*#include "Console.h"
 
 Console* Console::consolePtr=NULL;
 
@@ -25,7 +25,7 @@ Console* Console::GetObject()
 }
 
 
-void Console::Listener(void* UserData)
+void Console::Listener()
 {
     //this should be called via thread, and it will launch its own thread of Executor after a command has been typed
 
@@ -53,7 +53,7 @@ void Console::Listener(void* UserData)
 return;
 }
 
-void Console::Executor(void* UserData)
+void Console::Executor()
 {
     //this executes a command. thats it.
     ConsoleThread* Info= static_cast<ConsoleThread*>(UserData);
@@ -229,3 +229,4 @@ void Console::LaunchConsoleThread(sf::Event evt)
         std::cout<<"CONSOLE ALREADY ACTIVATED.\n";
     }
 }
+*/

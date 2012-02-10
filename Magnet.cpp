@@ -26,7 +26,6 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     m_initialized   = false;
     m_load_started  = false;
     name = "test_cmp";
-    test = NULL;
 
     CfgParse cfgparser("config.mcf");
     cfgparser.Parse(m_config);
@@ -46,30 +45,6 @@ void Magnet::Hook_Initialize(){
 }
 
 void Magnet::Debug_CreateMenu(){
-    std::cout << "Create menu\n";
-    int r = rand() % 255 + 1;
-    int g = rand() % 255 + 1;
-    int b = rand() % 255 + 1;
-    Object()->test = new mgui::Panel(name);
-    Object()->test->SetColor(sf::Color(r, g, b)) ;
-    Object()->test->SetVisible(true);
-    Object()->test->DebugOn();
-    Object()->test->Format();
-    Object()->test->Create();
-    Object()->m_menus.Register(Object()->test);
-
-    /*mgui::Panel* panel = new mgui::Panel("button");
-    panel->SetColor(sf::Color(100, 100, 100));
-    panel->SetPosition(sf::Vector2f(100, 0));
-    panel->SetOutlineWidth(1);
-    panel->SetOutlineColor(sf::Color(0, 255, 255, 255));
-    panel->EnableOutline(true);
-    panel->DebugOn();
-    panel->SetVisible(true);
-    panel->Format();
-    panel->Create();
-    Object()->m_menus.Register(panel);*/
-
 }
 
 void Magnet::Hook_Setup(){
@@ -86,35 +61,35 @@ void Magnet::Hook_Setup(){
 }
 
 bool Magnet::Event_MouseMove(sf::Event evt){
-    if(Object() == NULL) return true;
+   // if(Object() == NULL) return true;
 
-    if(Object("Event_MouseMove")->m_mouseTrail.on){
-       Object("Event_MouseMove")->m_mouseTrail.MouseMove(sf::Vector2i(evt.MouseMove.X, evt.MouseMove.Y));
-    }
-
-    return Object()->m_menus.onEvent(evt);
+    //return Object()->m_menus.onEvent(evt);
+    return true;
 }
 
 bool Magnet::Event_MouseButtonPressed(sf::Event evt){
-    return Object()->m_menus.onEvent(evt);
+   // return Object()->m_menus.onEvent(evt);
+   return true;
 }
 
 bool Magnet::Event_MouseButtonReleased(sf::Event evt){
-    return Object()->m_menus.onEvent(evt);
+   // return Object()->m_menus.onEvent(evt);
+   return true;
 }
 
 bool Magnet::Event_SpacePressed(sf::Event evt){
-    if(evt.Key.Code == sf::Key::Space){
+    if(evt.Key.Code == sf::Keyboard::Space){
         Object()->Debug_CreateMenu();
-    }else if(evt.Key.Code == sf::Key::A){
-        if(Object()->test == NULL){
+    }else if(evt.Key.Code == sf::Keyboard::A){
+       /* if(Object()->test == NULL){
             std::cout << "Menu link exists:\t0\n";
         }else{
             bool linkExists = Renderer::Object()->LinkExists(Object()->test->GetRendererLink());
             std::cout << "Menu link exists:\t" << linkExists << std::endl;
         }
         std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
-    }else if(evt.Key.Code == sf::Key::R){
+        */
+    }else if(evt.Key.Code == sf::Keyboard::R){
         try{
             //Resource::GetImage("images/guns/assault1.png");
             /*FileAction::directory_tree_t tree = FileAction::CreateDirectoryTree("resource/");
@@ -177,10 +152,11 @@ Hook::Registry* Magnet::Hooks(std::string from){
 Hook::Registry* Magnet::Hooks(){
     return &Object()->m_hooks;
 }
-
+/*
 mgui::Registry* Magnet::Menus(){
     return &Object()->m_menus;
 }
+*/
 
 Magnet* Magnet::Object(std::string from){
     if(magnet_ptr == NULL)
@@ -240,8 +216,8 @@ void Magnet::State_Initialize(){
         Renderer::Init(*m_renderWindow, *Object()->m_renderThread_ptr);
         std::cout << "[Magnet][Initialize] Initialize resource...\n";
         Resource::Init(m_loadThread_ptr, "resource/");
-        std::cout << "[Magnet][Initialize] Initialize WorldManager...\n";
-        WorldManager::Init();
+        std::cout << "[Magnet][Initialize] Initialize WorldManager (WARNING: NOT INITIALIZING DUE TO SFML2 UPDATE)...\n";
+        //WorldManager::Init();
 
         m_initialized = true;
 

@@ -18,7 +18,7 @@ void EventHandler::Listen(sf::RenderWindow& Window){
     listener_map_pair_t ptr_range;
     sf::Event nextEvent;
 
-    while (Window.GetEvent(nextEvent))
+    while (Window.PollEvent(nextEvent))
     {
         queue.push(nextEvent);
     }

@@ -1,3 +1,4 @@
+/*
 #include "ImageHandler.h"
 #include "../../Console/Console.h"
 
@@ -58,3 +59,4 @@ void ImageHandler::PrintAvailableImages()
         std::cout<<GetObject()->Oit->first<<"\n";
 
 }
+*/

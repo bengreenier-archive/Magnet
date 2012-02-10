@@ -30,11 +30,11 @@ int main()
     **********=>    End debug code
     **************************************************/
 
-    Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands) ;
-    Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
+   // Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands) ;
+    //Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
 
-    sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
-    Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
+    //sf::Thread ConsoleListenThread(&Console::Listener);//add the ability to console things in thread.
+    //Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
 
@@ -46,11 +46,11 @@ int main()
     sf::Thread ResourceLoader(&Resource::Load);
 
 
-    sf::RenderWindow Window(sf::VideoMode::GetMode(0), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
+    sf::RenderWindow Window(sf::VideoMode::GetDesktopMode(), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
     Window.SetActive(false);
 
 
-    while(Window.IsOpened()){
+    while(Window.IsOpen()){
         if(Magnet::Initialized()){
             EventHandler::Listen(Window);
             Magnet::Think();

@@ -1,4 +1,4 @@
-#include "Projectile.h"
+/*#include "Projectile.h"
 #include "../WorldManager.h"
 
 Projectile::Projectile(sf::Vector2f pos,b2Vec2 tForce,Material* mat,float degangle)
@@ -39,7 +39,7 @@ void Projectile::Create(b2World* p_world)
 
     //NO FUCKING CLUE...THIS IS DUMB. but it works...
     if (!Get_Static())
-        bodyDef.position.Set(/*(*/(Get_Position().x+Get_Width())/*/2)*/*WorldStandards::ppm, /*(*/(Get_Position().y+Get_Height())/*/2)*/*WorldStandards::ppm);
+        bodyDef.position.Set((Get_Position().x+Get_Width())*WorldStandards::ppm,(Get_Position().y+Get_Height())*WorldStandards::ppm);
     else
         bodyDef.position.Set(((Get_Position().x+Get_Width())/2)*WorldStandards::ppm, ((Get_Position().y+Get_Height())/2)*WorldStandards::ppm);
 
@@ -92,4 +92,4 @@ void Projectile::Create(b2World* p_world)
         std::cout << "[SFML] Added Projectile.\n";
 
 
-}
+}*/

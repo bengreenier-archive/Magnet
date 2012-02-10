@@ -27,7 +27,7 @@ Renderer::~Renderer()
 }
 
 bool Renderer::Event_KeyPressed(sf::Event evt){
-    if(evt.Key.Code == sf::Key::Escape){
+    if(evt.Key.Code == sf::Keyboard::Escape){
         Renderer::Close(evt);
     }
 
@@ -150,8 +150,8 @@ void Renderer::Think(){
 /*********************************************
             "Draw the screen "
 *********************************************/
-void Renderer::Render(void* threadData){
-    if(!GetRenderWindow()->IsOpened()) return;
+void Renderer::Render(){
+    if(!GetRenderWindow()->IsOpen()) return;
 
 
     Renderer::Mutex()->Lock();

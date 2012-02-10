@@ -1,3 +1,4 @@
+/*
 #ifndef LINE_H
 #define LINE_H
 
@@ -7,17 +8,17 @@ class Line : public PhysShape //! The line PhysShape, used in World.
 {
     public:
         /** Default constructor */
-        Line(int x,int y,int x2,int y2,int thickness = 1,Material* mat=new Material(MatType::Default)); //!< Default Constructor
-        Line(int x,int y,int x2,int y2,bool staticc,int thickness = 1,Material* mat=new Material(MatType::Default)); //!< Static Constructor
+        //Line(int x,int y,int x2,int y2,int thickness = 1,Material* mat=new Material(MatType::Default)); //!< Default Constructor
+        //Line(int x,int y,int x2,int y2,bool staticc,int thickness = 1,Material* mat=new Material(MatType::Default)); //!< Static Constructor
         /** Default destructor */
-        ~Line(); //!< Deconstructor
+        //~Line(); //!< Deconstructor
 
         /** Overide these virtual f(x)'s*/
-        virtual void Create(b2World* p_world); //!< Does everything to create both the sfml and b2d objects.
+        //virtual void Create(b2World* p_world); //!< Does everything to create both the sfml and b2d objects.
 
 
         /** Getters/Setters */
-        void Set_x1(int val){ m_x1 = val; } //!< Set x1
+        /*void Set_x1(int val){ m_x1 = val; } //!< Set x1
         int Get_x1(){ return m_x1; } //!< Get x1
         void Set_x2(int val){ m_x2 = val; } //!< Set x2
         int Get_x2(){ return m_x2; } //!< Get x2
@@ -41,3 +42,4 @@ class Line : public PhysShape //! The line PhysShape, used in World.
 };
 
 #endif // LINE_H
+*/

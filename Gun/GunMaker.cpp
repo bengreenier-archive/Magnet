@@ -1,4 +1,4 @@
-#include "GunMaker.h"
+/*#include "GunMaker.h"
 #include "GunLocker.h"
 #include "../Magnet.h"
 #include <stdlib.h>
@@ -14,14 +14,14 @@ GunMaker::GunMaker(float Scale)
      damage = GunLocker::Get()->Random(9)+1;
      ScaleFactor=Scale;//For Now, until this constructor takes a scale
 
-     /*//this mess supossibly rerandomizes until types match.
+     //this mess supossibly rerandomizes until types match.
 
 
      //set the sprite pointers to GunComponents
      //FrontComponent = *GunLocker::Get()->GetFrontComponent(fRand);
      //MiddleComponent = *GunLocker::Get()->GetMiddleComponent(mRand);
      //RearComponent = *GunLocker::Get()->GetRearComponent(rRand);
-     */
+
 
      FrontComponent = GunLocker::Get()->GetRandomComponent(GunEnum::Front, GunEnum::Light);
      MiddleComponent = GunLocker::Get()->GetRandomComponent(GunEnum::Middle, GunEnum::Light);
@@ -52,12 +52,10 @@ void GunMaker::SetPosition(int x,int y)
 
 void GunMaker::FormatDrawable(int x,int y)
 {
-    /*
-    int fLength =FrontComponent->Length;
-    int mLength =MiddleComponent->Length;
-    int rLength =RearComponent->Length;
-    */
-    //I love you
+    //int fLength =FrontComponent->Length;
+    //int mLength =MiddleComponent->Length;
+    //int rLength =RearComponent->Length;
+
     std::cout << "Making changes!\n";
 
     int fWidth  =FrontComponent.GetWidth();
@@ -100,4 +98,4 @@ std::string GunMaker::RenderGunInfo_Helper(int i)//this should be in conversions
     std::stringstream ss;
     ss<<i;
     return ss.str();
-}
+}*/

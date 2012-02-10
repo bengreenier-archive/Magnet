@@ -1,10 +1,11 @@
+/*
 #ifndef PHYSSHAPE_H
 #define PHYSSHAPE_H
 
 #include <iostream>
 #include <Box2D/Box2D.h>
 
-#include "../../Game/Animation.h"
+//#include "../../Game/Animation.h"
 
 //things shapes use
 #include "WorldShapes.h"
@@ -17,7 +18,7 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc. the
 {
     public:
 
-        /*overide these in each PhysShape*/
+        //overide these in each PhysShape
         virtual void Destroy(b2World* p_world) {
 
             Renderer::RemoveLink(Get_Shape());
@@ -31,81 +32,81 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc. the
         virtual void Update() { Get_Shape()->SetPosition(Get_Position()); Get_Shape()->Rotate(Get_Angle()); } //!< A virtual Update function, that should get overridden.
 
         virtual void Hide() { Renderer::RemoveLink(Get_Shape());  }
-        virtual void Step() { /*no need for this right now*/ }//!< Things that need to happen on step
+        virtual void Step() {  }//!< Things that need to happen on step
 
         void ApplyForce(b2Vec2 force) { Get_Body()->ApplyForce(force,Get_Body()->GetWorldCenter()); } //!< Apply a force to a body.
 
         /** Access m_Mat
          * \return The current value of m_Mat
          */
-        Material* Get_Mat() { return m_Mat; }
+        //Material* Get_Mat() { return m_Mat; }
 
         /** Set m_Mat
          * \param val New value to set
          */
-        void Set_Mat(Material* val) { m_Mat = val; }
+        //void Set_Mat(Material* val) { m_Mat = val; }
 
         /** Access m_ShapeType
          * \return The current value of m_ShapeType
          */
-        WorldShapes::Type Get_ShapeType() { return m_ShapeType; }
+        //WorldShapes::Type Get_ShapeType() { return m_ShapeType; }
 
         /** Set m_ShapeType
          * \param val New value to set
          */
-        void Set_ShapeType(WorldShapes::Type val) { m_ShapeType = val; }
+        //void Set_ShapeType(WorldShapes::Type val) { m_ShapeType = val; }
 
         /** Access m_Position
          * \return The current value of m_Position
          */
-        sf::Vector2f Get_Position() { return m_Position; }
+       // sf::Vector2f Get_Position() { return m_Position; }
 
         /** Set m_Position
          * \param val New value to set
          */
-        void Set_Position(sf::Vector2f val) { m_Position = val; }
+        //void Set_Position(sf::Vector2f val) { m_Position = val; }
 
         /** Access m_Angle
          * \return The current value of m_Angle
          */
-        float Get_Angle() { return m_Angle; }
+        //float Get_Angle() { return m_Angle; }
 
         /** Set m_Angle
          * \param val New value to set
          */
-        void Set_Angle(float val) { m_Angle = val; }
+        //void Set_Angle(float val) { m_Angle = val; }
 
         /** Access m_Static
          * \return The current value of m_Static
          */
-        bool Get_Static() { return m_Static; }
+        //bool Get_Static() { return m_Static; }
 
         /** Set m_Static
          * \param val New value to set
          */
-        void Set_Static(bool val) { m_Static = val; }
+        //void Set_Static(bool val) { m_Static = val; }
 
                 /** Access m_Shape
          * \return The current value of m_Shape
          */
-        sf::Drawable* Get_Shape() { return m_Shape; }
+        //sf::Drawable* Get_Shape() { return m_Shape; }
 
         /** Set m_Shape
          * \param val New value to set
          */
-        void Set_Shape(sf::Drawable* val) { m_Shape = val; }
+        //void Set_Shape(sf::Drawable* val) { m_Shape = val; }
 
         /** Access m_Body
          * \return The current value of m_Body
          */
-        b2Body* Get_Body() { return m_Body; }
+        //b2Body* Get_Body() { return m_Body; }
 
         /** Set m_Body
          * \param val New value to set
          */
-        void Set_Body(b2Body* val) { m_Body = val; }
+        //void Set_Body(b2Body* val) { m_Body = val; }
 
-        SelectiveCollision* Get_AdjustCollision() {return m_AdjustCollision; }
+        /*SelectiveCollision* Get_AdjustCollision() {return m_AdjustCollision; }
         void Set_AdjustCollision(SelectiveCollision* val){ m_AdjustCollision = val; }
 
         b2World* Get_C_World() { return m_created_with_world;}
@@ -129,6 +130,7 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc. the
 
         void startanim(bool ib){animation_cycle=ib;}
         bool doianim(){return animation_cycle;}
+
 
 
     protected:
@@ -155,3 +157,4 @@ class PhysShape //! The base class for each PhysShape, Like Circle,Line,Etc. the
 };
 
 #endif // PHYSSHAPE_H
+*/

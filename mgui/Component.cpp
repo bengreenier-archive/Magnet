@@ -1,4 +1,4 @@
-#include "Component.h"
+/*#include "Component.h"
 #include "Registry.h"
 
 using namespace mgui;
@@ -86,7 +86,7 @@ void Component::SetPosition(sf::Vector2f pos){
     //sf::Shape::SetPosition(sf::Vector2f(pos.x))
 }
 */
-
+/*
 void Component::Format(){
     if(GetNbPoints() == 0){
         AddPoint(0, 0, GetColor(), GetOutlineColor());
@@ -293,3 +293,4 @@ void Component::_RemoveDebugLines(){
     Renderer::RemoveLink(&debug_size_right);
     Renderer::RemoveLink(&debug_size_bottom);
 }
+*/

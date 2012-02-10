@@ -1,4 +1,4 @@
-#include "WorldStats.h"
+/*#include "WorldStats.h"
 #include "../../Magnet.h"
 #include <sstream>
 
@@ -75,4 +75,4 @@ void WorldStats::UpdateWorldCount(int x,int y)
     std::stringstream ss;
     ss << m_managedWorldPtr->GetBodyCount();
     m_wc->SetText("Total Bodies: "+ss.str());
-}
+}*/
