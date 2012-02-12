@@ -4,13 +4,13 @@ HttpReq::HttpReq(sf::Http::Request::Method in,std::string host,std::string path)
 {
     //ctor
 
-
-    //Request = new sf::Http::Request;
+/*
+    Request = new sf::Http::Request();
     Request.SetMethod(in);
     Request.SetURI(path);
     Http.SetHost(host);
     m_exec=false;
-
+*/
 }
 
 HttpReq::~HttpReq()
@@ -20,7 +20,7 @@ HttpReq::~HttpReq()
 
 void HttpReq::SetUrl(std::string path)
 {
-    Request.SetURI(path);
+//    Request.SetURI(path);
 }
 
 void HttpReq::SetHost(std::string host)
@@ -30,7 +30,7 @@ void HttpReq::SetHost(std::string host)
 
 void HttpReq::Set(std::string host,std::string path)
 {
-    Request.SetURI(path);
+//    Request.SetURI(path);
     Http.SetHost(host);
 }
 

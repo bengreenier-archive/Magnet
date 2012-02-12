@@ -56,8 +56,9 @@ Material::Material(float density,float rest,float fric,std::string text,std::str
     m_name = text;
 
 
-    m_text = text;
+
     m_font = Resource::GetFont(fontpath);
+    m_text = sf::Text(text,m_font);
     m_useImage=false;
     m_useText=true;
 
@@ -171,9 +172,9 @@ sf::Image* Material::GetImage()
     return &m_image;
 }
 
-std::string Material::GetText()
+sf::Text* Material::GetText()
 {
-    return m_text;
+    return &m_text;
 }
 
 sf::Font* Material::GetFont()

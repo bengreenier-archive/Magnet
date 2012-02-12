@@ -17,7 +17,7 @@ UserControlled::~UserControlled()
     //dtor
 }
 
-void BindKey(sf::Key::Code kCode,Movement::Type mType)
+void BindKey(sf::Keyboard::Key kCode,Movement::Type mType)
 {
 // call KeyBindings::AddBinding();
 

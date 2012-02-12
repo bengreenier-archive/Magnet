@@ -1,10 +1,22 @@
 #include "ShapeTransform.h"
+#include <iostream>
 
-ShapeTransform::ShapeTransform()
+ShapeTransform::ShapeTransform(sf::Vector2f position)
 {
-    //ctor
+    std::cout<<"[ShapeTransform][Constructor] Inactive Constructor.\n";
 }
-
+ShapeTransform::ShapeTransform(sf::Vector2f position,sf::Vector2f origin)
+{
+    std::cout<<"[ShapeTransform][Constructor] Inactive Constructor.\n";
+}
+ShapeTransform::ShapeTransform(sf::Vector2f position,sf::Vector2f origin,sf::Vector2f scale)
+{
+    std::cout<<"[ShapeTransform][Constructor] Inactive Constructor.\n";
+}
+ShapeTransform::ShapeTransform(sf::Transformable* shape)
+{
+    Shape = shape;
+}
 ShapeTransform::~ShapeTransform()
 {
     //dtor

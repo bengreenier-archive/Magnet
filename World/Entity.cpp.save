@@ -204,19 +204,15 @@ void Entity::CraftCircle(b2World* engineWorld,EntityInfo::Context context,Entity
     Data = new ShapeData(fixtureDef,bodyDef,engineWorld);
 
     //create a rectangleshape with given width and height
-    sf::CircleShape* rectangle = new sf::CircleShape(dims.radius);
+    sf::CircleShape* rectangle = new sf::CircleShape(sf::Vector2f(dims.width,dims.height));
 
     //adjust rectangle properties
     rectangle->SetPosition(dims.posx,dims.posy);
+    rectangle->SetOrigin(dims.width/2,dims.height/2);
     rectangle->Rotate(dims.angle);
 
     //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
     Transform = new ShapeTransform(rectangle);
 
-}
-
-void Entity::CraftTriangle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat)
-{
-    std::cout<<"[Entity][CraftTriangle] Triangles are disabled for now.\n";
 }

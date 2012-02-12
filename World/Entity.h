@@ -1,36 +1,55 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-namespace Entity{
-	Enum type{
+#include <SFML/Graphics.hpp>
+
+#include "WorldStandards.h"
+#include "EntityDimensions.h"
+#include "ShapeTransform.h"
+#include "ShapeDraw.h"
+#include "ShapeData.h"
+#include "Material/Material.h"
+
+namespace EntityInfo{
+	enum Type{
 		Circle,
 		Rect,
-		Triangle
+		Triangle,
+		Bullet
 		};
+
+    enum Context{
+        Static,
+        Dynamic
+		};
+
+};
 
 class Entity
 {
     public:
         /** Default constructor */
-        Entity(Entity::Type type);
-        Entity(ShapeTransform trans,ShapeDraw draw);
-        Entity(ShapeTransform trans,ShapeDraw draw,ShapeData data);
+        Entity(EntityInfo::Type type,EntityDimensions dims,b2World* engineWorld,Material mat=Material(MatType::Default),EntityInfo::Context context = EntityInfo::Dynamic);
+        Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data);
 
-        ShapeTransform Transform;
-        ShapeDraw	   Draw;
-        ShapeData	   Data;
+        //the Transformable,Drawable,Data of this Entity
+        ShapeTransform* Transform;
+        ShapeDraw*	   Draw;
+        ShapeData*	   Data;
+
         /** Default destructor */
         ~Entity();
     protected:
     private:
 
-        void CraftCircle();
-        void CraftRect();
-        void CraftTriangle();
+        //if EntityInfo::Type constructor is used, these config stuff
+        void CraftCircle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
+        void CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
+        void CraftTriangle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
+        void CraftBullet(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
 };
 
 
-	};
 
 
 #endif // ENTITY_H

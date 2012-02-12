@@ -39,7 +39,7 @@ class Material //! The material class, defining a material that a PhysShape can 
         sf::Color GetColor(); //!< Get material instance's color
         std::string GetName();//!< Get materials name (not always defined)
         sf::Image* GetImage();//!< REturns image , only call if UsesImage
-        std::string GetText();//!< return std::string text.
+        sf::Text* GetText();//!< return std::string text.
         sf::Font* GetFont();//!< Returns font
 
 
@@ -53,7 +53,7 @@ class Material //! The material class, defining a material that a PhysShape can 
         sf::Color m_color;
         std::string m_name;//!< Not always needed/used.
         sf::Image m_image;
-        std::string m_text;
+        sf::Text m_text;
         sf::Font m_font;
         bool m_useImage,m_useText;
 

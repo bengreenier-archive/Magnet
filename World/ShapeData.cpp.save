@@ -1,5 +1,7 @@
 #include "ShapeData.h"
 
+//because we need to renderer stuff in here.
+#include "../Game/Renderer.h"
 
 ShapeData::ShapeData(b2FixtureDef bodyFixture,b2BodyDef engineBodyDef,b2World* engineWorld)
 {
@@ -12,17 +14,17 @@ ShapeData::ShapeData(b2FixtureDef bodyFixture,b2BodyDef engineBodyDef,b2World* e
 ShapeData::~ShapeData()
 {
     //dtor
+    delete body;
 }
 
-void ShapeData::Create()
+ShapeData::Create()
 {
     body = world->CreateBody(&bdef);
     body->CreateFixture(&fdef);
     //now its in the world simulation
 }
 
-void ShapeData::Remove()
+ShapeData::Remove()
 {
-    world->DestroyBody(body);
-    //now this body won't be simulated
+    world->
 }

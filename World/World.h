@@ -8,9 +8,8 @@
 
 #include "../Game/Renderer.h"
 
-//PhysShapes
-#include "Shapes/ref.h"
-
+#include "Entity.h"
+#include "EntityDimensions.h"
 
 //Other World-ly includes
 #include "WorldStandards.h"
@@ -33,7 +32,7 @@ class World //! The world object. controls all physics and world-ly things. :)
 
         void AwakenAll();//!< Awaken all b2bodies.
 
-        void AddShape(PhysShape* in);
+        void AddShape(Entity* in);
 
         int uuid;//!< WorldManager sets this and its different for each World
         Material* CurrentMaterial(); //!< Points to the current material
@@ -67,12 +66,12 @@ class World //! The world object. controls all physics and world-ly things. :)
         b2World* m_selected;// a pointer to the selected world.
         b2World* m_world1; //our first/potentially-only physics world.
 
-        std::vector<PhysShape*> Objects,StaticObjects;
+        std::vector<Entity*> Objects,StaticObjects;
 
-        std::vector <PhysShape*> Queue;
+        std::vector <Entity*> Queue;
 
         //processes the above.
-        void ProcessQueue(std::vector<PhysShape*>* Q,std::string fx);
+        void ProcessQueue(std::vector<Entity*>* Q,std::string fx);
 
 
 

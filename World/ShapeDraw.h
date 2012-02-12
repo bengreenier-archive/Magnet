@@ -1,21 +1,27 @@
 #ifndef SHAPEDRAW_H
 #define SHAPEDRAW_H
 
+#include <SFML/Graphics.hpp>
+
+//because we need to renderer stuff in here.
+#include "../Game/Renderer.h"
 
 class ShapeDraw
 {
     public:
         /** Default constructor */
-        ShapeDraw(sf::Drawable shape);
+        ShapeDraw(sf::Drawable* shape);
         /** Default destructor */
         ~ShapeDraw();
 
-        Show();
-		Hide();
+        void Show();
+		void Hide();
 
     protected:
     private:
-        sf::Drawable* shape;
+        sf::Drawable* m_shape;
+        bool showing;
+        Renderer::Link* m_link;
 };
 
 #endif // SHAPEDRAW_H

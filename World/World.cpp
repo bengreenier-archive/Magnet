@@ -60,7 +60,7 @@ void World::Step()
 {
 
     //stores erases for this step, clears before step ends
-    std::vector<PhysShape*> EraseQueue;
+    std::vector<Entity*> EraseQueue;
 
     bool mpb_notchecked=true; //used to stop constant deletion when > maxPhysicsBodies (reset each Step)
 
@@ -217,7 +217,7 @@ Stat->UpdateFps(10,0);
 }
 
 
-void World::ProcessQueue(std::vector<PhysShape*>* Q,std::string fx)
+void World::ProcessQueue(std::vector<Entity*>* Q,std::string fx)
 {
 
 
@@ -301,7 +301,7 @@ void World::SetCurrentMaterial(Material* in)
     m_curMat=in;
 }
 
-void World::AddShape(PhysShape* in)
+void World::AddShape(Entity* in)
 {
     Queue.push_back(in);
 }
@@ -332,10 +332,10 @@ void World::Unload()
 void World::Hide()
 {
     for (int i=0;i<Objects.size();i++)
-        Objects[i]->Hide();
+        Objects[i]->Draw->Hide();
 
     for (int i=0;i<StaticObjects.size();i++)
-        StaticObjects[i]->Hide();
+        StaticObjects[i]->Draw->Hide();
 
     Stat->HideAll();
 }

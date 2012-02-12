@@ -2,7 +2,7 @@
 #define USERCONTROLLED_H
 
 #include "MovementBase.h"
-#include "../KeyBindings.h"
+
 
 #include <SFML/Graphics.hpp>
 
@@ -12,7 +12,7 @@ class UserControlled : MovementBase
         UserControlled();
         UserControlled(int i);//used to set speed on construction
         ~UserControlled();
-        void BindKey(sf::Key::Code kCode,Movement::Type mType);
+        void BindKey(sf::Keyboard::Key kCode,Movement::Type mType);
     protected:
     private:
 };
