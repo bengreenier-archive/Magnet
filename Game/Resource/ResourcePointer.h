@@ -6,8 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "../Handlers/ImageHandler.h"
-#include "../Handlers/FontHandler.h"
+
 
 #include "../Exception.h"
 

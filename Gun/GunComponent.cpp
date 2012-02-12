@@ -1,8 +1,8 @@
-/*
+
 #include "GunComponent.h"
 #include <iostream>
 #include <string>
-*/
+
 /*********************************************************************
 
     The GunComponent Constructor, maps pieces to the component values,
@@ -10,7 +10,7 @@
     to create a full fledged gun.
 
 *********************************************************************/
-/*
+
 GunComponent::GunComponent()
 {
 
@@ -19,7 +19,7 @@ GunComponent::~GunComponent()
 {
     //delete [] m_sprite;
 }
-
+/*
 sf::Sprite* GunComponent::GetSpritePtr(){
     return &m_sprite;
 }

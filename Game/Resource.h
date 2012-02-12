@@ -15,7 +15,6 @@
 #include "../FileActions/Cfg/CfgInclude.h"
 #include "../FileActions/FileAction.h"
 
-#include "Handlers/ImageHandler.h"
 
 #include "Exception.h"
 #include "Resource/ResourcePointer.h"

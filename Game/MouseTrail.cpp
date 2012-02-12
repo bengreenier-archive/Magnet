@@ -1,4 +1,4 @@
-/*
+
 #include "MouseTrail.h"
 #include "../Magnet.h"
 
@@ -14,7 +14,7 @@ MouseTrail::~MouseTrail()
 {
     //dtor
 }
-
+/*
 void MouseTrail::MouseMove(sf::Vector2i mouse){
     int circles      = rand() % 3 +1 ;
     int offsetX;
