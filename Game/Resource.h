@@ -17,7 +17,6 @@
 
 
 #include "Exception.h"
-#include "Resource/ResourcePointer.h"
 
 
 template<class T>
