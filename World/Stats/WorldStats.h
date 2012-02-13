@@ -27,8 +27,8 @@ class WorldStats //! Create stats for a world! info like FPS and total bodies ar
     protected:
     private:
         b2World* m_managedWorldPtr;
-        sf::String* m_wc;
-        sf::String* m_fps;
+        sf::Text* m_wc;
+        sf::Text* m_fps;
 };
 
 #endif // WORLDSTATS_H

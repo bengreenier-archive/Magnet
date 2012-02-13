@@ -4,7 +4,7 @@
 ShapeDraw::ShapeDraw(sf::Drawable* shape)
 {
     //ctor
-    m_shape = shape;
+    Instance = shape;
     showing = false;
 }
 
@@ -15,7 +15,7 @@ ShapeDraw::~ShapeDraw()
 
 void ShapeDraw::Show()
 {
-    m_link=Renderer::CreateLink(m_shape);
+    m_link=Renderer::CreateLink(Instance);
     showing = true;
 }
 

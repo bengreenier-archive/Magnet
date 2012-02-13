@@ -3,6 +3,7 @@
 Entity::Entity(EntityInfo::Type type,EntityDimensions dims,b2World* engineWorld,Material mat,EntityInfo::Context context)
 {
     //ctor
+    Context = context;
     switch(type)
     {
         case EntityInfo::Bullet:{CraftBullet(engineWorld,context,dims,mat);}break;

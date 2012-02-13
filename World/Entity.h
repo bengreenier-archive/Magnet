@@ -18,6 +18,7 @@ namespace EntityInfo{
 		Bullet
 		};
 
+    //should change to something less confusing (confused with opengl context)
     enum Context{
         Static,
         Dynamic
@@ -39,6 +40,9 @@ class Entity
 
         /** Default destructor */
         ~Entity();
+
+        //static or dynamic?
+        EntityInfo::Context Context;
     protected:
     private:
 

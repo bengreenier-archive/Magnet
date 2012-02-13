@@ -14,12 +14,14 @@ class ShapeDraw
         /** Default destructor */
         ~ShapeDraw();
 
+        sf::Drawable* Instance;
+
         void Show();
 		void Hide();
 
     protected:
     private:
-        sf::Drawable* m_shape;
+
         bool showing;
         Renderer::Link* m_link;
 };

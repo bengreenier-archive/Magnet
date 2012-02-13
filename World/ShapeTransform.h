@@ -14,7 +14,7 @@ class ShapeTransform
         /** Default destructor */
         ~ShapeTransform();
 
-        sf::Transformable* Shape;
+        sf::Transformable* Instance;
     protected:
     private:
 };
