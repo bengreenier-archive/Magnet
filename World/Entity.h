@@ -30,7 +30,7 @@ class Entity
 {
     public:
         /** Default constructor */
-        Entity(EntityInfo::Type type,EntityDimensions dims,b2World* engineWorld,Material mat=Material(MatType::Default),EntityInfo::Context context = EntityInfo::Dynamic);
+        Entity(EntityInfo::Type type,EntityDimensions* dims,b2World* engineWorld,Material mat=Material(MatType::Default),EntityInfo::Context context = EntityInfo::Dynamic);
         Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data);
 
         //the Transformable,Drawable,Data of this Entity
@@ -47,10 +47,10 @@ class Entity
     private:
 
         //if EntityInfo::Type constructor is used, these config stuff
-        void CraftCircle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
-        void CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
-        void CraftTriangle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
-        void CraftBullet(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat);
+        void CraftCircle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat);
+        void CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat);
+        void CraftTriangle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat);
+        void CraftBullet(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat);
 };
 
 

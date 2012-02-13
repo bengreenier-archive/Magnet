@@ -216,8 +216,8 @@ void Magnet::State_Initialize(){
         Renderer::Init(*m_renderWindow, *Object()->m_renderThread_ptr);
         std::cout << "[Magnet][Initialize] Initialize resource...\n";
         Resource::Init(m_loadThread_ptr, "resource/");
-        std::cout << "[Magnet][Initialize] Initialize WorldManager (WARNING: NOT INITIALIZING DUE TO SFML2 UPDATE)...\n";
-        //WorldManager::Init();
+        std::cout << "[Magnet][Initialize] Initialize WorldManager\n";
+        WorldManager::Init();
 
         m_initialized = true;
 
