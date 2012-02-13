@@ -115,6 +115,8 @@ class Renderer
         static void Think();
         static Hook::Registry* Hooks();
 
+        void RefreshFPS();
+
     protected:
         Renderer();
     private:
@@ -157,6 +159,8 @@ class Renderer
         int             m_max_process;
         int             m_max_attempts;
         unsigned int    m_cindex; //Current mapping index
+
+        sf::Text        m_fps_text;
 
 };
 

@@ -16,6 +16,8 @@ Renderer::Renderer()
 
     Magnet::Hooks()->Register(Hook::Think, &Renderer::Think);
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
+
+
 }
 
 //Clean up all the allocated memory space
@@ -24,6 +26,18 @@ Renderer::~Renderer()
     delete [] RendererPtr;
     delete [] RenderWindow_ptr;
     delete [] m_hooks;
+}
+
+void Renderer::RefreshFPS(){
+    try{
+        //if(!Magnet::GlobalConfig()->GetKeyObject("fps")->GetBool())return;
+    }
+
+    catch(Exception e){
+        e.output();
+    }
+
+    m_fps_text.SetString("Hello world");
 }
 
 bool Renderer::Event_KeyPressed(sf::Event evt){
@@ -78,6 +92,8 @@ void Renderer::Init(sf::RenderWindow& window, sf::Thread& renderThread){
 
     Renderer::SetRenderWindow(window);
     Renderer::SetRenderThread(renderThread);
+
+    //CreateLink(&Object()->m_fps_text);
 }
 
 /*********************************************
@@ -144,6 +160,7 @@ void Renderer::Think(){
 
         attempts++;
     }
+
     Object()->renderThread_ptr->Launch();
 }
 
@@ -151,15 +168,15 @@ void Renderer::Think(){
             "Draw the screen "
 *********************************************/
 void Renderer::Render(){
-    if(!GetRenderWindow()->IsOpen()) return;
+    sf::Context context;
 
-    //context.SetActive(true);
+    if(!GetRenderWindow()->IsOpen()) return;
 
     Renderer::Mutex()->Lock();
     Object()->m_running = true;
+    GetRenderWindow()->SetActive(true);
 
-    sf::Context context;
-    GetRenderWindow()->SetActive(false);
+    Object()->RefreshFPS();
 
     Hooks()->Call(Hook::Frame);
 
@@ -171,6 +188,7 @@ void Renderer::Render(){
 
     GetRenderWindow()->Display();
 
+    GetRenderWindow()->SetActive(false);
     Renderer::Mutex()->Unlock();
     Object()->m_running = false;
 }
