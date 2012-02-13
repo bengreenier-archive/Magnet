@@ -153,9 +153,13 @@ void Renderer::Think(){
 void Renderer::Render(){
     if(!GetRenderWindow()->IsOpen()) return;
 
+    //context.SetActive(true);
 
     Renderer::Mutex()->Lock();
     Object()->m_running = true;
+
+    sf::Context context;
+    GetRenderWindow()->SetActive(false);
 
     Hooks()->Call(Hook::Frame);
 
