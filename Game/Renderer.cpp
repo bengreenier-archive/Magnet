@@ -1,9 +1,11 @@
 #include "Renderer.h"
 #include "../Magnet.h"
 
+#include <sstream>
+
 Renderer*               Renderer::RendererPtr         = NULL;
 
-Renderer::Renderer()
+Renderer::Renderer() : m_fps_text(), m_frame_clock()
 {
     m_cindex        =   0;
     m_isValid       = false;
@@ -15,9 +17,10 @@ Renderer::Renderer()
     m_hooks         =   new Hook::Registry();
 
     Magnet::Hooks()->Register(Hook::Think, &Renderer::Think);
+    Magnet::Hooks()->Register(Hook::Initialize, &Renderer::Hook_Initialize, Hook::Settings(1));
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
 
-
+    m_fps_text.SetCharacterSize(12);
 }
 
 //Clean up all the allocated memory space
@@ -28,16 +31,15 @@ Renderer::~Renderer()
     delete [] m_hooks;
 }
 
+void Renderer::Hook_Initialize(){
+    Renderer::Object()->UpdateConfigVars();
+}
+
 void Renderer::RefreshFPS(){
-    try{
-        //if(!Magnet::GlobalConfig()->GetKeyObject("fps")->GetBool())return;
-    }
-
-    catch(Exception e){
-        e.output();
-    }
-
-    m_fps_text.SetString("Hello world");
+    std::stringstream ss;
+    ss << 1/m_frame_clock.GetElapsedTime().AsSeconds();
+    m_fps_text.SetString(ss.str());
+    m_frame_clock.Restart();
 }
 
 bool Renderer::Event_KeyPressed(sf::Event evt){
@@ -93,7 +95,8 @@ void Renderer::Init(sf::RenderWindow& window, sf::Thread& renderThread){
     Renderer::SetRenderWindow(window);
     Renderer::SetRenderThread(renderThread);
 
-    //CreateLink(&Object()->m_fps_text);
+    //Create the fps link **THIS SHOULD BE MOVED TO A LOAD PAIR
+    CreateLink(&Object()->m_fps_text);
 }
 
 /*********************************************
@@ -105,7 +108,7 @@ sf::RenderWindow* Renderer::GetRenderWindow(){
     return Object()->RenderWindow_ptr;
 }
 
-void Renderer::Think(){
+void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
     if(Magnet::GetState() != State::Ready) return;
 
     int attempts = 0;
@@ -164,6 +167,16 @@ void Renderer::Think(){
     Object()->renderThread_ptr->Launch();
 }
 
+void Renderer::UpdateConfigVars(){
+    if(Magnet::GlobalConfig()->KeyExists("show_fps")){
+        std::cout << "Key show_fps exists.. setting to stored value\n";
+        cfg_show_fps = Magnet::GlobalConfig()->GetKeyObject("show_fps")->GetBool();
+    }else{
+        std::cout << "Key show_fps doesn't exist.. setting to false\n";
+        cfg_show_fps = false;
+    }
+}
+
 /*********************************************
             "Draw the screen "
 *********************************************/
@@ -176,7 +189,9 @@ void Renderer::Render(){
     Object()->m_running = true;
     GetRenderWindow()->SetActive(true);
 
-    Object()->RefreshFPS();
+    if(Object()->cfg_show_fps){
+        Object()->RefreshFPS();
+    }
 
     Hooks()->Call(Hook::Frame);
 

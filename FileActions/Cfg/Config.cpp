@@ -34,7 +34,7 @@ Config::config_vect_type Config::GetCategory(std::string category_name){
 }
 
 bool Config::KeyExists(std::string key){
-    return KeyExists(CfgGlobals::NULL_STRING, key);
+    return KeyExists(CfgGlobals::GLOBAL_CATEGORY, key);
 }
 bool Config::KeyExists(std::string category_name, std::string key){
     for(int i = 0; i < m_cfg_vect.size(); i++){
@@ -69,11 +69,11 @@ CfgObject* Config::GetKeyObject(std::string category_name, std::string key){
         }
     }
 
-    return NULL;
+    return new CfgObject(CfgGlobals::NULL_STRING, CfgGlobals::NULL_STRING, CfgGlobals::NULL_STRING);
 }
 
 const std::string& Config::GetKeyValue(std::string key){
-    return GetKeyValue(CfgGlobals::NULL_STRING, key);
+    return GetKeyValue(CfgGlobals::GLOBAL_CATEGORY, key);
 }
 const std::string& Config::GetKeyValue(std::string category_name, std::string key){
     makeNullGlobal(category_name);

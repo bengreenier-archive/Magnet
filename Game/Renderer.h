@@ -70,6 +70,7 @@ class Renderer
         static sf::RenderWindow* GetRenderWindow();
 
         static void Init(sf::RenderWindow& window, sf::Thread& renderThread);
+        static void Hook_Initialize();
 
         /*********************************************
             "Draw the screen"
@@ -116,6 +117,7 @@ class Renderer
         static Hook::Registry* Hooks();
 
         void RefreshFPS();
+        void UpdateConfigVars();
 
     protected:
         Renderer();
@@ -160,7 +162,10 @@ class Renderer
         int             m_max_attempts;
         unsigned int    m_cindex; //Current mapping index
 
+        bool            cfg_show_fps;
+
         sf::Text        m_fps_text;
+        sf::Clock       m_frame_clock;
 
 };
 

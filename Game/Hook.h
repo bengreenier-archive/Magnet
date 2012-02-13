@@ -15,8 +15,9 @@ namespace Hook{
         Load,               //Called when resources should begin loading
         Initialize,         //Called after static classes have been initialized
                             //      *Add resources in this hook
-        Setup               //Called after resources have been loaded
+        Setup,               //Called before resources are loaded
                             //      *Create sf::Drawables here
+        LoadComplete        //Called after resources have been loaded (directly before Magnet::State == ready
     };
     struct Settings{
         Settings(int _lifespan=0)

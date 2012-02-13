@@ -221,12 +221,12 @@ void Magnet::State_Initialize(){
 
         m_initialized = true;
 
-
         Magnet::Hooks("Renderer::Render")->Call(Hook::Initialize);
     }else{
         if(LoadNeeded()){
             ChangeState(State::Setup);
         }else{
+            Magnet::Hooks()->Call(Hook::LoadComplete);
             ChangeState(State::Ready);
         }
     }
