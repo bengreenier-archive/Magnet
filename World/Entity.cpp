@@ -1,8 +1,9 @@
 #include "Entity.h"
 
-Entity::Entity(EntityInfo::Type type,EntityDimensions dims,b2World* engineWorld,Material mat,EntityInfo::Context context)
+Entity::Entity(EntityInfo::Type type,EntityDimensions* dims,b2World* engineWorld,Material mat,EntityInfo::Context context)
 {
     //ctor
+    Context = context;
     switch(type)
     {
         case EntityInfo::Bullet:{CraftBullet(engineWorld,context,dims,mat);}break;
@@ -27,7 +28,7 @@ Entity::~Entity()
     delete Data;
 }
 
-void Entity::CraftBullet(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat)
+void Entity::CraftBullet(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat)
 {
 
     b2BodyDef bodyDef;
@@ -41,26 +42,26 @@ void Entity::CraftBullet(b2World* engineWorld,EntityInfo::Context context,Entity
     //check if material is using an image, correct things if this is the case
     if (mat.UsesImage())
     {
-        dims.height = mat.GetImage()->GetHeight();
-        dims.width = mat.GetImage()->GetWidth();
+        dims->height = mat.GetImage()->GetHeight();
+        dims->width = mat.GetImage()->GetWidth();
     }
 
     //check if material is using text, correct if needed
     if (mat.UsesText())
     {
-        dims.height = mat.GetText()->GetLocalBounds().Height;
-        dims.width =  mat.GetText()->GetLocalBounds().Width;
+        dims->height = mat.GetText()->GetLocalBounds().Height;
+        dims->width =  mat.GetText()->GetLocalBounds().Width;
     }
 
     //set the bodydef's position in box2d coords
-    bodyDef.position.Set(((dims.posx+dims.width)/2)*WorldStandards::ppm, ((dims.posy+dims.height)/2)*WorldStandards::ppm);
+    bodyDef.position.Set(((dims->posx+dims->width)/2)*WorldStandards::ppm, ((dims->posy+dims->height)/2)*WorldStandards::ppm);
 
     //set incoming angle
-    bodyDef.angle = (((-1)*dims.angle)*WorldStandards::degtorad);
+    bodyDef.angle = (((-1)*dims->angle)*WorldStandards::degtorad);
 
     //make a an actual box
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox((dims.width/2)*WorldStandards::ppm, (dims.height/2)*WorldStandards::ppm);
+    dynamicBox.SetAsBox((dims->width/2)*WorldStandards::ppm, (dims->height/2)*WorldStandards::ppm);
 
     //make fixture
     b2FixtureDef fixtureDef;
@@ -77,12 +78,12 @@ void Entity::CraftBullet(b2World* engineWorld,EntityInfo::Context context,Entity
     Data = new ShapeData(fixtureDef,bodyDef,engineWorld);
 
     //create a rectangleshape with given width and height
-    sf::RectangleShape* rectangle = new sf::RectangleShape(sf::Vector2f(dims.width,dims.height));
+    sf::RectangleShape* rectangle = new sf::RectangleShape(sf::Vector2f(dims->width,dims->height));
 
     //adjust rectangle properties
-    rectangle->SetPosition(dims.posx,dims.posy);
-    rectangle->SetOrigin(dims.width/2,dims.height/2);
-    rectangle->Rotate(dims.angle);
+    rectangle->SetPosition(dims->posx,dims->posy);
+    rectangle->SetOrigin(dims->width/2,dims->height/2);
+    rectangle->Rotate(dims->angle);
 
     //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -91,7 +92,7 @@ void Entity::CraftBullet(b2World* engineWorld,EntityInfo::Context context,Entity
 }
 
 
-void Entity::CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat)
+void Entity::CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat)
 {
 
     b2BodyDef bodyDef;
@@ -105,26 +106,26 @@ void Entity::CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDi
     //check if material is using an image, correct things if this is the case
     if (mat.UsesImage())
     {
-        dims.height = mat.GetImage()->GetHeight();
-        dims.width = mat.GetImage()->GetWidth();
+        dims->height = mat.GetImage()->GetHeight();
+        dims->width = mat.GetImage()->GetWidth();
     }
 
     //check if material is using text, correct if needed
     if (mat.UsesText())
     {
-        dims.height = mat.GetText()->GetLocalBounds().Height;
-        dims.width =  mat.GetText()->GetLocalBounds().Width;
+        dims->height = mat.GetText()->GetLocalBounds().Height;
+        dims->width =  mat.GetText()->GetLocalBounds().Width;
     }
 
     //set the bodydef's position in box2d coords
-    bodyDef.position.Set(((dims.posx+dims.width)/2)*WorldStandards::ppm, ((dims.posy+dims.height)/2)*WorldStandards::ppm);
+    bodyDef.position.Set(((dims->posx+dims->width)/2)*WorldStandards::ppm, ((dims->posy+dims->height)/2)*WorldStandards::ppm);
 
     //set incoming angle
-    bodyDef.angle = (((-1)*dims.angle)*WorldStandards::degtorad);
+    bodyDef.angle = (((-1)*dims->angle)*WorldStandards::degtorad);
 
     //make a an actual box
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox((dims.width/2)*WorldStandards::ppm, (dims.height/2)*WorldStandards::ppm);
+    dynamicBox.SetAsBox((dims->width/2)*WorldStandards::ppm, (dims->height/2)*WorldStandards::ppm);
 
     //make fixture
     b2FixtureDef fixtureDef;
@@ -141,12 +142,12 @@ void Entity::CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDi
     Data = new ShapeData(fixtureDef,bodyDef,engineWorld);
 
     //create a rectangleshape with given width and height
-    sf::RectangleShape* rectangle = new sf::RectangleShape(sf::Vector2f(dims.width,dims.height));
+    sf::RectangleShape* rectangle = new sf::RectangleShape(sf::Vector2f(dims->width,dims->height));
 
     //adjust rectangle properties
-    rectangle->SetPosition(dims.posx,dims.posy);
-    rectangle->SetOrigin(dims.width/2,dims.height/2);
-    rectangle->Rotate(dims.angle);
+    rectangle->SetPosition(dims->posx,dims->posy);
+    rectangle->SetOrigin(dims->width/2,dims->height/2);
+    rectangle->Rotate(dims->angle);
 
     //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -155,7 +156,7 @@ void Entity::CraftRect(b2World* engineWorld,EntityInfo::Context context,EntityDi
 }
 
 
-void Entity::CraftCircle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat)
+void Entity::CraftCircle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat)
 {
 
     b2BodyDef bodyDef;
@@ -170,7 +171,7 @@ void Entity::CraftCircle(b2World* engineWorld,EntityInfo::Context context,Entity
     if (mat.UsesImage())
     {
         //to be successful, height should = width so this is irrelevent if its height or width
-        dims.radius = mat.GetImage()->GetHeight();
+        dims->radius = mat.GetImage()->GetHeight();
     }
 
     //check if material is using text, correct if needed
@@ -180,14 +181,14 @@ void Entity::CraftCircle(b2World* engineWorld,EntityInfo::Context context,Entity
     }
 
     //set the bodydef's position in box2d coords
-    bodyDef.position.Set(dims.posx*WorldStandards::ppm, dims.posy*WorldStandards::ppm);
+    bodyDef.position.Set(dims->posx*WorldStandards::ppm, dims->posy*WorldStandards::ppm);
 
     //set incoming angle
-    bodyDef.angle = (((-1)*dims.angle)*WorldStandards::degtorad);
+    bodyDef.angle = (((-1)*dims->angle)*WorldStandards::degtorad);
 
     //make a an actual circle
     b2CircleShape circle;
-    circle.m_radius = dims.radius * WorldStandards::ppm;
+    circle.m_radius = dims->radius * WorldStandards::ppm;
 
     //make fixture
     b2FixtureDef fixtureDef;
@@ -204,11 +205,11 @@ void Entity::CraftCircle(b2World* engineWorld,EntityInfo::Context context,Entity
     Data = new ShapeData(fixtureDef,bodyDef,engineWorld);
 
     //create a rectangleshape with given width and height
-    sf::CircleShape* rectangle = new sf::CircleShape(dims.radius);
+    sf::CircleShape* rectangle = new sf::CircleShape(dims->radius);
 
     //adjust rectangle properties
-    rectangle->SetPosition(dims.posx,dims.posy);
-    rectangle->Rotate(dims.angle);
+    rectangle->SetPosition(dims->posx,dims->posy);
+    rectangle->Rotate(dims->angle);
 
     //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -216,7 +217,7 @@ void Entity::CraftCircle(b2World* engineWorld,EntityInfo::Context context,Entity
 
 }
 
-void Entity::CraftTriangle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions dims,Material mat)
+void Entity::CraftTriangle(b2World* engineWorld,EntityInfo::Context context,EntityDimensions* dims,Material mat)
 {
     std::cout<<"[Entity][CraftTriangle] Triangles are disabled for now.\n";
 }

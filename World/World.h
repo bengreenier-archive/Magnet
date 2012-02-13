@@ -1,4 +1,4 @@
-/*
+
 #ifndef WORLD_H
 #define WORLD_H
 
@@ -78,4 +78,4 @@ class World //! The world object. controls all physics and world-ly things. :)
 };
 
 #endif // WORLD_H
-*/
+

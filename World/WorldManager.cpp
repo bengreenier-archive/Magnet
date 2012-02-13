@@ -1,4 +1,4 @@
-/*#include "WorldManager.h"
+#include "WorldManager.h"
 
 WorldManager* WorldManager::m_ptr = NULL;
 
@@ -105,7 +105,7 @@ World* WorldManager::CurrentWorld()
 }
 
 //**HOOKS BELOW**/
-/*
+
 void WorldManager::Renderer_Frame_Hook()
 {
     if (Access()->lol_logo_counter==0)
@@ -131,120 +131,79 @@ void WorldManager::Magnet_Load_Hook()
     //create a world on startup
     Access()->SelectWorld(Access()->AddUndefinedWorld());//add a new undefined world, and select it
 
-}*/
+}
 
 //**HOOKS ABOVE**/
 //**EVENTS BELOW**/
-/*
+
 bool WorldManager::Event_KeyReleased(sf::Event evt){
 
-     if (evt.Key.Code == sf::Key::LControl)
+     if (evt.Key.Code == sf::Keyboard::LControl)
      {
-         const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
 
-         Access()->CurrentWorld()->AddShape(new Projectile(sf::Vector2f(inpt.GetMouseX(),inpt.GetMouseY()),b2Vec2(0,50)));
+
+         Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Bullet,new EntityDimensions(5,5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y),Access()->CurrentWorld()->CurrentB2World()));
      }
 
 
 
 
-    if (evt.Key.Code == sf::Key::Num1)
+    if (evt.Key.Code == sf::Keyboard::Num1)
     {
         Access()->CurrentWorld()->SetCurrentMaterial(new Material(MatType::Default));
-    }else if (evt.Key.Code == sf::Key::Num2)
+    }else if (evt.Key.Code == sf::Keyboard::Num2)
     {
         Access()->CurrentWorld()->SetCurrentMaterial(new Material(MatType::Heavy));
-    }else if (evt.Key.Code == sf::Key::Num3)
+    }else if (evt.Key.Code == sf::Keyboard::Num3)
     {
         Access()->CurrentWorld()->SetCurrentMaterial(new Material(MatType::Light));
-    }else if (evt.Key.Code == sf::Key::Num4)
+    }else if (evt.Key.Code == sf::Keyboard::Num4)
     {
         Access()->CurrentWorld()->SetCurrentMaterial(new Material(MatType::Rubber));
-    }else if (evt.Key.Code == sf::Key::Num5)
+    }else if (evt.Key.Code == sf::Keyboard::Num5)
     {
         Access()->CurrentWorld()->SetCurrentMaterial(new Material(2,0.5f,0.3f,"image/tire.png"));
     }
 
 
-    if (evt.Key.Code == sf::Key::Num0)
+    if (evt.Key.Code == sf::Keyboard::Num0)
     {
         World* temp = Access()->CurrentWorld();
         Access()->HideWorld(temp);
         Access()->SelectWorld(Access()->AddUndefinedWorld());//autoselects it too...
     }
 
-    if (evt.Key.Code == sf::Key::Num6)
-    {
-        Access()->CurrentWorld()->AddShape(new Circle(50,b2Vec2(0.5,1),500,false,sf::Vector2f(300,300), new Material(2,0.00002f,0.6f,"image/earth.png")));
-    }
-
-
-    if (evt.Key.Code == sf::Key::Num9)
-    {
-        Access()->CurrentWorld()->AddShape(new Rect(0,0,sf::Vector2f(200,100),new Material(.5,0.002f,0.3f,"Magnet","font/tahoma.ttf")));
-    }
-
-    if (evt.Key.Code == sf::Key::Num7)
-    {
-        Access()->CurrentWorld()->AddShape(new Circle(40,true,sf::Vector2f(288,214),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(60,true,sf::Vector2f(967,349),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(548,640),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(10,true,sf::Vector2f(1187,150),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(25,true,sf::Vector2f(218,626),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(1252,627),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(122,57),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(177,227),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(135,527),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(15,true,sf::Vector2f(152,427),new Material(MatType::Floor)));
-
-        Access()->CurrentWorld()->AddShape(new Rect(5,10,true,sf::Vector2f(1022,57),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Rect(87,110,true,sf::Vector2f(1477,627),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Rect(7,10,true,sf::Vector2f(735,227),new Material(MatType::Floor)));
-        Access()->CurrentWorld()->AddShape(new Circle(34,true,sf::Vector2f(652,827),new Material(MatType::Floor)));
-
-
-    }
-
-    if (evt.Key.Code == sf::Key::Slash)
+    if (evt.Key.Code == sf::Keyboard::Slash)
     {
         Access()->CurrentWorld()->SetTimestep(1.0f / 40.0f);
     }
 
 
-    if (evt.Key.Code == sf::Key::End)
+    if (evt.Key.Code == sf::Keyboard::End)
     {
         Access()->CurrentWorld()->AwakenAll();
         Access()->CurrentWorld()->SetGravity(b2Vec2(0.0f,0.0f));
     }
 
-    if (evt.Key.Code == sf::Key::Num8)
-    {
-        Access()->CurrentWorld()->AddShape(new Line(0,0,2000,0));
-        Access()->CurrentWorld()->AddShape(new Line(0,0,0,2000));
-        Access()->CurrentWorld()->AddShape(new Line(0,873,2000,873));
-        Access()->CurrentWorld()->AddShape(new Line(1430,0,1430,2000));
-    }
-
-    if (evt.Key.Code == sf::Key::Up)
+    if (evt.Key.Code == sf::Keyboard::Up)
     {
         Access()->CurrentWorld()->AwakenAll();
         Access()->CurrentWorld()->SetGravity(b2Vec2(0.0f,-10.0f));
     }
 
-    if (evt.Key.Code == sf::Key::Down)
+    if (evt.Key.Code == sf::Keyboard::Down)
     {
         Access()->CurrentWorld()->AwakenAll();
         Access()->CurrentWorld()->SetGravity(b2Vec2(0.0f,10.0f));
     }
 
-    if (evt.Key.Code == sf::Key::Left)
+    if (evt.Key.Code == sf::Keyboard::Left)
     {
         Access()->CurrentWorld()->AwakenAll();
         Access()->CurrentWorld()->SetGravity(b2Vec2(-10.0f,0.0f));
     }
 
-    if (evt.Key.Code == sf::Key::Right)
+    if (evt.Key.Code == sf::Keyboard::Right)
     {
         Access()->CurrentWorld()->AwakenAll();
         Access()->CurrentWorld()->SetGravity(b2Vec2(10.0f,0.0f));
@@ -256,14 +215,14 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
 
 bool WorldManager::Event_KeyPresed(sf::Event evt){
 
-  if (evt.Key.Code == sf::Key::Comma)
+  if (evt.Key.Code == sf::Keyboard::Comma)
     {
         if(Access()->CurrentWorld()->GetTimestep() > WorldStandards::minSpeed){
         Access()->CurrentWorld()->SetTimestep(Access()->CurrentWorld()->GetTimestep()-(1.0f / 1000.0f));
         }
     }
 
-    if (evt.Key.Code == sf::Key::Period)
+    if (evt.Key.Code == sf::Keyboard::Period)
     {
 
         if(Access()->CurrentWorld()->GetTimestep() < WorldStandards::maxSpeed)
@@ -329,11 +288,11 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
          if (evt.MouseButton.Button == sf::Mouse::Left){
                 //for(int i=0; i<100; i++) //difference released-init
 
-                    Access()->CurrentWorld()->AddShape(new Circle(radius,force,sf::Vector2f(evt.MouseButton.X-radius+i*radius,evt.MouseButton.Y-radius),Access()->CurrentWorld()->CurrentMaterial()));
+                    Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y),Access()->CurrentWorld()->CurrentB2World()));
          }
          if (evt.MouseButton.Button == sf::Mouse::Right)
             //for(int i=0; i<100; i++)
-                Access()->CurrentWorld()->AddShape(new Rect(w,h,force,sf::Vector2f(evt.MouseButton.X-w+i*w,evt.MouseButton.Y-h),Access()->CurrentWorld()->CurrentMaterial()));
+                Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Rect,new EntityDimensions(5,5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y),Access()->CurrentWorld()->CurrentB2World()));
 
 
 
@@ -351,9 +310,9 @@ bool WorldManager::Event_MouseWheelMoved(sf::Event evt)
      int tHeight=w;
 
 
-     const sf::Input& inpt = Renderer::GetRenderWindow()->GetInput();
         for(int i=0; i<5; i++)
-        Access()->CurrentWorld()->AddShape(new Circle(radius,sf::Vector2f(inpt.GetMouseX()-tHeight+i*tHeight,inpt.GetMouseY()-tHeight),new Material(1,0.002f,0.3f,"image/moon.png")));
+        Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(radius,sf::Mouse::GetPosition().x-tHeight+i*tHeight,sf::Mouse::GetPosition().y-tHeight),Access()->CurrentWorld()->CurrentB2World()));
+
 
     return true;
 }
@@ -363,10 +322,10 @@ bool WorldManager::Event_MouseMoved(sf::Event evt)
     return true;
 }
 
-*/
+
 //**EVENTS ABOVE**/
 //**ACHEIVES BELOW**/
-/*
+
 bool WorldManager::Achievement_Conditions(sf::Event evt)
 {
     if (evt.Type == sf::Event::MouseButtonReleased)
@@ -382,4 +341,4 @@ void WorldManager::Achievement_Completion(std::string name)
 {
     std::cout<<"[WorldManager][Achievement_Completion] Congrats! You completed "<<name<<"!\n";
 }
-*/
+

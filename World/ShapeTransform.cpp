@@ -15,7 +15,7 @@ ShapeTransform::ShapeTransform(sf::Vector2f position,sf::Vector2f origin,sf::Vec
 }
 ShapeTransform::ShapeTransform(sf::Transformable* shape)
 {
-    Shape = shape;
+    Instance = shape;
 }
 ShapeTransform::~ShapeTransform()
 {
