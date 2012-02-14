@@ -59,7 +59,6 @@ sf::Mutex* Renderer::Mutex(){
 }
 
 bool Renderer::Close(sf::Event evt){
-    std::cout << "Closed\n";
     Renderer::GetRenderWindow()->Close();
     Object()->renderThread_ptr->Wait();
 
@@ -169,10 +168,8 @@ void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
 
 void Renderer::UpdateConfigVars(){
     if(Magnet::GlobalConfig()->KeyExists("show_fps")){
-        std::cout << "Key show_fps exists.. setting to stored value\n";
         cfg_show_fps = Magnet::GlobalConfig()->GetKeyObject("show_fps")->GetBool();
     }else{
-        std::cout << "Key show_fps doesn't exist.. setting to false\n";
         cfg_show_fps = false;
     }
 }
@@ -181,18 +178,17 @@ void Renderer::UpdateConfigVars(){
             "Draw the screen "
 *********************************************/
 void Renderer::Render(){
-    sf::Context context;
-
     if(!GetRenderWindow()->IsOpen()) return;
 
     Renderer::Mutex()->Lock();
-    Object()->m_running = true;
-    GetRenderWindow()->SetActive(true);
 
     if(Object()->cfg_show_fps){
         Object()->RefreshFPS();
     }
 
+    //sf::Context context;
+    Object()->m_running = true;
+    GetRenderWindow()->SetActive(true);
     Hooks()->Call(Hook::Frame);
 
     GetRenderWindow()->Clear(sf::Color(0, 0, 0));
@@ -200,6 +196,7 @@ void Renderer::Render(){
     for(int i=0; i < Object()->links.size(); i++){
         GetRenderWindow()->Draw(*Object()->links[i]->object);
     }
+
 
     GetRenderWindow()->Display();
 
