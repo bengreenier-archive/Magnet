@@ -2,6 +2,7 @@
 #define SHAPEDATA_H
 
 #include <Box2D/Box2D.h>
+#include <iostream>
 
 namespace RadialGravity
 {
@@ -11,18 +12,19 @@ namespace RadialGravity
     };
 }
 
+#include "WorldStandards.h"
 
 class ShapeData
 {
     public:
         /** Default constructor */
-        ShapeData(b2FixtureDef bodyFixture,b2BodyDef engineBodyDef,b2World* engineWorld);
+        ShapeData(b2FixtureDef bodyFixture,b2BodyDef engineBodyDef);
         /** Default destructor */
         ~ShapeData();
 
         b2Body* EngineBody;
 
-        void Create();
+        void Create(b2World* engineWorld);
 		void Remove();
 
         //construct radial gravity on this element

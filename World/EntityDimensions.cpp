@@ -1,6 +1,6 @@
 #include "EntityDimensions.h"
 
-EntityDimensions::EntityDimensions(float i_width,float i_height,float i_posx,float i_posy,float i_angle)
+EntityDimensions::EntityDimensions(std::string rect,float i_width,float i_height,float i_posx,float i_posy,float i_angle)
 {
     radius = -1;
     width = i_width;
@@ -10,7 +10,7 @@ EntityDimensions::EntityDimensions(float i_width,float i_height,float i_posx,flo
     angle = i_angle;
 }
 
-EntityDimensions::EntityDimensions(int i_width,int i_height,int i_posx,int i_posy,int i_angle)
+EntityDimensions::EntityDimensions(std::string rect,int i_width,int i_height,int i_posx,int i_posy,int i_angle)
 {
     radius = -1;
     width = i_width;

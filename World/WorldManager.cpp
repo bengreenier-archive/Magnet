@@ -142,7 +142,7 @@ bool WorldManager::Event_KeyReleased(sf::Event evt){
      {
 
 
-         Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Bullet,new EntityDimensions(5,5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y),Access()->CurrentWorld()->CurrentB2World()));
+         Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Bullet,new EntityDimensions("rect",5,5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y)));
      }
 
 
@@ -288,11 +288,11 @@ bool WorldManager::Event_MouseButtonReleased(sf::Event evt)
          if (evt.MouseButton.Button == sf::Mouse::Left){
                 //for(int i=0; i<100; i++) //difference released-init
 
-                    Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y),Access()->CurrentWorld()->CurrentB2World()));
+                Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y)));
          }
          if (evt.MouseButton.Button == sf::Mouse::Right)
             //for(int i=0; i<100; i++)
-                Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Rect,new EntityDimensions(5,5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y),Access()->CurrentWorld()->CurrentB2World()));
+                Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Rect,new EntityDimensions("rect",10,10,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y)));
 
 
 
@@ -311,7 +311,7 @@ bool WorldManager::Event_MouseWheelMoved(sf::Event evt)
 
 
         for(int i=0; i<5; i++)
-        Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(radius,sf::Mouse::GetPosition().x-tHeight+i*tHeight,sf::Mouse::GetPosition().y-tHeight),Access()->CurrentWorld()->CurrentB2World()));
+        Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(radius,sf::Mouse::GetPosition().x-tHeight+i*tHeight,sf::Mouse::GetPosition().y-tHeight)));
 
 
     return true;

@@ -15,7 +15,14 @@ ShapeDraw::~ShapeDraw()
 
 void ShapeDraw::Show()
 {
+    if (WorldStandards::debug)
+    std::cout<<"Draw showing..\n";
+
     m_link=Renderer::CreateLink(Instance);
+
+    if (WorldStandards::debug)
+    std::cout<<"Draw shown\n";
+
     showing = true;
 }
 

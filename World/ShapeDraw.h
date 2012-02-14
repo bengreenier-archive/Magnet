@@ -2,9 +2,11 @@
 #define SHAPEDRAW_H
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 //because we need to renderer stuff in here.
 #include "../Game/Renderer.h"
+#include "WorldStandards.h"
 
 class ShapeDraw
 {

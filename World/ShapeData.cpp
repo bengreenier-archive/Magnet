@@ -1,13 +1,14 @@
 #include "ShapeData.h"
 
 
-ShapeData::ShapeData(b2FixtureDef bodyFixture,b2BodyDef engineBodyDef,b2World* engineWorld)
+ShapeData::ShapeData(b2FixtureDef bodyFixture,b2BodyDef engineBodyDef)
 {
     //ctor
     fdef = bodyFixture;
     bdef = engineBodyDef;
-    world = engineWorld;
+
     r_grav = false;
+
 }
 
 ShapeData::~ShapeData()
@@ -15,8 +16,10 @@ ShapeData::~ShapeData()
     //dtor
 }
 
-void ShapeData::Create()
+void ShapeData::Create(b2World* engineWorld)
 {
+
+    world = engineWorld;
     EngineBody = world->CreateBody(&bdef);
     EngineBody->CreateFixture(&fdef);
     //now its in the world simulation

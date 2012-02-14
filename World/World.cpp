@@ -241,7 +241,7 @@ void World::ProcessQueue(std::vector<Entity*>* Q,std::string fx)
         for (int i =0; i< Q->size(); i++)
         {
 
-            Q->at(i)->Data->Create();
+            Q->at(i)->Data->Create(CurrentB2World());
             Q->at(i)->Draw->Show();
             //only add nonstatics
             if (Q->at(i)->Context==EntityInfo::Dynamic)
