@@ -52,7 +52,7 @@ class Material //! The material class, defining a material that a PhysShape can 
         float m_friction;
         sf::Color m_color;
         std::string m_name;//!< Not always needed/used.
-        sf::Texture m_image;
+        sf::Image m_image;
         sf::Text m_text;
         sf::Font m_font;
         bool m_useImage,m_useText;

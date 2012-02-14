@@ -41,7 +41,8 @@ Material::Material(float density,float rest,float fric,std::string imagepath)
     m_name = imagepath;
 
 
-    m_image = Resource::GetImage(imagepath);
+    m_image = sf::Texture();
+    m_image.Update(Resource::GetImage(imagepath));
     m_useImage=true;
     m_useText=false;
 
@@ -136,7 +137,9 @@ void Material::m_Ground_Img()
     m_friction = 0.3f;
     m_color = sf::Color(255,0,0);
     m_name = "Default";
-    m_image = Resource::GetImage("image/ground-depth.png");
+
+    m_image = sf::Texture();
+    m_image.Update(Resource::GetImage("image/ground-depth.png"));
     m_useImage=true;
 
 }
@@ -167,7 +170,7 @@ std::string Material::GetName()
     return m_name;
 }
 
-sf::Image* Material::GetImage()
+sf::Texture* Material::GetImage()
 {
     return &m_image;
 }
