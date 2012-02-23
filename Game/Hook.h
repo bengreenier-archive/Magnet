@@ -1,9 +1,10 @@
-
 #ifndef HOOK_H
 #define HOOK_H
 
 #include <map>
 #include <iostream>
+
+#include "Parameter.h"
 
 namespace Hook{
     enum Type {
@@ -12,8 +13,8 @@ namespace Hook{
         Think,              //Called every main iteration
         Close,              //Called when the game closes
         GameStateChange,    //Called after the game state has been changed
-        Load,               //Called when resources should begin loading
-        Initialize,         //Called after static classes have been initialized
+        StartLoad,               //Called when resources should begin loading
+        Initialized,         //Called after static classes have been initialized
                             //      *Add resources in this hook
         Setup,               //Called before resources are loaded
                             //      *Create sf::Drawables here

@@ -1,12 +1,11 @@
 #include "Magnet.h"
 
-//Static memebetrs
 Magnet*         Magnet::magnet_ptr           =   NULL;
 
-Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
+Magnet::Magnet(sf::Window& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
 {
-    m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
-    m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
+    /*m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
+
 
 
     m_hooks.Register(Hook::Initialize,&Magnet::ben_testing_space);//call ben testing space
@@ -14,7 +13,9 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonReleased, Event_MouseButtonReleased));
     EventHandler::AddListener(new EventListener(sf::Event::MouseMoved, Event_MouseMove));
     EventHandler::AddListener(new EventListener(sf::Event::MouseButtonPressed, Event_MouseButtonPressed));
-    EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, Event_SpacePressed ));
+    EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, Event_SpacePressed ));*/
+
+    m_hooks.Register(Hook::Setup, &Magnet::Hook_Setup);
 
     m_renderThread_ptr  =   &renderThread;
     m_loadThread_ptr    =   &loadThread;
@@ -22,31 +23,31 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
 
     m_renderWindow->SetFramerateLimit(30);
 
-    m_mouseTrail.on = false;
-    m_initialized   = false;
-    m_load_started  = false;
-    name = "test_cmp";
+    m_services_initialized   = false;
 
-    CfgParse cfgparser("config.mcf");
+    CfgParse cfgparser("resource/config/magnet.mcf");
     cfgparser.Parse(m_config);
 
     if(!cfgparser.IsParsed()){
         throw Exception(Exception::LoadFail, "Missing config", "The Magnet configuration file is missing");
     }
+
+    if(m_config.GetKeyObject("debug")->GetBool()){
+        dbg_timer = new sf::Clock();
+        dbg_timer->Restart();
+    }
 }
 
 Magnet::~Magnet()
 {
-    //dtor
+    delete magnet_ptr;
 }
 
+/*
 void Magnet::Hook_Initialize(){
 
 }
-
-void Magnet::Debug_CreateMenu(){
-}
-
+*/
 void Magnet::Hook_Setup(){
     try{
         Resource::AddDir(Resource::GetRootPath());
@@ -59,6 +60,8 @@ void Magnet::Hook_Setup(){
         std::cout << "[Magnet][Hook_Setup] Could not add files from directory '" << Resource::GetRootPath() << "'\n";
     }
 }
+
+/*
 
 bool Magnet::Event_MouseMove(sf::Event evt){
    // if(Object() == NULL) return true;
@@ -81,33 +84,16 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
     if(evt.Key.Code == sf::Keyboard::Space){
         Object()->Debug_CreateMenu();
     }else if(evt.Key.Code == sf::Keyboard::A){
-       /* if(Object()->test == NULL){
-            std::cout << "Menu link exists:\t0\n";
-        }else{
-            bool linkExists = Renderer::Object()->LinkExists(Object()->test->GetRendererLink());
-            std::cout << "Menu link exists:\t" << linkExists << std::endl;
-        }
-        std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
-        */
+       // if(Object()->test == NULL){
+         //   std::cout << "Menu link exists:\t0\n";
+        //}else{
+         //   bool linkExists = Renderer::Object()->LinkExists(Object()->test->GetRendererLink());
+          //  std::cout << "Menu link exists:\t" << linkExists << std::endl;
+        //}
+        //std::cout << "Menu is registered:\t" << Object()->m_menus.ComponentExists(Object()->name) << std::endl;
     }else if(evt.Key.Code == sf::Keyboard::R){
         try{
-            //Resource::GetImage("images/guns/assault1.png");
-            /*FileAction::directory_tree_t tree = FileAction::CreateDirectoryTree("resource/");
-            std::cout << "Here\n";
-            for(int i = 0; i < tree.size(); i++){
-                FileAction::dir_node* dir = tree[i];
-                if(dir->files.size() > 0){
-                    std::cout << "Folder " << dir->name << " has " << dir->files.size() << " files ";
-                }else{
-                    std::cout << "Folder " << dir->name << " does not have files";
-                }
 
-                if(dir->children.size() > 0){
-                    std::cout << " and has " << dir->children.size() << " sub folders\n";
-                }else{
-                    std::cout << " and has no sub folders\n";
-                }
-            }*/
         }
 
         catch(Exception e){
@@ -116,19 +102,11 @@ bool Magnet::Event_SpacePressed(sf::Event evt){
         catch(...){
             std::cout << "[Magnet][KeyPress] Unhandled exception\n";
         }
-        /*if(!Object()->once){
-        Object()->spr->SetImage(Resource::GetImage("images/guns/assault1.png"));
-        Renderer::CreateLink(Object()->spr);
-        Object()->once = true;
-        }*/
+
         //In setup hook
         //Magnet::Loader->Add(new Config("resource/config/test.mcf"));
         //data = Resource::GetConfig("test.mcf");
     }
-
-    /*if(Object("Event_SpacePressed")->gameState.get() == State::Menu){
-        Magnet::StartGame();
-    }*/
 
     return true;
 }
@@ -143,11 +121,7 @@ Achievements::Registry* Magnet::Achieves(){
 
 sf::Mutex* Magnet::GlobalMutex(){
     return &Object("GlobalMutex")->m_globalMutex;
-}
-
-Hook::Registry* Magnet::Hooks(std::string from){
-    return &Object(from + "->Hooks")->m_hooks;
-}
+}*/
 
 Hook::Registry* Magnet::Hooks(){
     return &Object()->m_hooks;
@@ -158,13 +132,6 @@ mgui::Registry* Magnet::Menus(){
 }
 */
 
-Magnet* Magnet::Object(std::string from){
-    if(magnet_ptr == NULL)
-        std::cout << "Magnet::Object(" << from << ")-> WARNING: Magnet not initialized! Null pointer returned\n";
-
-    return magnet_ptr;
-}
-
 Magnet* Magnet::Object(){
     if(magnet_ptr == NULL)
         std::cout << "Magnet::Object()-> WARNING: Magnet not initialized! Null pointer returned\n";
@@ -172,7 +139,7 @@ Magnet* Magnet::Object(){
     return magnet_ptr;
 }
 
-void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread) throw(Exception){
+void Magnet::Init(sf::Window& window, sf::Thread& renderThread, sf::Thread& loadThread) throw(Exception){
     if(magnet_ptr == NULL){
         try{
             magnet_ptr = new Magnet(window, renderThread, loadThread, State::Null);
@@ -186,7 +153,7 @@ void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread
     }
 }
 
-bool Magnet::Initialized(){
+bool Magnet::IsInitialized(){
     if(magnet_ptr == NULL){
         return false;
     }
@@ -201,16 +168,12 @@ void Magnet::ChangeState(State::_type newState){
     m_hooks.Call(Hook::GameStateChange);
 }
 
-bool Magnet::LoadNeeded(){
-    return !m_load_started;
-}
-
 Config* Magnet::GlobalConfig(){
     return &Object()->m_config;
 }
 
 void Magnet::State_Initialize(){
-    if(!m_initialized){
+    if(!m_services_initialized){
         std::cout << "**********\tINITALIZE\t**********\n";
         std::cout << "[Magnet][Initialize] Initialize renderer...\n";
         Renderer::Init(*m_renderWindow, *Object()->m_renderThread_ptr);
@@ -219,16 +182,16 @@ void Magnet::State_Initialize(){
         std::cout << "[Magnet][Initialize] Initialize WorldManager\n";
         WorldManager::Init();
 
-        m_initialized = true;
+        m_services_initialized = true;
 
-        Magnet::Hooks("Renderer::Render")->Call(Hook::Initialize);
+        Magnet::Hooks()->Call(Hook::Initialized);
     }else{
-        if(LoadNeeded()){
-            ChangeState(State::Setup);
-        }else{
-            Magnet::Hooks()->Call(Hook::LoadComplete);
-            ChangeState(State::Ready);
+        if(Object()->dbg_timer != NULL){
+            std::cout << "[Magnet] Initialized in " << Object()->dbg_timer->GetElapsedTime().AsMilliseconds()  << "ms\n";
+            Object()->dbg_timer->Restart();
         }
+
+        ChangeState(State::Setup);
     }
 }
 
@@ -240,21 +203,24 @@ void Magnet::State_Setup(){
 }
 
 void Magnet::State_Load(){
-    if(!Resource::Loading() && Resource::Ready()){
-        //m_load_started = false;
-        Object()->ChangeState(State::Initialize); //Should return to previous state
-    }else{
-        if(!m_load_started){
-            std::cout << "**********\tLOAD\t**********\n";
-            m_hooks.Call(Hook::Load);
+    if(Resource::Loading()) return; //Wait
 
-            m_load_started = true;
+    if(Resource::Ready()){
+        Magnet::Hooks()->Call(Hook::LoadComplete);
+        ChangeState(State::Ready);
+    }else{
+        if(Resource::NeedLoad()){
+            std::cout << "**********\tLOAD\t**********\n";
+            Magnet::Hooks()->Call(Hook::StartLoad);
+        }else{
+            std::cout << "**********\tSKIP LOAD ( no resources )\t**********\n";
+            ChangeState(State::Ready);
         }
     }
 }
 
 void Magnet::Think(){
-    if(!Initialized()) return;
+    if(!IsInitialized()) return;
 
     switch(Object()->gameState.get()){
         case State::Null:
@@ -268,28 +234,17 @@ void Magnet::Think(){
         case State::Setup:
             Object()->State_Setup();
             break;
+        case State::Ready:
+            if(Magnet::GlobalConfig()->GetKeyObject("debug")->GetBool()){
+                if(Object()->dbg_timer != NULL){
+                    std::cout << "[Magnet] Loaded in " << Object()->dbg_timer->GetElapsedTime().AsMilliseconds()  << "ms\n";
+                    delete Object()->dbg_timer;
+                    Object()->dbg_timer = 0;
+                }
+            }
+            //Wait for state change requests
+            break;
     }
 
     Hooks()->Call(Hook::Think);
-}
-
-
-void Magnet::ben_testing_space()
-{
-/*
-    HttpReq demo(sf::Http::Request::Post,"http://bengreenier.com","/pages/magnet/network/query.php?name=magnet&desc=Program%20Made%20This&msg=so%20cool&score=100");
-    if (demo.Execute())
-    {
-        std::cout<<"[Http] [Demo] Posted Successfully!\n";
-    }else{ std::cout<<"[Http] [Demo] Failed.\n"; }
-*/
-/* //PULL TO CONSOLE EXAMPLE
-    HttpReq demo(sf::Http::Request::Get,"http://bengreenier.com","/pages/magnet/network/output.php");
-    if (demo.Execute())
-    {
-        std::cout<<"[Http] [Demo] Got Successfully!\n[Http] Response:\n"<<demo.GetResponse();
-    }else{ std::cout<<"[Http] [Demo] Failed.\n"; }
-*/
-   // XmlParse ben("resource/config/AnimDemo.xml");
-    //ben.Parse();
 }

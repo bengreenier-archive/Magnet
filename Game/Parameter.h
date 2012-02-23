@@ -1,6 +1,7 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
+#include <SFML/Window.hpp>
 
 class Parameter
 {

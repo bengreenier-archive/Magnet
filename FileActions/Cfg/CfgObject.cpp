@@ -1,5 +1,5 @@
 #include "CfgObject.h"
-
+#include <iostream>
 CfgObject::CfgObject(std::string cat, std::string name, std::string value)
 {
     m_category  =   cat;

@@ -38,7 +38,7 @@ Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
     if(m_debug)
         std::cout << "\tSetting hooks...\n";
 
-    Magnet::Hooks("Resource::Constructor")->Register(Hook::Load, &Resource::Hook_Load);
+    Magnet::Hooks()->Register(Hook::StartLoad, &Resource::Hook_Load);
 
     if(m_debug)
         std::cout << "[Resource] Initialized.\n\n";
@@ -225,8 +225,6 @@ void Resource::Load(){
     //Process load queue
     while(!Object()->m_load_queue.empty()){
         FileAction::file_node* filenode = Object()->m_load_queue.front();
-
-        std::cout << "File type: " << filenode->type << std::endl;
 
         if(!filenode->loaded){
             if(FileAction::GetFileType(filenode->type) != FileAction::Invalid){

@@ -8,16 +8,18 @@ Renderer*               Renderer::RendererPtr         = NULL;
 Renderer::Renderer() : m_fps_text(), m_frame_clock()
 {
     m_cindex        =   0;
-    m_isValid       = false;
-    m_shouldDraw    = true;
-    m_running       = false;
-    m_max_process   =    10;  //The total amount of queue memebers to process every think
-    m_max_attempts  =    5;   //The amount of attempts to make to obtain a lock in think
+    m_isValid       =   false;
+    m_shouldDraw    =   true;
+    m_running       =   false;
+    m_max_process   =   10;  //The total amount of queue memebers to process every think
+    m_max_attempts  =   5;   //The amount of attempts to make to obtain a lock in think
 
     m_hooks         =   new Hook::Registry();
 
+    count = 0;
+
     Magnet::Hooks()->Register(Hook::Think, &Renderer::Think);
-    Magnet::Hooks()->Register(Hook::Initialize, &Renderer::Hook_Initialize, Hook::Settings(1));
+    Magnet::Hooks()->Register(Hook::Initialized, &Renderer::Hook_Initialize, Hook::Settings(1));
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
 
     m_fps_text.SetCharacterSize(12);
@@ -65,7 +67,7 @@ bool Renderer::Close(sf::Event evt){
     return true;
 }
 
-void Renderer::SetRenderWindow(sf::RenderWindow& Window){
+void Renderer::SetRenderWindow(sf::Window& Window){
     Object()->RenderWindow_ptr = &Window;
 }
 
@@ -88,7 +90,7 @@ Renderer* Renderer::Object(){
     return RendererPtr;
 }
 
-void Renderer::Init(sf::RenderWindow& window, sf::Thread& renderThread){
+void Renderer::Init(sf::Window& window, sf::Thread& renderThread){
     RendererPtr = new Renderer();
 
     Renderer::SetRenderWindow(window);
@@ -103,7 +105,7 @@ void Renderer::Init(sf::RenderWindow& window, sf::Thread& renderThread){
 
     Returns a pointer to the sf::RenderWindow
 *********************************************/
-sf::RenderWindow* Renderer::GetRenderWindow(){
+sf::Window* Renderer::GetRenderWindow(){
     return Object()->RenderWindow_ptr;
 }
 
@@ -163,14 +165,22 @@ void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
         attempts++;
     }
 
-    Object()->renderThread_ptr->Launch();
+    if(!Object()->m_running){
+        Object()->renderThread_ptr->Launch();
+    }else{
+        std::cout << "Thread already running " << Object()->count;
+        Object()->count++;
+    }
+
 }
 
 void Renderer::UpdateConfigVars(){
     if(Magnet::GlobalConfig()->KeyExists("show_fps")){
-        cfg_show_fps = Magnet::GlobalConfig()->GetKeyObject("show_fps")->GetBool();
+        bool fps_cfg = Magnet::GlobalConfig()->GetKeyObject("show_fps")->GetBool();
+        cfg_show_fps = fps_cfg;
     }else{
         cfg_show_fps = false;
+        std::cout << "[Renderer][UpdateConfigVars] Key 'show_fps' doesn't exist!\n";
     }
 }
 
@@ -178,31 +188,32 @@ void Renderer::UpdateConfigVars(){
             "Draw the screen "
 *********************************************/
 void Renderer::Render(){
+    //GetRenderWindow()->SetActive(true);
+    /*
     if(!GetRenderWindow()->IsOpen()) return;
+    //while(GetRenderWindow()->IsOpen()){
+        Renderer::Mutex()->Lock();
+        Object()->m_running = true;
 
-    Renderer::Mutex()->Lock();
+        if(Object()->cfg_show_fps){
+            Object()->RefreshFPS();
+        }
 
-    if(Object()->cfg_show_fps){
-        Object()->RefreshFPS();
-    }
+        //Hooks()->Call(Hook::Frame);
 
-    //sf::Context context;
-    Object()->m_running = true;
-    GetRenderWindow()->SetActive(true);
-    Hooks()->Call(Hook::Frame);
+        GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
-    GetRenderWindow()->Clear(sf::Color(0, 0, 0));
-
-    for(int i=0; i < Object()->links.size(); i++){
-        GetRenderWindow()->Draw(*Object()->links[i]->object);
-    }
+        for(int i=0; i < Object()->links.size(); i++){
+            GetRenderWindow()->Draw(*Object()->links[i]->object);
+        }
 
 
-    GetRenderWindow()->Display();
+        GetRenderWindow()->Display();
 
+        Renderer::Mutex()->Unlock();
+    //}
     GetRenderWindow()->SetActive(false);
-    Renderer::Mutex()->Unlock();
-    Object()->m_running = false;
+    Object()->m_running = false;*/
 }
 
 Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){

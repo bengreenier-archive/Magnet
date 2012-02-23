@@ -98,7 +98,7 @@ FileAction::directory_tree_t FileAction::CreateDirectoryTree(std::string path)  
 }
 
 FileAction::FileType FileAction::GetFileType(std::string file_type)throw(Exception){
-    if(!Magnet::Initialized()){
+    if(!Magnet::IsInitialized()){
         throw Exception(Exception::SyncError, "out of sync", "magnet is not initialzied, config could not be accessed");
     }
 
