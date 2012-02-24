@@ -2,7 +2,7 @@
 
 Magnet*         Magnet::magnet_ptr           =   NULL;
 
-Magnet::Magnet(sf::Window& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
+Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
 {
     /*m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
 
@@ -49,16 +49,17 @@ void Magnet::Hook_Initialize(){
 }
 */
 void Magnet::Hook_Setup(){
+    //Magnet does not need any resources on the Initial load
+    /*
     try{
-        Resource::AddDir(Resource::GetRootPath());
-        Resource::AddFile("resource/font/tahoma.ttf");
-        Resource::AddFile("resource/image/earth.png");
+        Resource::AddDir("image/", true);
     }
 
     catch(Exception e){
         e.output();
         std::cout << "[Magnet][Hook_Setup] Could not add files from directory '" << Resource::GetRootPath() << "'\n";
     }
+    */
 }
 
 /*
@@ -139,7 +140,7 @@ Magnet* Magnet::Object(){
     return magnet_ptr;
 }
 
-void Magnet::Init(sf::Window& window, sf::Thread& renderThread, sf::Thread& loadThread) throw(Exception){
+void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread) throw(Exception){
     if(magnet_ptr == NULL){
         try{
             magnet_ptr = new Magnet(window, renderThread, loadThread, State::Null);
@@ -187,8 +188,7 @@ void Magnet::State_Initialize(){
         Magnet::Hooks()->Call(Hook::Initialized);
     }else{
         if(Object()->dbg_timer != NULL){
-            std::cout << "[Magnet] Initialized in " << Object()->dbg_timer->GetElapsedTime().AsMilliseconds()  << "ms\n";
-            Object()->dbg_timer->Restart();
+            Object()->dbg_resetTimer("[Magnet] Initialization took ");
         }
 
         ChangeState(State::Setup);
@@ -237,9 +237,8 @@ void Magnet::Think(){
         case State::Ready:
             if(Magnet::GlobalConfig()->GetKeyObject("debug")->GetBool()){
                 if(Object()->dbg_timer != NULL){
-                    std::cout << "[Magnet] Loaded in " << Object()->dbg_timer->GetElapsedTime().AsMilliseconds()  << "ms\n";
-                    delete Object()->dbg_timer;
-                    Object()->dbg_timer = 0;
+                    Object()->dbg_resetTimer("[Magnet] Initial load took ");
+                    Object()->dbg_deleteTimer();
                 }
             }
             //Wait for state change requests
@@ -247,4 +246,17 @@ void Magnet::Think(){
     }
 
     Hooks()->Call(Hook::Think);
+}
+
+void Magnet::dbg_deleteTimer(){
+    delete Object()->dbg_timer;
+    Object()->dbg_timer = 0;
+}
+void Magnet::dbg_resetTimer(std::string msg){
+    if(Object()->dbg_timer->GetElapsedTime().AsMilliseconds() > 1000){
+        std::cout << msg << Object()->dbg_timer->GetElapsedTime().AsSeconds()  << "s\n";
+    }else{
+        std::cout << msg << Object()->dbg_timer->GetElapsedTime().AsMilliseconds()  << "ms\n";
+    }
+    dbg_timer->Restart();
 }

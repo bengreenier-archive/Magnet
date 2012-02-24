@@ -25,8 +25,6 @@ using std::vector;
 class Renderer
 {
     public:
-        int count;
-
        /****
             typedef: Layer
 
@@ -68,9 +66,9 @@ class Renderer
             *Uses lazy initialization
         *********************************************/
         static Renderer* Object();
-        static sf::Window* GetRenderWindow();
+        static sf::RenderWindow* GetRenderWindow();
 
-        static void Init(sf::Window& window, sf::Thread& renderThread);
+        static void Init(sf::RenderWindow& window, sf::Thread& renderThread);
         static void Hook_Initialize();
 
         /*********************************************
@@ -100,7 +98,7 @@ class Renderer
         /*********************************************
             "Creates the render window and sets renderTreadPtr"
         *********************************************/
-        static void SetRenderWindow(sf::Window& Window);
+        static void SetRenderWindow(sf::RenderWindow& Window);
 
         static void SetLinkDepth(Link* link, int new_depth);
         static void SetLinkLayer(Link* link, Layer new_layer);
@@ -135,7 +133,7 @@ class Renderer
 
 
 
-        sf::Window*     RenderWindow_ptr;
+        sf::RenderWindow*     RenderWindow_ptr;
         sf::Thread*           renderThread_ptr;
         sf::Mutex             renderMutex;
         Hook::Registry*       m_hooks;

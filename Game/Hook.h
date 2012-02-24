@@ -8,6 +8,7 @@
 
 namespace Hook{
     enum Type {
+        DEFAULT,            //THIS HOOK IS NEVER CALLED, it is for internal use only
         Frame,              //Called immediately before the frame is drawn
                             //Should be used sparingly (is called every frame)
         Think,              //Called every main iteration
@@ -21,11 +22,21 @@ namespace Hook{
         LoadComplete        //Called after resources have been loaded (directly before Magnet::State == ready
     };
     struct Settings{
-        Settings(int _lifespan=0)
+        Settings(Type _hooktype, int _lifespan=-1) : hooktype(_hooktype), lifespan(_lifespan) //Lifespan -1 or 0 for infinite
         {
-            lifespan    = _lifespan;
+            setDefaults();
         }
-        unsigned int lifespan;
+
+        void setDefaults(){
+            //Default settings (only if a lifespan was specified as -1)
+            if(lifespan == -1){
+                if(hooktype == Setup || hooktype == Initialized){
+                    lifespan = 1;
+                }
+            }
+        }
+        int lifespan;
+        Type hooktype;
 
     };
 
@@ -34,7 +45,12 @@ namespace Hook{
             typedef void (*HookCall_p)(Parameter);
             typedef void (*HookCall)();
 
-            void Register(Type hookType, HookCall functionPtr, Settings hook_settings = Settings()){
+            void Register(Type hookType, HookCall functionPtr, Settings hook_settings = Settings(DEFAULT)){
+                if(hook_settings.hooktype == DEFAULT){
+                    hook_settings.hooktype = hookType;
+                    hook_settings.setDefaults();
+                }
+
                 hook_data data;
                 data.hook     = functionPtr;
                 data.settings   = hook_settings;
@@ -45,7 +61,12 @@ namespace Hook{
                 m_hooks.push_back(data);
             }
 
-            void Register(Type hookType, HookCall_p functionPtr, Settings hook_settings = Settings()){
+            void Register(Type hookType, HookCall_p functionPtr, Settings hook_settings = Settings(DEFAULT)){
+                if(hook_settings.hooktype == DEFAULT){
+                    hook_settings.hooktype = hookType;
+                    hook_settings.setDefaults();
+                }
+
                 hook_data data;
                 data.hook_p       = functionPtr;
                 data.settings   = hook_settings;
@@ -59,6 +80,19 @@ namespace Hook{
             void Remove(HookCall unique_func){}
             void Remove(HookCall_p unique_func){}
 
+            void Prune(){
+                for(hooks_iterator_t it  =   m_hooks.begin();
+                    it  !=  m_hooks.end();
+                    it++)
+                {
+                   if(it->settings.lifespan > 0 ){
+                       if(it->count >= it->settings.lifespan){
+                            Remove(it->hook);
+                       }
+                   }
+                }
+            }
+
             void Call(Type hookType, Parameter p = Parameter()){
                 hooks_iterator_t it;
 
@@ -69,26 +103,19 @@ namespace Hook{
                     if(it->hook_type == hookType){
                         switch(it->callback_type){
                             case void_void:
-                               it->hook();
-                               if(it->settings.lifespan != 0){
-                                   it->count++;
-
-                                   if(it->count > it->settings.lifespan){
-                                        Remove(it->hook);
-                                   }
-                               }
+                                it->hook();
+                                it->count++;
                                break;
                             case void_p:
                                it->hook_p(p);
-                               it->count++;
-
-                               if(it->count > it->settings.lifespan){
-                                    Remove(it->hook);
-                               }
+                                it->count++;
                                break;
                         }
                     }
                 }
+
+
+                Prune();
             }
         protected:
         private:
@@ -98,6 +125,7 @@ namespace Hook{
             };
 
             struct hook_data{
+                hook_data() : settings(DEFAULT){}
                 HookCall_p  hook_p;
                 HookCall    hook;
 
@@ -111,6 +139,8 @@ namespace Hook{
             typedef std::vector<hook_data>::iterator hooks_iterator_t;
 
             hooks_t m_hooks;
+
+
     };
 
 } //namespace hook

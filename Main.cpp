@@ -21,7 +21,7 @@ int main()
     sf::Thread RenderThread(&Renderer::Render);
     sf::Thread ResourceLoader(&Resource::Load);
 
-    sf::Window Window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
+    sf::RenderWindow Window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
     Window.EnableVerticalSync(true);
     Window.SetActive(false);
 
@@ -42,6 +42,6 @@ int main()
         }
     }
 
-    return 1;
+    return 0;
 }
 

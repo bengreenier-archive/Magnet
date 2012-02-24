@@ -104,11 +104,6 @@ class Resource
         static void AddDir(std::string dir, bool recursive = false) throw(Exception);
 
         ////////////////////////////////
-        /// Add a directory recursively
-        ////////////////////////////////
-        static void AddDirRecursive(std::string dir, bool recursive) throw(Exception);
-
-        ////////////////////////////////
         /// Check if a directory exists
         /// in search paths or if the dir
         /// is a search directory
@@ -201,6 +196,8 @@ class Resource
         /// Get a font
         ////////////////////////////////
         static const sf::Font& GetFont(std::string file);
+
+        static void PrependRootPath(std::string& str);
     protected:
         Resource(sf::Thread* loadThread, std::string resourceDir);
     private:

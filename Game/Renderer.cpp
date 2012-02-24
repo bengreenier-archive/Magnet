@@ -16,10 +16,8 @@ Renderer::Renderer() : m_fps_text(), m_frame_clock()
 
     m_hooks         =   new Hook::Registry();
 
-    count = 0;
-
     Magnet::Hooks()->Register(Hook::Think, &Renderer::Think);
-    Magnet::Hooks()->Register(Hook::Initialized, &Renderer::Hook_Initialize, Hook::Settings(1));
+    Magnet::Hooks()->Register(Hook::Initialized, &Renderer::Hook_Initialize);
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
 
     m_fps_text.SetCharacterSize(12);
@@ -67,7 +65,7 @@ bool Renderer::Close(sf::Event evt){
     return true;
 }
 
-void Renderer::SetRenderWindow(sf::Window& Window){
+void Renderer::SetRenderWindow(sf::RenderWindow& Window){
     Object()->RenderWindow_ptr = &Window;
 }
 
@@ -90,7 +88,7 @@ Renderer* Renderer::Object(){
     return RendererPtr;
 }
 
-void Renderer::Init(sf::Window& window, sf::Thread& renderThread){
+void Renderer::Init(sf::RenderWindow& window, sf::Thread& renderThread){
     RendererPtr = new Renderer();
 
     Renderer::SetRenderWindow(window);
@@ -105,7 +103,7 @@ void Renderer::Init(sf::Window& window, sf::Thread& renderThread){
 
     Returns a pointer to the sf::RenderWindow
 *********************************************/
-sf::Window* Renderer::GetRenderWindow(){
+sf::RenderWindow* Renderer::GetRenderWindow(){
     return Object()->RenderWindow_ptr;
 }
 
@@ -167,9 +165,6 @@ void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
 
     if(!Object()->m_running){
         Object()->renderThread_ptr->Launch();
-    }else{
-        std::cout << "Thread already running " << Object()->count;
-        Object()->count++;
     }
 
 }
@@ -189,7 +184,7 @@ void Renderer::UpdateConfigVars(){
 *********************************************/
 void Renderer::Render(){
     //GetRenderWindow()->SetActive(true);
-    /*
+
     if(!GetRenderWindow()->IsOpen()) return;
     //while(GetRenderWindow()->IsOpen()){
         Renderer::Mutex()->Lock();
@@ -199,7 +194,7 @@ void Renderer::Render(){
             Object()->RefreshFPS();
         }
 
-        //Hooks()->Call(Hook::Frame);
+        Hooks()->Call(Hook::Frame);
 
         GetRenderWindow()->Clear(sf::Color(0, 0, 0));
 
@@ -213,7 +208,7 @@ void Renderer::Render(){
         Renderer::Mutex()->Unlock();
     //}
     GetRenderWindow()->SetActive(false);
-    Object()->m_running = false;*/
+    Object()->m_running = false;
 }
 
 Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){

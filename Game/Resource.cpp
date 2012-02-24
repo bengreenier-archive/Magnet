@@ -146,6 +146,7 @@ FileAction::file_node* Resource::GetFileNode(std::string file_path){
 }
 
 void Resource::AddFile(std::string file_path) throw(Exception){
+    Resource::PrependRootPath(file_path);
     FileAction::file_node* fnode = GetFileNode(file_path);
 
     if(!fnode){
@@ -156,6 +157,8 @@ void Resource::AddFile(std::string file_path) throw(Exception){
 }
 
 void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
+    Resource::PrependRootPath(dir);
+
     if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool()){
         std::cout << "[Resource][AddDir] Adding " << dir;
         if(recursive){
@@ -174,11 +177,20 @@ void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
             if(Object()->m_resource_tree[i]->full_path == dir){
                 if(!Object()->m_resource_tree[i]->files.empty()){
                     for(int j = 0; j < Object()->m_resource_tree[i]->files.size(); j ++){
-                        std::cout << "Found file '" << Object()->m_resource_tree[i]->files[j]->file << "' path '" << Object()->m_resource_tree[i]->files[j]->path << "'" << std::endl;
+                        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+                            std::cout << "[Resource][AddDir] Found file '" << Object()->m_resource_tree[i]->files[j]->file << "' path '" << Object()->m_resource_tree[i]->files[j]->path << "'" << std::endl;
+
                         Resource::AddFile(Object()->m_resource_tree[i]->files[j]);
                     }
-                }else{
-                    throw Exception(Exception::MissingFile, "missing file", "no files exist in '" + dir + "'");
+                }
+
+                if(recursive && !Object()->m_resource_tree[i]->children.empty()){
+                    for(int j = 0; j < Object()->m_resource_tree[i]->children.size(); j ++){
+                        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+                            std::cout << "Resource][AddDir] Found folder '" << Object()->m_resource_tree[i]->children[j]->name << "' path '" << Object()->m_resource_tree[i]->children[j]->full_path << "'" << std::endl;
+
+                        Resource::AddDir(Object()->m_resource_tree[i]->children[j]->full_path, true);
+                    }
                 }
             }
         }
@@ -190,7 +202,8 @@ void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
 
 
 bool Resource::FindInSearchDirectory(std::string dir){
-    if(FileAction::Find(GetRootPath() + dir)) return true;
+    Resource::PrependRootPath(dir);
+    if(FileAction::Find(dir)) return true;
     for(int i = 0; i < m_search_directories.size(); i++){
         if(FileAction::Find(GetFullPath(m_search_directories[i]) + dir)){
             return true;
@@ -258,6 +271,12 @@ void Resource::Load(){
         std::cout << "[Resource][Load] Done loading\n";
 
     Object()->m_load_state.set(State::Ready);
+}
+
+void Resource::PrependRootPath(std::string& str){
+    if(str.find(GetRootPath()) == std::string::npos){
+        str = GetRootPath() + str;
+    }
 }
 
 const sf::Image& Resource::GetImage(std::string file) throw(Exception){

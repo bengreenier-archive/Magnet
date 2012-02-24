@@ -70,7 +70,7 @@ class Magnet
         virtual ~Magnet();
 
         static Magnet* Object();
-        static void Init(sf::Window& window, sf::Thread& renderThread, sf::Thread& loadThread)  throw(Exception);
+        static void Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread)  throw(Exception);
         static bool IsInitialized(); //Check to see if we have initialized yet
 
         static void Hook_Initialize();
@@ -117,7 +117,7 @@ class Magnet
         void ChangeState(State::_type newState);
 
     protected:
-        Magnet(sf::Window& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
+        Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
     private:
         typedef std::vector<EventListener*>     eventlistener_vector_t;
 
@@ -127,7 +127,7 @@ class Magnet
         State gameState;
         sf::Thread* m_renderThread_ptr;
         sf::Thread* m_loadThread_ptr;
-        sf::Window* m_renderWindow;
+        sf::RenderWindow* m_renderWindow;
 
         sf::Mutex m_globalMutex;
 
@@ -157,6 +157,9 @@ class Magnet
         /// Called on ready
         //////////////////////////////////////////
         void State_Ready();
+
+        void dbg_deleteTimer();
+        void dbg_resetTimer(std::string msg);
 
 
 };

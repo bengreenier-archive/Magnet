@@ -13,7 +13,7 @@ EventHandler::~EventHandler()
     //dtor
 }
 
-void EventHandler::Listen(sf::Window& Window){
+void EventHandler::Listen(sf::RenderWindow& Window){
     event_queue_t& queue = Object()->m_event_queue;
     listener_map_pair_t ptr_range;
     sf::Event nextEvent;
