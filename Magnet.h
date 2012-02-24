@@ -21,7 +21,7 @@
     #ifdef BUILDING_MAGNET_DLL
         #define MAGNET_API __declspec(dllexport)
     #else
-        #define MAGNET_API __declspec(dllimport)
+        //#define MAGNET_API __declspec(dllimport)
     #endif
 #else
     #error This operating system is not yet supported

@@ -119,7 +119,7 @@ class Renderer
         void UpdateConfigVars();
 
     protected:
-        Renderer();
+        Renderer(sf::RenderWindow& window, sf::Thread& renderThread);
     private:
 
         typedef vector<Link*>            links_t;
@@ -137,6 +137,7 @@ class Renderer
         sf::Thread*           renderThread_ptr;
         sf::Mutex             renderMutex;
         Hook::Registry*       m_hooks;
+        sf::Context           m_context;
 
         bool m_wait; //what is>?
 

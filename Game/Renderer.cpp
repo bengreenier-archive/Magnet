@@ -5,8 +5,10 @@
 
 Renderer*               Renderer::RendererPtr         = NULL;
 
-Renderer::Renderer() : m_fps_text(), m_frame_clock()
+Renderer::Renderer(sf::RenderWindow& window, sf::Thread& renderThread) : m_fps_text(), m_frame_clock()
 {
+    RenderWindow_ptr=   &window;
+    renderThread_ptr=   &renderThread;
     m_cindex        =   0;
     m_isValid       =   false;
     m_shouldDraw    =   true;
@@ -21,6 +23,8 @@ Renderer::Renderer() : m_fps_text(), m_frame_clock()
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Renderer::Event_KeyPressed));
 
     m_fps_text.SetCharacterSize(12);
+
+    renderThread_ptr->Launch();
 }
 
 //Clean up all the allocated memory space
@@ -89,10 +93,7 @@ Renderer* Renderer::Object(){
 }
 
 void Renderer::Init(sf::RenderWindow& window, sf::Thread& renderThread){
-    RendererPtr = new Renderer();
-
-    Renderer::SetRenderWindow(window);
-    Renderer::SetRenderThread(renderThread);
+    RendererPtr = new Renderer(window, renderThread);
 
     //Create the fps link **THIS SHOULD BE MOVED TO A LOAD PAIR
     CreateLink(&Object()->m_fps_text);
@@ -164,7 +165,7 @@ void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
     }
 
     if(!Object()->m_running){
-        Object()->renderThread_ptr->Launch();
+       // Object()->renderThread_ptr->Launch();
     }
 
 }
@@ -185,10 +186,10 @@ void Renderer::UpdateConfigVars(){
 void Renderer::Render(){
     //GetRenderWindow()->SetActive(true);
 
-    if(!GetRenderWindow()->IsOpen()) return;
-    //while(GetRenderWindow()->IsOpen()){
+    //if(!GetRenderWindow()->IsOpen()) return;
+    Object()->m_running = true;
+    while(GetRenderWindow()->IsOpen()){
         Renderer::Mutex()->Lock();
-        Object()->m_running = true;
 
         if(Object()->cfg_show_fps){
             Object()->RefreshFPS();
@@ -206,8 +207,8 @@ void Renderer::Render(){
         GetRenderWindow()->Display();
 
         Renderer::Mutex()->Unlock();
-    //}
-    GetRenderWindow()->SetActive(false);
+    }
+    GetRenderWindow()->SetActive(true);
     Object()->m_running = false;
 }
 

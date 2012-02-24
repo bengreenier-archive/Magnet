@@ -185,13 +185,17 @@ void Magnet::State_Initialize(){
 
         m_services_initialized = true;
 
+        std::cout << "Calling initialized hook\n";
         Magnet::Hooks()->Call(Hook::Initialized);
+        std::cout << "called initialized hook\n";
     }else{
         if(Object()->dbg_timer != NULL){
             Object()->dbg_resetTimer("[Magnet] Initialization took ");
         }
 
+        std::cout << "Changing state to setup\n";
         ChangeState(State::Setup);
+        std::cout << "state changed to setup\n";
     }
 }
 
@@ -253,10 +257,10 @@ void Magnet::dbg_deleteTimer(){
     Object()->dbg_timer = 0;
 }
 void Magnet::dbg_resetTimer(std::string msg){
-    if(Object()->dbg_timer->GetElapsedTime().AsMilliseconds() > 1000){
+    /*if(Object()->dbg_timer->GetElapsedTime().AsMilliseconds() > 1000){
         std::cout << msg << Object()->dbg_timer->GetElapsedTime().AsSeconds()  << "s\n";
     }else{
         std::cout << msg << Object()->dbg_timer->GetElapsedTime().AsMilliseconds()  << "ms\n";
-    }
-    dbg_timer->Restart();
+    }*/
+    //dbg_timer->Restart();
 }
