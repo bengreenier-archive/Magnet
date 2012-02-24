@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(EntityInfo::Type type,EntityDimensions* dims,Material mat,EntityInfo::Context context)
+Entity::Entity(EntityInfo::Type type,EntityDimensions* dims,Material* mat,EntityInfo::Context context)
 {
     //ctor
     Context = context;
@@ -28,7 +28,7 @@ Entity::~Entity()
     delete Data;
 }
 
-void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Material mat)
+void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Material* mat)
 {
 
     b2BodyDef bodyDef;
@@ -40,17 +40,17 @@ void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Mate
     bodyDef.bullet = true;
 
     //check if material is using an image, correct things if this is the case
-    if (mat.UsesImage())
+    if (mat->UsesImage())
     {
-        dims->height = mat.GetImage()->GetHeight();
-        dims->width = mat.GetImage()->GetWidth();
+        dims->height = mat->GetImage()->GetHeight();
+        dims->width = mat->GetImage()->GetWidth();
     }
 
     //check if material is using text, correct if needed
-    if (mat.UsesText())
+    if (mat->UsesText())
     {
-        dims->height = mat.GetText()->GetLocalBounds().Height;
-        dims->width =  mat.GetText()->GetLocalBounds().Width;
+        dims->height = mat->GetText()->GetLocalBounds().Height;
+        dims->width =  mat->GetText()->GetLocalBounds().Width;
     }
 
     //set the bodydef's position in box2d coords
@@ -70,9 +70,9 @@ void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Mate
     fixtureDef.shape = dynamicBox;
 
     //apply material info to the fixture
-    fixtureDef.density = mat.GetDensity();
-    fixtureDef.friction = mat.GetFriction();
-    fixtureDef.restitution = mat.GetRestitution();
+    fixtureDef.density = mat->GetDensity();
+    fixtureDef.friction = mat->GetFriction();
+    fixtureDef.restitution = mat->GetRestitution();
 
     //set the data to be all set to be Created
     Data = new ShapeData(fixtureDef,bodyDef);
@@ -80,9 +80,9 @@ void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Mate
     //create a rectangleshape with given width and height
 
 
-    if (mat.UsesImage())
+    if (mat->UsesImage())
     {
-        sf::Sprite* rectangle = new sf::Sprite(*mat.GetImage());
+        sf::Sprite* rectangle = new sf::Sprite(*mat->GetImage());
             //adjust rectangle properties
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->SetOrigin(dims->width/2,dims->height/2);
@@ -94,9 +94,9 @@ void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Mate
     }
 
     //check if material is using text, correct if needed
-    else if (mat.UsesText())
+    else if (mat->UsesText())
     {
-        sf::Text* rectangle = mat.GetText();
+        sf::Text* rectangle = mat->GetText();
             //adjust rectangle properties
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->SetOrigin(dims->width/2,dims->height/2);
@@ -113,7 +113,7 @@ void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Mate
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->SetOrigin(dims->width/2,dims->height/2);
     rectangle->Rotate(dims->angle);
-        rectangle->SetFillColor(mat.GetColor());
+        rectangle->SetFillColor(mat->GetColor());
 
             //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -128,7 +128,7 @@ void Entity::CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Mate
 }
 
 
-void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Material mat)
+void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Material* mat)
 {
 
     b2BodyDef bodyDef;
@@ -139,18 +139,12 @@ void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Materi
     bodyDef.awake = true;
     bodyDef.bullet = false;
 
-    //check if material is using an image, correct things if this is the case
-    if (mat.UsesImage())
-    {
-        dims->height = mat.GetImage()->GetHeight();
-        dims->width = mat.GetImage()->GetWidth();
-    }
 
     //check if material is using text, correct if needed
-    if (mat.UsesText())
+    if (mat->UsesText())
     {
-        dims->height = mat.GetText()->GetLocalBounds().Height;
-        dims->width =  mat.GetText()->GetLocalBounds().Width;
+        dims->height = mat->GetText()->GetLocalBounds().Height;
+        dims->width =  mat->GetText()->GetLocalBounds().Width;
     }
 
     //set the bodydef's position in box2d coords
@@ -170,21 +164,27 @@ void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Materi
     fixtureDef.shape = dynamicBox;
 
     //apply material info to the fixture
-    fixtureDef.density = mat.GetDensity();
-    fixtureDef.friction = mat.GetFriction();
-    fixtureDef.restitution = mat.GetRestitution();
+    fixtureDef.density = mat->GetDensity();
+    fixtureDef.friction = mat->GetFriction();
+    fixtureDef.restitution = mat->GetRestitution();
 
     //set the data to be all set to be Created
     Data = new ShapeData(fixtureDef,bodyDef);
 
     //create a rectangleshape with given width and height
-    if (mat.UsesImage())
+    if (mat->UsesImage())
     {
-        sf::Sprite* rectangle = new sf::Sprite(*mat.GetImage());
+        sf::Sprite* rectangle = new sf::Sprite(*mat->GetImage());
         //adjust rectangle properties
+
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->SetOrigin(dims->width/2,dims->height/2);
     rectangle->Rotate(dims->angle);
+
+        if (mat->UsesOffset())//is thisright?
+            rectangle->Scale((1/(dims->width+mat->GetOffset()->xa++mat->GetOffset()->xb)),(1/(dims->height++mat->GetOffset()->ya++mat->GetOffset()->yb)));
+        else
+            rectangle->Scale((1/dims->width),(1/dims->height));
 
         //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -192,9 +192,9 @@ void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Materi
     }
 
     //check if material is using text, correct if needed
-    else if (mat.UsesText())
+    else if (mat->UsesText())
     {
-        sf::Text* rectangle = mat.GetText();
+        sf::Text* rectangle = mat->GetText();
         //adjust rectangle properties
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->SetOrigin(dims->width/2,dims->height/2);
@@ -211,7 +211,7 @@ void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Materi
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->SetOrigin(dims->width/2,dims->height/2);
     rectangle->Rotate(dims->angle);
-        rectangle->SetFillColor(mat.GetColor());
+        rectangle->SetFillColor(mat->GetColor());
 
             //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -225,7 +225,7 @@ void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Materi
 }
 
 
-void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Material mat)
+void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Material* mat)
 {
 
     b2BodyDef bodyDef;
@@ -237,16 +237,12 @@ void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Mate
     bodyDef.bullet = true;
 
     //check if material is using an image, correct things if this is the case
-    if (mat.UsesImage())
-    {
-        //to be successful, height should = width so this is irrelevent if its height or width
-        dims->radius = mat.GetImage()->GetHeight();
-    }
+        //was no need
 
     //check if material is using text, correct if needed
-    if (mat.UsesText())
+    if (mat->UsesText())
     {
-        std::cout<<"[Entity][CraftCircle] Circle Using Text = dumb\n";
+        std::cout<<"[Entity][CraftCircle] Circle Using Text = dumb || Not supported.\n";
     }
 
     //set the bodydef's position in box2d coords
@@ -267,20 +263,25 @@ void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Mate
     fixtureDef.shape = circle;
 
     //apply material info to the fixture
-    fixtureDef.density = mat.GetDensity();
-    fixtureDef.friction = mat.GetFriction();
-    fixtureDef.restitution = mat.GetRestitution();
+    fixtureDef.density = mat->GetDensity();
+    fixtureDef.friction = mat->GetFriction();
+    fixtureDef.restitution = mat->GetRestitution();
 
     //set the data to be all set to be Created
     Data = new ShapeData(fixtureDef,bodyDef);
 
     //create a rectangleshape with given width and height
-    if (mat.UsesImage())
+    if (mat->UsesImage())
     {
-        sf::Sprite* rectangle = new sf::Sprite(*mat.GetImage());
+        sf::Sprite* rectangle = new sf::Sprite(*mat->GetImage());
         //adjust rectangle properties
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->Rotate(dims->angle);
+
+        if (mat->UsesOffset())//is thisright?
+            rectangle->Scale((1/(dims->radius+mat->GetOffset()->xa++mat->GetOffset()->xb)),(1/(dims->radius++mat->GetOffset()->ya++mat->GetOffset()->yb)));
+        else
+            rectangle->Scale((1/dims->radius),(1/dims->radius));
 
         //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -288,9 +289,9 @@ void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Mate
     }
 
     //check if material is using text, correct if needed
-    else if (mat.UsesText())
+    else if (mat->UsesText())
     {
-        sf::Text* rectangle = mat.GetText();
+        sf::Text* rectangle = mat->GetText();
         //adjust rectangle properties
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->Rotate(dims->angle);
@@ -305,8 +306,8 @@ void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Mate
         //adjust rectangle properties
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->Rotate(dims->angle);
-    rectangle->SetFillColor(mat.GetColor());
-        rectangle->SetFillColor(mat.GetColor());
+    rectangle->SetFillColor(mat->GetColor());
+        rectangle->SetFillColor(mat->GetColor());
 
             //set the stuff for Draw and Transform
     Draw = new ShapeDraw(rectangle);
@@ -318,7 +319,7 @@ void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Mate
 
 }
 
-void Entity::CraftTriangle(EntityInfo::Context context,EntityDimensions* dims,Material mat)
+void Entity::CraftTriangle(EntityInfo::Context context,EntityDimensions* dims,Material* mat)
 {
     std::cout<<"[Entity][CraftTriangle] Triangles are disabled for now.\n";
 }

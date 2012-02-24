@@ -27,9 +27,12 @@ namespace MatType{ //! The List of all materials any PhysShape can have.
 class Material //! The material class, defining a material that a PhysShape can be.
 {
     public:
+        struct MatOffset{int xa,xb,ya,yb;};//the pixel offset that can be applied to an image
+
         Material(MatType::Type in=MatType::Default); //!< Default Constructor
         Material(float density,float rest,float fric,sf::Color col,std::string name);//!< Long Contructor
         Material(float density,float rest,float fric,std::string imagepath);//!< Long Contructor, for image use
+        Material(float density,float rest,float fric,std::string imagepath,MatOffset* offset);//!< Long Contructor, for image use (with offset)
         Material(float density,float rest,float fric,std::string text,std::string fontpath);//!< Long text constructor, for text use
 
         ~Material(); //!< Default Deconstructor
@@ -41,10 +44,14 @@ class Material //! The material class, defining a material that a PhysShape can 
         sf::Texture* GetImage();//!< REturns image , only call if UsesImage
         sf::Text* GetText();//!< return std::string text.
         sf::Font* GetFont();//!< Returns font
-
+        MatOffset* GetOffset();//!< Returns offset
 
         bool UsesText(){return m_useText;}
         bool UsesImage(){return m_useImage;}
+        bool UsesOffset(){return m_useOffset;}
+
+
+
     protected:
     private:
         float m_density;
@@ -52,10 +59,11 @@ class Material //! The material class, defining a material that a PhysShape can 
         float m_friction;
         sf::Color m_color;
         std::string m_name;//!< Not always needed/used.
-        sf::Texture m_image;
+        sf::Texture* m_image;
         sf::Text m_text;
         sf::Font m_font;
-        bool m_useImage,m_useText;
+        MatOffset* m_offset;
+        bool m_useImage,m_useText,m_useOffset;
 
         //these set things up for each type. each type has a function here.
         void m_Default();

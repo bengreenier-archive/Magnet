@@ -30,7 +30,7 @@ class Entity
 {
     public:
         /** Default constructor */
-        Entity(EntityInfo::Type type,EntityDimensions* dims,Material mat=Material(MatType::Default),EntityInfo::Context context = EntityInfo::Dynamic);
+        Entity(EntityInfo::Type type,EntityDimensions* dims,Material* mat= new Material(MatType::Default),EntityInfo::Context context = EntityInfo::Dynamic);
         Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data);
 
         //the Transformable,Drawable,Data of this Entity
@@ -47,10 +47,10 @@ class Entity
     private:
 
         //if EntityInfo::Type constructor is used, these config stuff
-        void CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Material mat);
-        void CraftRect(EntityInfo::Context context,EntityDimensions* dims,Material mat);
-        void CraftTriangle(EntityInfo::Context context,EntityDimensions* dims,Material mat);
-        void CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Material mat);
+        void CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Material* mat);
+        void CraftRect(EntityInfo::Context context,EntityDimensions* dims,Material* mat);
+        void CraftTriangle(EntityInfo::Context context,EntityDimensions* dims,Material* mat);
+        void CraftBullet(EntityInfo::Context context,EntityDimensions* dims,Material* mat);
 };
 
 

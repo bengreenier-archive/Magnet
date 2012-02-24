@@ -7,6 +7,7 @@ Material::Material(MatType::Type in)
     m_name = "";
     m_useImage=false;
     m_useText=false;
+    m_useOffset=false;
     //switch types, and call their config methods.
     switch(in)
     {
@@ -29,6 +30,7 @@ Material::Material(float density,float rest,float fric,sf::Color col,std::string
     m_name = name;
     m_useImage=false;
     m_useText=false;
+    m_useOffset=false;
 }
 
 
@@ -41,11 +43,32 @@ Material::Material(float density,float rest,float fric,std::string imagepath)
     m_name = imagepath;
 
 
-    m_image = sf::Texture();
-    m_image.Update(Resource::GetImage(imagepath));
+    m_image = new sf::Texture();
+
+    m_image->LoadFromImage(Resource::GetImage(imagepath));
+    m_useImage=true;
+    m_useText=false;
+    m_useOffset=false;
+
+}
+
+Material::Material(float density,float rest,float fric,std::string imagepath,MatOffset* offset)
+{
+        m_density = density;
+    m_friction = fric;
+    m_restitution = rest;
+    m_color = sf::Color(0,0,0);
+    m_name = imagepath;
+
+
+    m_image = new sf::Texture();
+
+    m_image->LoadFromImage(Resource::GetImage(imagepath));
     m_useImage=true;
     m_useText=false;
 
+    m_offset=offset;
+    m_useOffset=true;
 }
 
 Material::Material(float density,float rest,float fric,std::string text,std::string fontpath)
@@ -62,6 +85,7 @@ Material::Material(float density,float rest,float fric,std::string text,std::str
     m_text = sf::Text(text,m_font);
     m_useImage=false;
     m_useText=true;
+    m_useOffset=false;
 
 }
 
@@ -138,8 +162,8 @@ void Material::m_Ground_Img()
     m_color = sf::Color(255,0,0);
     m_name = "Default";
 
-    m_image = sf::Texture();
-    m_image.Update(Resource::GetImage("image/ground-depth.png"));
+    m_image = new sf::Texture();
+    m_image->Update(Resource::GetImage("image/ground-depth.png"));
     m_useImage=true;
 
 }
@@ -172,7 +196,7 @@ std::string Material::GetName()
 
 sf::Texture* Material::GetImage()
 {
-    return &m_image;
+    return m_image;
 }
 
 sf::Text* Material::GetText()
@@ -183,4 +207,9 @@ sf::Text* Material::GetText()
 sf::Font* Material::GetFont()
 {
     return &m_font;
+}
+
+Material::MatOffset* Material::GetOffset()
+{
+    return m_offset;
 }

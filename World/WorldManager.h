@@ -5,7 +5,7 @@
 #include "../Magnet.h"
 #include "World.h"
 #include <list>
-
+#include <sstream>
 
 
 class WorldManager

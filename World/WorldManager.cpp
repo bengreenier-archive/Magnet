@@ -128,7 +128,42 @@ void WorldManager::Renderer_Frame_Hook()
 void WorldManager::Magnet_Load_Hook()
 {
 
-    //create a world on startup
+    //parse the resources sandbox needs loaded
+    Config load;
+    CfgParse cfgparser("resource/sandbox.mcf");
+    cfgparser.Parse(load);
+    if(!cfgparser.IsParsed()){
+        if (WorldStandards::debug)
+            std::cout<<"Parsing Sandbox.mcf failed.\n";
+    }else{
+    //parse success
+    /*
+    if (load.KeyExists("resources","rscount"))
+    for (int i=0;i<load.GetKeyObject("resources","rscount")->GetInt();i++)
+        {
+            std::string temp = "rs";
+            std::stringstream ss;
+            ss<<i;
+            temp.append(ss.str());
+            if (load.KeyExists("resources",temp))
+                try{
+                    std::cout<<"Assuming no exception, added file "<<"resource/"<<load.GetKeyObject("resources",temp)->GetString()<<"\n";
+                    Resource::AddFile("resource/"+load.GetKeyObject("resources",temp)->GetString());
+                }
+                catch(Exception e)
+                {
+                    e.output();
+                }
+
+        }
+        */
+
+        if (load.KeyExists("resources","dir")){
+            std::cout<<"adding "<<load.GetKeyObject("resources","dir")->GetString()<<" recursively\n";
+        Resource::AddDir(load.GetKeyObject("resources","dir")->GetString()+"/",true);
+        }
+    }
+    //create a world on startup (for now)
     Access()->SelectWorld(Access()->AddUndefinedWorld());//add a new undefined world, and select it
 
 }
@@ -311,7 +346,7 @@ bool WorldManager::Event_MouseWheelMoved(sf::Event evt)
 
 
         for(int i=0; i<5; i++)
-        Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(radius,sf::Mouse::GetPosition().x-tHeight+i*tHeight,sf::Mouse::GetPosition().y-tHeight)));
+        Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Circle,new EntityDimensions(radius,sf::Mouse::GetPosition().x-tHeight+i*tHeight,sf::Mouse::GetPosition().y-tHeight),new Material(2,0.5f,0.3f,"image/sandbox/tire.png")));
 
 
     return true;
