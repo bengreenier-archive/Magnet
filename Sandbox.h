@@ -49,16 +49,13 @@ class Sandbox
         int defaultconstraint;
         static Sandbox* m_ptr;
 
-        //achiev varibles
-        bool has_clicked;
-
         //MouseVectors
         b2Vec2 Init_Mouse;
         b2Vec2 Released_Mouse;
 
-        //lol logo
-        int lol_logo_counter;
-        sf::Sprite* lol_sprite;
+        //writes config loaded values into WorldStandards
+        void WriteWorldStandardsFromConfig(std::string path);
+
 
 };
 

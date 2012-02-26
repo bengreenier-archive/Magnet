@@ -4,12 +4,14 @@ Sandbox* Sandbox::m_ptr = NULL;
 
 Sandbox::Sandbox()
 {
+    WriteWorldStandardsFromConfig("resource/config/sandbox.mcf");
+
+
     //ctor
     m_curuuid=0;
     defaultconstraint=500;
 
-    //achievs
-    has_clicked=false;//player hasn't clicked originally
+
 
 
     //the hooked hooks
@@ -30,9 +32,6 @@ Sandbox::Sandbox()
     Released_Mouse = b2Vec2(0,0);
     Init_Mouse = b2Vec2(0,0);
 
-    //lol_logo
-    lol_logo_counter=0;
-    lol_sprite = new sf::Sprite();
 
 
 }
@@ -108,18 +107,6 @@ World* Sandbox::CurrentWorld()
 
 void Sandbox::Renderer_Frame_Hook()
 {
-    if (Access()->lol_logo_counter==0)
-    {
-
-    }
-
-    if (Access()->lol_logo_counter>100)
-    {
-        Renderer::RemoveLink(Access()->lol_sprite);
-    }
-
-
-    Access()->lol_logo_counter++;
 
     if (Access()->CurrentWorld())
     Access()->CurrentWorld()->Step();
@@ -128,39 +115,19 @@ void Sandbox::Renderer_Frame_Hook()
 void Sandbox::Magnet_Load_Hook()
 {
 
+
     //parse the resources sandbox needs loaded
     Config load;
-    CfgParse cfgparser("resource/sandbox.mcf");
+    CfgParse cfgparser("resource/config/sandbox.mcf");
     cfgparser.Parse(load);
     if(!cfgparser.IsParsed()){
         if (WorldStandards::debug)
             std::cout<<"Parsing Sandbox.mcf failed.\n";
     }else{
-    //parse success
-    /*
-    if (load.KeyExists("resources","rscount"))
-    for (int i=0;i<load.GetKeyObject("resources","rscount")->GetInt();i++)
+        if (load.KeyExists("resources","dir"))
         {
-            std::string temp = "rs";
-            std::stringstream ss;
-            ss<<i;
-            temp.append(ss.str());
-            if (load.KeyExists("resources",temp))
-                try{
-                    std::cout<<"Assuming no exception, added file "<<"resource/"<<load.GetKeyObject("resources",temp)->GetString()<<"\n";
-                    Resource::AddFile("resource/"+load.GetKeyObject("resources",temp)->GetString());
-                }
-                catch(Exception e)
-                {
-                    e.output();
-                }
-
-        }
-        */
-
-        if (load.KeyExists("resources","dir")){
             std::cout<<"adding "<<load.GetKeyObject("resources","dir")->GetString()<<" recursively\n";
-        Resource::AddDir(load.GetKeyObject("resources","dir")->GetString()+"/",true);
+            Resource::AddDir(load.GetKeyObject("resources","dir")->GetString()+"/",true);
         }
     }
     //create a world on startup (for now)
@@ -175,8 +142,6 @@ bool Sandbox::Event_KeyReleased(sf::Event evt){
 
      if (evt.Key.Code == sf::Keyboard::LControl)
      {
-
-
          Access()->CurrentWorld()->AddShape(new Entity(EntityInfo::Bullet,new EntityDimensions("rect",5,5,sf::Mouse::GetPosition().x,sf::Mouse::GetPosition().y)));
      }
 
@@ -281,13 +246,11 @@ bool Sandbox::Event_MouseButtonReleased(sf::Event evt)
     int radius = 5;
     int i=0; //if for is commented out, just do this for now.
     int w = radius*2;
-     int h = w;
-     int tHeight=w;
+    int h = w;
+    int tHeight=w;
 
     Access()->Released_Mouse = b2Vec2(evt.MouseButton.X,evt.MouseButton.Y);
 
-    if (!Access()->has_clicked)
-    Access()->has_clicked=true;//now player has cliked (achieves)
 
 
 
@@ -363,17 +326,52 @@ bool Sandbox::Event_MouseMoved(sf::Event evt)
 
 bool Sandbox::Achievement_Conditions(sf::Event evt)
 {
-    if (evt.Type == sf::Event::MouseButtonReleased)
-        {
-            if (Access()->has_clicked)
-                std::cout<<"Clicked via achievs";
-            else
-                return false;
-        }
+
 }
 
 void Sandbox::Achievement_Completion(std::string name)
 {
     std::cout<<"[Sandbox][Achievement_Completion] Congrats! You completed "<<name<<"!\n";
+}
+
+
+
+void Sandbox::WriteWorldStandardsFromConfig(std::string path)
+{
+
+    Config load;
+    CfgParse cfgparser(path.c_str());
+    cfgparser.Parse(load);
+    if(cfgparser.IsParsed()){
+
+        if (load.KeyExists("standards","ratio"))
+         WorldStandards::ratio = load.GetKeyObject("standards","ratio")->GetFloat();
+        if (load.KeyExists("standards","ppm"))
+         WorldStandards::ppm = load.GetKeyObject("standards","ppm")->GetFloat();
+        if (load.KeyExists("standards","mpp"))
+         WorldStandards::mpp = load.GetKeyObject("standards","mpp")->GetFloat();
+        if (load.KeyExists("standards","unratio"))
+         WorldStandards::unratio = load.GetKeyObject("standards","unratio")->GetFloat();
+        if (load.KeyExists("standards","degtorad"))
+         WorldStandards::degtorad = load.GetKeyObject("standards","degtorad")->GetFloat();
+        if (load.KeyExists("standards","radtodeg"))
+         WorldStandards::radtodeg = load.GetKeyObject("standards","radtodeg")->GetFloat();
+        if (load.KeyExists("standards","debug"))
+         WorldStandards::debug = load.GetKeyObject("standards","debug")->GetBool();
+        if (load.KeyExists("standards","debug_step"))
+         WorldStandards::debug_step = load.GetKeyObject("standards","debug_step")->GetBool();
+        if (load.KeyExists("standards","rgrav_forceConst"))
+         WorldStandards::rgrav_forceConst = load.GetKeyObject("standards","rgrav_forceConst")->GetFloat();
+        if (load.KeyExists("standards","minSpeed"))
+         WorldStandards::minSpeed = load.GetKeyObject("standards","minSpeed")->GetFloat();
+        if (load.KeyExists("standards","maxSpeed"))
+         WorldStandards::maxSpeed = load.GetKeyObject("standards","maxSpeed")->GetFloat();
+
+    }else{
+
+    if (WorldStandards::debug)
+        std::cout<<"Failure To Load sandbox.cfg, though not to worry, WorldStandards will use defaults.\n";
+
+    }
 }
 
