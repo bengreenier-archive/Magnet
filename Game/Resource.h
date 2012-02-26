@@ -197,7 +197,9 @@ class Resource
         ////////////////////////////////
         static const sf::Font& GetFont(std::string file);
 
-        static void PrependRootPath(std::string& str);
+        /////////////////////////
+        // Adds the root
+        static void PrependRootPath(std::string& path);
     protected:
         Resource(sf::Thread* loadThread, std::string resourceDir);
     private:
@@ -210,7 +212,7 @@ class Resource
         typedef ResourceHandler<sf::SoundBuffer>    soundbuffer_handler_type;
         typedef ResourceHandler<Config>             config_handler_type;
 
-        //Define handlers
+        //Find template solution to this>?
         image_handler_type          m_image_handler;
         font_handler_type           m_font_handler;
         soundbuffer_handler_type    m_soundbuffer_handler;

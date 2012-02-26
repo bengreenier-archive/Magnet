@@ -25,6 +25,10 @@ int main()
     Window.EnableVerticalSync(true);
     Window.SetActive(false);
 
+    //This should be created more dynamically (Checking available RAM at install time or run-tim)
+    //Should also consider storing these in an object
+    size_t _serial_entity_size = 5000;  //bytes of storage for entity serials, i.e. how many entities can exits within the engine
+                                        //at 5000 bytes for storage, and 4 bytes per serial 1250 entities can exist in the engine
 
     while(Window.IsOpen()){
         if(Magnet::IsInitialized()){
@@ -32,7 +36,7 @@ int main()
             Magnet::Think();
         }else{
             try{
-                Magnet::Init(Window, RenderThread, ResourceLoader);
+                Magnet::Init(_serial_entity_size, Window, RenderThread, ResourceLoader);
             }
 
             catch(Exception e){

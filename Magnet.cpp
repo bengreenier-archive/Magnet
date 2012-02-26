@@ -2,7 +2,8 @@
 
 Magnet*         Magnet::magnet_ptr           =   NULL;
 
-Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState) : gameState(defaultState)
+Magnet::Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState)
+    :   gameState(defaultState)
 {
     /*m_hooks.Register(Hook::Initialize, &Magnet::Hook_Initialize);
 
@@ -36,6 +37,11 @@ Magnet::Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& l
         dbg_timer = new sf::Clock();
         dbg_timer->Restart();
     }
+
+    Serial test(SERIAL_READ_ONCE);
+    test.Unflag(SERIAL_READ_ONCE);
+
+    std::cout << "flags: " << (int)test.GetFlagsCopy() << std::endl;
 }
 
 Magnet::~Magnet()
@@ -140,10 +146,10 @@ Magnet* Magnet::Object(){
     return magnet_ptr;
 }
 
-void Magnet::Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread) throw(Exception){
+void Magnet::Init(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread) throw(Exception){
     if(magnet_ptr == NULL){
         try{
-            magnet_ptr = new Magnet(window, renderThread, loadThread, State::Null);
+            magnet_ptr = new Magnet(_serial_entity_size, window, renderThread, loadThread, State::Null);
         }
 
         catch(Exception e){

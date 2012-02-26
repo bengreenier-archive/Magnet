@@ -11,7 +11,8 @@
 #ifdef __WIN32__
     #define WINDOWS 1
 #elif __unix
-    #define UNIX 1
+    //#define UNIX 1
+    #error Operating system not supported!
 #else
     #error Operating system not supported!
 #endif
@@ -59,6 +60,9 @@
 
 #include "FileActions/Cfg/CfgInclude.h"
 
+//Memory management
+#include "Game/Serial.h"
+
 
 ////////////////////////////////////////////////////////////
     //This class manages the state of the enginge, and the
@@ -70,7 +74,7 @@ class Magnet
         virtual ~Magnet();
 
         static Magnet* Object();
-        static void Init(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread)  throw(Exception);
+        static void Init(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread)  throw(Exception);
         static bool IsInitialized(); //Check to see if we have initialized yet
 
         static void Hook_Initialize();
@@ -117,7 +121,7 @@ class Magnet
         void ChangeState(State::_type newState);
 
     protected:
-        Magnet(sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
+        Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
     private:
         typedef std::vector<EventListener*>     eventlistener_vector_t;
 

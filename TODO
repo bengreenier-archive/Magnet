@@ -17,7 +17,9 @@ mgui:
 Hooks:
       *Add ability to remove hooks
 Renderer:
-	*Apply concurrent queues as stated in docv1
+	*Move to lockless design
+Magnet:
+	
 [DIRECTORY CHANGES] 
       Move directory "Game/Handlers/" to "Game/Handler"
             -Classes in folder should be named after their

@@ -181,9 +181,9 @@ void Entity::CraftRect(EntityInfo::Context context,EntityDimensions* dims,Materi
     rectangle->SetOrigin(dims->width/2,dims->height/2);
     rectangle->Rotate(dims->angle);
 
-        if (mat->UsesOffset())//is thisright?
-            rectangle->Scale((1/(dims->width+mat->GetOffset()->xa++mat->GetOffset()->xb)),(1/(dims->height++mat->GetOffset()->ya++mat->GetOffset()->yb)));
-        else
+        //if (mat->UsesOffset())//is thisright?
+            //rectangle->Scale((1/(dims->width+mat->GetOffset()->xa+mat->GetOffset()->xb)),(1/(dims->height++mat->GetOffset()->ya+mat->GetOffset()->yb)));
+        //else
             rectangle->Scale((1/dims->width),(1/dims->height));
 
         //set the stuff for Draw and Transform
@@ -278,9 +278,9 @@ void Entity::CraftCircle(EntityInfo::Context context,EntityDimensions* dims,Mate
     rectangle->SetPosition(dims->posx,dims->posy);
     rectangle->Rotate(dims->angle);
 
-        if (mat->UsesOffset())//is thisright?
-            rectangle->Scale((1/(dims->radius+mat->GetOffset()->xa++mat->GetOffset()->xb)),(1/(dims->radius++mat->GetOffset()->ya++mat->GetOffset()->yb)));
-        else
+        //if (mat->UsesOffset())//is thisright?
+        //    rectangle->Scale((1/(dims->radius+mat->GetOffset()->xa++mat->GetOffset()->xb)),(1/(dims->radius++mat->GetOffset()->ya++mat->GetOffset()->yb)));
+        //else
             rectangle->Scale((1/dims->radius),(1/dims->radius));
 
         //set the stuff for Draw and Transform

@@ -77,22 +77,6 @@ namespace Hook{
                 m_hooks.push_back(data);
             }
 
-            void Remove(HookCall unique_func){}
-            void Remove(HookCall_p unique_func){}
-
-            void Prune(){
-                for(hooks_iterator_t it  =   m_hooks.begin();
-                    it  !=  m_hooks.end();
-                    it++)
-                {
-                   if(it->settings.lifespan > 0 ){
-                       if(it->count >= it->settings.lifespan){
-                            Remove(it->hook);
-                       }
-                   }
-                }
-            }
-
             void Call(Type hookType, Parameter p = Parameter()){
                 hooks_iterator_t it;
 
@@ -108,14 +92,12 @@ namespace Hook{
                                break;
                             case void_p:
                                it->hook_p(p);
-                                it->count++;
+                               it->count++;
                                break;
                         }
                     }
+                    //prune(it);
                 }
-
-
-                Prune();
             }
         protected:
         private:
@@ -139,6 +121,20 @@ namespace Hook{
             typedef std::vector<hook_data>::iterator hooks_iterator_t;
 
             hooks_t m_hooks;
+
+            hooks_iterator_t remove(hooks_iterator_t it){
+                return m_hooks.erase(it);
+            }
+
+            hooks_iterator_t prune(hooks_iterator_t it, unsigned char type){ //0 for no param hook, 1 for param hook
+               if(it->settings.lifespan > 0 ){
+                   if(it->count >= it->settings.lifespan){
+                        return remove(it);
+                   }
+               }else{
+                    return it;
+               }
+            }
 
 
     };

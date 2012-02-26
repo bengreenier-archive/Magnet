@@ -187,10 +187,8 @@ void Renderer::Render(){
     //GetRenderWindow()->SetActive(true);
 
     //if(!GetRenderWindow()->IsOpen()) return;
-    Object()->m_running = true;
+   /* Object()->m_running = true;
     while(GetRenderWindow()->IsOpen()){
-        Renderer::Mutex()->Lock();
-
         if(Object()->cfg_show_fps){
             Object()->RefreshFPS();
         }
@@ -205,11 +203,9 @@ void Renderer::Render(){
 
 
         GetRenderWindow()->Display();
-
-        Renderer::Mutex()->Unlock();
     }
     GetRenderWindow()->SetActive(true);
-    Object()->m_running = false;
+    Object()->m_running = false;*/
 }
 
 Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){

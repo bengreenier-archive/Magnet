@@ -16,7 +16,12 @@ struct Exception {
         LoadFail,
         MissingDir,
         MissingFile,
-        Recursive
+        Recursive,
+
+        ///////////////////////
+        ///     SharedVar
+        SharedReadDenied,
+        SharedWriteDenied
     };
     //Default
     Exception(){ what = "UNKNOWN EXCEPTION"; why = "Unknown"; }
