@@ -56,7 +56,7 @@
 
 //#include "FileActions/Xml/xml_include.h" **DELETE THIS
 
-#include "World/WorldManager.h"
+#include "Sandbox.h"
 
 #include "FileActions/Cfg/CfgInclude.h"
 
