@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <SFML/Audio.hpp>
 
-#include "../Config/CfgInclude.h"
+#include "../Config/ConfigInclude.h"
 #include "../FileActions/FileAction.h"
 
 
