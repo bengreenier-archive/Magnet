@@ -2,7 +2,7 @@
 #define SERIAL_H
 
 #include <set>
-#include "Exception.h"
+#include "../Game/Exception.h"
 
 const char SERIAL_MODIFIED      = 0X1;
 const char SERIAL_WRITE_ONCE    = 0X2;

@@ -1,5 +1,7 @@
 #include "Magnet.h"
 
+#include "Memory/SharedVar.h"
+
 Magnet*         Magnet::magnet_ptr           =   NULL;
 
 Magnet::Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState)
@@ -37,11 +39,6 @@ Magnet::Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread&
         dbg_timer = new sf::Clock();
         dbg_timer->Restart();
     }
-
-    Serial test(SERIAL_READ_ONCE);
-    test.Unflag(SERIAL_READ_ONCE);
-
-    std::cout << "flags: " << (int)test.GetFlagsCopy() << std::endl;
 }
 
 Magnet::~Magnet()

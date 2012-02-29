@@ -117,7 +117,6 @@ class Renderer
 
         void RefreshFPS();
         void UpdateConfigVars();
-
     protected:
         Renderer(sf::RenderWindow& window, sf::Thread& renderThread);
     private:

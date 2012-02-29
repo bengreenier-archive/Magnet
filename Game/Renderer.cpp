@@ -115,7 +115,7 @@ void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
     int process  = 0;
 
 
-    while(!Object()->depth_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
+    /*while(!Object()->depth_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
         Object()->_SetLinkDepth(Object()->depth_queue.front());
 
         if(Object()->depth_queue.front().first->depth == Object()->depth_queue.front().second || !Renderer::Object()->LinkExists(Object()->depth_queue.front().first)){
@@ -137,7 +137,7 @@ void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
         }
 
         attempts++;
-    }
+    }*/
 
     //Process the remove link queue
     while(!Object()->delete_queue.empty() && attempts < Object()->m_max_attempts && process < Object()->m_max_process){
@@ -187,7 +187,7 @@ void Renderer::Render(){
     //GetRenderWindow()->SetActive(true);
 
     //if(!GetRenderWindow()->IsOpen()) return;
-   /* Object()->m_running = true;
+    Object()->m_running = true;
     while(GetRenderWindow()->IsOpen()){
         if(Object()->cfg_show_fps){
             Object()->RefreshFPS();
@@ -205,7 +205,7 @@ void Renderer::Render(){
         GetRenderWindow()->Display();
     }
     GetRenderWindow()->SetActive(true);
-    Object()->m_running = false;*/
+    Object()->m_running = false;
 }
 
 Renderer::Link* Renderer::CreateLink(sf::Drawable* drawable_ptr, Layer layer, int depth){

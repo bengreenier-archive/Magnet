@@ -1,4 +1,4 @@
-#include "SharedVar.h"
+/*#include "SharedVar.h"
 #include <sstream>
 
 template<class T>
@@ -41,7 +41,7 @@ const T& SharedVar<T>::GetValue() throw(Exception){
 }
 
 template<class T>
-void SharedVar<T>::StrongWrite(T& val) throw(Exception){
+void SharedVar<T>::StrongWrite(const T& val) throw(Exception){
     if(m_serial.IsFlagged(SERIAL_MODIFIED)){
         if(m_serial.IsFlagged(SERIAL_WRITE_ONCE)){
             std::stringstream ss;
@@ -54,7 +54,7 @@ void SharedVar<T>::StrongWrite(T& val) throw(Exception){
 }
 
 template<class T>
-bool SharedVar<T>::WeakWrite(T& val) throw(Exception){
+bool SharedVar<T>::WeakWrite(const T& val) throw(Exception){
     if(m_serial.IsFlagged(SERIAL_MODIFIED)){
         if(m_serial.IsFlagged(SERIAL_WRITE_ONCE)){
             std::stringstream ss;
@@ -88,3 +88,4 @@ bool SharedVar<T>::SerialCompare(const unsigned char expected_serial){
         return false;
     }
 }
+*/

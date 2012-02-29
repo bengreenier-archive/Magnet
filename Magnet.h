@@ -61,8 +61,7 @@
 #include "FileActions/Cfg/CfgInclude.h"
 
 //Memory management
-#include "Game/Serial.h"
-
+#include "Memory/Serial.h"
 
 ////////////////////////////////////////////////////////////
     //This class manages the state of the enginge, and the

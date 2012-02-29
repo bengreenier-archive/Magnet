@@ -76,8 +76,8 @@ Serial* SerialRegistry32::createIndex(unsigned int* index){
 ///CLASS:             Serial
 ///////////////////////////////////////////////////////////////////
 Serial::Serial(){
-    key.serial = 0;
-    key.flags = 0;
+    key.serial  = 0;
+    key.flags   = 0;
 }
 Serial::Serial(const unsigned char& flags){
     key.serial = 0;
