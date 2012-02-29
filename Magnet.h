@@ -34,7 +34,7 @@
 #include "Console/Console.h"
 
 #include "Game/EventListener.h"
-#include "Game/Handlers/EventHandler.h"
+#include "Game/EventHandler.h"
 
 #include "Game/State.h"
 #include "Game/Hook.h"
@@ -42,7 +42,6 @@
 #include "Achievements/Achievements.h"
 #include "Game/Renderer.h"
 #include "Game/Resource.h"
-#include "Game/MouseTrail.h"
 
 #include "World/World.h"
 
@@ -50,15 +49,11 @@
 //#include "mgui/mgui.h"
 
 #include "FileActions/FileAction.h"
-#include "FileActions/Cfg/CfgInclude.h"
+#include "Config/CfgInclude.h"
 
 #include "Network/HttpReq.h"
 
-//#include "FileActions/Xml/xml_include.h" **DELETE THIS
-
 #include "Sandbox.h"
-
-#include "FileActions/Cfg/CfgInclude.h"
 
 //Memory management
 #include "Memory/Serial.h"
