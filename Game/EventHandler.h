@@ -4,7 +4,7 @@
 #include <SFML/Window.hpp>
 #include <map>
 #include <queue>
-#include "../EventListener.h"
+#include "EventListener.h"
 
 #include <iostream>
 class EventHandler

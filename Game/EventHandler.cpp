@@ -1,5 +1,5 @@
 #include "EventHandler.h"
-#include "../../Magnet.h"
+#include "../Magnet.h"
 
 EventHandler*   EventHandler::EventObject   =   NULL;
 

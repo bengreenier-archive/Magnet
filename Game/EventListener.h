@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "Listener/BaseListener.h"
+#include "BaseListener.h"
 
 class EventListener : public BaseListener
 {
