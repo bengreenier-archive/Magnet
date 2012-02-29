@@ -1,4 +1,4 @@
-#include "CfgObject.h"
+#include "ConfigObject.h"
 #include <iostream>
 CfgObject::CfgObject(std::string cat, std::string name, std::string value)
 {

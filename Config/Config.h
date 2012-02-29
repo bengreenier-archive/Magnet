@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "CfgGlobals.h"
-#include "CfgObject.h"
+#include "ConfigGlobals.h"
+#include "ConfigObject.h"
 #include <iostream>
 
 class Config

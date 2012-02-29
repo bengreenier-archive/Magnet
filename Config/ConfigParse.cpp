@@ -1,4 +1,4 @@
-#include "CfgParse.h"
+#include "ConfigParse.h"
 
 CfgParse::CfgParse(const char* path)
 {

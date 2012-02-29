@@ -5,8 +5,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "CfgGlobals.h"
-#include "CfgObject.h"
+#include "ConfigGlobals.h"
+#include "ConfigObject.h"
 #include "Config.h"
 
 class CfgParse
