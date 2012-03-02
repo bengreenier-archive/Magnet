@@ -1,6 +1,7 @@
 #include "ConfigObject.h"
 #include <iostream>
-CfgObject::CfgObject(std::string cat, std::string name, std::string value)
+
+CfgObject::CfgObject(std::string cat, std::string name, std::string value, uint8_t flags)
 {
     m_category  =   cat;
     m_kvpair.first  = name;

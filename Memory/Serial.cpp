@@ -84,19 +84,15 @@ Serial::Serial(const unsigned char& flags){
     key.flags  = flags;
 }
 
-void Serial::SetSerial(const unsigned char& _serial){
-    key.serial = _serial;
-}
-
-bool Serial::IsFlagged(const unsigned char& flag) const{
+bool Serial::IsEnabled(const unsigned char& flag) const{
     return key.flags & flag;
 }
 
-void Serial::Flag(const unsigned char& _flags){
+void Serial::Enable(const unsigned char& _flags){
     key.flags = key.flags | _flags;
 }
 
-void Serial::Unflag(const unsigned char& _flags){
+void Serial::Disable(const unsigned char& _flags){
     key.flags = key.flags & ~_flags;
 }
 
@@ -116,9 +112,15 @@ const unsigned char Serial::GetKeyCopy() const{
 }
 
 bool Serial::operator==(const Serial& cmp) const{
-    if(cmp.GetSerialCopy() == key.serial && cmp.GetFlagsCopy() == key.flags){
+    if(cmp.Copy() == key.serial){
         return true;
     }
 
     return false;
+}
+
+Serial& Serial::operator++(int old){
+    key.serial = static_cast<uint8_t>(old)+1;
+
+    return *this;
 }

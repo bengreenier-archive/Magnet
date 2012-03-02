@@ -4,9 +4,8 @@
 #include <set>
 #include "../Game/Exception.h"
 
-const char SERIAL_MODIFIED      = 0X1;
-const char SERIAL_WRITE_ONCE    = 0X2;
-const char SERIAL_READ_ONCE     = 0X4;
+#include <SFML/System.hpp>
+
 //const char SERIAL_REG_INDEX_LESS = 0x1; //The maximum possible indices is less than maximum storage space. (Maximum capacity will never be reached)
 
 /*
@@ -47,36 +46,39 @@ class SerialRegistry32{
     Serial* NewSerial() throw(Exception);
 };
 */
-//This class provides a tag that can be applied to shared variables
-class Serial
+class Serial;
+class SerialRegistry : public sf::NonCopyable
 {
-    //friend class Magnet; //for testing, should be SharedVar<> in the future
+
+    size_t m_size;
+
 
     public:
 
-    const unsigned char GetFlagsCopy() const;
-    bool IsFlagged(const unsigned char& flag) const;
-    const unsigned char GetSerialCopy() const;
-    const unsigned char GetKeyCopy() const;
+        SerialRegistry(size_t size);
 
-    bool operator==(const Serial& cmp) const;
+        const Serial * const Register();
+        void Remove(Serial* serialptr);
 
-    struct _serial_t{
-        unsigned char flags        : 3;     //0 for Write has taken place, reset to 0 after read. Default 0
-                                            //1 for write once per read.    Default 1
-                                            //2 for read once per write.    Default 0
-        unsigned char serial       : 5;    //3-7 The serial is modified every time a write takes place. Default 0.
-    }key;
+};
 
+class Serial : public sf::NonCopyable{
+    friend class SerialRegistry;
+    Serial(); //Serials may only be constructed by a serial registry
 
+    public:
 
-    Serial(const unsigned char& flags ); //Create a private constructor, so only friends may create a serial (This is to ensure that each serial is unique upon creation)
-    Serial(); //Default
+        struct key_t{
+            uint16_t flags  :   8;
+            uint16_t serial :   8;
+        };
 
+        const unsigned char Copy() const;
+        void    Enable(uint8_t flag);
+        void    Disable(uint8_t flag);
 
-    void SetSerial(const unsigned char& _serial);
-    void Flag(const unsigned char& _flags);
-    void Unflag(const unsigned char& _flags);
+        bool operator==(const Serial& cmp) const;
+        Serial& operator++(int cmp);
 };
 
 #endif // SERIAL_H

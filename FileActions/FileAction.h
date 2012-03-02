@@ -9,24 +9,23 @@
 
 #include "../Game/Exception.h"
 
-class FileAction //! Allows program access to files.
+namespace FileAction //! Allows program access to files.
 {
-    public:
         enum FileType{
-            Invalid,
-            Image,
-            Sound,
-            Font,
-            Config
+            FileInvalid,
+            FileImage,
+            FileSound,
+            FileFont,
+            FileConfig
         };
 
         struct file_node{
-            std::string path;       //Full path:    dir1/dir2/file.type
+            std::string path;       //Full path:    dir1/dir2/
             std::string file;       //Filename:     file.type
-            bool loaded;
             std::string type;
+            bool        loaded;     //true when the file has been loaded.
 
-            file_node(std::string _path, std::string _file, bool _loaded=false) :
+             file_node(std::string _path, std::string _file, bool _loaded=false) :
                 path(_path),
                 file(_file),
                 loaded(_loaded)
@@ -61,20 +60,16 @@ class FileAction //! Allows program access to files.
 
         typedef std::vector<dir_node*> directory_tree_t;
 
-        FileAction();
-        ~FileAction();
-        static void WriteTo(std::string Filename,std::string Msg);
-        static std::string ReadFrom(std::string Filename);
-        static bool FindDir(std::string dir);
-        static bool FindFile(std::string file_path);
-        static bool Find(std::string path);
-        static void MakeDir(std::string dir);
-        static directory_tree_t CreateDirectoryTree(std::string dir) throw(Exception);
-        static void GrowDirectoryTree(directory_tree_t& tree, dir_node* cur_node=NULL) throw(Exception);
-        static void ExplodeString(std::string base, std::string delim, std::vector<std::string>& str_store);
-        static FileType GetFileType(std::string file_type)throw(Exception);
-    protected:
-    private:
+        void WriteTo(std::string Filename,std::string Msg);
+        std::string ReadFrom(std::string Filename);
+        bool FindDir(std::string dir);
+        bool FindFile(std::string file_path);
+        bool Find(std::string path);
+        void MakeDir(std::string dir);
+        directory_tree_t CreateDirectoryTree(std::string dir) throw(Exception);
+        void GrowDirectoryTree(directory_tree_t& tree, dir_node* cur_node=NULL) throw(Exception);
+        void ExplodeString(std::string base, std::string delim, std::vector<std::string>& str_store);
+        FileType GetFileType(std::string file_type)throw(Exception);
 };
 
 #endif // FILEACTION_H
