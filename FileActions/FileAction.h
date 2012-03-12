@@ -12,11 +12,11 @@
 namespace FileAction //! Allows program access to files.
 {
         enum FileType{
-            FileInvalid,
-            FileImage,
-            FileSound,
-            FileFont,
-            FileConfig
+            InvalidFile,
+            ImageFile,
+            SoundFile,
+            FontFile,
+            ConfigFile
         };
 
         struct file_node{

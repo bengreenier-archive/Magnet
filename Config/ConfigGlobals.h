@@ -24,19 +24,8 @@ using namespace FileAction;
 //  A singleton class that handles  all configuration files
 class Config;
 class ConfigGlobals {
-
-    struct registered_config_t{
-        registered_config_t(){
-            config = 0;
-            file = 0;
-            flags = 0;
-        }
-        Config*                      config; //A pointer to the configuration
-        FileAction::file_node*       file;   //A pointer to the configuration file in the file tree
-        uint8_t                     flags;
-    };
-
-    SerialRegistry   m_registry;
+    typedef std::set<Config*>   registry_type;
+    registry_type                          m_registry;
 
     static ConfigGlobals*                  m_object;
     directory_tree_t                       m_config_tree;
@@ -60,12 +49,12 @@ class ConfigGlobals {
         ///////////////////////////////////////////////////
         ///     GetConfig
         //      Gets a pointer to stored configuration data
-        static Config* GetConfig(std::string name);
-        static bool ConfigExists(std::string name);
+        static const Config* GetConfig(std::string name); //Needs to be properly defined
+        static bool ConfigExists(std::string name) { return false; }; //Needs to be properly defined
 
         ///Attempt to find a config file in the search tree by
         // its name
-        static bool ConfigFileExists(std::string name);
+        static file_node* GetConfigFileFromTree(std::string name);
 
         static file_node* GetConfigFile(std::string name);
 
@@ -77,21 +66,21 @@ class ConfigVar;
 class Config
 {
     public:
-        typedef std::vector<ConfigVar*>             config_vect_type;
-        typedef std::vector<ConfigVar*>::iterator   config_vect_it_type;
+        typedef std::vector<const ConfigVar*>             config_vect_type;
+        typedef std::vector<const  ConfigVar*>::iterator   config_vect_it_type;
 
         Config();
         virtual ~Config();
 
 
-        config_vect_type GetCategory(std::string category_name);
+        config_vect_type GetCategory(std::string category_name) const;
 
-        bool            CategoryExists(std::string category_name);
-        bool            KeyExists(std::string category_name, std::string key);
-        bool            KeyExists(std::string key);
+        bool            CategoryExists(std::string category_name) const;
+        bool            KeyExists(std::string category_name, std::string key) const;
+        bool            KeyExists(std::string key) const;
 
-        ConfigVar*                   GetVar(std::string category_name, std::string key);
-        ConfigVar*                   GetVar(std::string key);
+        const ConfigVar*                   GetVar(std::string category_name, std::string key) const;
+        const ConfigVar*                   GetVar(std::string key) const;
         //const std::string&           GetKeyValue(std::string category_name, std::string key);
         //const std::string&           GetKeyValue(std::string key);
 
@@ -102,46 +91,48 @@ class Config
         //Output all config data
         void Output();
 
-        file_node* GetFile();
-        void SetFile(file_node* file);
+        const file_node* GetFile() const;
+        void SetFile(const file_node* file);
     private:
-        sf::Mutex*  m_mutex;
+        friend class ConfigGlobals;
 
         config_vect_type m_cfg_vect;
-        file_node*       m_file;
+        const file_node*       m_file;
 
-        void makeNullGlobal(std::string& null_string);
+        void makeNullGlobal(std::string& null_string) const;
 };
 
 //ConfigVar Flags
 enum CVAR_FLAG{
-    CVAR_F_CONSTANT =   1//Makes a config var unwriteable
+    CVAR_F_CONSTANT =   1,//Makes a config var unwriteable
+    CVAR_F_ARCHIVE  =   2 //Stores the config var in the cache
 };
 
 class ConfigVar
 {
     public:
-        ConfigVar(std::string cat, std::string name, std::string value, uint8_t flags=0);
+        ConfigVar(std::string cat, std::string name, const void* value, uint8_t flags=0);
         virtual ~ConfigVar();
 
-        const int&          GetInt();
-        const float&        GetFloat();
-        const bool&         GetBool();
-        const std::string&  GetString();
+        const int          GetInt() const;
+        const float        GetFloat() const;
+        const bool         GetBool() const;
+        const std::string  GetString() const;
 
-        void            SetValue(uint8_t* value);
+        void            SetValue(void* value);
         void            SetName(std::string str);
         void            SetCategory(std::string str);
 
-        std::string GetCategory();
-        std::string GetName();
+        std::string GetCategory() const { return m_category; };
+        std::string GetName() const { return m_name; };
     protected:
     private:
         typedef std::pair<std::string, std::string>    kv_pair_type;
 
         Config*                     m_config;
-        Serial                      m_serial;
-        SharedVar<uint8_t*>         m_value;
+        std::string                 m_category;
+        std::string                 m_name;
+        SharedVar<void*>            m_value;
 };
 
 

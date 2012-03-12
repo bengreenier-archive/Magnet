@@ -21,7 +21,7 @@ Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
     if(m_debug)
         std::cout << "\tInitializing directories...\n";
 
-    m_rootdir = (Magnet::GlobalConfig()->KeyExists("resource", "root")) ? Magnet::GlobalConfig()->GetKeyValue("resource", "root") : "resource/";
+    m_rootdir = (Magnet::GlobalConfig()->KeyExists("resource", "root")) ? Magnet::GlobalConfig()->GetVar("resource", "root")->GetString() : "resource/";
     m_resource_tree = FileAction::CreateDirectoryTree(m_rootdir);
 
     for(int i = 0; i < m_resource_tree.size(); i++){
@@ -83,25 +83,24 @@ std::string Resource::GetFullPath(std::string dir){
 }
 
 bool Resource::SearchPathExists(std::string path_name){
-    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+    if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool()) //should change from config to resource
         std::cout << "[Resource][SearchPathExists] Checking '" << path_name << "' ... ";
     if(GetRootPath() == path_name){
-
-        if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+        if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool()) //should change from config to resource
             std::cout << "is root. Return true.\n";
         return true;
     }
     std::cout << "!!!\n";
     for(int i = 0; i < Object()->m_search_directories.size(); i++){
         if(Object()->m_search_directories[i] == path_name){
-            if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+            if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool()) //should change from config to resource
                 std::cout << "is search directory. Return true.\n";
             return true;
         }
     }
 
 
-    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+    if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool()) //should change from config to resource
         std::cout << "doesn't exist. Return false.\n";
     return false;
 }
@@ -127,7 +126,7 @@ void Resource::AddFile(FileAction::file_node* filenode) throw(Exception){
     Object()->m_loadSize = Object()->m_load_queue.size();
     Object()->m_loadLeft = Object()->m_load_queue.size();
 
-    if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+    if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
         std::cout << "[Resource] Added \"" << filenode->path << "\"\n";
 }
 
@@ -159,7 +158,7 @@ void Resource::AddFile(std::string file_path) throw(Exception){
 void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
     Resource::PrependRootPath(dir);
 
-    if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool()){
+    if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool()){
         std::cout << "[Resource][AddDir] Adding " << dir;
         if(recursive){
             std::cout << " recursively\n";
@@ -177,7 +176,7 @@ void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
             if(Object()->m_resource_tree[i]->full_path == dir){
                 if(!Object()->m_resource_tree[i]->files.empty()){
                     for(int j = 0; j < Object()->m_resource_tree[i]->files.size(); j ++){
-                        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+                        if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
                             std::cout << "[Resource][AddDir] Found file '" << Object()->m_resource_tree[i]->files[j]->file << "' path '" << Object()->m_resource_tree[i]->files[j]->path << "'" << std::endl;
 
                         Resource::AddFile(Object()->m_resource_tree[i]->files[j]);
@@ -186,7 +185,7 @@ void Resource::AddDir(std::string dir, bool recursive) throw(Exception){
 
                 if(recursive && !Object()->m_resource_tree[i]->children.empty()){
                     for(int j = 0; j < Object()->m_resource_tree[i]->children.size(); j ++){
-                        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+                        if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
                             std::cout << "Resource][AddDir] Found folder '" << Object()->m_resource_tree[i]->children[j]->name << "' path '" << Object()->m_resource_tree[i]->children[j]->full_path << "'" << std::endl;
 
                         Resource::AddDir(Object()->m_resource_tree[i]->children[j]->full_path, true);
@@ -240,23 +239,23 @@ void Resource::Load(){
         FileAction::file_node* filenode = Object()->m_load_queue.front();
 
         if(!filenode->loaded){
-            if(FileAction::GetFileType(filenode->type) != FileAction::Invalid){
+            if(FileAction::GetFileType(filenode->type) != FileAction::InvalidFile){
                 switch(FileAction::GetFileType(filenode->type)){
-                    case FileAction::Image:
+                    case FileAction::ImageFile:
                         Object()->m_image_handler.Load(filenode);
                         break;
-                    case FileAction::Font:
+                    case FileAction::FontFile:
                         Object()->m_font_handler.Load(filenode);
                         break;
-                    case FileAction::Config:
+                    case FileAction::ConfigFile:
                         //Object()->m_config_handler.Load(filenode);
                         break;
-                    case FileAction::Sound:
+                    case FileAction::SoundFile:
                         Object()->m_soundbuffer_handler.Load(filenode);
                         break;
                 }
             }else{
-                if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+                if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
                     std::cout << "[Resource][Load] Could not load '" << filenode->path << "', file type " << filenode->type << "' is not supported\n";
             }
         }
@@ -267,7 +266,7 @@ void Resource::Load(){
         std::cout << "[Resource][Load]\t" << LoadProgress() << "%\n ";
     }
 
-    if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+    if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
         std::cout << "[Resource][Load] Done loading\n";
 
     Object()->m_load_state.set(State::Ready);
@@ -297,7 +296,7 @@ const sf::Image& Resource::GetImage(std::string file) throw(Exception){
             e.output();
         }
     }else{
-        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+        if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
             std::cout << "[Resource][GetImage] Image " << file << " doesn't exist\n";
 
         user_error = true;
@@ -331,14 +330,14 @@ const sf::Font& Resource::GetFont(std::string file){
             e.output();
         }
     }else{
-        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+        if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
             std::cout << "[Resource][GetImage] Font " << file << " node doesn't exist\n";
 
         user_error = true;
     }
 
     if(user_error){
-        if(Magnet::GlobalConfig()->GetKeyObject("resource", "debug")->GetBool())
+        if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
             std::cout << "[Resource][GetImage] Font " << file << " doesn't exist, using default\n";
         font = &sf::Font::GetDefaultFont();
     }

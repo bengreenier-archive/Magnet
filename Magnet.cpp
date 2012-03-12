@@ -26,8 +26,15 @@ Magnet::Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread&
 
     m_renderWindow->SetFramerateLimit(30);
 
-    m_services_initialized   = false;
+    std::cout << "Creating test\n";
+    SharedVar<void*> test;
+    std::cout << "Writing 1\n";
+    test.StrongWrite(1);
+    int val = *static_cast<int*>(test.StrongRead());
+    std::cout << "Reading 1\n";
 
+
+    m_services_initialized   = false;
     CfgParse cfgparser("resource/config/magnet.mcf");
     cfgparser.Parse(m_config);
 
@@ -35,7 +42,7 @@ Magnet::Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread&
         throw Exception(Exception::LoadFail, "Missing config", "The Magnet configuration file is missing");
     }
 
-    if(m_config.GetKeyObject("debug")->GetBool()){
+    if(m_config.GetVar("debug")->GetBool()){
         dbg_timer = new sf::Clock();
         dbg_timer->Restart();
     }
@@ -242,7 +249,7 @@ void Magnet::Think(){
             Object()->State_Setup();
             break;
         case State::Ready:
-            if(Magnet::GlobalConfig()->GetKeyObject("debug")->GetBool()){
+            if(Magnet::GlobalConfig()->GetVar("debug")->GetBool()){
                 if(Object()->dbg_timer != NULL){
                     Object()->dbg_resetTimer("[Magnet] Initial load took ");
                     Object()->dbg_deleteTimer();

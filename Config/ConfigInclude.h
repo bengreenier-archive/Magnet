@@ -2,7 +2,7 @@
 #define CFGINCLUDE_H
 
 #include "ConfigParse.h"
-#include "ConfigObject.h"
+#include "ConfigVar.h"
 #include "Config.h"
 
 #endif // CFGINCLUDE_H

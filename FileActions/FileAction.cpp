@@ -7,15 +7,6 @@
 
 #include "../Magnet.h"
 
-FileAction::FileAction()
-{
-}
-
-FileAction::~FileAction()
-{
-    //dtor
-}
-
 void FileAction::WriteTo(std::string Filename,std::string Msg)
 {
     std::ofstream outfile(Filename.c_str());
@@ -113,24 +104,24 @@ FileAction::FileType FileAction::GetFileType(std::string file_type)throw(Excepti
 
         if(name == "image"){
             if(value.find(file_type) != std::string::npos){
-                return Image;
+                return ImageFile;
             }
         }else if(name == "config"){
             if(value.find(file_type) != std::string::npos){
-                return Config;
+                return ConfigFile;
             }
         }else if(name == "font"){
             if(value.find(file_type) != std::string::npos){
-                return Font;
+                return FontFile;
             }
         }else if(name == "sound"){
             if(value.find(file_type) != std::string::npos){
-                return Sound;
+                return SoundFile;
             }
         }
     }
 
-    return Invalid;
+    return InvalidFile;
 
 }
 

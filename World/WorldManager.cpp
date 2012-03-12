@@ -139,7 +139,7 @@ void WorldManager::Magnet_Load_Hook()
     //parse success
     /*
     if (load.KeyExists("resources","rscount"))
-    for (int i=0;i<load.GetKeyObject("resources","rscount")->GetInt();i++)
+    for (int i=0;i<load.GetVar("resources","rscount")->GetInt();i++)
         {
             std::string temp = "rs";
             std::stringstream ss;
@@ -147,8 +147,8 @@ void WorldManager::Magnet_Load_Hook()
             temp.append(ss.str());
             if (load.KeyExists("resources",temp))
                 try{
-                    std::cout<<"Assuming no exception, added file "<<"resource/"<<load.GetKeyObject("resources",temp)->GetString()<<"\n";
-                    Resource::AddFile("resource/"+load.GetKeyObject("resources",temp)->GetString());
+                    std::cout<<"Assuming no exception, added file "<<"resource/"<<load.GetVar("resources",temp)->GetString()<<"\n";
+                    Resource::AddFile("resource/"+load.GetVar("resources",temp)->GetString());
                 }
                 catch(Exception e)
                 {
@@ -159,8 +159,8 @@ void WorldManager::Magnet_Load_Hook()
         */
 
         if (load.KeyExists("resources","dir")){
-            std::cout<<"adding "<<load.GetKeyObject("resources","dir")->GetString()<<" recursively\n";
-        Resource::AddDir(load.GetKeyObject("resources","dir")->GetString()+"/",true);
+            std::cout<<"adding "<<load.GetVar("resources","dir")->GetString()<<" recursively\n";
+        Resource::AddDir(load.GetVar("resources","dir")->GetString()+"/",true);
         }
     }
     //create a world on startup (for now)

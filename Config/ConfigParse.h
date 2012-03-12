@@ -6,8 +6,6 @@
 #include <iostream>
 
 #include "ConfigGlobals.h"
-#include "ConfigObject.h"
-#include "Config.h"
 
 class CfgParse
 {

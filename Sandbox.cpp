@@ -126,8 +126,8 @@ void Sandbox::Magnet_Load_Hook()
     }else{
         if (load.KeyExists("resources","dir"))
         {
-            std::cout<<"adding "<<load.GetKeyObject("resources","dir")->GetString()<<" recursively\n";
-            Resource::AddDir(load.GetKeyObject("resources","dir")->GetString()+"/",true);
+            std::cout<<"adding "<<load.GetVar("resources","dir")->GetString()<<" recursively\n";
+            Resource::AddDir(load.GetVar("resources","dir")->GetString()+"/",true);
         }
     }
     //create a world on startup (for now)
@@ -345,27 +345,27 @@ void Sandbox::WriteWorldStandardsFromConfig(std::string path)
     if(cfgparser.IsParsed()){
 
         if (load.KeyExists("standards","ratio"))
-         WorldStandards::ratio = load.GetKeyObject("standards","ratio")->GetFloat();
+         WorldStandards::ratio = load.GetVar("standards","ratio")->GetFloat();
         if (load.KeyExists("standards","ppm"))
-         WorldStandards::ppm = load.GetKeyObject("standards","ppm")->GetFloat();
+         WorldStandards::ppm = load.GetVar("standards","ppm")->GetFloat();
         if (load.KeyExists("standards","mpp"))
-         WorldStandards::mpp = load.GetKeyObject("standards","mpp")->GetFloat();
+         WorldStandards::mpp = load.GetVar("standards","mpp")->GetFloat();
         if (load.KeyExists("standards","unratio"))
-         WorldStandards::unratio = load.GetKeyObject("standards","unratio")->GetFloat();
+         WorldStandards::unratio = load.GetVar("standards","unratio")->GetFloat();
         if (load.KeyExists("standards","degtorad"))
-         WorldStandards::degtorad = load.GetKeyObject("standards","degtorad")->GetFloat();
+         WorldStandards::degtorad = load.GetVar("standards","degtorad")->GetFloat();
         if (load.KeyExists("standards","radtodeg"))
-         WorldStandards::radtodeg = load.GetKeyObject("standards","radtodeg")->GetFloat();
+         WorldStandards::radtodeg = load.GetVar("standards","radtodeg")->GetFloat();
         if (load.KeyExists("standards","debug"))
-         WorldStandards::debug = load.GetKeyObject("standards","debug")->GetBool();
+         WorldStandards::debug = load.GetVar("standards","debug")->GetBool();
         if (load.KeyExists("standards","debug_step"))
-         WorldStandards::debug_step = load.GetKeyObject("standards","debug_step")->GetBool();
+         WorldStandards::debug_step = load.GetVar("standards","debug_step")->GetBool();
         if (load.KeyExists("standards","rgrav_forceConst"))
-         WorldStandards::rgrav_forceConst = load.GetKeyObject("standards","rgrav_forceConst")->GetFloat();
+         WorldStandards::rgrav_forceConst = load.GetVar("standards","rgrav_forceConst")->GetFloat();
         if (load.KeyExists("standards","minSpeed"))
-         WorldStandards::minSpeed = load.GetKeyObject("standards","minSpeed")->GetFloat();
+         WorldStandards::minSpeed = load.GetVar("standards","minSpeed")->GetFloat();
         if (load.KeyExists("standards","maxSpeed"))
-         WorldStandards::maxSpeed = load.GetKeyObject("standards","maxSpeed")->GetFloat();
+         WorldStandards::maxSpeed = load.GetVar("standards","maxSpeed")->GetFloat();
 
     }else{
 

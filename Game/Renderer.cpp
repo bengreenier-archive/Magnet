@@ -172,7 +172,7 @@ void Renderer::Think(){ //THIS NEEDS TO BE REWRITTEN
 
 void Renderer::UpdateConfigVars(){
     if(Magnet::GlobalConfig()->KeyExists("show_fps")){
-        bool fps_cfg = Magnet::GlobalConfig()->GetKeyObject("show_fps")->GetBool();
+        bool fps_cfg = Magnet::GlobalConfig()->GetVar("show_fps")->GetBool();
         cfg_show_fps = fps_cfg;
     }else{
         cfg_show_fps = false;

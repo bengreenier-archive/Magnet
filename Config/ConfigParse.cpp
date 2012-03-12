@@ -5,7 +5,7 @@ CfgParse::CfgParse(const char* path)
     m_path = path;
     m_parsed = false;
 
-    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+    if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool())
         std::cout << "[CfgParse]Created new parse element from path \"" << path << "\"\n";
 
     Load();
@@ -22,13 +22,13 @@ CfgParse::~CfgParse()
 }
 
 bool CfgParse::Load(const char* path){
-    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+    if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool())
         std::cout << "[CfgParse][Load] Setting path to \"" << path << "\"\n";
     m_path = path;
     return Load();
 }
 bool CfgParse::Load(){
-    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+    if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool())
         std::cout << "[CfgParse][Load] Loading from \"" << m_path << "\"\n";
 
     if(m_config_file.is_open()){
@@ -41,34 +41,33 @@ bool CfgParse::Load(){
 Config& CfgParse::Parse(Config& data){
     if(!IsReady()) return data;
 
-    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+    if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool())
         std::cout << "[CfgParse][Load] Parsing from \"" << m_path << "\"\n";
 
     std::string line;
 
-    std::string current_category = CfgGlobals::GLOBAL_CATEGORY;
+    std::string current_category = ConfigGlobals::GetConfig("config")->GetVar("parser", "global_category")->GetString();
     int line_n = 1;
     while(getline(m_config_file, line)){
-        if(line.find(CfgGlobals::COMMENT_STRING) != std::string::npos){
-            line = line.substr(0, line.find(CfgGlobals::COMMENT_STRING));
+        if(line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "comment_string")->GetString()) != std::string::npos){
+            line = line.substr(0, line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "comment_string")->GetString()));
         }
 
         //Look for the start of a category
-        if(line.find(CfgGlobals::CATEGORY_TAG_OPEN) != std::string::npos){
+        if(line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "category_tag_open")->GetString()) != std::string::npos){
             //Get start and end position of the category definition
-            size_t start = line.find(CfgGlobals::CATEGORY_TAG_OPEN);
-            size_t end = line.find(CfgGlobals::CATEGORY_TAG_CLOSE);
+            size_t start = line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "category_tag_opn")->GetString());
+            size_t end = line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "category_tag_close")->GetString());
 
             if(end == std::string::npos){
-                if(CfgGlobals::DEBUG)
-                    std::cout << "[CfgParse][Load] Syntax error in file \"" << m_path << "\" one line " << line_n << ". Category tag not closed.\n";
+                std::cout << "[CfgParse][Load] Syntax error in file \"" << m_path << "\" one line " << line_n << ". Category tag not closed.\n";
                 continue;
             }
             current_category = line.substr(start+1, end-1);
             TrimString(current_category);
             ToLower(current_category);
-        }else if(line.find(CfgGlobals::ASSIGNMENT_OPERATOR) != std::string::npos){
-            size_t split_pos = line.find(CfgGlobals::ASSIGNMENT_OPERATOR);
+        }else if(line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "assignment_operator")->GetString()) != std::string::npos){
+            size_t split_pos = line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "assignment_operator")->GetString());
             std::string name = line.substr(0, split_pos);
             std::string value= line.substr(split_pos+1, line.length());
 
@@ -76,7 +75,8 @@ Config& CfgParse::Parse(Config& data){
             TrimString(value);
 
             //std::cout << "Category: \"" << current_category << "\"" << std::endl;
-            data.AddKeyObject(new CfgObject(current_category, name, value));
+            void* val = static_cast<void*>(&value);
+            data.AddVar(new ConfigVar(current_category, name, val));
         }
 
         line_n++;
@@ -126,16 +126,16 @@ bool CfgParse::StringIsInt(std::string str){
 bool CfgParse::IsReady(){
    if(m_config_file.is_open()){
        if(m_config_file.good()){
-            if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+            if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool())
             std::cout << "[CfgParse][IsReady] Parser is ready\n";
 
             return true;
        }else{
-            if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+            if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool())
             std::cout << "[CfgParse][IsReady] File not open.\n";
        }
     }else{
-        if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE){
+        if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool()){
             std::cout << "[CfgParse][IsReady] File not good:\n";
             if((m_config_file.rdstate() & std::ifstream::failbit ) != 0){
                 std::cout << "\tFailbit set\n";
@@ -147,7 +147,7 @@ bool CfgParse::IsReady(){
         }
     }
 
-    if(CfgGlobals::DEBUG && CfgGlobals::VERBOSE)
+    if(ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() && ConfigGlobals::GetConfig("config")->GetVar("verbose")->GetBool())
             std::cout << "[CfgParse][IsReady] Parser is not ready\n";
 
     return false;

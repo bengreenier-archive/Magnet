@@ -26,11 +26,12 @@ class SharedVar
             m_serial = cpy.m_serial;
         }    //Copy constructor
         virtual ~SharedVar(){
+            while(!SerialCompare(m_serial.Copy())){}
             delete m_value;
         }
 
         //A read that will fail if a write interrupts
-        bool WeakRead(T& store_var) throw(Exception){
+        bool WeakRead(T& store_var) const throw(Exception){
             if(SerialCompare(m_serial.Copy())){
                 store_var = *m_value;
 
@@ -40,13 +41,19 @@ class SharedVar
             }
         }
 
-        void StrongRead(T& store_var) throw(Exception){
+        const T& StrongRead() const throw(Exception){
+            T&          exp           = *m_value;
+            Serial::serial_t    exp_serial    = m_serial.Copy();
 
-            std::cout << "Serial compare ";
-            while(!SerialCompare(m_serial.Copy())){}
-            std::cout << "success\n";
+            while(!SerialCompare(exp_serial) && exp != *m_value){
+                exp = *m_value;
+                //if(GlobalConfig::GetConfig("memory")->GetVar("debug")->GetBool())
+                std::cout << "StrongRead failed, getting new val. Serial " << m_serial.Copy() << " != " << exp_serial << std::endl;
+                exp_serial = m_serial.Copy();
+            }
 
-            store_var = *m_value;
+
+            return exp;
         }
 
         //Strong write ensures that a write will take place, unless an exception has occured
@@ -87,17 +94,17 @@ class SharedVar
             return newvar;
         }
 
-        const char GetSerialCopy(){
+        const uint8_t GetSerialCopy(){
             return  m_serial.Copy();;
         }
     protected:
     private:
-        Serial      m_serial;
-        T*          m_value;
+        Serial               m_serial;
+        volatile T*          m_value;
 
         void initialize(T val);
 
-        bool SerialCAS(T* store, T expected, const unsigned char serial, T newval){
+        bool SerialCAS(T* store, T expected, const uint8_t serial, T newval){
             T curval = *store;
 
             if(expected == curval && m_serial.Copy() == serial){

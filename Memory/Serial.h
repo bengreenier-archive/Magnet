@@ -46,36 +46,21 @@ class SerialRegistry32{
     Serial* NewSerial() throw(Exception);
 };
 */
-class Serial;
-class SerialRegistry : public sf::NonCopyable
-{
-
-    size_t m_size;
-
-
-    public:
-
-        SerialRegistry(size_t size);
-
-        const Serial * const Register();
-        void Remove(Serial* serialptr);
-
-};
 
 class Serial : public sf::NonCopyable{
-    friend class SerialRegistry;
-    Serial(); //Serials may only be constructed by a serial registry
+    //friend class SharedVar;
+    //Serial(); //Serials may only be constructed by a serial registry
+
+
+    uint8_t serial;
 
     public:
+        typedef uint8_t serial_t;
 
-        struct key_t{
-            uint16_t flags  :   8;
-            uint16_t serial :   8;
-        };
-
+        Serial();
         const unsigned char Copy() const;
-        void    Enable(uint8_t flag);
-        void    Disable(uint8_t flag);
+        //void    Enable(uint8_t flag);
+        //void    Disable(uint8_t flag);
 
         bool operator==(const Serial& cmp) const;
         Serial& operator++(int cmp);

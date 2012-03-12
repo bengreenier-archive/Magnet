@@ -1,29 +1,41 @@
-#include "ConfigObject.h"
+#include "ConfigGlobals.h"
 #include <iostream>
 
-CfgObject::CfgObject(std::string cat, std::string name, std::string value, uint8_t flags)
+ConfigVar::ConfigVar(std::string cat, std::string name, const void* value, uint8_t flags)
 {
     m_category  =   cat;
-    m_kvpair.first  = name;
-    m_kvpair.second = value;
+    m_name  = name;
+    m_value.StrongWrite(&value);
 }
 
-CfgObject::~CfgObject()
+ConfigVar::~ConfigVar()
 {
     //delete m_kvpair.second;
 }
 
-const int& CfgObject::GetInt(){
-    return atoi(m_kvpair.second.c_str());
+const int ConfigVar::GetInt() const{
+    //void* stored_val =  m_value.StrongRead();
+    return 0;//;*static_cast<int*>(stored_val);
 }
-const float& CfgObject::GetFloat(){
-    return atof(m_kvpair.second.c_str());
+const float ConfigVar::GetFloat()const{
+    //void* stored_val = m_value.StrongRead();
+    return 0.f;//*static_cast<float*>(stored_val);
 }
-const bool& CfgObject::GetBool(){
-    if(m_kvpair.second == CfgGlobals::BOOL_ID){
-        return true;
-    }
+const bool ConfigVar::GetBool()const{
+    /*void* stored_val = m_value.StrongRead();
+    std::string val = *static_cast<std::string*>(stored_val);
 
+    if(ConfigGlobals::ConfigExists("config")){
+        if(ConfigGlobals::GetConfig("config")->GetVar("parser", "bool_id")->GetString() == val){
+            return true;
+        }
+    }else{
+        return (val == "true") ? true : false;
+    }
+    */
     return false;
 }
-const std::string& CfgObject::GetString(){ return m_kvpair.second; }
+const std::string ConfigVar::GetString()const{
+    //void* stored_val = m_value.StrongRead();
+    return "";//*static_cast<std::string*>(stored_val);
+}

@@ -76,14 +76,9 @@ Serial* SerialRegistry32::createIndex(unsigned int* index){
 ///CLASS:             Serial
 ///////////////////////////////////////////////////////////////////
 Serial::Serial(){
-    key.serial  = 0;
-    key.flags   = 0;
+    serial  = 0;
 }
-Serial::Serial(const unsigned char& flags){
-    key.serial = 0;
-    key.flags  = flags;
-}
-
+/*
 bool Serial::IsEnabled(const unsigned char& flag) const{
     return key.flags & flag;
 }
@@ -101,18 +96,19 @@ const unsigned char Serial::GetFlagsCopy() const{
     return copy;
 }
 
-const unsigned char Serial::GetSerialCopy() const{
-    unsigned char copy = key.serial;
-    return copy;
-}
-
 const unsigned char Serial::GetKeyCopy() const{
     unsigned char copy = key.serial | key.flags;
     return copy;
 }
 
+*/
+const unsigned char Serial::Copy() const{
+    unsigned char copy = serial;
+    return copy;
+}
+
 bool Serial::operator==(const Serial& cmp) const{
-    if(cmp.Copy() == key.serial){
+    if(cmp.Copy() == serial){
         return true;
     }
 
@@ -120,7 +116,7 @@ bool Serial::operator==(const Serial& cmp) const{
 }
 
 Serial& Serial::operator++(int old){
-    key.serial = static_cast<uint8_t>(old)+1;
+    serial = static_cast<uint8_t>(old)+1;
 
     return *this;
 }

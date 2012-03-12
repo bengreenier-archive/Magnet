@@ -10,15 +10,15 @@ Config::~Config()
     //dtor
 }
 
-file_node* Config::GetFile(){
+const file_node* Config::GetFile()const{
     return m_file;
 }
 
-void Config::SetFile(file_node* file){
+void Config::SetFile(const file_node* file){
     m_file = file;
 }
 
-bool Config::CategoryExists(std::string category_name){
+bool Config::CategoryExists(std::string category_name) const{
     makeNullGlobal(category_name);
     for(int i = 0; i < m_cfg_vect.size(); i++){
         if(m_cfg_vect[i]->GetCategory() == category_name){
@@ -29,7 +29,7 @@ bool Config::CategoryExists(std::string category_name){
     return false;
 }
 
-Config::config_vect_type Config::GetCategory(std::string category_name){
+Config::config_vect_type Config::GetCategory(std::string category_name) const{
     makeNullGlobal(category_name);
     config_vect_type category;
     for(int i = 0; i < m_cfg_vect.size(); i++){
@@ -41,10 +41,10 @@ Config::config_vect_type Config::GetCategory(std::string category_name){
     return category;
 }
 
-bool Config::KeyExists(std::string key){
+bool Config::KeyExists(std::string key) const{
     return KeyExists(CONFIG_GLOBAL_CATEGORY, key);
 }
-bool Config::KeyExists(std::string category_name, std::string key){
+bool Config::KeyExists(std::string category_name, std::string key) const{
     for(int i = 0; i < m_cfg_vect.size(); i++){
         if(m_cfg_vect[i]->GetCategory() == category_name){
             if(m_cfg_vect[i]->GetName() == key){
@@ -56,17 +56,17 @@ bool Config::KeyExists(std::string category_name, std::string key){
     return false;
 }
 
-void Config::makeNullGlobal(std::string& null_string){
+void Config::makeNullGlobal(std::string& null_string) const{
     if(null_string == ""){
         null_string = CONFIG_GLOBAL_CATEGORY;
     }
 }
 
-ConfigVar* Config::GetVar(std::string key){
+const ConfigVar* Config::GetVar(std::string key) const{
     return GetVar("", key);
 }
 
-ConfigVar* Config::GetVar(std::string category_name, std::string key){
+const ConfigVar* Config::GetVar(std::string category_name, std::string key) const{
     makeNullGlobal(category_name);
 
     for(int i = 0; i < m_cfg_vect.size(); i++){
@@ -77,7 +77,7 @@ ConfigVar* Config::GetVar(std::string category_name, std::string key){
         }
     }
 
-    return new ConfigVar("", "", "");
+    return 0;
 }
 
 void Config::AddVar(ConfigVar* cfg_ob){
@@ -146,7 +146,6 @@ void Config::RemoveVar(std::string category_name, std::string key){
         }
     }
 }
-
 
 void Config::Output(){
     if(!((ConfigGlobals::ConfigExists("config")) ? ConfigGlobals::GetConfig("config")->GetVar("parser", "debug")->GetBool() : true)) return;
