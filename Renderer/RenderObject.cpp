@@ -4,13 +4,14 @@ RenderObject::RenderObject( Vector position, Vector rotation, Vector up ){
     m_position  = position;
     m_rotation  = rotation;
     m_up        = up;
+    m_origin    = DEFAULT_ORIGIN;
 
     m_rotation.normalize();
     m_up.normalize();
 }
 
-Vector RenderObject::position() const{
-    return m_position;
+Point RenderObject::position() const{
+    return m_origin + m_position;
 }
 
 Vector RenderObject::up() const{
@@ -22,11 +23,17 @@ Vector RenderObject::rotation() const{
 }
 
 Angle RenderObject::angle()const{
-    Angle ang = Vector::GetAngle(up(), rotation());
-
-    return ang;
+    return Vector::GetAngle(up(), rotation());
 }
 
-Vector RenderObject::rotate(const Angle& rotation, const Vector& direction = Z_AXIS){
+Vector RenderObject::rotate(const Angle& rotation, const Vector& axis){
+    point_t x = (m_rotation.x() * cos(rotation)) - (m_rotation.y() * sin(rotation));
+    point_t y = (m_rotation.y() * cos(rotation)) - (m_rotation.y() * sin(rotation));
+
+    if(axis.x() && !(axis.y() || axis.z())){
+
+    }
+
+    //Vector new_rotation;
 
 }

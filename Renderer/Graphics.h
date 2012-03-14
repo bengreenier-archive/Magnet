@@ -9,9 +9,10 @@
 #define X_AXIS              Vector(1, 0, 0)
 #define Y_AXIS              Vector(0, 1, 0)
 #define Z_AXIS              Vector(0, 0, 1)
+#define IDENTITY_VECTOR     Vector(1, 1, 1)
 
 #define DEFAULT_UP_VECTOR   Y_AXIS //y-axis is up
-
+#define DEFAULT_ORIGIN      Point(0, 0, 0)
 #define PI 3.1459f
 
 
@@ -20,6 +21,34 @@ class Vector;
 typedef float                                  point_t;
 typedef float                                  angle_t;
 
+
+
+struct Point{
+    point_t x;
+    point_t y;
+    point_t z;
+
+    Point(point_t _x = 0,
+          point_t _y = 0,
+          point_t _z = 0)
+    {
+        x = _x;
+        y = _y;
+        z = _z;
+    }
+
+    Point operator+(const Point& pt) const{
+        Point result;
+        result.x = x + pt.x;
+        result.y = y + pt.y;
+        result.z = z + pt.z;
+
+        return result;
+    }
+};
+
+
+//Should be moved to Renderer
 
 struct Angle {
 
@@ -90,31 +119,6 @@ struct Angle {
         angle_t m_angle;
 };
 
-struct Point{
-    point_t x;
-    point_t y;
-    point_t z;
-
-    Point(point_t _x = 0,
-          point_t _y = 0,
-          point_t _z = 0)
-    {
-        x = _x;
-        y = _y;
-        z = _z;
-    }
-
-    Point operator+(const Point& pt) const{
-        Point result;
-        result.x = x + pt.x;
-        result.y = y + pt.y;
-        result.z = z + pt.z;
-
-        return result;
-    }
-};
-
-//Should be moved to Renderer
 class Vector{
     point_t m_x;
     point_t m_y;
@@ -173,8 +177,65 @@ class Vector{
         }
 };
 
+
+
+struct TransformMatrix {
+    point_t trans_matrix[4][4];
+    point_t point[4];
+
+    TransformMatrix( const Point& pt, const Vector& translation, const Vector& dtranslation ) {
+        point[0] = pt.x;
+        point[1] = pt.y;
+        point[2] = pt.z;
+        point[3] = 1; //w = 0 to indicate vector
+
+        trans_matrix[0][0] = translation.x();
+        trans_matrix[0][1] = 0;
+        trans_matrix[0][2] = 0;
+        trans_matrix[0][3] = dtranslation.x();
+
+        trans_matrix[1][0] = translation.y();
+        trans_matrix[1][1] = 0;
+        trans_matrix[1][2] = 0;
+        trans_matrix[1][3] = dtranslation.y();
+
+        trans_matrix[2][0] = translation.z();
+        trans_matrix[2][1] = 0;
+        trans_matrix[2][2] = 0;
+        trans_matrix[2][3] = dtranslation.z();
+
+        trans_matrix[3][0] = 0;
+        trans_matrix[3][1] = 0;
+        trans_matrix[3][2] = 0;
+        trans_matrix[3][3] = 1; //w = 0 to indicate vector
+    }
+
+    Point result(){
+        point_t x, y, z;
+
+        x =     (trans_matrix[0][0] * point[0])
+            +   (trans_matrix[0][1] * point[1])
+            +   (trans_matrix[0][2] * point[2])
+            +   (trans_matrix[0][3] * point[3]);
+
+        y =     (trans_matrix[1][0] * point[0])
+            +   (trans_matrix[1][1] * point[1])
+            +   (trans_matrix[1][2] * point[2])
+            +   (trans_matrix[1][3] * point[3]);
+
+        z =     (trans_matrix[2][0] * point[0])
+            +   (trans_matrix[2][1] * point[1])
+            +   (trans_matrix[2][2] * point[2])
+            +   (trans_matrix[2][3] * point[3]);
+
+        return Point(x, y, z);
+
+    }
+};
+
 class RenderObject
 {
+    Point   m_origin;
     Vector  m_position; //The Vector from the origin to where the object should be
     Vector  m_up;       //The direction the object is facing upon creation.
     Vector  m_rotation; //Angle from up
@@ -189,7 +250,7 @@ class RenderObject
         RenderObject( Vector position = Vector(), Vector rotation = Vector(), Vector up = DEFAULT_UP_VECTOR );
         //virtual ~RenderObject();
 
-        Vector      position() const;
+        Point      position() const;
         Vector      up() const;
         Vector      rotation() const;
         Angle       angle() const;
