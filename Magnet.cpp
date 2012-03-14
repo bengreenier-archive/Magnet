@@ -26,16 +26,9 @@ Magnet::Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread&
 
     m_renderWindow->SetFramerateLimit(30);
 
-    std::cout << "Creating test\n";
-    SharedVar<void*> test;
-    std::cout << "Writing 1\n";
-    test.StrongWrite(1);
-    int val = *static_cast<int*>(test.StrongRead());
-    std::cout << "Reading 1\n";
-
-
     m_services_initialized   = false;
     CfgParse cfgparser("resource/config/magnet.mcf");
+    std::cout << "Config\n";
     cfgparser.Parse(m_config);
 
     if(!cfgparser.IsParsed()){

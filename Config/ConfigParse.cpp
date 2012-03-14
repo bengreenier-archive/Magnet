@@ -47,8 +47,9 @@ Config& CfgParse::Parse(Config& data){
     std::string line;
 
     std::string current_category = ConfigGlobals::GetConfig("config")->GetVar("parser", "global_category")->GetString();
+
     int line_n = 1;
-    while(getline(m_config_file, line)){
+    while(1 == 0){ //Parsing is disabled, while condition should equal getline(m_config_file, line)
         if(line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "comment_string")->GetString()) != std::string::npos){
             line = line.substr(0, line.find(ConfigGlobals::GetConfig("config")->GetVar("parser", "comment_string")->GetString()));
         }
@@ -75,8 +76,8 @@ Config& CfgParse::Parse(Config& data){
             TrimString(value);
 
             //std::cout << "Category: \"" << current_category << "\"" << std::endl;
-            void* val = static_cast<void*>(&value);
-            data.AddVar(new ConfigVar(current_category, name, val));
+
+            data.AddVar(new ConfigVar(current_category, name.c_str(), 0)); //No
         }
 
         line_n++;

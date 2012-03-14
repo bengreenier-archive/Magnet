@@ -1,11 +1,11 @@
 #include "ConfigGlobals.h"
 #include <iostream>
 
-ConfigVar::ConfigVar(std::string cat, std::string name, const void* value, uint8_t flags)
+ConfigVar::ConfigVar(std::string cat, std::string name, const char* value, uint8_t flags)
 {
     m_category  =   cat;
     m_name  = name;
-    m_value.StrongWrite(&value);
+    //m_value.StrongWrite(&value);
 }
 
 ConfigVar::~ConfigVar()
@@ -33,7 +33,7 @@ const bool ConfigVar::GetBool()const{
         return (val == "true") ? true : false;
     }
     */
-    return false;
+    return true;
 }
 const std::string ConfigVar::GetString()const{
     //void* stored_val = m_value.StrongRead();

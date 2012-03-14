@@ -1,3 +1,7 @@
+#if defined(USE_HOARD)
+#pragma comment(lib, "winhoard.lib")
+#endif
+
 #include <iostream>
 
 #include "Magnet.h"

@@ -2,6 +2,7 @@
 #define CFGGLOBALS_H
 
 
+
 #include <string>
 #include "../FileActions/FileAction.h"
 #include "../Game/ResourceDirectories.h"
@@ -111,7 +112,7 @@ enum CVAR_FLAG{
 class ConfigVar
 {
     public:
-        ConfigVar(std::string cat, std::string name, const void* value, uint8_t flags=0);
+        ConfigVar(std::string cat, std::string name, const char* value, uint8_t flags=0);
         virtual ~ConfigVar();
 
         const int          GetInt() const;
@@ -132,7 +133,7 @@ class ConfigVar
         Config*                     m_config;
         std::string                 m_category;
         std::string                 m_name;
-        SharedVar<void*>            m_value;
+        SharedVar<std::string>            m_value;
 };
 
 
