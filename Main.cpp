@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "Magnet.h"
-
+#include "Renderer/Graphics.h"
 
 //Out main is all we have for our game so far. It represents the most simple possible implementation of the Magnet game engine.
 int main()
@@ -17,6 +17,14 @@ int main()
     //Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
+
+    Vector up = DEFAULT_UP_VECTOR;
+    Vector rotation = Vector(1, 0, 0);
+
+    Angle angle = Vector::GetAngle(up, rotation);
+    Vector norm = Vector::GetNormal(up, rotation);
+
+    std::cout << "Angle: " << angle.degrees() << std::endl;
 
     /*************************************************
     **********=>     Main loop
