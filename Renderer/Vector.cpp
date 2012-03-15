@@ -26,6 +26,8 @@ point_t Vector::y() const{ return m_y; }
 point_t Vector::z() const{ return m_z; }
 
 float   Vector::length() const {
+    if(x() == 0 && y() == 0 && z() == 0) return 0.0f;
+
     float x = pow((m_x - m_origin.x), 2);
     float y = pow((m_y - m_origin.y), 2);
     float z = pow((m_z - m_origin.z), 2);
@@ -42,9 +44,24 @@ float   Vector::length() const {
 }
 
 void    Vector::normalize(){
+    if(x() == 0 && y() == 0 && z() == 0) return;
+    if(isNormal()) return;
+
     while(length() != 1.0f){
+        //std::cout << "Normalize " << length() << std::endl;
         m_x = m_x/length();
         m_y = m_y/length();
         m_z = m_z/length();
     }
+}
+
+bool Vector::isNormal(){
+    if(length() == 1) return true;
+
+    return false;
+}
+bool Vector::isZero(){
+    if(x() == 0 && y() == 0 && z() == 0) return true;
+
+    return false;
 }

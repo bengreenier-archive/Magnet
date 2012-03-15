@@ -6,23 +6,21 @@
 #include <math.h>
 #include <ctype.h>
 
+#include "Matrix.h"
+
 #define X_AXIS              Vector(1, 0, 0)
 #define Y_AXIS              Vector(0, 1, 0)
 #define Z_AXIS              Vector(0, 0, 1)
 #define IDENTITY_VECTOR     Vector(1, 1, 1)
 
-#define DEFAULT_UP_VECTOR   Y_AXIS //y-axis is up
+#define DEFAULT_UP_VECTOR   Y_AXIS          //y-axis is up
 #define DEFAULT_ORIGIN      Point(0, 0, 0)
-#define PI 3.1459f
-
-
-class Vector;
+#define PI 3.14159265
 
 typedef float                                  point_t;
 typedef float                                  angle_t;
 
-
-
+class Vector;
 struct Point{
     point_t x;
     point_t y;
@@ -45,6 +43,8 @@ struct Point{
 
         return result;
     }
+
+    Point operator+(const Vector& vect) const;
 };
 
 
@@ -60,7 +60,7 @@ struct Angle {
         return (deg * (PI/180.0f));
     }
 
-    Angle( angle_t _angle = 0, std::string _type = "rad" ){
+    Angle( angle_t _angle = 0, std::string _type = "degree" ){
         std::cout << "Constructing angle " << _angle << " of type " << _type << " \n";
         m_angle = _angle; //Stored internally as radians
 
@@ -102,11 +102,19 @@ struct Angle {
         return *this;
     }
 
-    angle_t degrees(){
+    angle_t degrees() const{
         if(type == DEGREE){
             return m_angle;
         }else{
             return RadToDegree(m_angle);
+        }
+    }
+
+    angle_t radians() const{
+        if(type == RADIAN){
+            return m_angle;
+        }else{
+            return DegreeToRad(m_angle);
         }
     }
 
@@ -132,10 +140,10 @@ class Vector{
         Vector(const Vector& oldvect);
 
 
-        point_t x()  const;
-        point_t y()  const;
-        point_t z()   const;
-        float   length() const;
+        point_t x()         const;
+        point_t y()         const;
+        point_t z()         const;
+        float   length()    const;
         void    normalize();
 
         //
@@ -156,10 +164,13 @@ class Vector{
             angle_t det = static_cast<angle_t>(up * rotation) / (up.length() * rotation.length());
             double  angle = acos(det);
 
-            Angle ret = Angle(static_cast<angle_t>(angle));
+            Angle ret = Angle(static_cast<angle_t>(angle), "radians");
 
             return ret;
         }
+
+        bool isNormal();
+        bool isZero();
 
         ///Override ='s operator
         const Vector& operator=(const Vector& cpy){
@@ -174,6 +185,15 @@ class Vector{
             point_t dot = (cpy.x()*this->x()) + (cpy.y()*this->y()) + (cpy.z()*this->z());
 
             return dot;
+        }
+
+        Vector operator+(const Vector& add) const{
+            Vector nvect = Vector(x() + add.x(), y() + add.y(), z() + add.z());
+            return nvect;
+        }
+
+        void debug_output(){
+            std::cout << "Vector (" << x() << ", " << y() << ", " << z() << ") = " << length() << "\n";
         }
 };
 
@@ -247,19 +267,15 @@ class RenderObject
         //x=rows, y=cols
         ///If only xsize is specified, a square matrix will be made of xsize rows and cols
         ///If both xsize and ysize are spcified, a matrix of that size will be made
-        RenderObject( Vector position = Vector(), Vector rotation = Vector(), Vector up = DEFAULT_UP_VECTOR );
+        RenderObject( Vector position = Vector(), Vector rotation = Vector(), Vector up = DEFAULT_UP_VECTOR, Point origin = DEFAULT_ORIGIN );
         //virtual ~RenderObject();
 
-        Point      position() const;
+        Point       position() const;
         Vector      up() const;
         Vector      rotation() const;
         Angle       angle() const;
 
         Vector      rotate(const Angle& rotation, const Vector& direction = Z_AXIS);
-
-        Vector& operator+=(Vector& x){
-            return x;
-        }
 };
 
 #endif // GRAPHICS_H

@@ -1,10 +1,10 @@
 #include "Graphics.h"
 
-RenderObject::RenderObject( Vector position, Vector rotation, Vector up ){
+RenderObject::RenderObject( Vector position, Vector rotation, Vector up, Point origin ){
     m_position  = position;
     m_rotation  = rotation;
     m_up        = up;
-    m_origin    = DEFAULT_ORIGIN;
+    m_origin    = origin;
 
     m_rotation.normalize();
     m_up.normalize();
@@ -27,13 +27,25 @@ Angle RenderObject::angle()const{
 }
 
 Vector RenderObject::rotate(const Angle& rotation, const Vector& axis){
-    point_t x = (m_rotation.x() * cos(rotation)) - (m_rotation.y() * sin(rotation));
-    point_t y = (m_rotation.y() * cos(rotation)) - (m_rotation.y() * sin(rotation));
+    point_t x = 0;
+    point_t y = 0;
+    point_t z = 0;
 
-    if(axis.x() && !(axis.y() || axis.z())){
+    if(axis.x()){
 
     }
 
-    //Vector new_rotation;
+    if(axis.x()){
 
+    }
+
+    if(axis.z()){
+        x += (m_rotation.x() * cos(rotation.radians())) - (m_rotation.y() * sin(rotation.radians()));
+        y += (m_rotation.x() * sin(rotation.radians())) + (m_rotation.y() * cos(rotation.radians()));
+        //z += 0.f;
+    }
+
+    m_rotation = m_rotation + Vector(x, y, z);
+    //m_rotation.normalize();
+    m_rotation.debug_output();
 }

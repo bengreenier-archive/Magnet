@@ -18,13 +18,10 @@ int main()
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
 
-    Vector up = DEFAULT_UP_VECTOR;
-    Vector rotation = Vector(1, 0, 0);
+    Matrix<float> float_matrix(2, 5, 1);
+    float_matrix.debug_output();
 
-    Angle angle = Vector::GetAngle(up, rotation);
-    Vector norm = Vector::GetNormal(up, rotation);
 
-    std::cout << "Angle: " << angle.degrees() << std::endl;
 
     /*************************************************
     **********=>     Main loop
