@@ -18,8 +18,16 @@ int main()
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
 
-    Matrix<float> float_matrix(2, 5, 1);
-    float_matrix.debug_output();
+    Matrix<float> matrix1(2, 5, 1);
+    Matrix<float> matrix2(5, 5, 1);
+
+    try{
+        Matrix<float> result = matrix1 * matrix2;
+    }
+    catch(int e){
+        std::cout << "EXCEPTION\n";
+    }
+    //result.debug_output();
 
 
 
