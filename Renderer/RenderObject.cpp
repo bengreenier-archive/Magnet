@@ -6,7 +6,6 @@ RenderObject::RenderObject( Point position, Vector rotation ){
     m_rotation  = rotation;
 
     m_rotation.normalize();
-    m_up.normalize();
 
     m_shape_type = GL_QUADS;
 
@@ -16,10 +15,6 @@ RenderObject::RenderObject( Point position, Vector rotation ){
 
 const Point& RenderObject::position() const{
     return m_position;
-}
-
-Vector RenderObject::up() const{
-    return m_up;
 }
 
 Vector RenderObject::rotation() const{

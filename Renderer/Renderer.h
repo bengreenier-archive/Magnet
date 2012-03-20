@@ -16,6 +16,9 @@ class Renderer
     sf::Window*     m_window;
 
     public:
+        static RenderObject* CreateSquare( Point pos = Point(), Vector size = Vector(5, 5) );
+        static RenderObject* CreateCircle( Point pos = Point(), point_t radius = 5, unsigned int level = 6 );
+
         Renderer(sf::Window* window);
         virtual ~Renderer(){};
 

@@ -1,5 +1,22 @@
 #include "Renderer.h"
 
+
+RenderObject* Renderer::CreateSquare( Point pos, Vector size )
+{
+    point_t size_x = size.x() /2;
+    point_t size_y = size.y() /2;
+
+    RenderObject* ob = new RenderObject(pos);
+    ob->shape_type(GL_QUADS);
+    ob->addPoint(new Point(-size_x, -size_y));
+    ob->addPoint(new Point(-size_x, size_y));
+    ob->addPoint(new Point(size_x, size_y));
+    ob->addPoint(new Point(size_x, -size_y));
+
+    return ob;
+}
+//RenderObject* Renderer::CreateCircle( Point pos = Point(), point_t radius = 5, unsigned int level = 6 );
+
 Renderer::Renderer(sf::Window* window)
 {
     m_window = window;

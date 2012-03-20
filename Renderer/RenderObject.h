@@ -16,7 +16,6 @@ typedef std::vector<const Point*> vertices_t;
 //
 ///Member variables
 Point       m_position; //The Vector from the origin to where the object should be
-Vector      m_up;       //The direction the object is facing upon creation.
 Vector      m_rotation; //Vector from up that indicates rotation
 vertices_t  m_vertexBuffer; //A collection of points
 GLenum      m_shape_type;
@@ -42,6 +41,7 @@ Vector      rotate(const Angle& rotation, const Vector& direction = Z_AXIS);
 ///Public setters
 void        addPoint    ( Point* newpt );
 void        removePoint ( const Point& newpt );
+void        shape_type(GLenum shape) { m_shape_type = shape; }
 
 //
 ///Public getters
@@ -50,7 +50,6 @@ unsigned int      points() const { return m_vertexBuffer.size(); }
 const Point&      getPoint(unsigned int pindex) const;
 const Point&      position() const;
 void              setPosition(Point newpt);
-Vector      up() const;
 Vector      rotation() const;
 //Angle     angle() const;
 };

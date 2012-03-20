@@ -17,13 +17,8 @@ int main(int argc, char **argv)
     Renderer* renderer =  new Renderer(&window);
     renderer->hook_initialized();
 
-    RenderObject* ob = new RenderObject(Point(1));
-    ob->addPoint(new Point(-1, -1));
-    ob->addPoint(new Point(-1, 1));
-    ob->addPoint(new Point(1, 1, -2));
-    ob->addPoint(new Point(1, -1));
+    RenderObject* ob = Renderer::CreateSquare(Point(.51, .51), Vector(1, 1));
     renderer->addRenderObject(ob);
-
 
     bool left = false;
 
