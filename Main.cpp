@@ -1,14 +1,9 @@
-#if defined(USE_HOARD)
-#pragma comment(lib, "winhoard.lib")
-#endif
-
 #include <iostream>
-
-#include "Magnet.h"
-#include "Renderer/Graphics.h"
-
+#include "Renderer/Renderer.h"
+//#include "Magnet.h"
+//ZACH WROTE THIS FUCK BEN
 //Out main is all we have for our game so far. It represents the most simple possible implementation of the Magnet game engine.
-int main()
+int main(int argc, char **argv)
 {
     //Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands) ;
     //Console::AddCommand("Console::TellAJoke()",&Console::TellAJoke);
@@ -18,24 +13,40 @@ int main()
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
 
-    Matrix<float> matrix1(2, 5, 1);
-    Matrix<float> matrix2(5, 5, 1);
+    sf::Window window(sf::VideoMode(800, 800), "Magnet");
+    Renderer* renderer =  new Renderer(&window);
+    renderer->hook_initialized();
 
-    try{
-        Matrix<float> result = matrix1 * matrix2;
+    RenderObject* ob = new RenderObject(Point(1));
+    ob->addPoint(new Point(-1, -1));
+    ob->addPoint(new Point(-1, 1));
+    ob->addPoint(new Point(1, 1, -2));
+    ob->addPoint(new Point(1, -1));
+    renderer->addRenderObject(ob);
+
+
+    bool left = false;
+
+    sf::Event evt;
+    while(window.isOpen()){
+        //Poll events
+        while(window.pollEvent(evt)){
+            if(evt.type == sf::Event::KeyPressed){
+                if(evt.key.code == sf::Keyboard::Escape){
+                    window.close();
+                }
+            }
+
+            if(evt.type == sf::Event::Resized)
+            {
+                renderer->event_resized(evt);
+            }
+        }
+        renderer->frame();
+
     }
-    catch(int e){
-        std::cout << "EXCEPTION\n";
-    }
-    //result.debug_output();
 
-
-
-    /*************************************************
-    **********=>     Main loop
-    **************************************************/
-
-    sf::Thread RenderThread(&Renderer::Render);
+    /*sf::Thread RenderThread(&Renderer::Render);
     sf::Thread ResourceLoader(&Resource::Load);
 
     sf::RenderWindow Window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
@@ -61,7 +72,7 @@ int main()
                 return -1;
             }
         }
-    }
+    }*/
 
     return 0;
 }

@@ -1,7 +1,7 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "../FileActions/Cfg/CfgInclude.h"
+//#include "../FileActions/Cfg/CfgInclude.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>

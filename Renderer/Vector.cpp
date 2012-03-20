@@ -1,67 +1,138 @@
 #include "Graphics.h"
 
-Vector::Vector(point_t _x, point_t _y, point_t _z, Point origin) //Default, Construct from three point_t x, y, and z
+/// ////////////////////////////////////
+//  STATIC FUNCTIONS
+/// ////////////////////////////////////
+Vector Vector::Cross(const Vector& a, const Vector& b){
+
+    ///**ADD: PIPELINE
+    if(DEBUG){
+        std::cout << "Crossing\n";
+        a.debug_output();
+        std::cout << "\tx\n";
+        b.debug_output();
+        std::cout << std::endl;
+    }
+
+    point_t nx = (a.y() * b.z()) - (a.z() * b.y());
+    point_t ny = (a.z() * b.x()) - (a.x() * b.z());
+    point_t nz = (a.x() * b.y()) - (a.y() * b.x());
+
+    Vector norm(nx, ny, nz);
+    norm.normalize();
+
+    return Vector(nx, ny, nz);
+}
+
+Vector Vector::GetNormal(const Vector& x, const Vector& y){
+    Vector norm = Cross(x, y);
+
+    return norm;
+}
+
+angle_t Vector::GetAngle(const Vector& a, const Vector& b){
+    angle_t det = (a * b) / (a.length() * b.length());
+    angle_t angle = acos(det);
+    return angle;
+}
+
+
+/// ////////////////////////////////////
+//  CONSTRUCTORS
+/// ////////////////////////////////////
+Vector::Vector(point_t x, point_t y, point_t z)
+:   POINT_MATRIX(4, 1)
 {
-    m_x = _x;
-    m_y = _y;
-    m_z = _z;
-    m_origin = origin;
+    set(x, 0, 0);
+    set(y, 1, 0);
+    set(z, 2, 0);
+    set(0, 3, 0);
 }
-Vector::Vector(const Point& pt, Point origin)                          //Construct from a point
-{
-    m_x = pt.x;
-    m_y = pt.y;
-    m_z = pt.z;
-    m_origin = origin;
-}
+Vector::Vector(const Point& pt)                          //Construct from a point
+:    POINT_MATRIX(pt)
+{}
 
-Vector::Vector(const Vector& oldvect){
-    m_x = oldvect.x();
-    m_y = oldvect.y();
-    m_z = oldvect.z();
-}
+Vector::Vector(const POINT_MATRIX& m)                          //Construct from a matrix
+:    POINT_MATRIX(m)
+{}
 
-point_t Vector::x() const{ return m_x; }
-point_t Vector::y() const{ return m_y; }
-point_t Vector::z() const{ return m_z; }
+Vector::Vector(const Vector& oldvect)
+:    POINT_MATRIX(oldvect)
+{ std::cout << "Copy constructor\n"; }
 
-float   Vector::length() const {
+/// ////////////////////////////////////
+//  GETTERS
+/// ////////////////////////////////////
+point_t Vector::x() const{ return get(0, 0); }
+point_t Vector::y() const{ return get(1, 0); }
+point_t Vector::z() const{ return get(2, 0); }
+point_t Vector::w() const{ return get(3, 0); }
+
+point_t   Vector::length() const {
     if(x() == 0 && y() == 0 && z() == 0) return 0.0f;
 
-    float x = pow((m_x - m_origin.x), 2);
-    float y = pow((m_y - m_origin.y), 2);
-    float z = pow((m_z - m_origin.z), 2);
-    float sum = x+y+z;
+    point_t nx = pow(x(), 2);
+    point_t ny = pow(y(), 2);
+    point_t nz = pow(z(), 2);
+    point_t sum = nx+ny+nz;
 
     if(sum < 0 ){
         std::cout << "Sum is negative\n";
         sum *= -1;
     }
 
-    float r = sqrt(sum);
+    point_t r = sqrt(sum);
 
     return r;
 }
 
+bool Vector::isNormal() const{
+    if(length() == 1) return true;
+    return false;
+}
+
+bool Vector::isZero() const{
+    if(x() == 0 && y() == 0 && z() == 0) return true;
+    return false;
+}
+
+/// ////////////////////////////////////
+//  SETTERS
+/// ////////////////////////////////////
 void    Vector::normalize(){
     if(x() == 0 && y() == 0 && z() == 0) return;
     if(isNormal()) return;
 
-    while(length() != 1.0f){
-        //std::cout << "Normalize " << length() << std::endl;
-        m_x = m_x/length();
-        m_y = m_y/length();
-        m_z = m_z/length();
+    point_t len = length();
+
+    ///**ADD: CONDITIONAL CONFIG
+    ///**ADD: PIPELINE
+    std::cout << "normalizing vector\n";
+    debug_output();
+
+    set((x()/len), 0, 0);
+    set((y()/len), 1, 0);
+    set((z()/len), 2, 0);
+
+    ///**ADD: CONDITIONAL CONFIG
+    ///**ADD: PIPELINE
+    std::cout << "\nto\n";
+    debug_output();
+
+    std::cout << std::endl;
+}
+
+inline bool Vector::isCorrupt() const
+{
+    return ( w() != 0.f ) ? true : false;
+}
+
+inline void Vector::debug_output() const
+{
+    std::cout << "v{ " << x() << ", " << y() << ", " << z() << ", " << w() << " }";
+
+    if(isCorrupt()){
+        std::cout << " WARNING: Vector is corrupt!";
     }
 }
 
-bool Vector::isNormal(){
-    if(length() == 1) return true;
-
-    return false;
-}
-bool Vector::isZero(){
-    if(x() == 0 && y() == 0 && z() == 0) return true;
-
-    return false;
-}

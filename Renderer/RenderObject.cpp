@@ -1,17 +1,21 @@
-#include "Graphics.h"
+#include "RenderObject.h"
 
-RenderObject::RenderObject( Vector position, Vector rotation, Vector up, Point origin ){
+RenderObject::RenderObject( Point position, Vector rotation ){
+    std::cout << "Object created\n";
     m_position  = position;
     m_rotation  = rotation;
-    m_up        = up;
-    m_origin    = origin;
 
     m_rotation.normalize();
     m_up.normalize();
+
+    m_shape_type = GL_QUADS;
+
+    std::cout << "Position: ";
+    position.debug_output();
 }
 
-Point RenderObject::position() const{
-    return m_origin + m_position;
+const Point& RenderObject::position() const{
+    return m_position;
 }
 
 Vector RenderObject::up() const{
@@ -22,12 +26,14 @@ Vector RenderObject::rotation() const{
     return m_rotation;
 }
 
+/*
 Angle RenderObject::angle()const{
     return Vector::GetAngle(up(), rotation());
 }
+*/
 
 Vector RenderObject::rotate(const Angle& rotation, const Vector& axis){
-    point_t x = 0;
+    /*point_t x = 0;
     point_t y = 0;
     point_t z = 0;
 
@@ -48,4 +54,21 @@ Vector RenderObject::rotate(const Angle& rotation, const Vector& axis){
     m_rotation = m_rotation + Vector(x, y, z);
     //m_rotation.normalize();
     m_rotation.debug_output();
+    */
+}
+
+void RenderObject::addPoint( Point* newpt ){
+    m_vertexBuffer.push_back(newpt);
+}
+
+const Point& RenderObject::getPoint(unsigned int pindex) const{
+    if(pindex < m_vertexBuffer.size())
+    {
+        return *m_vertexBuffer[pindex];
+    }
+}
+
+
+void RenderObject::setPosition(Point newpt){
+    m_position = newpt;
 }
