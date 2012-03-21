@@ -5,7 +5,7 @@ Documentation for this project can be found at : http://bengreenier.com/pages/ma
 
 
 
-
+find and replace in all files "std::cout<<" and replace with "pipe<<" after including pipeline in magnet.h
 
 
 
