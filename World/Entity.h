@@ -31,7 +31,7 @@ class Entity
     public:
         /** Default constructor */
         Entity(EntityInfo::Type type,EntityDimensions* dims,Material* mat= new Material(MatType::Default),EntityInfo::Context context = EntityInfo::Dynamic);
-        Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data);
+        Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data,EntityInfo::Context context = EntityInfo::Dynamic);
 
         //the Transformable,Drawable,Data of this Entity
         ShapeTransform* Transform;

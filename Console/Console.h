@@ -1,8 +1,9 @@
-/*
+
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
 #include <iostream>
+/*
 #include <string>
 #include <vector>
 #include <map>
@@ -11,11 +12,11 @@
 
 #include "ConsoleThread.h"
 #include "FunctionPtrTemplate.h"
-
+*/
 class Console //! Our threaded console that works while in game. currently uses cout
 {
     public:
-        typedef void (*FuncType)();//used for function referencing and calling and etc.
+     /*   typedef void (*FuncType)();//used for function referencing and calling and etc.
         typedef int (*FuncTypeInt)();
         typedef std::string (*FuncTypeString)();
         typedef bool (*FuncTypeBool)();
@@ -40,7 +41,9 @@ class Console //! Our threaded console that works while in game. currently uses 
         static void TellAJoke();//!< Test function, to be sure console is working.
 
         sf::Thread* consoleThread_ptr;  //A pointer to the console thread
-
+*/
+        static std::ostream* Stream(){ return &std::cout; }//when this is written, return the ostream Console Developers have written
+        /*
     protected:
 
     private:
@@ -57,8 +60,8 @@ class Console //! Our threaded console that works while in game. currently uses 
         static Console* consolePtr;
 
 
-
+*/
 };
 
 #endif // CONSOLE_H
-*/
+
