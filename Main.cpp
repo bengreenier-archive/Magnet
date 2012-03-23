@@ -1,8 +1,7 @@
 #include <iostream>
-#include "Renderer/Renderer.h"
-//#include "Magnet.h"
-//ZACH WROTE THIS FUCK BEN
-//Out main is all we have for our game so far. It represents the most simple possible implementation of the Magnet game engine.
+#include "Renderer.h"
+#include "Magnet.h"
+
 int main(int argc, char **argv)
 {
     //Console::AddCommand("Console::PrintCommands()",&Console::PrintCommands) ;
@@ -12,6 +11,10 @@ int main(int argc, char **argv)
     //Console::GetObject()->consoleThread_ptr = &ConsoleListenThread; //LEt us access the console thread from anywhere that the console is accessible from
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
+
+    /*
+
+            ///GLRENDERER TEST
 
     sf::Window window(sf::VideoMode(800, 800), "Magnet");
     Renderer* renderer =  new Renderer(&window);
@@ -40,26 +43,28 @@ int main(int argc, char **argv)
         renderer->frame();
 
     }
+    */
 
-    /*sf::Thread RenderThread(&Renderer::Render);
+    sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
+    window.setActive(false);
+
+
     sf::Thread ResourceLoader(&Resource::Load);
 
-    sf::RenderWindow Window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
-    Window.EnableVerticalSync(true);
-    Window.SetActive(false);
+
 
     //This should be created more dynamically (Checking available RAM at install time or run-tim)
     //Should also consider storing these in an object
     size_t _serial_entity_size = 5000;  //bytes of storage for entity serials, i.e. how many entities can exits within the engine
                                         //at 5000 bytes for storage, and 4 bytes per serial 1250 entities can exist in the engine
 
-    while(Window.IsOpen()){
+    while(window.isOpen()){
         if(Magnet::IsInitialized()){
-            EventHandler::Listen(Window);
+            EventHandler::Listen(window);
             Magnet::Think();
         }else{
             try{
-                Magnet::Init(_serial_entity_size, Window, RenderThread, ResourceLoader);
+                Magnet::Init(_serial_entity_size, window, ResourceLoader);
             }
 
             catch(Exception e){
@@ -67,7 +72,7 @@ int main(int argc, char **argv)
                 return -1;
             }
         }
-    }*/
+    }
 
     return 0;
 }

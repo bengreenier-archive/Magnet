@@ -1,3 +1,5 @@
+/*
+
 #ifndef ENTITY_H
 #define ENTITY_H
 
@@ -29,7 +31,7 @@ namespace EntityInfo{
 class Entity
 {
     public:
-        /** Default constructor */
+        /// Default constructor
         Entity(EntityInfo::Type type,EntityDimensions* dims,Material* mat= new Material(MatType::Default),EntityInfo::Context context = EntityInfo::Dynamic);
         Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data);
 
@@ -38,7 +40,7 @@ class Entity
         ShapeDraw*	   Draw;
         ShapeData*	   Data;
 
-        /** Default destructor */
+        /// Default destructor
         ~Entity();
 
         //static or dynamic?
@@ -57,3 +59,5 @@ class Entity
 
 
 #endif // ENTITY_H
+
+*/

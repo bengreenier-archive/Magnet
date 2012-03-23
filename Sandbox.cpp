@@ -1,4 +1,4 @@
-#include "Sandbox.h"
+/*#include "Sandbox.h"
 
 Sandbox* Sandbox::m_ptr = NULL;
 
@@ -103,7 +103,7 @@ World* Sandbox::CurrentWorld()
   return m_curWorld;
 }
 
-//**HOOKS BELOW**/
+//HOOKS BELOW
 
 void Sandbox::Renderer_Frame_Hook()
 {
@@ -135,8 +135,8 @@ void Sandbox::Magnet_Load_Hook()
 
 }
 
-//**HOOKS ABOVE**/
-//**EVENTS BELOW**/
+//HOOKS ABOVE
+//EVENTS BELOW
 
 bool Sandbox::Event_KeyReleased(sf::Event evt){
 
@@ -321,8 +321,8 @@ bool Sandbox::Event_MouseMoved(sf::Event evt)
 }
 
 
-//**EVENTS ABOVE**/
-//**ACHEIVES BELOW**/
+//EVENTS ABOVE
+//ACHEIVES BELOW
 
 bool Sandbox::Achievement_Conditions(sf::Event evt)
 {
@@ -375,3 +375,4 @@ void Sandbox::WriteWorldStandardsFromConfig(std::string path)
     }
 }
 
+*/

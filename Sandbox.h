@@ -1,4 +1,4 @@
-
+/*
 #ifndef SANDBOX_H
 #define SANDBOX_H
 
@@ -11,9 +11,7 @@
 class Sandbox
 {
     public:
-        /** Default constructor */
         Sandbox();
-        /** Default destructor */
         ~Sandbox();
 
         static void Init();
@@ -60,4 +58,4 @@ class Sandbox
 };
 
 #endif // WORLDMANAGER_H
-
+*/

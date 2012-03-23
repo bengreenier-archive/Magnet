@@ -1,3 +1,4 @@
+/*
 #ifndef SHAPEDRAW_H
 #define SHAPEDRAW_H
 
@@ -11,9 +12,9 @@
 class ShapeDraw
 {
     public:
-        /** Default constructor */
+        /// Default constructor
         ShapeDraw(sf::Drawable* shape);
-        /** Default destructor */
+        /// Default destructor
         ~ShapeDraw();
 
         sf::Drawable* Instance;
@@ -29,3 +30,4 @@ class ShapeDraw
 };
 
 #endif // SHAPEDRAW_H
+*/

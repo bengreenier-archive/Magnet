@@ -38,7 +38,8 @@ Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
     if(m_debug)
         std::cout << "\tSetting hooks...\n";
 
-    Magnet::Hooks()->Register(Hook::StartLoad, &Resource::Hook_Load);
+    //Magnet::Hooks()->Register(Hook::StartLoad, &Resource::Hook_Load);
+    //Magnet::Hooks()->Register(new Hook(Hook::StartLoad, &Resource::Hook_Load));
 
     if(m_debug)
         std::cout << "[Resource] Initialized.\n\n";
@@ -227,7 +228,7 @@ void Resource::Hook_Load(){
 
         if(Object()->m_debug)
             std::cout << "[Resource][Load] Loading...\n";
-        Object()->m_loadThread_ptr->Launch();
+        Object()->m_loadThread_ptr->launch();
     }else{
         Object()->m_load_state.set(State::Ready);
     }
@@ -304,7 +305,7 @@ const sf::Image& Resource::GetImage(std::string file) throw(Exception){
 
     if(user_error){
         img = new sf::Image();
-        img->Create(32, 32, sf::Color(255, 0, 0, 60));
+        img->create(32, 32, sf::Color(255, 0, 0, 60));
     }
 
     return *img;
@@ -339,7 +340,7 @@ const sf::Font& Resource::GetFont(std::string file){
     if(user_error){
         if(Magnet::GlobalConfig()->GetVar("resource", "debug")->GetBool())
             std::cout << "[Resource][GetImage] Font " << file << " doesn't exist, using default\n";
-        font = &sf::Font::GetDefaultFont();
+        font = &sf::Font::getDefaultFont();
     }
 
     return *font;

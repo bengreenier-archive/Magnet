@@ -1,4 +1,4 @@
-
+/*
 #ifndef WORLDMANAGER_H
 #define WORLDMANAGER_H
 
@@ -11,9 +11,7 @@
 class WorldManager
 {
     public:
-        /** Default constructor */
         WorldManager();
-        /** Default destructor */
         ~WorldManager();
 
         static void Init();
@@ -63,4 +61,4 @@ class WorldManager
 };
 
 #endif // WORLDMANAGER_H
-
+*/

@@ -1,4 +1,4 @@
-
+/*
 #ifndef WORLD_H
 #define WORLD_H
 
@@ -14,6 +14,7 @@
 //Other World-ly includes
 #include "WorldStandards.h"
 #include "Material/Material.h"
+/*
 #include "Stats/WorldStats.h"
 
 class World //! The world object. controls all physics and world-ly things. :)
@@ -78,4 +79,5 @@ class World //! The world object. controls all physics and world-ly things. :)
 };
 
 #endif // WORLD_H
+*/
 

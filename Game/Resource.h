@@ -34,7 +34,7 @@ class ResourceHandler{
             T* new_resource = new T();
 
             //if(dynamic_cast<Config*>(new_resource) == 0){ //Specialization if new_resource is config, see else
-                if(new_resource->LoadFromFile(fnode->path)){
+                if(new_resource->loadFromFile(fnode->path)){
                     m_resource_map.insert(resource_pair_type(fnode->path, new_resource));
                     fnode->loaded = true;
                 }else{

@@ -1,4 +1,4 @@
-#include "Material.h"
+/*#include "Material.h"
 #include "../../Game/Resource.h"
 
 Material::Material(MatType::Type in)
@@ -213,3 +213,4 @@ Material::MatOffset* Material::GetOffset()
 {
     return m_offset;
 }
+*/

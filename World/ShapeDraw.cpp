@@ -1,4 +1,4 @@
-#include "ShapeDraw.h"
+/*#include "ShapeDraw.h"
 
 
 ShapeDraw::ShapeDraw(sf::Drawable* shape)
@@ -31,3 +31,4 @@ void ShapeDraw::Hide()
     if (showing)
     Renderer::RemoveLink(m_link);
 }
+*/

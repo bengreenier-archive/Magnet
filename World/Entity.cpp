@@ -1,4 +1,4 @@
-#include "Entity.h"
+/*#include "Entity.h"
 
 Entity::Entity(EntityInfo::Type type,EntityDimensions* dims,Material* mat,EntityInfo::Context context)
 {
@@ -323,3 +323,4 @@ void Entity::CraftTriangle(EntityInfo::Context context,EntityDimensions* dims,Ma
 {
     std::cout<<"[Entity][CraftTriangle] Triangles are disabled for now.\n";
 }
+*/

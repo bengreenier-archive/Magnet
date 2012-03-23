@@ -41,5 +41,4 @@ struct Exception {
     std::string     why;
 
 };
-
 #endif // EXCEPTION_H

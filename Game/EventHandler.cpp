@@ -13,19 +13,19 @@ EventHandler::~EventHandler()
     //dtor
 }
 
-void EventHandler::Listen(sf::RenderWindow& Window){
+void EventHandler::Listen(sf::Window& Window){
     event_queue_t& queue = Object()->m_event_queue;
     listener_map_pair_t ptr_range;
     sf::Event nextEvent;
 
-    while (Window.PollEvent(nextEvent))
+    while (Window.pollEvent(nextEvent))
     {
         queue.push(nextEvent);
     }
 
     while(!queue.empty()){
         Object()->doCallEvent(queue.front(),
-Object()->m_listener_map.equal_range(queue.front().Type));
+        Object()->m_listener_map.equal_range(queue.front().type));
         queue.pop();
     }
 }

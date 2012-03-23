@@ -5,8 +5,21 @@
 #include <iostream>
 
 #include "Parameter.h"
+#include "../Utility/Functor.h"
 
-namespace Hook{
+
+//Ensure Magnet uses debug_hook compile when including this file
+#ifdef      DEBUG_HOOK
+#error      [HOOK]  Debug mode enabled. Do not include this file. \
+                    sugest adding this check to decide whehter or not to include this file
+#endif
+
+using namespace util;
+
+typedef unsigned char hook_lifespan_t;
+
+class Hook{
+public:
     enum Type {
         DEFAULT,            //THIS HOOK IS NEVER CALLED, it is for internal use only
         Frame,              //Called immediately before the frame is drawn
@@ -15,129 +28,100 @@ namespace Hook{
         Close,              //Called when the game closes
         GameStateChange,    //Called after the game state has been changed
         StartLoad,               //Called when resources should begin loading
-        Initialized,         //Called after static classes have been initialized
+        Initialize,         //Called after static classes have been initialized
                             //      *Add resources in this hook
         Setup,               //Called before resources are loaded
                             //      *Create sf::Drawables here
-        LoadComplete        //Called after resources have been loaded (directly before Magnet::State == ready
-    };
-    struct Settings{
-        Settings(Type _hooktype, int _lifespan=-1) : hooktype(_hooktype), lifespan(_lifespan) //Lifespan -1 or 0 for infinite
-        {
-            setDefaults();
-        }
-
-        void setDefaults(){
-            //Default settings (only if a lifespan was specified as -1)
-            if(lifespan == -1){
-                if(hooktype == Setup || hooktype == Initialized){
-                    lifespan = 1;
-                }
-            }
-        }
-        int lifespan;
-        Type hooktype;
-
+        LoadComplete,        //Called after resources have been loaded (directly before Magnet::State == ready
+        InitialzeSingletons
     };
 
-    class Registry{
-        public:
-            typedef void (*HookCall_p)(Parameter);
-            typedef void (*HookCall)();
+    Hook(Type htype, Functor hcallback, hook_lifespan_t life=0)
+    :   m_type(htype),
+        m_callback(hcallback),
+        m_lifespan(life)
+    { }
 
-            void Register(Type hookType, HookCall functionPtr, Settings hook_settings = Settings(DEFAULT)){
-                if(hook_settings.hooktype == DEFAULT){
-                    hook_settings.hooktype = hookType;
-                    hook_settings.setDefaults();
-                }
+    Hook(const Hook& cpy)
+    :   m_type(cpy.type()),
+        m_lifespan(cpy.lifespan()),
+        m_callback(cpy.callback())
+    {}
 
-                hook_data data;
-                data.hook     = functionPtr;
-                data.settings   = hook_settings;
-                data.hook_type  = hookType;
-                data.callback_type = void_void;
-                data.count      = 0;
+    const Type& type() const
+    {
+        return m_type;
+    }
 
-                m_hooks.push_back(data);
-            }
+    const hook_lifespan_t& lifespan() const { return m_lifespan; }
+    const util::Functor& callback() const { return m_callback; }
 
-            void Register(Type hookType, HookCall_p functionPtr, Settings hook_settings = Settings(DEFAULT)){
-                if(hook_settings.hooktype == DEFAULT){
-                    hook_settings.hooktype = hookType;
-                    hook_settings.setDefaults();
-                }
 
-                hook_data data;
-                data.hook_p       = functionPtr;
-                data.settings   = hook_settings;
-                data.hook_type  = hookType;
-                data.callback_type = void_p;
-                data.count      = 0;
+    void begin()
+    {
+        m_callback.begin();
+    }
+private:
+    Type                  m_type;
+    hook_lifespan_t       m_lifespan; //0 for infinite (default), 1-255 for that number of operations before being removed
+    util::Functor         m_callback;
+}; //class hook
 
-                m_hooks.push_back(data);
-            }
+class HookRegistry{
+    public:
+        void Register(Hook* inhook){
+            m_hooks.push_back(inhook);
+        }
 
-            void Call(Type hookType, Parameter p = Parameter()){
-                hooks_iterator_t it;
+        void Call(Hook::Type hookType, Parameter p = Parameter()){
+            hooks_iterator_t it;
 
-                for(it  =   m_hooks.begin();
-                    it  !=  m_hooks.end();
-                    it++)
-                {
-                    if(it->hook_type == hookType){
-                        switch(it->callback_type){
-                            case void_void:
-                                it->hook();
-                                it->count++;
-                               break;
-                            case void_p:
-                               it->hook_p(p);
-                               it->count++;
-                               break;
-                        }
+            for(it  =   m_hooks.begin();
+                it  !=  m_hooks.end();
+                it++)
+            {
+                if((*it)->type() == hookType){
+
+                    std::cout << "Call hook\n";
+                    try{
+                    (*it)->begin();
+                    }catch(...){
+                        std::cout << "Hook call failed\n";
                     }
-                    //prune(it);
+
+            std::cout << "Call ed\n";
                 }
-            }
-        protected:
-        private:
-            enum function_type{
-                void_void, //Returns void, takes no params:     HookCall
-                void_p    //Returns void, takes a Parameter:   HookCall_p
-            };
-
-            struct hook_data{
-                hook_data() : settings(DEFAULT){}
-                HookCall_p  hook_p;
-                HookCall    hook;
-
-                Settings settings;
-                function_type callback_type;
-                Type hook_type;
-                unsigned int count; //The amount of times hook has been called
-            };
-
-            typedef std::vector<hook_data>           hooks_t;
-            typedef std::vector<hook_data>::iterator hooks_iterator_t;
-
-            hooks_t m_hooks;
-
-            hooks_iterator_t remove(hooks_iterator_t it){
-                return m_hooks.erase(it);
+                //prune(it);
             }
 
-            hooks_iterator_t prune(hooks_iterator_t it, unsigned char type){ //0 for no param hook, 1 for param hook
-               if(it->settings.lifespan > 0 ){
-                   if(it->count >= it->settings.lifespan){
-                        return remove(it);
-                   }
-               }else{
-                    return it;
+
+        }
+    protected:
+    private:
+        enum function_type{
+            void_void, //Returns void, takes no params:     HookCall
+            void_p    //Returns void, takes a Parameter:   HookCall_p
+        };
+
+        typedef std::vector<Hook*>           hooks_t;
+        typedef std::vector<Hook*>::iterator hooks_iterator_t;
+
+        hooks_t m_hooks;
+
+        hooks_iterator_t remove(hooks_iterator_t it){
+            return m_hooks.erase(it);
+        }
+
+        hooks_iterator_t prune(hooks_iterator_t it, unsigned char type){ //0 for no param hook, 1 for param hook
+           /*if(it->settings.lifespan > 0 ){
+               if(it->count >= it->settings.lifespan){
+                    return remove(it);
                }
-            }
+           }else{
+                return it;
+           }*/
+        }
 
 
-    };
-
-} //namespace hook
+};
 #endif

@@ -12,7 +12,7 @@ class EventHandler
     public:
 
         //Should be called every frame
-        static void Listen(sf::RenderWindow& Window);
+        static void Listen(sf::Window& Window);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
         ///    Function:        static void AddListener()

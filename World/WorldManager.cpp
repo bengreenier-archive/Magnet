@@ -1,3 +1,4 @@
+/*
 #include "WorldManager.h"
 
 WorldManager* WorldManager::m_ptr = NULL;
@@ -104,7 +105,7 @@ World* WorldManager::CurrentWorld()
   return m_curWorld;
 }
 
-//**HOOKS BELOW**/
+//HOOKS BELOW
 
 void WorldManager::Renderer_Frame_Hook()
 {
@@ -137,26 +138,26 @@ void WorldManager::Magnet_Load_Hook()
             std::cout<<"Parsing Sandbox.mcf failed.\n";
     }else{
     //parse success
-    /*
-    if (load.KeyExists("resources","rscount"))
-    for (int i=0;i<load.GetVar("resources","rscount")->GetInt();i++)
-        {
-            std::string temp = "rs";
-            std::stringstream ss;
-            ss<<i;
-            temp.append(ss.str());
-            if (load.KeyExists("resources",temp))
-                try{
-                    std::cout<<"Assuming no exception, added file "<<"resource/"<<load.GetVar("resources",temp)->GetString()<<"\n";
-                    Resource::AddFile("resource/"+load.GetVar("resources",temp)->GetString());
-                }
-                catch(Exception e)
-                {
-                    e.output();
-                }
 
-        }
-        */
+    //if (load.KeyExists("resources","rscount"))
+    //for (int i=0;i<load.GetVar("resources","rscount")->GetInt();i++)
+    //    {
+    //        std::string temp = "rs";
+    //        std::stringstream ss;
+    //        ss<<i;
+    //        temp.append(ss.str());
+    //        if (load.KeyExists("resources",temp))
+    //            try{
+    //               std::cout<<"Assuming no exception, added file "<<"resource/"<<load.GetVar("resources",temp)->GetString()<<"\n";
+    //                Resource::AddFile("resource/"+load.GetVar("resources",temp)->GetString());
+    //           }
+    //            catch(Exception e)
+    //            {
+    //                e.output();
+    //            }
+
+    //     }
+
 
         if (load.KeyExists("resources","dir")){
             std::cout<<"adding "<<load.GetVar("resources","dir")->GetString()<<" recursively\n";
@@ -168,8 +169,8 @@ void WorldManager::Magnet_Load_Hook()
 
 }
 
-//**HOOKS ABOVE**/
-//**EVENTS BELOW**/
+//HOOKS ABOVE
+//EVENTS BELOW
 
 bool WorldManager::Event_KeyReleased(sf::Event evt){
 
@@ -358,8 +359,8 @@ bool WorldManager::Event_MouseMoved(sf::Event evt)
 }
 
 
-//**EVENTS ABOVE**/
-//**ACHEIVES BELOW**/
+//EVENTS ABOVE
+//ACHEIVES BELOW
 
 bool WorldManager::Achievement_Conditions(sf::Event evt)
 {
@@ -376,4 +377,4 @@ void WorldManager::Achievement_Completion(std::string name)
 {
     std::cout<<"[WorldManager][Achievement_Completion] Congrats! You completed "<<name<<"!\n";
 }
-
+*/

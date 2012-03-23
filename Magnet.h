@@ -28,21 +28,22 @@
     #error This operating system is not yet supported
 #endif
 
+
+#ifndef   DEBUG_HOOK
+#include "Game/Hook.h"
+#endif  //
+
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-#include "Console/Console.h"
+#include "Renderer.h"
 
+#include "Console/Console.h"
 #include "Game/EventListener.h"
 #include "Game/EventHandler.h"
-
 #include "Game/State.h"
-#include "Game/Hook.h"
-
-#include "Achievements/Achievements.h"
-#include "Game/Renderer.h"
 #include "Game/Resource.h"
-
+#include "Achievements/Achievements.h"
 #include "World/World.h"
 
 
@@ -50,10 +51,10 @@
 
 #include "FileActions/FileAction.h"
 #include "Config/ConfigInclude.h"
-
+#include "Utility/Functor.h"
 #include "Network/HttpReq.h"
 
-#include "Sandbox.h"
+//#include "Sandbox.h"
 
 //Memory management
 #include "Memory/Serial.h"
@@ -68,11 +69,13 @@ class Magnet
         virtual ~Magnet();
 
         static Magnet* Object();
-        static void Init(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread)  throw(Exception);
+        static void Init(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread)  throw(Exception);
         static bool IsInitialized(); //Check to see if we have initialized yet
 
-        static void Hook_Initialize();
-        static void Hook_Setup();
+        //static void Hook_Initialize();
+        //static void Hook_Setup();
+
+        static bool event_keyPressed(sf::Event evt);
 
         static void Think();
 
@@ -89,8 +92,8 @@ class Magnet
         //////////////////////////////////////////
         /// Retrieve the global hook registry
         //////////////////////////////////////////
-        static Hook::Registry* Hooks(std::string from); ///< DEBUG
-        static Hook::Registry* Hooks();
+        //static HookRegistry* Hooks(std::string from); ///< DEBUG
+        //static HookRegistry* Hooks();
         //////////////////////////////////////////
         /// Retrieve the global menu registry
         //////////////////////////////////////////
@@ -115,7 +118,7 @@ class Magnet
         void ChangeState(State::_type newState);
 
     protected:
-        Magnet(size_t _serial_entity_size, sf::RenderWindow& window, sf::Thread& renderThread, sf::Thread& loadThread, State::_type defaultState);
+        Magnet(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread, State::_type defaultState);
     private:
         typedef std::vector<EventListener*>     eventlistener_vector_t;
 
@@ -123,16 +126,18 @@ class Magnet
 
         static Magnet* magnet_ptr;
         State gameState;
+
         sf::Thread* m_renderThread_ptr;
         sf::Thread* m_loadThread_ptr;
-        sf::RenderWindow* m_renderWindow;
+        sf::Window* m_renderWindow;
+        Renderer*   m_renderer;
 
         sf::Mutex m_globalMutex;
 
         sf::Clock* dbg_timer;
 
         //Registries
-        Hook::Registry m_hooks;
+        //HookRegistry m_hooks;
         //mgui::Registry m_menus;
         //Achievements::Registry m_acheivs;
 
