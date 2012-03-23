@@ -13,11 +13,12 @@ Entity::Entity(EntityInfo::Type type,EntityDimensions* dims,Material* mat,Entity
     }
 }
 
-Entity::Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data)
+Entity::Entity(ShapeTransform* trans,ShapeDraw* draw,ShapeData* data,EntityInfo::Context context)
 {
     Transform = trans;
     Data = data;
     Draw = draw;
+    Context=context;
 }
 
 Entity::~Entity()

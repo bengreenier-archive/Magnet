@@ -126,3 +126,4 @@ class SharedVar
 };
 
 #endif // SHAREDVAR_H
+
