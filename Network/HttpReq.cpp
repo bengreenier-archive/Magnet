@@ -25,22 +25,22 @@ void HttpReq::SetUrl(std::string path)
 
 void HttpReq::SetHost(std::string host)
 {
-    Http.SetHost(host);
+    Http.setHost(host);
 }
 
 void HttpReq::Set(std::string host,std::string path)
 {
 //    Request.SetURI(path);
-    Http.SetHost(host);
+    Http.setHost(host);
 }
 
 bool HttpReq::Execute()
 {
-    sf::Http::Response Response = Http.SendRequest(Request);
+    sf::Http::Response Response = Http.sendRequest(Request);
 
-    if (Response.GetStatus() == sf::Http::Response::Ok)//most common good response
+    if (Response.getStatus() == sf::Http::Response::Ok)//most common good response
     {
-        bodyResponse = Response.GetBody();
+        bodyResponse = Response.getBody();
         m_exec=true;
         return true;
     }

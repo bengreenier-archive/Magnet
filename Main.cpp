@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Renderer.h"
-#include "Magnet.h"
+//#include "Magnet.h"
 
 int main(int argc, char **argv)
 {
@@ -12,17 +12,17 @@ int main(int argc, char **argv)
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
 
-    /*
+
 
             ///GLRENDERER TEST
 
     sf::Window window(sf::VideoMode(800, 800), "Magnet");
     Renderer* renderer =  new Renderer(&window);
-    renderer->hook_initialized();
+    renderer->initialize();
 
     RenderObject* ob = Renderer::CreateSquare(Point(.51, .51), Vector(1, 1));
     renderer->addRenderObject(ob);
-
+std::cout << "HELLO WORLD\n";
     bool left = false;
 
     sf::Event evt;
@@ -43,9 +43,9 @@ int main(int argc, char **argv)
         renderer->frame();
 
     }
-    */
 
-    sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
+
+    /*sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
     window.setActive(false);
 
 
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
                 return -1;
             }
         }
-    }
+    }*/
 
     return 0;
 }

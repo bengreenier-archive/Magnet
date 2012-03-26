@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "Console.h"
+#include "Console/Console.h"
 
 class Pipeline
 {
