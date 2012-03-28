@@ -1,27 +1,37 @@
 #ifndef FUNCTOR_H
 #define FUNCTOR_H
 
+#include <SFML/System.hpp>
 #include "Param.h"
 
 namespace util{
 
 struct Callback;
-class Functor
+class Functor : sf::NonCopyable
 {
     public:
+        //Construct from a static/free function
         template< typename F >
-        Functor( F function );         //Pointer-to-function
+        Functor( F function );
 
+        //Construct from a static/free function with arguments
         //template< typename F >
-        //Functor( F function, const Param* params );         //Pointer-to-function
-        //template< typename C >
-        //Functor( void(C::*function)(), C* object );             //Pointer-to-member without arguments
-        //template< typename C >
-        //Functor(void(C::*_function)(Param), C* object, const Param* params );//Point-to-member with arguments
+        //Functor( F function, const Param* params );
 
+        //Construct from a member function
+        template< typename C >
+        Functor( void(C::*function)(), C* object );
+
+        //Construct from a member function with arguments
+        //template< typename C >
+        //Functor(void(C::*_function)(Param), C* object, const Param* params );
+
+
+        //Functor(const Functor& cpy); //Static/Free function copy constructor
 
         virtual ~Functor();
-        void begin();
+        void execute();
+        const Callback& callback() const;
 
 
     private:

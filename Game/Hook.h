@@ -8,12 +8,6 @@
 #include "../Utility/Functor.h"
 
 
-//Ensure Magnet uses debug_hook compile when including this file
-#ifdef      DEBUG_HOOK
-#error      [HOOK]  Debug mode enabled. Do not include this file. \
-                    sugest adding this check to decide whehter or not to include this file
-#endif
-
 using namespace util;
 
 typedef unsigned char hook_lifespan_t;
@@ -33,20 +27,14 @@ public:
         Setup,               //Called before resources are loaded
                             //      *Create sf::Drawables here
         LoadComplete,        //Called after resources have been loaded (directly before Magnet::State == ready
-        InitialzeSingletons
+        InitialzeServices
     };
 
-    Hook(Type htype, Functor hcallback, hook_lifespan_t life=0)
-    :   m_type(htype),
-        m_callback(hcallback),
-        m_lifespan(life)
-    { }
+    template< typename T >
+    Hook(Type htype, T function, hook_lifespan_t life=0);
 
-    Hook(const Hook& cpy)
-    :   m_type(cpy.type()),
-        m_lifespan(cpy.lifespan()),
-        m_callback(cpy.callback())
-    {}
+    template< typename T, typename C >
+    Hook(Type htype, T function, C* object, hook_lifespan_t life=0);
 
     const Type& type() const
     {
@@ -59,12 +47,12 @@ public:
 
     void begin()
     {
-        m_callback.begin();
+        m_callback.execute();
     }
 private:
     Type                  m_type;
     hook_lifespan_t       m_lifespan; //0 for infinite (default), 1-255 for that number of operations before being removed
-    util::Functor         m_callback;
+    util::Functor        m_callback;
 }; //class hook
 
 class HookRegistry{
@@ -76,20 +64,13 @@ class HookRegistry{
         void Call(Hook::Type hookType, Parameter p = Parameter()){
             hooks_iterator_t it;
 
-            for(it  =   m_hooks.begin();
-                it  !=  m_hooks.end();
-                it++)
+            for(int i = 0; i < m_hooks.size(); i++)
             {
-                if((*it)->type() == hookType){
+                if(m_hooks[i]->type() == hookType){
 
-                    std::cout << "Call hook\n";
-                    try{
-                    (*it)->begin();
-                    }catch(...){
-                        std::cout << "Hook call failed\n";
-                    }
-
-            std::cout << "Call ed\n";
+                    //std::cout << "Call hook\n";
+                    m_hooks[i]->begin();
+                    //std::cout << "Call end\n";
                 }
                 //prune(it);
             }
@@ -124,4 +105,7 @@ class HookRegistry{
 
 
 };
+
+#include "Hook.inl"
+
 #endif

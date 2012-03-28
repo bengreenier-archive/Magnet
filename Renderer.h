@@ -26,7 +26,7 @@ class Renderer
 
         //Drawing
         void frame();
-        void initialize();
+        void hook_initialize();
         void event_resized(sf::Event& evt);
         void setViewport();
 };

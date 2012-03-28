@@ -22,9 +22,9 @@ Renderer::Renderer(sf::Window* window)
     m_window = window;
 }
 
-void Renderer::initialize()
+void Renderer::hook_initialize()
 {
-    std::cout << "Initialized\n";
+    std::cout << "[Renderer] Intializing\n";
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
 
     setViewport();
@@ -34,7 +34,8 @@ void Renderer::initialize()
 
 void Renderer::frame()
 {
-    m_window->setActive();
+    //std::cout << "Frame\n";
+    m_window->setActive(true);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -43,7 +44,6 @@ void Renderer::frame()
     srand(time(0));
 
     for(int i = 0; i < m_renderobjects.size(); i++){
-        glPushMatrix();
         glLoadIdentity();
 
         glTranslatef(0.0f, 0.0f, -5.0f);
@@ -61,8 +61,6 @@ void Renderer::frame()
                 glVertex3f(pt.x(), pt.y(), pt.z());
             }
         glEnd();
-
-        glPopMatrix();
     }
 
 

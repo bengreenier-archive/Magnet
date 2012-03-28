@@ -7,7 +7,14 @@ Functor::~Functor()
     delete m_callback;
 }
 
-void Functor::begin()
+void Functor::execute()
 {
-    this->m_callback->execute();
+    //m_callback->debug();
+    //std::cout << "Execute called\n";
+    m_callback->execute();
+}
+
+const Callback& Functor::callback() const
+{
+    return *m_callback;
 }

@@ -29,9 +29,7 @@
 #endif
 
 
-#ifndef   DEBUG_HOOK
 #include "Game/Hook.h"
-#endif  //
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -72,8 +70,8 @@ class Magnet
         static void Init(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread)  throw(Exception);
         static bool IsInitialized(); //Check to see if we have initialized yet
 
-        //static void Hook_Initialize();
-        //static void Hook_Setup();
+        static void Hook_Initialize();
+        static void Hook_Setup();
 
         static bool event_keyPressed(sf::Event evt);
 
@@ -92,8 +90,8 @@ class Magnet
         //////////////////////////////////////////
         /// Retrieve the global hook registry
         //////////////////////////////////////////
-        //static HookRegistry* Hooks(std::string from); ///< DEBUG
-        //static HookRegistry* Hooks();
+        static HookRegistry* Hooks(std::string from); ///< DEBUG
+        static HookRegistry* Hooks() { return &Object()->m_hooks; }
         //////////////////////////////////////////
         /// Retrieve the global menu registry
         //////////////////////////////////////////
@@ -137,7 +135,7 @@ class Magnet
         sf::Clock* dbg_timer;
 
         //Registries
-        //HookRegistry m_hooks;
+        HookRegistry m_hooks;
         //mgui::Registry m_menus;
         //Achievements::Registry m_acheivs;
 
