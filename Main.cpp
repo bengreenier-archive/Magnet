@@ -1,13 +1,6 @@
 #include <iostream>
-//#include "Utility/Functor.h"
 #include "Renderer.h"
-//#include "Magnet.h"
-
-using namespace util;
-class tclass{
-    public:
-    void test(){ std::cout << "Functor called mo'fuk\n"; }
-};
+#include "Magnet.h"
 
 int main(int argc, char **argv)
 {
@@ -19,14 +12,11 @@ int main(int argc, char **argv)
 
     //EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Console::LaunchConsoleThread));
 
-<<<<<<< HEAD
     /*
     std::cout << "Calling functor\n";
     tclass inst;
     Functor f(&tclass::test, &inst);
-=======
 
->>>>>>> a9a393b6b22809f78e91ffd177db1142bb9050f1
 
     f.execute();
     std::cout << "Functor called\n";
@@ -62,14 +52,9 @@ std::cout << "HELLO WORLD\n";
 
     }
 
-
-<<<<<<< HEAD
+    */
     sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
     //window.setActive(false);
-=======
-    /*sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
-    window.setActive(false);
->>>>>>> a9a393b6b22809f78e91ffd177db1142bb9050f1
 
 
     sf::Thread ResourceLoader(&Resource::Load);
@@ -95,7 +80,7 @@ std::cout << "HELLO WORLD\n";
                 return -1;
             }
         }
-    }*/
+    }
 
 
     return 0;
