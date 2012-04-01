@@ -35,7 +35,13 @@ typedef unsigned int                               uint_t;   //Should be based o
 //If both xsize and ysize are spcified, a matrix of that size will be made
 RenderObject( Point position = Point(), Vector rotation = Vector() );
 //virtual ~RenderObject();
-Vector      rotate(const Angle& rotation, const Vector& direction = Z_AXIS);
+
+//Rotate by rotation vector
+void      rotate(const Vector& rotation);
+//Rotate by an angle on a single axis
+void      rotate(const Angle& rotation, const Vector& axis = Z_AXIS);
+//Construct an angle
+void      rotate(const angle_t& rotation, const Vector& axis = Z_AXIS);
 
 //
 ///Public setters
@@ -50,7 +56,7 @@ unsigned int      points() const { return m_vertexBuffer.size(); }
 const Point&      getPoint(unsigned int pindex) const;
 const Point&      position() const;
 void              setPosition(Point newpt);
-Vector      rotation() const;
+const Vector&             rotation() const;
 //Angle     angle() const;
 };
 

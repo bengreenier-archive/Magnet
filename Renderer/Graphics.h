@@ -26,8 +26,8 @@
 #define POINT_MATRIX          Matrix<point_t>
 #define COLOR_MATRIX          Matrix<color_t>
 
-typedef float                                    point_t;
-typedef unsigned char                            color_t; //RGBa value between 0-255
+typedef GLfloat                                    point_t;
+typedef unsigned char                              color_t; //RGBa value between 0-255
 
 class Point;
 class Angle;
@@ -51,6 +51,7 @@ Vector(const Vector& oldvect);
 static  Vector   Cross(const Vector& x, const Vector& y);        //Get the cross vector
 static  Vector   GetNormal(const Vector& x, const Vector& y);    // Get the normal between two vectors
 static  angle_t  GetAngle(const Vector& a, const Vector& b);     //Get the angle between two vectors
+static  point_t   DotProduct(const Vector& a, const Vector& b);   //Get the dot product between two vectors
 
 //////// Getters /////////
         bool    isNormal()  const;
@@ -71,22 +72,21 @@ virtual inline void debug_output() const;
 
     const Vector& operator=(const Vector& cpy){
         if(!cpy.isCorrupt()){
-            set(0, 0, cpy.x());
-            set(1, 0, cpy.y());
-            set(2, 0, cpy.z());
+            set(cpy.x(), 0 );
+            set(cpy.y(), 1 );
+            set(cpy.z(), 2 );
         }
 
         return *this;
     }
 
-    point_t operator*(const Vector& cpy) const{
-        point_t dot = (cpy.x()*this->x()) + (cpy.y()*this->y()) + (cpy.z()*this->z());
-
+    Vector operator*(const Vector& cpy) const{
+        Vector dot((cpy.x()*this->x()), (cpy.y()*this->y()), (cpy.z()*this->z()));
         return dot;
     }
 
     Vector operator+(const Vector& add) const{
-        Vector nvect = Vector(x() + add.x(), y() + add.y(), z() + add.z());
+        Vector nvect(x() + add.x(), y() + add.y(), z() + add.z());
         return nvect;
     }
 };
@@ -146,98 +146,24 @@ class Angle {
         RADIAN
     } type;
 
-    Vector  m_rot;
+    angle_t  m_rot;
 
 
     public:
 
-    static angle_t RadToDegree(const Vector& rot){
-        return (rot * (180.0f/PI));
-    }
+    static angle_t RadToDegree(const angle_t& rot);
+    static angle_t DegreeToRad(const angle_t& rot);
+    Angle( angle_t rotation, std::string _type = "degree" );
 
-    static angle_t DegreeToRad(const Vector& rot){
-        return (rot * (PI/180.0f));
-    }
-
-    Angle( Vector rotation, std::string _type = "degree" ){
-        m_rot   = rotation;
-
-        for(width_t i = 0; i < _type.size(); i++){
-            _type[i] = tolower(_type[i]);
-        }
-
-        if(_type == "radian"  ||
-           _type == "radians" ||
-           _type == "rad"     ||
-           _type == "rads"      )
-        {
-            type    = RADIAN;
-        }else{
-            type    = DEGREE;
-        }
-    }
-
-    Angle( const Angle& cpy ){
-        std::cout << "Copy\n";
-        type    = cpy.type;
-        m_rot   = cpy.m_rot;
-    }
-
-    Angle& toRadians(){
-        if(type == DEGREE){
-            m_rot   = DegreeToRad(m_rot);
-            type = RADIAN;
-        }
-        return *this;
-    }
-
-    Angle& toDegrees(){
-        if(type == RADIAN){
-            m_rot   = RadToDegree(m_rot);
-            type = DEGREE;
-        }
-
-        return *this;
-    }
-
-    Vector degrees() const{
-        if(type == DEGREE){
-            return m_rot;
-        }else{
-            return RadToDegree(m_rot);
-        }
-    }
-
-    Vector radians() const{
-        if(type == RADIAN){
-            return m_rot;
-        }else{
-            return DegreeToRad(m_rot);
-        }
-    }
+    Angle( const Angle& cpy );
+    Angle& toRadians();
+    Angle& toDegrees();
+    angle_t degrees() const;
+    angle_t radians() const;
 
 #ifdef DEBUG_COMPILE
-    void debug_output(){
-        std::string measure;
-        Vector     angle;
-
-        if( type == RADIAN )
-        {
-            measure = "radians";
-            angle   = radians();
-
-        } else {
-
-            measure = "degrees";
-            angle   = radians();
-
-        }
-
-        std::cout << "Angle vector (" << measure << ")\n";
-        angle.debug_output();
-        std::cout << "X: " << Vector::GetAngle(UP_VECTOR, Vector(angle.x(), 0, 0)) << std::endl;
-        std::cout << "Y: " << Vector::GetAngle(UP_VECTOR, Vector(0, angle.y(), 0)) << std::endl;
-        std::cout << "Z: " << Vector::GetAngle(UP_VECTOR, Vector(0, 0, angle.z())) << std::endl;
+    void debug_output() const{
+        std::cout << degrees() << " degrees\n";
     }
 #endif //Debug Compile
 };

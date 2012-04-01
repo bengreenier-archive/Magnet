@@ -3,6 +3,12 @@
 /// ////////////////////////////////////
 //  STATIC FUNCTIONS
 /// ////////////////////////////////////
+point_t Vector::DotProduct(const Vector& a, const Vector& b)
+{
+    point_t dot = (a.x()*b.x()) + (a.y()*b.y()) + (a.z()*b.z());
+    return dot;
+}
+
 Vector Vector::Cross(const Vector& a, const Vector& b){
 
     ///**ADD: PIPELINE
@@ -31,7 +37,7 @@ Vector Vector::GetNormal(const Vector& x, const Vector& y){
 }
 
 angle_t Vector::GetAngle(const Vector& a, const Vector& b){
-    angle_t det = (a * b) / (a.length() * b.length());
+    angle_t det = DotProduct(a, b) / DotProduct(a.length() , b.length());
     angle_t angle = acos(det);
     return angle;
 }
@@ -43,10 +49,10 @@ angle_t Vector::GetAngle(const Vector& a, const Vector& b){
 Vector::Vector(point_t x, point_t y, point_t z)
 :   POINT_MATRIX(4, 1)
 {
-    set(x, 0, 0);
-    set(y, 1, 0);
-    set(z, 2, 0);
-    set(0, 3, 0);
+    set(x, 0);
+    set(y, 1);
+    set(z, 2);
+    set(0, 3);
 }
 Vector::Vector(const Point& pt)                          //Construct from a point
 :    POINT_MATRIX(pt)
@@ -58,7 +64,7 @@ Vector::Vector(const POINT_MATRIX& m)                          //Construct from 
 
 Vector::Vector(const Vector& oldvect)
 :    POINT_MATRIX(oldvect)
-{ std::cout << "Copy constructor\n"; }
+{  }
 
 /// ////////////////////////////////////
 //  GETTERS
@@ -77,7 +83,6 @@ point_t   Vector::length() const {
     point_t sum = nx+ny+nz;
 
     if(sum < 0 ){
-        std::cout << "Sum is negative\n";
         sum *= -1;
     }
 
@@ -87,8 +92,7 @@ point_t   Vector::length() const {
 }
 
 bool Vector::isNormal() const{
-    if(length() == 1) return true;
-    return false;
+    return (length() == 1.f) ;
 }
 
 bool Vector::isZero() const{
@@ -105,21 +109,9 @@ void    Vector::normalize(){
 
     point_t len = length();
 
-    ///**ADD: CONDITIONAL CONFIG
-    ///**ADD: PIPELINE
-    std::cout << "normalizing vector\n";
-    debug_output();
-
     set((x()/len), 0, 0);
     set((y()/len), 1, 0);
     set((z()/len), 2, 0);
-
-    ///**ADD: CONDITIONAL CONFIG
-    ///**ADD: PIPELINE
-    std::cout << "\nto\n";
-    debug_output();
-
-    std::cout << std::endl;
 }
 
 inline bool Vector::isCorrupt() const
