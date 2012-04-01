@@ -7,6 +7,16 @@
 
 #include "Console/Console.h"
 
+//Defines should always be outside of class definitions.
+#define pipe (*Pipeline::Instance())
+
+#define debuglog    pipe.SetScope(Pipeline::DEBUGLOG); \
+                    pipe
+#define dbgconsole  pipe.SetScope(Pipeline::SCREEN); \
+                    pipe
+
+
+
 class Pipeline
 {
     public:
@@ -15,7 +25,6 @@ class Pipeline
         typedef std::ios_base& (*iosbasefunc)(std::ios_base& str);
 
         enum Scope{LOG,DEBUGLOG,SCREEN,CONSOLE};
-        Pipeline();
 
         static Pipeline* Instance();
 
@@ -45,9 +54,10 @@ class Pipeline
         Pipeline& operator<<(float a);
         Pipeline& operator<<(double a);
         Pipeline& operator<<(iosbasefunc fn);
-        #define pipe *Pipeline::Instance()
         //the above chunk is the work
     protected:
+        //Pipeline should be protected, this way only calling the initialize funtion will create the object.
+        Pipeline();
     private:
 
         enum Type{FILE,COUT,INGAME};
