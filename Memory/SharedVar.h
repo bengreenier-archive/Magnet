@@ -11,6 +11,8 @@
 
 */
 
+
+/*
 template<class T>
 class SharedVar
 {
@@ -124,6 +126,6 @@ class SharedVar
             }
         }
 };
-
+*/
 #endif // SHAREDVAR_H
 

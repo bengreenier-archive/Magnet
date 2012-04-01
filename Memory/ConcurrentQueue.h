@@ -1,3 +1,4 @@
+/*
 #ifndef CONCURRENTQUEUE_H
 #define CONCURRENTQUEUE_H
 
@@ -40,3 +41,4 @@ class ConcurrentQueue
 };
 
 #endif // CONCURRENTQUEUE_H
+*/
