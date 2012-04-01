@@ -1,3 +1,4 @@
+/*
 #include "ConfigGlobals.h"
 
 ConfigGlobals* ConfigGlobals::m_object =   0;
@@ -44,9 +45,9 @@ void ConfigGlobals::RegisterDefaults(std::string name, Config& new_default){
 
     if((tmpcfg.m_file = GetConfigFileFromTree(name)) != 0){
         if(tmpcfg.GetFile()->loaded){
-            /*if(!GetCachedValue(reg_config.config)){  //Override defaults
-                reg_config.flags |= CONFIG_F_LOAD;  //This lets main logic know that it doesn't need to load a file on load
-            }*/
+            //if(!GetCachedValue(reg_config.config)){  //Override defaults
+            //    reg_config.flags |= CONFIG_F_LOAD;  //This lets main logic know that it doesn't need to load a file on load
+            //}
         }
     }
 
@@ -74,3 +75,4 @@ const Config* ConfigGlobals::GetConfig(std::string name){
 }
 
 
+*/

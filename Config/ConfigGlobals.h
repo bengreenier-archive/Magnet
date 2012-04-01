@@ -1,3 +1,4 @@
+/*
 #ifndef CFGGLOBALS_H
 #define CFGGLOBALS_H
 
@@ -138,3 +139,4 @@ class ConfigVar
 
 
 #endif // CFGGLOBALS_H
+*/

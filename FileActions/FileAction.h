@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "../Game/Exception.h"
+#include "../Utility.h"
 
 namespace FileAction //! Allows program access to files.
 {
@@ -66,10 +66,10 @@ namespace FileAction //! Allows program access to files.
         bool FindFile(std::string file_path);
         bool Find(std::string path);
         void MakeDir(std::string dir);
-        directory_tree_t CreateDirectoryTree(std::string dir) throw(Exception);
-        void GrowDirectoryTree(directory_tree_t& tree, dir_node* cur_node=NULL) throw(Exception);
+        directory_tree_t CreateDirectoryTree(std::string dir) throw(util::Exception);
+        void GrowDirectoryTree(directory_tree_t& tree, dir_node* cur_node=NULL) throw(util::Exception);
         void ExplodeString(std::string base, std::string delim, std::vector<std::string>& str_store);
-        FileType GetFileType(std::string file_type)throw(Exception);
+        FileType GetFileType(std::string file_type)throw(util::Exception);
 };
 
 #endif // FILEACTION_H

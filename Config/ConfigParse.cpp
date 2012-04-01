@@ -1,3 +1,4 @@
+/*
 #include "ConfigParse.h"
 
 CfgParse::CfgParse(const char* path)
@@ -153,3 +154,4 @@ bool CfgParse::IsReady(){
 
     return false;
 }
+*/

@@ -78,7 +78,7 @@ void FileAction::MakeDir(std::string dir){
 }
 
 
-FileAction::directory_tree_t FileAction::CreateDirectoryTree(std::string path)  throw(Exception){
+FileAction::directory_tree_t FileAction::CreateDirectoryTree(std::string path)  throw(util::Exception){
     std::cout << "[FileAction][CreateDirectoryTree] Creating directory tree from '" << path << "'\n";
     FileAction::directory_tree_t tree;
 
@@ -88,17 +88,17 @@ FileAction::directory_tree_t FileAction::CreateDirectoryTree(std::string path)  
     return tree;
 }
 
-FileAction::FileType FileAction::GetFileType(std::string file_type)throw(Exception){
+FileAction::FileType FileAction::GetFileType(std::string file_type)throw(util::Exception){
     if(!Magnet::IsInitialized()){
-        throw Exception(Exception::SyncError, "out of sync", "magnet is not initialzied, config could not be accessed");
+        throw util::Exception("sync_error", "magnet is not initialzied, config could not be accessed");
     }
 
 
-    Config::config_vect_type supported_files = Magnet::GlobalConfig()->GetCategory("supported_file_types");
+//    Config::config_vect_type supported_files = Magnet::GlobalConfig()->GetCategory("supported_file_types");
     std::string name;
     std::string value;
 
-    for(int i = 0; i < supported_files.size(); i++){
+/*    for(int i = 0; i < supported_files.size(); i++){
         name = supported_files[i]->GetName();
         value = supported_files[i]->GetString();
 
@@ -120,12 +120,13 @@ FileAction::FileType FileAction::GetFileType(std::string file_type)throw(Excepti
             }
         }
     }
+    */
 
     return InvalidFile;
 
 }
 
-void FileAction::GrowDirectoryTree(directory_tree_t& tree, dir_node* cur_node) throw(Exception){
+void FileAction::GrowDirectoryTree(directory_tree_t& tree, dir_node* cur_node) throw(util::Exception){
     if(cur_node == NULL){
         cur_node = tree.back();
     }
@@ -176,7 +177,7 @@ void FileAction::GrowDirectoryTree(directory_tree_t& tree, dir_node* cur_node) t
 
         closedir( dp );
     }else{
-        throw Exception(Exception::MissingDir, "missing directory", "could not find \"" + current_path + "\" within search directories"); //this ends execution
+        throw util::Exception("missing directory", "could not find \"" + current_path + "\" within search directories");
     }
 }
 

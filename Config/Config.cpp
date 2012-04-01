@@ -1,4 +1,4 @@
-#include "ConfigGlobals.h"
+/*#include "ConfigGlobals.h"
 
 Config::Config()
 {
@@ -156,3 +156,4 @@ void Config::Output(){
         std::cout << m_cfg_vect[i]->GetCategory() << "\t\t" << m_cfg_vect[i]->GetName() <<  "\t\t" << m_cfg_vect[i]->GetString () << std::endl;
     }
 }
+*/

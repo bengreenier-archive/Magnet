@@ -24,7 +24,7 @@ class CfgParse
         /// This converts the loaded file
         /// into a CfgObject tree
         //////////////////////////////////////
-        Config& Parse(Config& data);
+        //Config& Parse(Config& data);
 
         ///Returns true when ready for a parse
         bool IsReady();

@@ -1,3 +1,4 @@
+/*
 #include "ConfigGlobals.h"
 #include <iostream>
 
@@ -33,9 +34,11 @@ const bool ConfigVar::GetBool()const{
         return (val == "true") ? true : false;
     }
     */
+    /* coontinue document quote
     return true;
 }
 const std::string ConfigVar::GetString()const{
     //void* stored_val = m_value.StrongRead();
     return "";//*static_cast<std::string*>(stored_val);
 }
+*/
