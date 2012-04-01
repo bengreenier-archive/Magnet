@@ -7,6 +7,7 @@
 namespace util{
 
 struct Callback;
+class  Exception;
 class Functor : sf::NonCopyable
 {
     public:
@@ -30,7 +31,7 @@ class Functor : sf::NonCopyable
         //Functor(const Functor& cpy); //Static/Free function copy constructor
 
         virtual ~Functor();
-        void execute();
+        void execute() throw(Exception);
         const Callback& callback() const;
 
 

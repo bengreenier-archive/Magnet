@@ -13,10 +13,11 @@ struct Callback
     }
 };
 
+/// Static/Free function without arguments
 template< typename F >
 struct _cb_static_na : Callback{
     _cb_static_na( F _function ) : m_function(_function)
-    { std::cout << " _cb_static_na constructing static functor \n"; }
+    {}
 
     virtual void execute()
     {
@@ -49,6 +50,8 @@ struct _cb_static_a : Callback{
 };
 */
 
+/// Member function without arguments
+
 template< typename C >
 struct _cb_member_na : Callback{
     _cb_member_na( void(C::*_function)(), C* _object )
@@ -56,7 +59,7 @@ struct _cb_member_na : Callback{
         object(_object)
     {}
 
-    virtual void execute()
+    virtual void execute() throw(Exception)
     {
         //std::cout << "_cb_member_na\n";
         (object->*function)();
@@ -88,8 +91,9 @@ struct _cb_member_a : Callback{
 */
 
 
+/// Static constructor function without arguments
 template< typename F >
-Functor::Functor( F _function ) //Pointer-to-function
+Functor::Functor( F _function )
 :   m_callback( new _cb_static_na< F >( _function) )
 {
     //std::cout << "[Functor] Constructing static functor with no args!\n";
@@ -103,6 +107,7 @@ Functor::Functor( F _function, const Param* params ) //Pointer-to-function
 */
 
 
+/// Member constructor function without arguments
 template< typename C >
 Functor::Functor( void(C::*_function)(), C* object )             //Pointer-to-member without arguments
 :   m_callback( new _cb_member_na< C >( _function, object) )

@@ -1,5 +1,6 @@
 #include "Functor.h"
-#include <iostream>
+#include "Exception.h"
+
 using namespace util;
 
 Functor::~Functor()
@@ -7,10 +8,8 @@ Functor::~Functor()
     delete m_callback;
 }
 
-void Functor::execute()
+void Functor::execute() throw( util::Exception )
 {
-    //m_callback->debug();
-    //std::cout << "Execute called\n";
     m_callback->execute();
 }
 
