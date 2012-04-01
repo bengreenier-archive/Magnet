@@ -2,9 +2,9 @@
 
 using namespace util;
 
-Param::Param()
+Param::Param(unsigned char num_args, ...)
 {
-    //ctor
+    //m_args = new _int[num_args];
 }
 
 Param::~Param()

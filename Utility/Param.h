@@ -6,10 +6,12 @@ namespace util{
 class Param
 {
     public:
-        Param();
+        Param(unsigned char num_args, ...);
         virtual ~Param();
+
     protected:
     private:
+        int m_args[];
 };
 
 }//ns util
