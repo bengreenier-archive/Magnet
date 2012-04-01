@@ -1,7 +1,11 @@
+/*
+        ///CANNOT USE UNTIL CONFIG IS COMPLETE
+        //too much resource code is alreacy
+        //contaminated.
+
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#include "../Magnet.h"
 #include <string>
 #include <queue>
 #include <map>
@@ -11,6 +15,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "../Config/ConfigInclude.h"
 #include "../FileActions/FileAction.h"
@@ -40,26 +45,26 @@ class ResourceHandler{
                 }else{
                     fnode->loaded = false;
                 }
-            /*}else{
-                CfgParse parser(fnode->path);
-                parser.Parse(*new_resource);
-                if(parser.IsParsed()){
-                    fnode->loaded = true;
-                }else{
-                    fnode->loaded = false;
-                }
-            }*/
+            //}else{
+            //    CfgParse parser(fnode->path);
+            //    parser.Parse(*new_resource);
+            //    if(parser.IsParsed()){
+            //        fnode->loaded = true;
+            //    }else{
+            //        fnode->loaded = false;
+            //    }
+            //}
 
             return fnode->loaded;
         }
 
-        T* Get(FileAction::file_node* fnode) throw(Exception){
+        T* Get(FileAction::file_node* fnode) throw(util::Exception){
             return Get(fnode->path);
         }
 
-        T* Get(std::string file) throw(Exception){
+        T* Get(std::string file) throw(util::Exception){
             if(m_resource_map.count(file) == 0){
-                throw (Exception(Exception::NullPointer, "null pointer", "resource '" + file + "' does not exist"));
+                //throw (Exception(Exception::NullPointer, "null pointer", "resource '" + file + "' does not exist"));
             }
 
             return m_resource_map.find(file)->second;
@@ -95,13 +100,13 @@ class Resource
         /// The resource will be loaded
         /// on the next Load hook
         ////////////////////////////////
-        static void AddFile(std::string file) throw(Exception);
-        static void AddFile(FileAction::file_node* filenode) throw(Exception);
+        static void AddFile(std::string file) throw(util::Exception);
+        static void AddFile(FileAction::file_node* filenode) throw(util::Exception);
 
         ////////////////////////////////
         /// Add a directory
         ////////////////////////////////
-        static void AddDir(std::string dir, bool recursive = false) throw(Exception);
+        static void AddDir(std::string dir, bool recursive = false) throw(util::Exception);
 
         ////////////////////////////////
         /// Check if a directory exists
@@ -191,7 +196,7 @@ class Resource
         ////////////////////////////////
         /// Get an image
         ////////////////////////////////
-        static const sf::Image& GetImage(std::string file) throw(Exception);
+        static const sf::Image& GetImage(std::string file) throw(util::Exception);
         ////////////////////////////////
         /// Get a font
         ////////////////////////////////
@@ -210,13 +215,13 @@ class Resource
         typedef ResourceHandler<sf::Image>          image_handler_type;
         typedef ResourceHandler<sf::Font>           font_handler_type;
         typedef ResourceHandler<sf::SoundBuffer>    soundbuffer_handler_type;
-        typedef ResourceHandler<Config>             config_handler_type;
+        //typedef ResourceHandler<Config>             config_handler_type;
 
         //Find template solution to this>?
         image_handler_type          m_image_handler;
         font_handler_type           m_font_handler;
         soundbuffer_handler_type    m_soundbuffer_handler;
-        config_handler_type         m_config_handler;
+        //config_handler_type         m_config_handler;
 
         load_queue_t    m_load_queue;
         State           m_load_state;
@@ -228,7 +233,7 @@ class Resource
         std::string     m_rootdir;
         FileAction::directory_tree_t m_resource_tree;
 
-        Config m_config;
+       // Config m_config;
 
 
 
@@ -237,3 +242,5 @@ class Resource
 
 
 #endif // RESOURCE_H
+
+*/

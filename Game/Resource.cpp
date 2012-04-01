@@ -1,13 +1,19 @@
+/*
+        ///CANNOT USE UNTIL CONFIG IS COMPLETE
+        //too much resource code is alreacy
+        //contaminated.
+
+
 #include "Resource.h"
 
 Resource*   Resource::_resource_ptr =   NULL;
 
 Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
-    :   m_load_state(State::Null)/*,
-        m_image_handler(),
-        m_font_handler(),
-        m_soundbuffer_handler(),
-        m_config_handler()*/
+    :   m_load_state(State::Null)
+    //,   m_image_handler()
+    //,   m_font_handler()
+    //,   m_soundbuffer_handler()
+    //,   m_config_handler()
 
 {
     m_debug = true;
@@ -21,6 +27,7 @@ Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
     if(m_debug)
         std::cout << "\tInitializing directories...\n";
 
+
     m_rootdir = (Magnet::GlobalConfig()->KeyExists("resource", "root")) ? Magnet::GlobalConfig()->GetVar("resource", "root")->GetString() : "resource/";
     m_resource_tree = FileAction::CreateDirectoryTree(m_rootdir);
 
@@ -32,6 +39,7 @@ Resource::Resource(sf::Thread* loadThread, std::string resourceDir)
             }
         }
     }
+
 
     m_loadThread_ptr    =   loadThread;
 
@@ -345,3 +353,4 @@ const sf::Font& Resource::GetFont(std::string file){
 
     return *font;
 }
+*/

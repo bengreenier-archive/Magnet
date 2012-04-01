@@ -3,7 +3,8 @@
 
 #include <iostream>
 
-struct Exception {
+class Exception {
+    public:
     enum Type {
         Unknown,
         ///////////////////////
