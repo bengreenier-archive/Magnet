@@ -28,22 +28,20 @@
     #error This operating system is not yet supported
 #endif
 
-
-#include "Game/Hook.h"
-
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
 #include "Renderer.h"
 
 #include "Console/Console.h"
-#include "Game/EventListener.h"
-#include "Game/EventHandler.h"
-#include "Game/State.h"
-#include "Game/Resource.h"
 #include "Achievements/Achievements.h"
 #include "World/World.h"
 
+//Should change Game to Engine...
+#include "Game/EventListener.h"
+#include "Game/EventHandler.h"
+#include "Game/Resource.h"
+#include "Game/Exception.h"
 
 //#include "mgui/mgui.h"
 
@@ -57,6 +55,9 @@
 //Memory management
 #include "Memory/Serial.h"
 
+#define mENGINE_REGISTER_SHOOK(hook_name, hook_enum, func_pointer)      Magnet::Hooks()->registerHook(new Hook(hook_name, hook_enum, func_pointer));    //Static hook (a hook that points to a static/free function)
+#define mENGINE_REGISTER_IHOOK(hook_name, hook_enum, func_pointer, ob)  Magnet::Hooks()->registerHook(new Hook(hook_name, hook_enum, func_pointer, ob));      //Instance hook (a hook that points to a member function)
+
 ////////////////////////////////////////////////////////////
     //This class manages the state of the enginge, and the
     // initialization of singleton classes.
@@ -67,7 +68,7 @@ class Magnet
         virtual ~Magnet();
 
         static Magnet* Object();
-        static void Init(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread)  throw(Exception);
+        static void Init(size_t& _serial_entity_size, sf::Window& window, sf::Thread& loadThread)  throw(util::Exception);
         static bool IsInitialized(); //Check to see if we have initialized yet
 
         static void Hook_Initialize();
@@ -99,7 +100,7 @@ class Magnet
         //////////////////////////////////////////
         /// Retrieve the global config object
         //////////////////////////////////////////
-        static Config* GlobalConfig();
+        //static Config* GlobalConfig();
 
         static void ben_testing_space();//!< space for shit ben needs to test
 
@@ -139,7 +140,7 @@ class Magnet
         //mgui::Registry m_menus;
         //Achievements::Registry m_acheivs;
 
-        Config m_config;
+      //  Config m_config;
         bool m_services_initialized;     //True when Engine critical classes are initialized
 
         //////////////////////////////////////////
@@ -158,6 +159,7 @@ class Magnet
         /// Called on ready
         //////////////////////////////////////////
         void State_Ready();
+        void State_Entry();
 
         void dbg_deleteTimer();
         void dbg_resetTimer(std::string msg);

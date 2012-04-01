@@ -1,6 +1,6 @@
 #include "Magnet.h"
-
-#include "Memory/SharedVar.h"
+#include "Pipeline.h"
+#include "Utility.h"
 
 using util::Functor;
 
@@ -8,20 +8,15 @@ Magnet*         Magnet::magnet_ptr           =   NULL;
 
 Magnet::Magnet(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread, State::_type defaultState)
     :   gameState(defaultState),
-        m_renderer(new Renderer(&window)),
-        m_config()
+        m_renderer(new Renderer(&window))
+    //,   m_config()
 {
-
-    m_hooks.Register(new Hook(Hook::Initialize, &Magnet::Hook_Initialize));
+    m_hooks.registerHook(new Hook("initialize_magnet", Hook::onInitialize, &Magnet::Hook_Initialize));
     //m_hooks.Register(new Hook(Hook::Setup,      &Magnet::Hook_Setup));
-
-    ///Register renderer hooks
-    m_hooks.Register(new Hook(Hook::Initialize, &Renderer::hook_initialize, m_renderer));
-    m_hooks.Register(new Hook(Hook::Think, &Renderer::frame, m_renderer));
 
     EventHandler::AddListener(new EventListener(sf::Event::KeyPressed, &Magnet::event_keyPressed));
 
-    m_renderThread_ptr  =   new sf::Thread(&Renderer::frame, m_renderer);
+    m_renderThread_ptr  =   new sf::Thread(&Renderer::onDrawFrame, m_renderer);
     m_loadThread_ptr    =   &loadThread;
     m_renderWindow      =   &window;
 
@@ -35,11 +30,12 @@ Magnet::Magnet(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadT
     if(!cfgparser.IsParsed()){
         throw Exception(Exception::LoadFail, "Missing config", "The Magnet configuration file is missing");
     }
+    */
 
-    if(m_config.GetVar("debug")->GetBool()){
+    //if(m_config.GetVar("debug")->GetBool()){
         dbg_timer = new sf::Clock();
         dbg_timer->restart();
-    }*/
+    //}
 }
 
 Magnet::~Magnet()
@@ -124,14 +120,14 @@ Magnet* Magnet::Object(){
     return magnet_ptr;
 }
 
-void Magnet::Init(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread) throw(Exception){
+void Magnet::Init(size_t& _serial_entity_size, sf::Window& window, sf::Thread& loadThread) throw(util::Exception){
     if(magnet_ptr == NULL){
         try{
             magnet_ptr = new Magnet(_serial_entity_size, window, loadThread, State::Null);
         }
 
-        catch(Exception e){
-            e.output();
+        catch(util::Exception e){
+            //e.output();
             magnet_ptr = NULL;
             throw e;
         }
@@ -153,60 +149,59 @@ void Magnet::ChangeState(State::_type newState){
     //m_hooks.Call(Hook::GameStateChange);
 }
 
-Config* Magnet::GlobalConfig(){
-    return &Object()->m_config;
-}
+//Config* Magnet::GlobalConfig(){
+//    return &Object()->m_config;
+//}
 
 void Magnet::State_Initialize() {
     if(!m_services_initialized){
-        std::cout << "**********\tINITALIZE\t**********\n";
-        //Magnet::Hooks()->Call(Hook::InitialzeServices);
-
-        //std::cout << "[Magnet][Initialize] Initialize renderer...\n";
-        //Renderer::Init(*m_renderWindow, *Object()->m_renderThread_ptr);
-        std::cout << "[Magnet][Initialize] Initialize resource...\n";
-        Resource::Init(m_loadThread_ptr, "resource/");
-        std::cout << "[Magnet][Initialize] Initialize Sandbox\n";
-        //Sandbox::Init();
-
+        dbgconsole << "\n[Magnet] *** INITIALIZE STATE ***\n";
+        Magnet::Hooks()->Call(Hook::onInitializeSingletons);
         m_services_initialized = true;
 
-        std::cout << "Calling initialized hook\n";
-        Magnet::Hooks()->Call(Hook::Initialize);
-        std::cout << "called initialized hook\n";
+        Magnet::Hooks()->Call(Hook::onInitialize);
     }else{
         if(Object()->dbg_timer != NULL){
             Object()->dbg_resetTimer("[Magnet] Initialization took ");
         }
 
-        std::cout << "Changing state to setup\n";
-        ChangeState(State::Setup);
-        std::cout << "state changed to setup\n";
+        ChangeState(State::Load);
     }
 }
 
 void Magnet::State_Setup(){
-    std::cout << "**********\tSETUP\t**********\n";
 //    Magnet::Hooks()->Call(Hook::Setup);
 
     ChangeState(State::Load);
 }
 
 void Magnet::State_Load(){
-    if(Resource::Loading()) return; //Wait
+    dbgconsole << "\n[Magnet] *** LOAD STATE ***\n";
+    Magnet::Hooks()->Call(Hook::Setup);
+//    if(Resource::Loading()) return; //Wait
 
-    if(Resource::Ready()){
+   // if(Resource::Ready()){
 //        Magnet::Hooks()->Call(Hook::LoadComplete);
         ChangeState(State::Ready);
-    }else{
-        if(Resource::NeedLoad()){
-            std::cout << "**********\tLOAD\t**********\n";
+   // }else{
+       // if(Resource::NeedLoad()){
+        //    std::cout << "**********\tLOAD\t**********\n";
 //            Magnet::Hooks()->Call(Hook::StartLoad);
-        }else{
-            std::cout << "**********\tSKIP LOAD ( no resources )\t**********\n";
+     //   }else{
+            std::cout << "[Magnet][State_Load] Load skipped, no resources\n";
             ChangeState(State::Ready);
-        }
-    }
+       // }
+   // }
+}
+
+void Magnet::State_Entry()
+{
+    dbgconsole << "\n[Magnet] *** ENTRY STATE ***\n";
+    //Registry service registry hooks
+    util::ServiceRegistry::RegisterHooks();
+
+    Object()->ChangeState(State::Initialize);
+    Object()->dbg_resetTimer("[Magnet] Entry took ");
 }
 
 void Magnet::Think(){
@@ -214,7 +209,8 @@ void Magnet::Think(){
 
     switch(Object()->gameState.get()){
         case State::Null:
-            Object()->ChangeState(State::Initialize);
+            Object()->State_Entry();
+            break;
         case State::Initialize:
             Object()->State_Initialize();
             break;
@@ -225,17 +221,19 @@ void Magnet::Think(){
             Object()->State_Setup();
             break;
         case State::Ready:
+            /*
             if(Magnet::GlobalConfig()->GetVar("debug")->GetBool()){
                 if(Object()->dbg_timer != NULL){
                     Object()->dbg_resetTimer("[Magnet] Initial load took ");
                     Object()->dbg_deleteTimer();
                 }
             }
+            */
             //Wait for state change requests
             break;
     }
 
-    Hooks()->Call(Hook::Think);
+    Hooks()->Call(Hook::onThink);
 }
 
 void Magnet::dbg_deleteTimer(){
@@ -243,10 +241,17 @@ void Magnet::dbg_deleteTimer(){
     Object()->dbg_timer = 0;
 }
 void Magnet::dbg_resetTimer(std::string msg){
-    /*if(Object()->dbg_timer->GetElapsedTime().AsMilliseconds() > 1000){
-        std::cout << msg << Object()->dbg_timer->GetElapsedTime().AsSeconds()  << "s\n";
+    if(Object()->dbg_timer->getElapsedTime().asMilliseconds() > 1000){
+        debuglog << msg << Object()->dbg_timer->getElapsedTime().asSeconds()  << "s\n";
+    }else if(Object()->dbg_timer->getElapsedTime().asMicroseconds() > 1000){
+        debuglog<< msg << Object()->dbg_timer->getElapsedTime().asMilliseconds()  << "ms\n";
     }else{
-        std::cout << msg << Object()->dbg_timer->GetElapsedTime().AsMilliseconds()  << "ms\n";
-    }*/
-    //dbg_timer->Restart();
+        if(Object()->dbg_timer->getElapsedTime().asMicroseconds() > 0)
+        {
+            debuglog << msg << (int)Object()->dbg_timer->getElapsedTime().asMicroseconds()  << (char)(230) << "s\n";
+        }else{
+            debuglog << msg << " < 1 " << (char)(230) << "s\n";
+        }
+    }
+    dbg_timer->restart();
 }
