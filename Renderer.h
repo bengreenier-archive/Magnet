@@ -8,14 +8,20 @@
 #include "Renderer/Graphics.h"
 #include "Renderer/RenderObject.h"
 
-class Renderer
+#include "Utility.h"
+
+class Renderer : util::Service
 {
     typedef std::vector<RenderObject*>  renderobjects_t; //Should be a ringbuffer
 
     renderobjects_t m_renderobjects;
     sf::Window*     m_window;
+    HookRegistry    m_hooks;
+    State           m_state;
+    sf::Thread      m_drawThread;
 
     public:
+        RenderObject* ob;
         static RenderObject* CreateSquare( Point pos = Point(), Vector size = Vector(5, 5) );
         static RenderObject* CreateCircle( Point pos = Point(), point_t radius = 5, unsigned int level = 6 );
 
@@ -24,11 +30,19 @@ class Renderer
 
         void addRenderObject(RenderObject* newob);
 
-        //Drawing
-        void frame();
-        void hook_initialize();
+        HookRegistry*   hooks();
+        State*          getState();
+
+        void onThink();
+        void onBeginFrame();
+        void onDrawFrame();
         void event_resized(sf::Event& evt);
         void setViewport();
+
+        //Virtual
+
+        virtual void onInitialize();
+        //virtual void onRegister();
 };
 
 #endif // RENDERER_H
