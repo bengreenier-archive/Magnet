@@ -16,7 +16,7 @@ class ServiceRegistry;
 class Service : sf::NonCopyable
 {
     public:
-        Service(std::string name, bool ienabled = true, State::_type istate = State::Null);
+        Service(std::string name, State::_type istate = State::Null);
         virtual ~Service();
 
         virtual const std::string& name();
@@ -24,7 +24,6 @@ class Service : sf::NonCopyable
         virtual void onRegister();
         virtual void onInitialize() = 0;
     private:
-        bool                m_enabled;
         std::string         m_name;
         State               m_state;
 };

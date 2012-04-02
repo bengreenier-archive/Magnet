@@ -15,8 +15,6 @@
 #define dbgconsole  pipe.SetScope(Pipeline::SCREEN); \
                     pipe
 
-
-
 class Pipeline
 {
     public:

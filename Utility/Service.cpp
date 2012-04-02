@@ -4,9 +4,8 @@
 
 using namespace util;
 
-Service::Service(std::string name, bool ienabled, State::_type istate)
+Service::Service(std::string name, State::_type istate)
 :   m_name(name),
-    m_enabled(ienabled),
     m_state(istate)
 {
     std::string hook_name = "register_" + name + "_service";
@@ -24,7 +23,6 @@ void Service::onRegister()
 
 Service::~Service()
 {
-    m_enabled = false;
     m_state.set(State::Pause);
     ServiceRegistry::Unregister(this);
 }
