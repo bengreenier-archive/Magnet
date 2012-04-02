@@ -31,13 +31,14 @@ public:
         LoadComplete,        //Called after resources have been loaded (directly before Magnet::State == ready
         onInitializeSingletons,
         onRegisterService,
+        onClose
     };
 
     template< typename T >
-    Hook(const char* name, Type htype, T function, hook_lifespan_t life=0);
+    Hook(const std::string& name, Type htype, T function, hook_lifespan_t life=0);
 
     template< typename T, typename C >
-    Hook(const char* name, Type htype, T function, C* object, hook_lifespan_t life=0);
+    Hook(const std::string& name, Type htype, T function, C* object, hook_lifespan_t life=0);
 
     const Type& type() const
     {
