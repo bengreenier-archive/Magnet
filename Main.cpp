@@ -15,8 +15,8 @@ int main(int argc, char **argv)
 
     //Chache testing
     try{
-        util::Cache test("test.bin");
-        test.write("hello", 5, 0);
+        util::Cache test( "test" );
+        test.write("hello", 1.010102, 0, false, util::Cache::FLAG_FLOAT);
     } catch ( util::Exception e ) {
         e.log();
         dbgconsole << "Chache exception has occured...\n";
