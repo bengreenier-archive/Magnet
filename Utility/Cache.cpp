@@ -1,13 +1,16 @@
 #include "Cache.h"
 #include "FileAction.h"
 #include "../Pipeline.h"
+#include "../Magnet.h"
 
 using namespace util;
 
-Cache::Cache(const std::string& file)
-:   m_file(new char[file.size()])
+Cache::Cache(const std::string& name)
+:   Service(name + "_cache"),
+    m_file(new char[name.size() + 4])
 {
-    strcpy(m_file, file.c_str());
+    std::string file = name + ".bin";
+    strcpy(m_file, name.c_str());
 
     //Create the file if it doens't exist.
     if( !FindFile(m_file) )
@@ -64,18 +67,13 @@ bool Cache::closeStream()
     m_mutex.unlock();
 }
 
-uchar Cache::getType( const var_t& var ) const
+void Cache::onInitialize()
 {
-    uchar type;
+    dbgconsole << "Cache initialize\n";
+    //mENGINE_REGISTER_IHOOK("close_" + name(), Hook::onClose, &Cache::onClose, this);
+}
 
-    if(var.flags & FLAG_CHAR)
-    {
-        type = FLAG_CHAR;
-    }else if(var.flags & FLAG_INT){
-        type = FLAG_INT;
-    }else if(var.flags & FLAG_FLOAT){
-        type = FLAG_FLOAT;
-    }
-
-    return type;
+void Cache::onClose()
+{
+    //Write changes
 }

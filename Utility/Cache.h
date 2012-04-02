@@ -7,11 +7,13 @@
 #include <cstring>
 #include <SFML/System.hpp>
 
+#include "Service.h"
+
 namespace util{
 
 typedef unsigned char uchar;
 
-class Cache
+class Cache : Service
 {
     public:
         enum FLAGS
@@ -25,7 +27,7 @@ class Cache
         struct var_t
         {
             uchar   size    : 4;
-            uchar   flags   : 3;
+            uchar   type    : 3;
             uchar   sign    : 1;
         };
 
@@ -37,20 +39,23 @@ class Cache
         */
         struct data_t
         {
-            var_t type;
-            uchar name_size;
-            uchar flag_size;
+            var_t type_data;
+            var_t name_type_data;
+            var_t flag_type_data;
 
             char* name;
-            char* value;
-            char* flags;
+            void* value;
+            void* flags;
         };
 
-        Cache(const std::string& file);
+        Cache( const std::string& name );
         virtual ~Cache();
 
+        virtual void onInitialize();
+        void onClose();
+
         template< typename T, typename F >
-        bool write(std::string name, T value, F flags, bool sign = false, uchar type_flags = 0);
+        bool write(const std::string& name, const T& value, const F& flags = 0, bool sign = false, FLAGS type_flags = 0);
 
         uchar getType( const var_t& var ) const;
     protected:
