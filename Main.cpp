@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Magnet.h"
 #include "Pipeline.h"
+#include "Utility.h"
 
 //This is just a temporary test function
 void load_resources(){
@@ -11,6 +12,17 @@ void load_resources(){
 
 int main(int argc, char **argv)
 {
+
+    //Chache testing
+    try{
+        util::Cache test("test.bin");
+        test.write("hello", 5, 0);
+    } catch ( util::Exception e ) {
+        e.log();
+        dbgconsole << "Chache exception has occured...\n";
+    }
+
+
     sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
     sf::Thread ResourceLoader(&load_resources); //&Resource::Load
 
