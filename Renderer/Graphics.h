@@ -3,12 +3,14 @@
 
 #include <vector>
 #include <set>
-#include <iostream>
+#include <sstream>
 #include <math.h>
 #include <ctype.h>
 #include <gl/glew.h>
 
 #include "Matrix.h"
+#include "../Utility/Exception.h"
+#include "../Pipeline.h"
 
 ///**ADD: CONDITIONAL CONFIG
 #define DEBUG true
@@ -207,6 +209,59 @@ class Color : public POINT_MATRIX
     void g(color_t g);
     void b(color_t b);
     void a(color_t a);
+};
+
+typedef unsigned int vertexarr_size_t;
+
+class VertexArray
+{
+    public:
+        VertexArray(const vertexarr_size_t& size, const Point* values = 0);
+        virtual ~VertexArray();
+
+        const Point* pointArray() const;
+        const vertexarr_size_t& size() const;
+        const unsigned int numPoints() const;
+
+        Point&  point(vertexarr_size_t i) const throw(util::Exception);
+        void    point(vertexarr_size_t i, const Point& pt) throw(util::Exception);
+
+        const point_t& operator[](vertexarr_size_t raw_index)
+        {
+            vertexarr_size_t pt_index = raw_index / 3;
+            unsigned char    coord_id = raw_index % 3;
+
+            if( indexOutOfBounds( pt_index ) )
+            {
+                dbgconsole << "WARNING: Index '" << (int)raw_index << "' is out of bounds [" << ( (int)(size() * 3) - 1 ) << "]\n";
+                return 0; //Index out of bounds
+            }
+
+            point_t pt;
+
+            if(coord_id == 0){
+                pt = m_vertices[pt_index].x();
+            }else if(coord_id == 1){
+                pt = m_vertices[pt_index].y();
+            }else if(coord_id == 2){
+                pt = m_vertices[pt_index].z();
+            }
+
+            std::cout << "opengl is getting " << pt << std::endl;
+            return pt;
+        }
+
+        inline
+        bool indexOutOfBounds(vertexarr_size_t i) const
+        {
+            return ( i > (size() - 1) );
+        }
+    protected:
+    private:
+        const vertexarr_size_t  m_size;
+        Point*                  m_vertices;
+
+
 };
 
 #endif // GRAPHICS_H
