@@ -29,7 +29,6 @@ public:
         Setup,               //Called before resources are loaded
                             //      *Create sf::Drawables here
         LoadComplete,        //Called after resources have been loaded (directly before Magnet::State == ready
-        onInitializeSingletons,
         onRegisterService,
         onClose
     };
