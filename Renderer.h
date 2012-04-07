@@ -22,8 +22,9 @@ class Renderer : util::Service
 
     public:
         RenderObject* ob;
-        static RenderObject* CreateSquare( Point pos = Point(), Vector size = Vector(5, 5) );
-        static RenderObject* CreateCircle( Point pos = Point(), point_t radius = 5, unsigned int level = 6 );
+        static RenderObject* CreateSquare( Point pos = Point(), Vector size = Vector(1, 1) );
+        static RenderObject* CreateCircle( Point pos = Point(), point_t radius = 1, unsigned int level = 6 );
+        static RenderObject* CreateCube( Point pos = Point(), Vector size = Vector(1, 1, 1) );
 
         Renderer(sf::Window* window);
         virtual ~Renderer(){};
@@ -41,7 +42,7 @@ class Renderer : util::Service
 
         //Virtual
 
-        virtual void onInitialize();
+        virtual bool onInitialize();
         //virtual void onRegister();
 };
 
