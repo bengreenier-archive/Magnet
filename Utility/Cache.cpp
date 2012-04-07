@@ -6,7 +6,7 @@
 using namespace util;
 
 Cache::Cache(const std::string& name)
-:   Service(name + "_cache"),
+:   Service(name),
     m_file(new char[name.size() + 4])
 {
     std::string file = name + ".bin";
@@ -67,13 +67,21 @@ bool Cache::closeStream()
     m_mutex.unlock();
 }
 
-void Cache::onInitialize()
+bool Cache::onInitialize()
 {
     dbgconsole << "Cache initialize\n";
     //mENGINE_REGISTER_IHOOK("close_" + name(), Hook::onClose, &Cache::onClose, this);
+
+    return true;
 }
 
 void Cache::onClose()
 {
     //Write changes
 }
+/*
+const std::string& Cache::name() const
+{
+    return m_name;
+}
+*/

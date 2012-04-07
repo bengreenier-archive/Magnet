@@ -47,26 +47,26 @@ public:
 
     const hook_lifespan_t& lifespan() const { return m_lifespan; }
     const util::Functor& callback() const { return m_callback; }
-    const char* name();
+    const std::string& name();
 
     void begin() throw();
 private:
     Type                  m_type;
     hook_lifespan_t       m_lifespan; //0 for infinite (default), 1-255 for that number of operations before being removed
     util::Functor         m_callback;
-    const char*                 m_name;
+    const std::string     m_name;
 }; //class hook
 
 class HookRegistry{
     public:
-        void registerHook(Hook* inhook){
-            std::cout << "[HookRegistry][registerHook] Registering hook " << inhook->name() << std::endl;
-            m_hooks.push_back(inhook);
-        }
+        HookRegistry(const std::string& name);
+        void registerHook(Hook* inhook);
 
         void Call(Hook::Type hookType, bool remove = false) throw();
 
-        bool exists(Hook::Type hookType);
+        bool exists(const Hook::Type& hookType);
+        bool exists(const std::string& name);
+        const std::string& name() const;
     protected:
     private:
         enum function_type{
@@ -77,6 +77,7 @@ class HookRegistry{
         typedef std::vector<Hook*>           hooks_t;
         typedef std::vector<Hook*>::iterator hooks_iterator_t;
 
+        const std::string m_name;
         hooks_t m_hooks;
         sf::Mutex m_mutex;
 

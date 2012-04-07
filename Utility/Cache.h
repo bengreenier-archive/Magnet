@@ -51,21 +51,23 @@ class Cache : Service
         Cache( const std::string& name );
         virtual ~Cache();
 
-        virtual void onInitialize();
+        virtual bool onInitialize();
         void onClose();
 
         template< typename T, typename F >
         bool write(const std::string& name, const T& value, const F& flags = 0, bool sign = false, FLAGS type_flags = 0);
 
         uchar getType( const var_t& var ) const;
+
+        //virtual const std::string& name() const;
     protected:
     private:
         bool openStream(std::_Ios_Openmode flags);
         bool closeStream();
 
-        char*           m_file;
-        std::fstream    m_stream;
-        sf::Mutex       m_mutex;
+        char*               m_file;
+        std::fstream        m_stream;
+        sf::Mutex           m_mutex;
 };
 
 }//ns util

@@ -15,7 +15,7 @@ Exception::~Exception()
 
 void Exception::log()
 {
-    Pipeline::SetScope(Pipeline::DEBUGLOG);
+    Pipeline::SetScope(Pipeline::SCREEN);
 
     pipe << "'Exception " << m_name << " has occured!' " << m_msg << std::endl;
 }

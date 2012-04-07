@@ -10,8 +10,8 @@ ServiceRegistry*    ServiceRegistry::m_instance = 0;
 
 void ServiceRegistry::RegisterHooks()
 {
-    mENGINE_REGISTER_IHOOK("intialize_serviceRegistry", Hook::onInitializeSingletons, &ServiceRegistry::onInitialize, Instance());
-    mENGINE_REGISTER_IHOOK("think_serviceRegistry", Hook::onThink, &ServiceRegistry::onThink, Instance());
+     mENGINE_REGISTER_IHOOK("intialize_service_registry", Hook::onInitializeSingletons, &ServiceRegistry::onInitialize, Instance());
+     mENGINE_REGISTER_IHOOK("think_service_registry", Hook::onThink, &ServiceRegistry::onThink, Instance());
 }
 
 
@@ -26,18 +26,13 @@ HookRegistry* ServiceRegistry::Hooks()
 {
     return &(Instance()->m_hooks);
 }
-
-bool ServiceRegistry::IsPaused()
-{
-    return ((Instance()->m_state.get() == State::Pause) ? true : false );
-}
-
 //
 ///Constructors
 //
 
 ServiceRegistry::ServiceRegistry()
-:   m_state(State::Initialize)
+:   m_state(State::Initialize),
+    m_hooks("ServiceRegistryHooks")
 {
 
 }
@@ -60,16 +55,17 @@ void ServiceRegistry::Register(Service* nserv)
 {
     if(IsPaused()) return;
 
-    Instance()->m_mutex.lock();
-    Instance()->m_services.insert(nserv);
-    Instance()->m_mutex.unlock();
+    Instance()->m_rqmutex.lock();
+    std::cout << "[ServiceRegistry] Queuing " << nserv->name() << " for registry" << std::endl;
+    Instance()->m_newqueue.push(nserv);
+    Instance()->m_rqmutex.unlock();
 }
 
 void ServiceRegistry::Unregister(Service* oserv)
 {
     if(IsPaused()) return;
 
-    Instance()->m_mutex.lock();
+    Instance()->m_ssmutex.lock();
 
     for( services_it_t it = Instance()->m_services.begin();
          it !=              Instance()->m_services.end();
@@ -81,25 +77,38 @@ void ServiceRegistry::Unregister(Service* oserv)
         }
     }
 
-    Instance()->m_mutex.unlock();
+    Instance()->m_ssmutex.unlock();
 }
 
 void ServiceRegistry::onThink()
 {
     switch(m_state.get())
     {
-        case State::Null:
-        case State::Ready:
-            //Check if there are services waiting to be registered
-            if(Hooks()->exists(Hook::onRegisterService))
-            {
-                //If there are, register them and delete the hook registration so we know that they have been called
-                Hooks()->Call(Hook::onRegisterService, true);
-            }
-            break;
         case State::Pause: //Allows outside influences to stop services from being processed and their hooks from being called
             //Dont do anything until we are unpaused
             break;
+        default:
+            //Check if there are services waiting to be registered
+            if(!m_newqueue.empty())
+            {
+                m_rqmutex.lock();
+                m_ssmutex.lock();
+
+                while(!m_newqueue.empty())
+                {
+                    if(m_newqueue.front()->onRegister())
+                    {
+                        if(m_newqueue.front()->onInitialize())
+                        {
+                            m_services.insert(m_newqueue.front());
+                        }
+                    }
+
+                    m_newqueue.pop();
+                }
+                m_ssmutex.unlock();
+                m_rqmutex.unlock();
+            }
     }
 
     Hooks()->Call(Hook::onThink);

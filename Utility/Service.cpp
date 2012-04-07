@@ -4,21 +4,17 @@
 
 using namespace util;
 
-Service::Service(std::string name, State::_type istate)
+Service::Service(const std::string& name, State::_type istate)
 :   m_name(name),
     m_state(istate)
 {
-    std::string hook_name = "register_" + name + "_service";
-    mSERVICE_REGISTER_IHOOK(hook_name.c_str(), Hook::onRegisterService, &Service::onRegister, this);
+    ServiceRegistry::Register(this);
 }
 
-void Service::onRegister()
+bool Service::onRegister()
 {
-    ServiceRegistry::Register(this);
-
-    std::string hook_name = "register_" + name() + "_service";
-    mENGINE_REGISTER_IHOOK(hook_name.c_str(), Hook::onInitialize, &Service::onInitialize, this);
-    dbgconsole << "[Service] Registered " << name() << std::endl;
+    dbgconsole << "[" << name() << "] Registered " << std::endl;
+    return true;
 }
 
 Service::~Service()
@@ -27,7 +23,7 @@ Service::~Service()
     ServiceRegistry::Unregister(this);
 }
 
-const std::string& Service::name()
+const std::string& Service::name() const
 {
     return m_name;
 }
