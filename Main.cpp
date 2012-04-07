@@ -3,6 +3,7 @@
 #include "Magnet.h"
 #include "Pipeline.h"
 #include "Utility.h"
+#include "Utility/SLinkedList.h"
 
 //This is just a temporary test function
 void load_resources(){
@@ -14,6 +15,7 @@ int main(int argc, char **argv)
 {
 
     //Chache testing
+    /*
     try{
         util::Cache test( "test" );
         test.write("hello", 1.010102, 0, false, util::Cache::FLAG_FLOAT);
@@ -21,11 +23,23 @@ int main(int argc, char **argv)
         e.log();
         dbgconsole << "Chache exception has occured...\n";
     }
+    */
 
+    //Linked list testing
+    /*
+    dbgconsole << "Constructing list\n";
+    util::SLinkedList<int> list;
+    dbgconsole << "list constructing, inserting 1\n";
+    list.insert(1);
+    dbgconsole << "Inserted\n";
+    list.insert(2);
+    list.insert(3);
 
-    sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar); //sf::WindowSettings(24, 8, 4)
+    list.debug_output();
+    */
+
+    sf::Window window(sf::VideoMode(800, 600), "Magnet", sf::Style::Titlebar, sf::ContextSettings(24, 0, 4)); //sf::WindowSettings(24, 8, 4)
     sf::Thread ResourceLoader(&load_resources); //&Resource::Load
-
 
     //This is now useless
     size_t _serial_entity_size = 5000;
