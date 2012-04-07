@@ -63,11 +63,13 @@
 class Magnet
 {
     public:
+        util::Cache m_cache;
         virtual ~Magnet();
 
         static Magnet* Object();
         static void Init(size_t& _serial_entity_size, sf::Window& window, sf::Thread& loadThread)  throw(util::Exception);
         static bool IsInitialized(); //Check to see if we have initialized yet
+        static bool ServicesInitialized();
 
         static void Hook_Initialize();
         static void Hook_Setup();

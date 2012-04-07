@@ -8,7 +8,9 @@ Magnet*         Magnet::magnet_ptr           =   NULL;
 
 Magnet::Magnet(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread, State::_type defaultState)
     :   gameState(defaultState),
-        m_renderer(new Renderer(&window))
+        m_renderer(new Renderer(&window)),
+        m_cache("Magnet cache"),
+        m_hooks("MagnetHooks")
     //,   m_config()
 {
     m_hooks.registerHook(new Hook("initialize_magnet", Hook::onInitialize, &Magnet::Hook_Initialize));
@@ -41,6 +43,11 @@ Magnet::Magnet(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadT
 Magnet::~Magnet()
 {
     delete magnet_ptr;
+}
+
+bool Magnet::ServicesInitialized()
+{
+    return Object()->m_services_initialized;
 }
 
 bool Magnet::event_keyPressed(sf::Event evt)
@@ -157,9 +164,9 @@ void Magnet::State_Initialize() {
     if(!m_services_initialized){
         dbgconsole << "\n[Magnet] *** INITIALIZE STATE ***\n";
         Magnet::Hooks()->Call(Hook::onInitializeSingletons);
-        m_services_initialized = true;
-
         Magnet::Hooks()->Call(Hook::onInitialize);
+
+        m_services_initialized = true;
     }else{
         if(Object()->dbg_timer != NULL){
             Object()->dbg_resetTimer("[Magnet] Initialization took ");
