@@ -9,7 +9,6 @@ Magnet*         Magnet::magnet_ptr           =   NULL;
 Magnet::Magnet(size_t _serial_entity_size, sf::Window& window, sf::Thread& loadThread, State::_type defaultState)
     :   gameState(defaultState),
         m_renderer(new Renderer(&window)),
-        m_cache("Magnet cache"),
         m_hooks("MagnetHooks")
     //,   m_config()
 {

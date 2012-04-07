@@ -63,7 +63,6 @@
 class Magnet
 {
     public:
-        util::Cache m_cache;
         virtual ~Magnet();
 
         static Magnet* Object();
