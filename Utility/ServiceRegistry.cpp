@@ -10,7 +10,7 @@ ServiceRegistry*    ServiceRegistry::m_instance = 0;
 
 void ServiceRegistry::RegisterHooks()
 {
-     mENGINE_REGISTER_IHOOK("intialize_service_registry", Hook::onInitializeSingletons, &ServiceRegistry::onInitialize, Instance());
+     mENGINE_REGISTER_IHOOK("intialize_service_registry", Hook::onInitialize, &ServiceRegistry::onInitialize, Instance());
      mENGINE_REGISTER_IHOOK("think_service_registry", Hook::onThink, &ServiceRegistry::onThink, Instance());
 }
 

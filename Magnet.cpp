@@ -162,7 +162,6 @@ void Magnet::ChangeState(State::_type newState){
 void Magnet::State_Initialize() {
     if(!m_services_initialized){
         dbgconsole << "\n[Magnet] *** INITIALIZE STATE ***\n";
-        Magnet::Hooks()->Call(Hook::onInitializeSingletons);
         Magnet::Hooks()->Call(Hook::onInitialize);
 
         m_services_initialized = true;
